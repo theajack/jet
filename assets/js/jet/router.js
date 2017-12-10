@@ -37,7 +37,7 @@ Jet.router={
   },
   route:function(url){
     url=_checkUrl(url);
-    if(!(url in Jet.router.router)&&url!=""){
+    if(!(url in Jet.router.router)){
       url="/404";
     }
     Jet.router.url=url;
@@ -127,11 +127,11 @@ function _loadStyle(out){
   }
 }
 function _checkUrl(url){
-  if(url=='/'){
+  if(url==Jet.router.base){
     url=Jet.router.base+'/home';
   }else{
     if(url[0]!="/"){url=Jet.router.path+'/'+url};
-    if(url[url.length-1]=='/')url=url.substring(0,url.length-1);
+    if(url[url.length-1]=='/')url=Jet.router.base+url.substring(0,url.length-1);
   }
   return url;
 }
