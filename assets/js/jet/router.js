@@ -6,16 +6,17 @@ J.ready(function(){
   Jet.router.reload();
 });
 Jet.router={
-  base:"/",
+  base:"/jet",
+  path:"/",
   conf:{
-    router:"assets/router/router.json",
-    html:"src/html/",
-    js:"src/js/",
-    css:"src/css/",
-    image:"src/image/",
+    router:this.base+"/assets/router/router.json",
+    html:this.base+"/src/html/",
+    js:this.base+"/src/js/",
+    css:this.base+"/src/css/",
+    image:this.base+"/src/image/",
     use:true
   },
-  path:{},
+  router:{},
   init:function(){
     J.attr("\\"+_route).each(function(item){
       item.clk(function(){
@@ -25,9 +26,9 @@ Jet.router={
   },
   reload:function(){
     if(Jet.router.conf.use){
-      Jet.router.base=location.pathname;
+      Jet.router.path=location.pathname;
       J.load(Jet.router.conf.router,function(json){
-        Jet.router.path=new Function("return "+json)();
+        Jet.router.router=new Function("return "+json)();
         Jet.router.route(location.pathname);
       });
       Jet.router.init();
@@ -35,7 +36,7 @@ Jet.router={
   },
   route:function(url){
     url=_checkUrl(url);
-    if(!(url in Jet.router.path)&&url!=""){
+    if(!(url in Jet.router.router)&&url!=""){
       url="/404";
     }
     Jet.router.url=url;
@@ -43,8 +44,8 @@ Jet.router={
     var title = url;
     var newUrl = url;
     history.pushState(stateObject,title,newUrl);
-    Jet.router.base=location.pathname;
-    J.load(Jet.router.conf.html+Jet.router.path[url],function(html){
+    Jet.router.path=location.pathname;
+    J.load(Jet.router.conf.html+Jet.router.router[url],function(html){
       var out=J.attr("\\"+_routeout).html(html);
       _loadScript(out);
       _loadStyle(out);
@@ -126,9 +127,9 @@ function _loadStyle(out){
 }
 function _checkUrl(url){
   if(url=='/'){
-    url='/home';
+    url=Jet.router.base+'/home';
   }else{
-    if(url[0]!="/"){url=Jet.router.base+'/'+url};
+    if(url[0]!="/"){url=Jet.router.path+'/'+url};
     if(url[url.length-1]=='/')url=url.substring(0,url.length-1);
   }
   return url;
