@@ -8,11 +8,11 @@ J.ready(function(){
 Jet.router={
   base:"/",
   conf:{
-    router:"/assets/router/router.json",
-    html:"/src/html/",
-    js:"/src/js/",
-    css:"/src/css/",
-    image:"/src/image/",
+    router:"assets/router/router.json",
+    html:"src/html/",
+    js:"src/js/",
+    css:"src/css/",
+    image:"src/image/",
     use:true
   },
   path:{},
