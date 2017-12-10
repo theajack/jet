@@ -27,7 +27,6 @@ Jet.router={
   },
   reload:function(){
     if(Jet.router.conf.use){
-      Jet.router.path=location.pathname;
       J.load(Jet.router.conf.router,function(json){
         Jet.router.router=new Function("return "+json)();
         Jet.router.route(location.pathname);
@@ -38,14 +37,13 @@ Jet.router={
   route:function(url){
     url=_checkUrl(url);
     if(!(url in Jet.router.router)){
-      url="/404";
+      url=Jet.router.base+"/404";
     }
-    Jet.router.url=url;
+    Jet.router.path=url;
     var stateObject = {};
     var title = url;
     var newUrl = url;
     history.pushState(stateObject,title,newUrl);
-    Jet.router.path=location.pathname;
     J.load(Jet.router.conf.html+Jet.router.router[url],function(html){
       var out=J.attr("\\"+_routeout).html(html);
       _loadScript(out);
@@ -53,6 +51,22 @@ Jet.router={
     });
   }
 };
+function _checkUrl(url){
+  if(url[url.length-1]=='/'){
+    url=url.substring(0,url.length-1);
+  }
+  if(url==Jet.router.base){
+    url=Jet.router.base+'/home';
+  }else{
+    if(url[0]!="/"){//相对路径
+      url=Jet.router.path+'/'+url
+    }else{//绝对路径
+      url=Jet.router.base+url;
+    }
+    
+  }
+  return url;
+}
 function _loadScript(out){
   if(J.id(_routeScript).exist()){
     J.id(_routeScript).remove();
@@ -125,13 +139,4 @@ function _loadStyle(out){
   if(index==-1){
     style.html(txt.join(''));
   }
-}
-function _checkUrl(url){
-  if(url==Jet.router.base){
-    url=Jet.router.base+'/home';
-  }else{
-    if(url[0]!="/"){url=Jet.router.path+'/'+url};
-    if(url[url.length-1]=='/')url=Jet.router.base+url.substring(0,url.length-1);
-  }
-  return url;
 }
