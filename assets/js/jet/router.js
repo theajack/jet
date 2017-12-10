@@ -28,7 +28,10 @@ Jet.router={
   reload:function(){
     if(Jet.router.conf.use){
       J.load(Jet.router.conf.router,function(json){
-        Jet.router.router=new Function("return "+json)();
+        var r=new Function("return "+json)();
+        for(var k in r){
+          Jet.router.router[_base+k]=r[k];
+        }
         Jet.router.route(location.pathname);
       });
       Jet.router.init();
