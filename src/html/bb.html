@@ -1,0 +1,48 @@
+<style type="text/css">
+  .blue{color:#00f}
+</style>
+
+<div $='users'>
+  <div $="$each" $form>
+    <input type="text" $='name' $valid='notnull'/><br/>
+    <input type="text" $='age' $valid='number'/><br/>
+    <input type="text" $='email' $valid='email'/><br/>
+    <input type="text" $='tel' $valid='phone'/><br/>
+    <div $on='click:$valid=>regist'>提交</div><br/>
+  </div>
+</div>
+    
+<script type="text/javascript">
+
+  var test=new Jet({
+    data:{
+      user:{
+        name:'theajack',
+        age:23,
+        email:'theajack@qq.com',
+        tel:'13122222222'
+      },
+      users:[{
+        name:'theajack',
+        age:23,
+        email:'theajack@qq.com',
+        tel:'13122222222'
+      },{
+        name:'theajack',
+        age:23,
+        email:'theajack@qq.com',
+        tel:'13122222222'
+      },{
+        name:'theajack',
+        age:23,
+        email:'theajack@qq.com',
+        tel:'13122222222'
+      }]
+    },
+    func:{
+      regist:function(d){
+        console.log('regist success')
+      }
+    }
+  });
+</script>  

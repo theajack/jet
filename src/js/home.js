@@ -1,0 +1,41 @@
+
+var test=new Jet({
+  ready:function(){
+    //alert(this.me.name.first);
+  },
+  data:{
+    a:true,
+    b:'aaa',
+    me:{
+      name:{
+        first:"thea",
+        last:"jack",
+        boy:true
+      },
+      test:[{a:[1,2,3]},{a:[10,2,3]}]
+    },
+    s:[
+      {t:2,v:'t2'},
+      {t:1,v:'t1'},
+      {t:2,v:'t2'},
+      {t:1,v:'t1'},
+      {t:4,v:'t3'},
+      {t:3,v:'t3'}
+    ]
+  },
+  func:{
+    test:function(d){
+      //console.log(d.ele)
+    },
+    log:function(d){
+      //console.log(d.data);
+    },hide:function(d){
+      d.ele.hide();
+    },show:function(d){
+      d.ele.show();
+    }
+  }
+});
+function test(){
+  console.log('test')
+}
