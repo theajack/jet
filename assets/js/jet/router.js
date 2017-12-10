@@ -5,15 +5,16 @@ var _route="$router",
 J.ready(function(){
   Jet.router.reload();
 });
+var _base="/jet";
 Jet.router={
-  base:"/jet",
+  base:_base,
   path:"/",
   conf:{
-    router:this.base+"/assets/router/router.json",
-    html:this.base+"/src/html/",
-    js:this.base+"/src/js/",
-    css:this.base+"/src/css/",
-    image:this.base+"/src/image/",
+    router:_base+"/assets/router/router.json",
+    html:_base+"/src/html/",
+    js:_base+"/src/js/",
+    css:_base+"/src/css/",
+    image:_base+"/src/image/",
     use:true
   },
   router:{},
