@@ -83,7 +83,7 @@ function _initJet(opt,calls){
   });
   bindList.each(function(item,index){
     if(!item._hasBind){
-      dom.append(item);
+      dom.appendChild(item);
       var attr=item.attr(_bind);
       if(opt.data[attr]){
         var type=J.type(opt.data[attr]);

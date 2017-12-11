@@ -382,7 +382,11 @@ Array.insert
         c =new XMLHttpRequest()
       }
       if(b.asyn){
-        c.responseType = b.dataType;
+        try{
+          c.responseType = b.dataType;
+        }catch(e){
+          c.overrideMimeType(b.dataType);
+        }
       }
       c.open(b.type, b.url, b.asyn);
       c.setRequestHeader("Content-Type", b.contentType);
