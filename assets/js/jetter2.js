@@ -381,8 +381,9 @@ Array.insert
       } else if (window.XMLHttpRequest) {
         c =new XMLHttpRequest()
       }
-      if(b.asyn)
+      if(b.asyn){
         c.responseType = b.dataType;
+      }
       c.open(b.type, b.url, b.asyn);
       c.setRequestHeader("Content-Type", b.contentType);
       //header
