@@ -58,8 +58,8 @@
       } else if (window.XMLHttpRequest) {
         c =new XMLHttpRequest()
       }
-      c.responseType = b.dataType;
       c.open(b.type, b.url, b.async);
+      c.responseType = b.dataType;
       c.setRequestHeader("Content-Type", b.contentType);
       //header
       c.send(_convertData(b.data));
