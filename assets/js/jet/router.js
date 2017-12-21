@@ -41,6 +41,9 @@ Jet.router={
             }
           }
         }
+        Jet.load.init();
+        Jet.valid.init();
+        Jet.lang.init();
         Jet.router.route(url);
       });
       Jet.router.init();
@@ -64,11 +67,11 @@ Jet.router={
     Jet.router.params=_JT.urlParam();
     _JT.load(Jet.router.conf.html+Jet.router.router[url],function(html){
       var out=_JT.attr(_routeout)._JT_html(html);
-      Jet.load.init();
+      Jet.load.init(out);
       _loadScript(out);
       _loadStyle(out);
-      Jet.valid.init();
-      Jet.lang.init();
+      Jet.valid.init(out);
+      Jet.lang.init(out);
     });
   }
 };
