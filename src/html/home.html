@@ -4,58 +4,68 @@
     color:#0f0;
   }
 </style>
-
-<div class='home'>
-  homehomehomehomehomehome
-</div>
-<div class='home2'>
-  homehomehomehomehomehome
-</div>
-<div $='me' $on="click:test">
-  <div $='name' >
-    <div $load='test.html'></div>
-    <div $='first' class='home2' $if='$=="thea":class[a]'></div>
-    <div $='last'></div>
+<select name="" id="" J='lang' Jon='change:changLange'>
+  <option J='$each' Jrun='addLangText'></option>
+</select>
+<div J='s'>
+  <div J='$each.t=1'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <span J='v' >$</span>
   </div>
-  <div $='test'  >
-    <div $='$each' >
-      <div $='$index'></div>
-      <div $='a' >
-        <div $='$each'>
-          <span $='$index' >$</span>
-          <span $='$value' $run='log'> $ </span>
-          <input $='$value' type="text" value="$"/>
+  <div J='$each.t=2'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <span J='v' >$</span>
+  </div>
+  <div J='$each.t=3'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <input type='text' J='v' value="$+'plus'"/>
+  </div>
+  <div J='$each.t=4'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <input type='text' J='v' value="$+'plus'"/>
+  </div>
+</div>
+<div class='home' Jlang>
+  <span Jname='en'>homehomehomehomehomehome</span>
+  <span Jname='cn'>主页主页主页主页主页主页</span>
+</div>
+<div class='home2' Jlang>
+  <span Jname='en'>homehomehomehomehomehome</span>
+  <span Jname='cn'>主页主页主页主页主页主页</span>
+</div>
+<div J='me' Jon="click:test">
+  <div Jlang>
+    <div Jname='en'>
+      <input type='text' value='hello world'/>
+    </div>
+    <div Jname='cn'>
+      <input type='button' value='你好世界'/>
+    </div>
+  </div>
+  <div J='name' >
+    <div Jload='test.html'></div>
+    <div J='first' class='home2' jif='$=="thea":class[a]'></div>
+    <div J='last'></div>
+  </div>
+  <div J='test'  >
+    <div J='$each' >
+      <div J='$index'></div>
+      <div J='a' >
+        <div J='$each'>
+          <span J='$index' >$</span>
+          <span J='$value' Jrun='log'> $ </span>
+          <input J='$value' type="text" value="$"/>
         </div>
       </div>
     </div>
   </div>
-  
-  
 </div>
-<div $='a' $if='$:css[display=block|color=#f00]'></div>
-<div $='b' $if='$:hide|show'></div>
-<div $='s'>
-  <div $='$each.t=1'>
-    <span $='$index' >$</span>
-    <span $='t' >$</span>
-    <span $='v' >$</span>
-  </div>
-  <div $='$each.t=2'>
-    <span $='$index' >$</span>
-    <span $='t' >$</span>
-    <span $='v' >$</span>
-  </div>
-  <div $='$each.t=3'>
-    <span $='$index' >$</span>
-    <span $='t' >$</span>
-    <input type='text' $='v' value="$+'plus'"/>
-  </div>
-  <div $='$each.t=4'>
-    <span $='$index' >$</span>
-    <span $='t' >$</span>
-    <input type='text' $='v' value="$+'plus'"/>
-  </div>
-</div>
+<div J='a' jif='$:css[display=block|color=#f00]'></div>
+<div J='b' jif='$:hide|show'></div>
     
 <script type="text/javascript" src='home.js'></script>
 <script type="text/javascript">

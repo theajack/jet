@@ -11,7 +11,8 @@
     <meta name="apple-touch-fullscreen" content="yes">
     <meta content="telephone=no" name="format-detection">
     <title>jet</title>
-    <style type="text/css" src='assets/css/common.css'></style>
+    <style type="text/css" src='/src/css/common.css'></style>
+    <script type="text/javascript" src='/assets/js/preload.js'></script>
     <style>
     body{width:1000px}
     #header{
@@ -35,34 +36,66 @@
       height:800px;
     }
     </style>
-  <body class="common" jet-form="content">
-    <div id="header"></div>
+  <body class="common">
+    <div id="header">
+    </div>
     <div id="">
       <div id="menu">
-        <div class="menuitem" $router='/home'>home</div>
-        <div class="menuitem" $router='/aa'>aa</div>
-        <div class="menuitem" $router='/bb'>bb</div>
-        <div class="menuitem" $router='/cc'>cc</div>
-        <div class="menuitem" $router='sub'>sub</div>
+        <div class="menuitem" Jrouter='/home' Jlang>
+          <span Jname='en'>home</span>
+          <span Jname='cn'>主页</span>
+        </div>
+        <div class="menuitem" Jrouter='/aa' Jlang>
+          <span Jname='en'>aa</span>
+          <span Jname='cn'>啊啊</span>
+        </div>
+        <div class="menuitem" Jrouter='/bb' Jlang>
+          <span Jname='en'>bb</span>
+          <span Jname='cn'>比比</span>
+        </div>
+        <div class="menuitem" Jrouter='/cc' Jlang>
+          <span Jname='en'>cc</span>
+          <span Jname='cn'>吃吃</span>
+        </div>
+        <div class="menuitem" Jrouter='sub' Jlang>
+          <span Jname='en'>sub</span>
+          <span Jname='cn'>子</span>
+        </div>
       </div>
-      <div id="main" $out></div>
+      <div id="main" Jout></div>
     </div>
+    <!-- <script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script> -->
+    <!-- <script type="text/javascript" src="/assets/js/jet/jet.min.js"></script> -->
     
-    <script type="text/javascript" src="assets/js/jetter2.js"></script>
-    <script type="text/javascript" src="assets/js/common.js"></script>
-    <script type="text/javascript" src="assets/js/jet/define.js"></script>
-    <script type="text/javascript" src="assets/js/jet/jet.js"></script>
-    <script type="text/javascript" src="assets/js/jet/load.js"></script>
-    <script type="text/javascript" src="assets/js/jet/valid.js"></script>
-    <script type="text/javascript" src="assets/js/jet/router.js"></script>
-    <script type="text/javascript" src="assets/js/jet/bind.js"></script>
-    <script type="text/javascript" src="assets/js/jet/for.js"></script>
-    <script type="text/javascript" src="assets/js/jet/text.js"></script>
-    <script type="text/javascript" src="assets/js/jet/input.js"></script>
-    <script type="text/javascript" src="assets/js/jet/if.js"></script>
-    <script type="text/javascript" src="assets/js/jet/on.js"></script>
-    <script type="text/javascript" src="assets/js/jet/run.js"></script>
+    
+    <!-- <script type="text/javascript" src="/assets/js/flv.min.js"></script> -->
+    <script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script>
+    <script type="text/javascript" src="/assets/js/common.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/define.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/jet.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/load.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/valid.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/lang.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/router.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/bind.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/for.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/text.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/input.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/if.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/on.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/run.js"></script>
     <script type="text/javascript">
+      Jet.lang.conf(['en','cn']);
+      <!-- var player = document.getElementById('videoElement'); -->
+        <!-- if (flvjs.isSupported()) { -->
+            <!-- var flvPlayer = flvjs.createPlayer({ -->
+                <!-- type: 'flv', -->
+                <!-- url: 'https://staticlive.douyucdn.cn/common/share/play.swf?room_id=70231' -->
+            <!-- }); -->
+            <!-- flvPlayer.attachMediaElement(videoElement); -->
+            <!-- flvPlayer.load(); //加载 -->
+        <!-- } -->
+      
     </script>
   </body>
 </html>

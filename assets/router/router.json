@@ -1,8 +1,15 @@
 {
-  '/aa':'aa.html',
-  '/bb':'bb.html',
-  '/cc':'cc.html',
-  '/home':'home.html',
-  '/home/sub':'home-sub.html',
-  '/404':'404.html'
+  router:{
+    '/aa':'aa.html',
+    '/bb':'bb.html',
+    '/cc':'cc.html',
+    '/home':'home.html',
+    '/home/sub':'home-sub.html',
+    '/404':'404.html'
+  },
+  conf:{
+    history:false,
+    base:"/jet",
+    trueBase:false
+  }
 }

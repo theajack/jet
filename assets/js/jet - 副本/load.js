@@ -1,13 +1,13 @@
 
-var _load="Jload";
+var _load="$load";
 Jet.load={
   init:function(obj){
     var data={};
     var list;
     if(obj==undefined){
-      list=_JT.attr(_load);
+      list=_JT.attr("\\"+_load);
     }else{
-      list=obj._JT_findAttr(_load)
+      list=obj._JT_findAttr("\\"+_load)
     }
     list._JT_each(function(item){
       var attr=item._JT_attr(_load);

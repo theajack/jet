@@ -1,4 +1,4 @@
-var _form='$form',_valid='Jvalid';
+var _form='$form',_valid='$valid';
 //第一个含有 _form 的父元素
 Jet.valid={
   init:function(obj){
@@ -59,9 +59,9 @@ Jet.valid={
   initValid: function(b) {
     var c;
     if (b == undefined) {
-      c = _JT.attr(_valid)
+      c = _JT.attr('\\'+_valid)
     } else {
-      c = b._JT_findAttr(_valid)
+      c = b._JT_findAttr('\\'+_valid)
     }
     c._JT_each(function(a) {
       a._JT_on({
@@ -178,7 +178,7 @@ function _validateForm(g, f, c) {
     b = false
   }
   var d = true;
-  var a = g._JT_findAttr(_valid);
+  var a = g._JT_findAttr('\\'+_valid);
   a._JT_each(function(j) {
     var h = _validInputOfForm(j);
     if (h != "true") {

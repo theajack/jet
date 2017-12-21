@@ -1,1 +1,30 @@
-aaaaaaaaaaaaaaa
+<div J='name'>
+  <div J='value'></div>
+  <div Jlang Jon='click:alert'>
+    <div Jname='en'>
+      <input type='text' Jvalid='phone' value='hello world'/>
+    </div>
+    <div Jname='cn'>
+      <input type='text' Jvalid='phone' value='你好世界'/>
+    </div>
+  </div>
+  <div Jload='test.html' Jon='click:alert'></div>
+</div>
+
+<script>
+  var aa=new Jet({
+    data:{
+      name:{
+        value:new Jet.lang({
+          en:'theajack',
+          cn:'陈中胜'
+        }),
+      }
+    },
+    func:{
+      alert:function(d){
+        alert(d.ele.innerHTML)
+      }
+    }
+  });
+</script>

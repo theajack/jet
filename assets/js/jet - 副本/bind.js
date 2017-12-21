@@ -19,10 +19,10 @@ Jet.Bind=function(opt){
 function _initBind(opt){
   var _this=this;
   var _data=opt.data[opt.name];
-  var bindList=this.ele._JT_findAttr(_bind);
-  var ifList=this.ele._JT_findAttr(_if);
-  var onList=this.ele._JT_findAttr(_on);
-  var runList=this.ele._JT_findAttr(_run);
+  var bindList=this.ele._JT_findAttr("\\"+_bind);
+  var ifList=this.ele._JT_findAttr("\\"+_if);
+  var onList=this.ele._JT_findAttr("\\"+_on);
+  var runList=this.ele._JT_findAttr("\\"+_run);
   bindList._JT_each(function(item,index){
     if(!item._hasBind){
       var attr=item._JT_attr(_bind);

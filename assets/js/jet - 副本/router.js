@@ -1,7 +1,7 @@
-var _route="Jrouter",
-  _routeout="Jout",
-  _routeScript="JrouteScript",
-  _routeStyle="JrouteStyle";
+var _route="$router",
+  _routeout="$out",
+  _routeScript="$routeScript",
+  _routeStyle="$routeStyle";
 Jet.router={
   use:true,//是否启用路由
   base:"",//根目录，可以是虚拟的也可以是真实的，无需手动设置，在json文件中配置
@@ -18,7 +18,7 @@ Jet.router={
     image:"/src/image/"
   },
   init:function(){
-    _JT.attr(_route)._JT_each(function(item){
+    _JT.attr("\\"+_route)._JT_each(function(item){
       item._JT_clk(function(){
         Jet.router.route(this._JT_attr(_route))
       });
@@ -63,7 +63,7 @@ Jet.router={
     history.pushState(stateObject,title,newUrl);
     Jet.router.params=_JT.urlParam();
     _JT.load(Jet.router.conf.html+Jet.router.router[url],function(html){
-      var out=_JT.attr(_routeout)._JT_html(html);
+      var out=_JT.attr("\\"+_routeout)._JT_html(html);
       Jet.load.init();
       _loadScript(out);
       _loadStyle(out);

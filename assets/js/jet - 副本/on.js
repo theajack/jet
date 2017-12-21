@@ -24,7 +24,7 @@ function _initOn(){
     _throw('j-on 属性格式错误:'+attr);
   }
   var e=attr.split(":");
-  if(e[1]._JT_has('$valid')){
+  if(e[1]._JT_has(_valid)){
     if(e[1]._JT_has('=>')){
       _this.valid=true;
       _this.validPar=Jet.valid.findValidPar(_this.ele);

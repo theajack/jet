@@ -2,13 +2,13 @@
   .blue{color:#00f}
 </style>
 
-<div $='users'>
-  <div $="$each" $form>
-    <input type="text" $='name' $valid='notnull'/><br/>
-    <input type="text" $='age' $valid='number'/><br/>
-    <input type="text" $='email' $valid='email'/><br/>
-    <input type="text" $='tel' $valid='phone'/><br/>
-    <div $on='click:$valid=>regist'>提交</div><br/>
+<div J='users'>
+  <div J="$each" Jform>
+    <input type="text" J='name' Jvalid='notnull'/><br/>
+    <input type="text" J='age' Jvalid='number'/><br/>
+    <input type="text" J='email' Jvalid='email'/><br/>
+    <input type="text" J='tel' Jvalid='phone'/><br/>
+    <div Jon='click:$valid=>regist'>提交</div><br/>
   </div>
 </div>
     

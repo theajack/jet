@@ -15,13 +15,13 @@
 // j-on 
 // j-run
 
-var _bind="J",
-  _for="Jfor",
-  _input="Jinput",
-  _text="Jtext",
-  _if="Jif",
-  _on="Jon",
-  _run="Jrun",
+var _bind="$",
+  _for="$for",
+  _input="$input",
+  _text="$text",
+  _if="$if",
+  _on="$on",
+  _run="$run",
   _each="$each",
   _value="$value",
   _index="$index";
@@ -59,15 +59,15 @@ function _initJet(opt,calls){
   var _this=this;
   var bindList,ifList,onList,runList;
   if(opt.ele){
-    bindList=opt.ele._JT_findAttr(_bind);
-    ifList=opt.ele._JT_findAttr(_if);
-    onList=opt.ele._JT_findAttr(_on);
-    runList=opt.ele._JT_findAttr(_run);
+    bindList=opt.ele._JT_findAttr("\\"+_bind);
+    ifList=opt.ele._JT_findAttr("\\"+_if);
+    onList=opt.ele._JT_findAttr("\\"+_on);
+    runList=opt.ele._JT_findAttr("\\"+_run);
   }else{
-    bindList=_JT.attr(_bind);
-    ifList=_JT.attr(_if);
-    onList=_JT.attr(_on);
-    runList=_JT.attr(_run);
+    bindList=_JT.attr("\\"+_bind);
+    ifList=_JT.attr("\\"+_if);
+    onList=_JT.attr("\\"+_on);
+    runList=_JT.attr("\\"+_run);
   }
   var temp=[];
   var dom=document.createDocumentFragment();
@@ -129,7 +129,9 @@ function _initJet(opt,calls){
     if(json.item.__isRoot==true)
       json.par._JT_append(json.item,json.index);
   });
-  Jet.$.id('__preload_j')._JT_remove();
+  //Jet.$.id('__preload')._JT_remove();
+  
+  //__par._JT_append(dom,__index);
 };
 
 

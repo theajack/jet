@@ -4,12 +4,22 @@ var test=new Jet({
     //alert(this.me.name.first);
   },
   data:{
+    lang:Jet.lang.list,
     a:true,
-    b:'aaa',
+    b:new Jet.lang({
+      cn:'啊啊啊',
+      en:'aaa'
+    }),
     me:{
       name:{
-        first:"thea",
-        last:"jack",
+        first:JL({
+          cn:'西娅',
+          en:"thea"
+        }),
+        last:JL({
+          cn:'杰克',
+          en:"jack"
+        }),
         boy:true
       },
       test:[{a:[1,2,3]},{a:[10,2,3]}]
@@ -30,9 +40,22 @@ var test=new Jet({
     log:function(d){
       //console.log(d.data);
     },hide:function(d){
-      d.ele.hide();
+      d.ele._JT_css('display','none');
     },show:function(d){
-      d.ele.show();
+      d.ele._JT_css('display','block');
+    },alert:function(d){
+      alert(d.ele.innerHTML)
+    },addLangText:function(d){
+      var txt='';
+      switch(d.data){
+        case 'en':txt='English';break;
+        case 'cn':txt='简体中文';break;
+        default:break;
+      }
+      d.ele._JT_txt(txt);
+      d.ele._JT_attr('value',d.data)
+    },changLange:function(d){
+      Jet.lang.name=d.ele.value;
     }
   }
 });

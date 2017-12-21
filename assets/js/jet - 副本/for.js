@@ -152,7 +152,7 @@ function _initForRule(ele){
       }
     }
   }else{//普通模式
-    if(!this.ele._JT_findAttr(_bind+'="'+_each+'"')._JT_exist()){
+    if(!this.ele._JT_findAttr("\\"+_bind+'="'+_each+'"')._JT_exist()){
       var html=this.ele._JT_html();
       this._html='<div '+_bind+'="'+_each+'">'+html+'</div>'
       for(var i=0;i<this.data[this.name].length;i++){

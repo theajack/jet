@@ -6,27 +6,24 @@
 
 /*
 修改了以下保留字
-class
-new
-default
-null
-float
-新增方法 J.type() 去除了全部的 constructor 因为兼容性
-因为兼容 formdata.get方法需要trycatch
-
-J.load -> J.onload
-J.load 新方法 加载html
-
-hasData
+  class -> cls
+  new -> ct
+  default -> def
+  null -> 使用字符串 "null"
+  float -> 使用字符串 "float"
+新增方法 J.type() 去除了全部的 constructor 因为兼容
+因为兼容 formdata.get方法需要try catch
+J.show() 增加了center样式 17-9-30
+J.load 重命名为 J.onload
+J.load 变成新方法 使用ajax请求加载文件
+添加 hasData
+data 方法对于不存在的数据返回undefined
 removeClass("a b") 支持空格
 J.delay
 J.clearDelay
 HTMLCollection NodeList Array 添加了findClass ....
-
-Array.insert
-
-
-
+HTMLCollection NodeList indexOf
+17 12-30：修改urlParam 在hash模式下也能正确获取参数 现在只会返回 null或json
 */
 (function(){
   //(function(){var meta=document.createElement("meta");
@@ -148,10 +145,14 @@ Array.insert
     open: function(a) {window.open(a)},
     back: function() {window.history.back()},
     forward: function() {window.history.forward()},
+    reload:function(force){
+      location.reload(force);
+    },
     urlParam: _getUrlParam,
     sign: _sign,
     random: _getRandomNum,
     isMobile: _isMobile,
+    
     delay:function(call,time){
       return setTimeout(call,time);
     },
@@ -164,7 +165,6 @@ Array.insert
     clearRepeat:function(t){
       return clearInterval(t);
     },
-    
     
     jetForm:function(a) {
       return J.attr("jet-form=" + a)
@@ -366,7 +366,7 @@ Array.insert
       var b = {
         type: a.type || "GET",
         url: a.url || "",
-        asyn: J.checkArg(a.asyn,true),
+        async: a.async || "true",
         data: a.data || null,
         dataType: a.dataType || "text",
         contentType: a.contentType || "application/x-www-form-urlencoded",
@@ -381,14 +381,8 @@ Array.insert
       } else if (window.XMLHttpRequest) {
         c =new XMLHttpRequest()
       }
-      if(b.asyn){
-        try{
-          c.responseType = b.dataType;
-        }catch(e){
-          c.overrideMimeType(b.dataType);
-        }
-      }
-      c.open(b.type, b.url, b.asyn);
+      c.responseType = b.dataType;
+      c.open(b.type, b.url, b.async);
       c.setRequestHeader("Content-Type", b.contentType);
       //header
       c.send(_convertData(b.data));
@@ -402,10 +396,10 @@ Array.insert
         }
       }
     };
-  function _load(name,call,asyn,ecall){
+  function _load(name,call,ecall){
     J.ajax({ 
       url : name, 
-      asyn:J.checkArg(asyn,true),
+      async:true,
       success : function(result){ 
         call(result);
       },
@@ -557,10 +551,13 @@ Array.insert
     if(a==undefined){
       return function(){};
     }else{
-      if(J.type(a)=="function"){
+      var b=J.type(a);
+      if(b=="function"){
         return a;
-      }else{
+      }else if(b=="string"){
         return new Function(a);
+      }else{
+        return function(){};
       }
     }
   }
@@ -809,7 +806,7 @@ Array.insert
     });
     return this
   };
-HTMLElement.prototype.findClass = function(a) {
+  HTMLElement.prototype.findClass = function(a) {
     return _checkSelect(this.getElementsByClassName(a))
   };
   HTMLCollection.prototype.findClass = NodeList.prototype.findClass =  Array.prototype.findClass = function(a) {
@@ -996,6 +993,14 @@ HTMLElement.prototype.findClass = function(a) {
       b.toggleClass(v)
     });
     return this
+  };
+  HTMLCollection.prototype.indexOf = NodeList.prototype.indexOf = function(ele) {
+    for(var i=0;i<this.length;i++){
+      if(this[i]==ele){
+        return i;
+      }
+    }
+    return -1;
   };
   HTMLElement.prototype.val = function(a) {
     if (a == undefined && arguments.length == 0) {
@@ -1894,7 +1899,7 @@ HTMLElement.prototype.findClass = function(a) {
     return this
   };
   HTMLElement.prototype.append = function(b, a) {
-    if (a == undefined||a >= this.child().length) {
+    if (a == undefined) {
       var type=J.type(b);
       if (type=="array"||type=="htmlcollection"||type=="nodelist") {
         for(var i=0;i<b.length;i++){
@@ -1908,12 +1913,6 @@ HTMLElement.prototype.findClass = function(a) {
     } else {
       this.insertBefore(_checkHtmle(b), this.children[a])
     }
-    return this
-  };
-  HTMLCollection.prototype.append = NodeList.prototype.append = function(b, a) {
-    this.each(function(c) {
-      c.append(b, a)
-    });
     return this
   };
   HTMLElement.prototype.toArray=function(){
@@ -1971,6 +1970,12 @@ HTMLElement.prototype.findClass = function(a) {
   HTMLCollection.prototype.before = NodeList.prototype.before = function(b) {
     this.each(function(c) {
       c.before(b)
+    });
+    return this
+  };
+  HTMLCollection.prototype.append = NodeList.prototype.append = function(b, a) {
+    this.each(function(c) {
+      c.append(b, a)
     });
     return this
   };
@@ -2112,20 +2117,11 @@ HTMLElement.prototype.findClass = function(a) {
     return this[0];
   };
   Array.prototype.remove = function(b,order) {
-    for (var a = 0; a < this.length; a++) {
-      if (this[a] === b) {
-        if(order==false){
-          this[a]=this[this.length-1];
-        }else{
-          if (a < this.length - 1) {
-            for (var i = a + 1; i < this.length; i++) {
-              this[i - 1] = this[i]
-            }
-          }
-        }
-        this.length--;
-        break;
-      }
+    var index=this.indexOf(b)
+    if(order==false){
+      this[a]=this[this.length--];
+    }else{
+      this.removeByIndex(index);
     }
     return this
   };
@@ -2133,14 +2129,18 @@ HTMLElement.prototype.findClass = function(a) {
     this.splice(b,1);
     return this
   };
-  //mod
   Array.prototype.insert = function(b, i) {
     this.splice(i,0,b);
     return this
   };
   Array.prototype.insertArray = function(arr,i) {
-    for (var k=0;k<arr.length;k++) {
-      this.insert(arr[k],i+k);
+    var index=i;
+    var n=arr.length;
+    for (var a = this.length - 1; a >= index; a--) {
+      this[a + n] = this[a]
+    }
+    for(var j=0;j<n;j++){
+      this[index+j] = arr[j];
     }
     return this
   };
@@ -2163,40 +2163,36 @@ HTMLElement.prototype.findClass = function(a) {
     return this.insertArray(b, 0)
   };
   Array.prototype.sort = function(a) {
-    if(this.length>1){
-      var b = this.length;
-      var c, current;
-      for (var i = 1; i < b; i++) {
-        c = i - 1;
-        current = this[i];
-        while (c >= 0 && this[c] > current) {
-          this[c + 1] = this[c];
-          c--
-        }
-        this[c + 1] = current
+    var b = this.length;
+    var c, current;
+    for (var i = 1; i < b; i++) {
+      c = i - 1;
+      current = this[i];
+      while (c >= 0 && this[c] > current) {
+        this[c + 1] = this[c];
+        c--
       }
-      if (a == false) {
-        this.reverse()
-      }
+      this[c + 1] = current
+    }
+    if (a == false) {
+      this.reverse()
     }
     return this
   };
   Array.prototype.sortByAttr = function(a,type, b) {
-    if(this.length>1){
-      var c = this.length;
-      var d, current;
-      for (var i = 1; i < c; i++) {
-        d = i - 1;
-        current = this[i];
-        while (d >= 0 && _compareValue(this[d][a],current[a],type) ) {
-          this[d + 1] = this[d];
-          d--
-        }
-        this[d + 1] = current
+    var c = this.length;
+    var d, current;
+    for (var i = 1; i < c; i++) {
+      d = i - 1;
+      current = this[i];
+      while (d >= 0 && _compareValue(this[d][a],current[a],type) ) {
+        this[d + 1] = this[d];
+        d--
       }
-      if (type == false||b==false) {
-        this.reverse()
-      }
+      this[d + 1] = current
+    }
+    if (type == false||b==false) {
+      this.reverse()
     }
     return this
   };
@@ -2379,31 +2375,37 @@ HTMLElement.prototype.findClass = function(a) {
       return true;
     }
   };
-  Array.prototype.sum = function() {
+  Array.prototype.sum = function(a,b) {
     if(_checkEmptyArray(this)){
-      var con=J.type(this[0]);
-      if(con=="number"||con=="string"||con=="array"){
-        var sum;
-        if(con=="number"||(con=="array"&&J.type(this[0][0])=="number")){
-          sum=0;
-        }else if(con=="string"||(con=="array"&&J.type(this[0][0])=="string")){
-          sum="";
+      if(a!=undefined){
+        return this.slice(a,b).sum();
+      }else{
+        var con=J.type(this[0]);
+        if(con=="number"||con=="string"||con=="array"){
+          var sum;
+          if(con=="number"||(con=="array"&&J.type(this[0][0])=="number")){
+            sum=0;
+          }else if(con=="string"||(con=="array"&&J.type(this[0][0])=="string")){
+            sum="";
+          }else{
+            throw new Error("sum方法不支持除Number,String,Array以外的类型");
+          }
+          this.each(function(a){
+            if(J.type(a)=="array"){
+              a.each(function(b){
+                sum+=b;
+              });
+            }else{
+              sum+=a;
+            }
+          });
+          return sum;
         }else{
           throw new Error("sum方法不支持除Number,String,Array以外的类型");
         }
-        this.each(function(a){
-          if(J.type(a)=="array"){
-            a.each(function(b){
-              sum+=b;
-            });
-          }else{
-            sum+=a;
-          }
-        });
-        return sum;
-      }else{
-        throw new Error("sum方法不支持除Number,String,Array以外的类型");
       }
+    }else{
+      return 0;
     }
   };
   Array.prototype.avg = function() {
@@ -2479,23 +2481,6 @@ HTMLElement.prototype.findClass = function(a) {
       }
     }else{
       return false;
-    }
-  };
-  Array.prototype.index =function(a){
-    if(_checkEmptyArray(this,false)){
-      var type=J.type(this[0]);
-      if(type=="number"||type=="string"){
-        return this.indexOf(a);
-      }else{
-        for(var i=0;i<this.length;i++){
-          if(a==this[i]){
-            return i;
-          }
-          return -1;
-        }
-      }
-    }else{
-      return -1;
     }
   };
   Array.prototype.indexsOf =function(a){
@@ -2662,20 +2647,22 @@ HTMLElement.prototype.findClass = function(a) {
   };
   
   function _getUrlParam() {
-    var d = decodeURI(location.search.substring(1)).split("&");
-    if (d.length == 0) {
-      return ""
+    var search='';
+    if(location.search!=''){
+      search=location.search.substring(1)
+    }else if(location.hash.has('?')){
+      search=location.hash.substring(location.hash.indexOf("?")+1);
+    }
+    if (search=='') {
+      return null
     } else {
-      if (d.length == 1) {
-        return d[0].split("=")[1]
-      } else {
-        var a = {};
-        for (var c = 0; c < d.length; c++) {
-          var b = d[c].split("=");
-          a[b[0]] = b[1]
-        }
-        return a
+      var d = decodeURI(search).split("&");
+      var a = {};
+      for (var c = 0; c < d.length; c++) {
+        var b = d[c].split("=");
+        a[b[0]] = b[1]
       }
+      return a
     }
   };
 
@@ -2683,7 +2670,7 @@ HTMLElement.prototype.findClass = function(a) {
     try{
       window.location.href = (encodeURI(a))
     }catch(e){
-      throw new Error("跳转地址错误","error");
+      throw new Error("跳转地址错误");
     }
   };
   function _getRandomNum(a, b) {
@@ -2708,9 +2695,7 @@ HTMLElement.prototype.findClass = function(a) {
     }
   };
   
-  
-  
-    //show confirm input 序列化 验证 
+  //show confirm input 序列化 验证 
   var _t;
   var _submitCall = null,
     _submitCancelCall = null,
