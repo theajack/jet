@@ -11,8 +11,8 @@
     <meta name="apple-touch-fullscreen" content="yes">
     <meta content="telephone=no" name="format-detection">
     <title>jet</title>
-    <style type="text/css" src='/jet/src/css/common.css'></style>
-    <script type="text/javascript" src='/jet/assets/js/preload.js'></script>
+    <style type="text/css" src='/src/css/common.css'></style>
+    <script type="text/javascript" src='/assets/js/preload.js'></script>
     <style>
     body{width:1000px}
     #header{
@@ -38,7 +38,7 @@
     </style>
   </head>
   <body class="common">
-    <div id="header">
+    <div id="header">aaa
     </div>
     <div id="">
       <div id="menu">
@@ -68,8 +68,7 @@
     <!-- <script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script> -->
     <!-- <script type="text/javascript" src="/assets/js/jet/jet.min.js"></script> -->
     
-    
-    <script type="text/javascript" src="/jet/assets/js/jet/jet.all.js"></script>
+    <script type="text/javascript" src="/assets/js/jet.all.js"></script>
     <!--<script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script>
     <script type="text/javascript" src="/assets/js/common.js"></script>
     <script type="text/javascript" src="/assets/js/jet/define.js"></script>
@@ -87,7 +86,31 @@
     <script type="text/javascript" src="/assets/js/jet/run.js"></script>-->
     <script type="text/javascript">
       Jet.lang.conf(['en','cn']);
-      
+      Jet.router.use({
+        history:false,
+        base:"/jet",
+        trueBase:false,
+        router:{
+          '/aa':'aa',
+          '/bb':'bb',
+          '/cc':'cc',
+          '/home':{
+            name:'home',
+            children:{
+              '/sub':'home-sub',
+              '/sub2':'home-sub',
+              '/sub3':{
+                name:'home-sub',
+                children:{
+                  '/sub-sub':'home-sub'
+                }
+              }
+            }
+          },
+          '/home/sub':'home-sub',
+          '/404':'404'
+        }
+      });
       
     </script>
   </body>
