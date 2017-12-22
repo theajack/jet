@@ -38,7 +38,7 @@ function _initOn(){
   if(!_this.func||_JT.type(_this.func)!='function'){
     _throw('没有 '+e[1]+' 方法')
   }
-  this.ele._JT_on(e[0],function(){
+  this.ele._JT_on(e[0],function(event){
     var opt={
       ele:this,
       data:_this.get(),

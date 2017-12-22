@@ -51,7 +51,7 @@ function _loadCompScript(out,attr){
       }else{
         txt[i+1]=item._JT_html();
       }
-      item.remove();
+      item._JT_remove();
     });
     if(index==-1){
       script._JT_html(txt.join(''));
@@ -59,7 +59,7 @@ function _loadCompScript(out,attr){
     }
   }else{
     var txt=script._JT_html();
-    script.remove();
+    script._JT_remove();
     _JT.body()._JT_append(_JT.ct('script')._JT_attr({
       'load-script':attr,
       'type':'text/javascript'

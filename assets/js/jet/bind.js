@@ -59,7 +59,6 @@ function _initBind(opt){
           switch(type){
             case 'json':_jet=new Jet.Bind(_opt);break;
             case 'array':_jet=new Jet.For(_opt);break;
-              break;
             default:{
               if(isInput(item)){
                 _jet=new Jet.Input(_opt);
