@@ -11,8 +11,8 @@
     <meta name="apple-touch-fullscreen" content="yes">
     <meta content="telephone=no" name="format-detection">
     <title>jet</title>
-    <style type="text/css" src='/src/css/common.css'></style>
-    <script type="text/javascript" src='/assets/js/preload.js'></script>
+    <style type="text/css" src='/jet/src/css/common.css'></style>
+    <script type="text/javascript" src='/jet/assets/js/preload.js'></script>
     <style>
     body{width:1000px}
     #header{
@@ -68,7 +68,7 @@
     <!-- <script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script> -->
     <!-- <script type="text/javascript" src="/assets/js/jet/jet.min.js"></script> -->
     
-    <script type="text/javascript" src="/assets/js/jet.all.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jet/jet.all.js"></script>
     <!--<script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script>
     <script type="text/javascript" src="/assets/js/common.js"></script>
     <script type="text/javascript" src="/assets/js/jet/define.js"></script>
@@ -85,7 +85,7 @@
     <script type="text/javascript" src="/assets/js/jet/on.js"></script>
     <script type="text/javascript" src="/assets/js/jet/run.js"></script>-->
     <script type="text/javascript">
-      Jet.lang.conf(['en','cn']);
+      Jet.lang.use(['en','cn']);
       Jet.router.use({
         history:false,
         base:"/jet",
@@ -96,6 +96,10 @@
           '/cc':'cc',
           '/home':{
             name:'home',
+            params:{
+              id:1,
+              a:1
+            },
             children:{
               '/sub':'home-sub',
               '/sub2':'home-sub',

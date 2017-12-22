@@ -55,7 +55,7 @@ var test=new Jet({
       d.ele._JT_txt(txt);
       d.ele._JT_attr('value',d.data)
     },changLange:function(d){
-      Jet.lang.name=d.ele.value;
+      Jet.lang.type=d.ele.value;
     }
   }
 });
