@@ -1813,11 +1813,11 @@ Jet.router={
   params:null,//get参数
   router:{},
   conf:{
-    router:"/assets/router/router.json",
-    html:"/src/html/",
-    js:"/src/js/",
-    css:"/src/css/",
-    image:"/src/image/"
+    router:"/jet/assets/router/router.json",
+    html:"/jet/src/html/",
+    js:"/jet/src/js/",
+    css:"/jet/src/css/",
+    image:"/jet/src/image/"
   },
   init:function(){
     _JT.attr(_route)._JT_each(function(item){
