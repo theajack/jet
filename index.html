@@ -38,11 +38,12 @@
     </style>
   </head>
   <body class="common">
-    <div id="header">aaa
+    <div id="header">
+      <input type='text' Jvalid='phone'/>
     </div>
     <div id="">
       <div id="menu">
-        <div class="menuitem" Jrouter='/home' Jlang>
+        <div class="menuitem" Jrouter='/' Jlang>
           <span Jname='en'>home</span>
           <span Jname='cn'>主页</span>
         </div>
@@ -65,41 +66,17 @@
       </div>
       <div id="main" Jout></div>
     </div>
-    <!-- <script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script> -->
-    <!-- <script type="text/javascript" src="/assets/js/jet/jet.min.js"></script> -->
-    
-    <script type="text/javascript" src="/jet/assets/js/jet.all.js"></script>
-    <!--<script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script>
-    <script type="text/javascript" src="/assets/js/common.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/define.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/jet.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/load.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/valid.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/lang.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/router.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/bind.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/for.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/text.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/input.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/if.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/on.js"></script>
-    <script type="text/javascript" src="/assets/js/jet/run.js"></script>-->
+    <script type="text/javascript" src="/jet/assets/js/jet/jet.all.js"></script>
     <script type="text/javascript">
       Jet.lang.use(['en','cn']);
       Jet.router.use({
         history:false,
         base:"/jet",
+        index:'/',
         trueBase:true,
         router:{
-          '/aa':'aa',
-          '/bb':'bb',
-          '/cc':'cc',
-          '/home':{
+          '/':{
             name:'home',
-            params:{
-              id:1,
-              a:1
-            },
             children:{
               '/sub':'home-sub',
               '/sub2':'home-sub',
@@ -111,6 +88,15 @@
               }
             }
           },
+          '/aa':{
+            name:'aa',
+            params:{
+              id:1,
+              a:1
+            },
+          },
+          '/bb':'bb',
+          '/cc':'cc',
           '/home/sub':'home-sub',
           '/404':'404'
         }
