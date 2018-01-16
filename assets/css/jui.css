@@ -1,0 +1,686 @@
+/*common********************************************************************/
+.j-btn,.j-input,.j-select,.j-radio,.j-checkbox,.j-switch,.j-date,.j-color{
+    margin: 3px;
+    display: inline-block;
+}
+.j-option{visibility:hidden}
+
+/*btn********************************************************************/
+.j-btn{
+    background-color: #1da1ff;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    outline: none;
+    border: none;
+    font-family: "Microsoft Yahei";
+    transition: background-color .2s ease;
+    -webkit-transition: background-color .2s ease;
+    -o-transition: background-color .2s ease;
+    -moz-transition: background-color .2s ease;
+    -ms-transition: background-color .2s ease;
+}
+.j-btn.xs{
+    padding: 2px 5px;
+    font-size: 12px;
+}
+.j-btn.xs .j-icon{
+    font-size: 12px;
+}
+.j-btn.s{
+    padding: 3px 6px;
+    font-size: 14px;
+}
+.j-btn.s .j-icon{
+    font-size: 14px;
+}
+.j-btn.l{
+    padding: 7px 14px;
+    font-size: 18px;
+}
+.j-btn.l .j-icon{
+    font-size: 18px;
+}
+.j-btn.xl{
+    padding: 9px 16px;
+    font-size: 22px;
+}
+.j-btn.xl .j-icon{
+    font-size: 22px;
+}
+.j-btn:hover{background-color: #5fbcff}
+.j-btn:active{background-color: #70c4ff}
+.j-btn.success{background-color: #2ac32f}
+.j-btn.success:hover{background-color: #27d12c}
+.j-btn.success:active{background-color: #2fec34}
+.j-btn.warn{background-color: #dfa02b}
+.j-btn.warn:hover{background-color: #eaa82c}
+.j-btn.warn:active{background-color: #f2af32}
+.j-btn.info{background-color: #9e9e9e}
+.j-btn.info:hover{background-color: #b6b6b6}
+.j-btn.info:active{background-color: #c7c7c7}
+.j-btn.danger{background-color: #dc5454}
+.j-btn.danger:hover{background-color: #f45d5d}
+.j-btn.danger:active{background-color: #ff8383}
+
+
+.j-input,.j-select,.j-date{
+    font-size: 16px;
+    border: 1px solid #999;
+    background-color:#fff;
+    width: 150px;
+    padding-left: 5px;
+    height: 30px;
+    color: #222;
+    outline: none;
+    border-radius: 2px;
+    transition: border-color .2s ease;
+    -webkit-transition: border-color .2s ease;
+    -o-transition: border-color .2s ease;
+    -moz-transition: border-color .2s ease;
+    -ms-transition: border-color .2s ease;
+}
+.j-input:focus{border: 1px solid #bbb;}
+.j-input.normal{border-color: #1da1ff}
+.j-input.normal:focus{border-color: #70c4ff}
+.j-input.success{border-color: #2ac32f}
+.j-input.success:focus{border-color: #2fec34}
+.j-input.warn{border-color: #dfa02b}
+.j-input.warn:focus{border-color: #f2af32}
+.j-input.danger{border-color: #dc5454}
+.j-input.danger:focus{border-color: #ff8383}
+.j-input.xs{
+    font-size: 12px;
+    height: 23px;
+    width: 100px;
+    padding-left: 2px;
+}
+.j-input.s{
+    font-size: 14px;
+    height: 26px;
+    width: 120px;
+    padding-left: 4px;
+}
+.j-input.l{
+    font-size: 18px;
+    height: 35px;
+    width: 170px;
+    padding-left: 7px;
+}
+.j-input.xl{
+    font-size: 22px;
+    height: 40px;
+    width: 200px;
+    padding-left: 8px;
+}
+
+.j-select{
+    cursor: pointer;
+    padding: 0;
+    line-height: 30px;
+    position: relative;
+}
+.j-select-vw{
+    position: relative;
+    width: 100%;
+    height:100%;
+    text-align: center;
+    line-height: 27px;
+    background-color:#fff;
+}
+.j-select-vw .j-icon{
+    position: absolute;
+    right: 7px;
+    top: 5px;
+    font-size: 20px;
+    transform: rotate(0deg);
+    transition: transform .2s ease;
+    -webkit-transition: -webkit-transform .2s ease;
+    -o-transition: -o-transform .2s ease;
+    -moz-transition: -moz-transform .2s ease;
+    -ms-transition: -ms-transform .2s ease;
+}
+.j-select-vw .j-icon.s-open{
+    transform: rotate(-180deg);
+}
+.j-select:hover{
+    border: 1px solid #bbb;
+}
+.j-option-w{
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    opacity: 0;
+    text-align: center;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    height:0;
+    overflow: hidden;
+    transition: all .2s ease;
+    -webkit-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    -ms-transition: all .2s ease;
+    background-color:#fff;
+    z-index:1;
+}
+.j-option-w.s-open{
+    top: 30px;
+    opacity: 1;
+    height:auto;
+}
+.j-option-w .j-option{
+    border-bottom: 1px solid #ccc;
+}
+.j-option-w .j-option.c-disabled{
+    color: #aaa;
+}
+.j-option-w .j-option:hover{
+    background-color:#eee;
+}
+.j-option-w .j-option:last-child{
+    border: none
+}
+
+
+
+/*MESSAGE*************************************************************/
+.j-msg-w{
+    position: fixed;
+    background-color: #2ac32f;
+    color: #fff;
+    width: 600px;
+    left: 50%;
+    margin-left: -300px;
+    border-radius: 3px;
+    padding: 10px 35px;
+    font-size: 15px;
+    top:-20px;
+    opacity: 0;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+}
+.j-msg-w.warn{
+    background-color: #dfa02b;
+}
+.j-msg-w.error{
+    background-color: #dc5454;
+}
+.j-msg-w.info{
+    background-color: #9e9e9e;
+}
+.j-msg-w.msg-open{
+    top: 10px;
+    opacity: .95;
+}
+.j-msg-i,.j-msg-close{
+    position: absolute;
+    font-size: 20px;
+    top: 50%;
+    margin-top: -10px;
+}
+.j-msg-i{
+    left: 10px;
+}
+.j-msg-close{
+    right:10px;
+    cursor: pointer;
+    opacity: 1;
+}
+.j-msg-close:hover{
+    opacity: 0.8;
+}
+
+/*RADIO************************************************************************************/
+.j-radio,.j-checkbox{
+    display: inline-block;
+    cursor: pointer;
+    margin: 3px;
+}
+.j-radio-cw,.j-checkbox-cw{
+    display: inline-block;
+    border: 1px solid #999;
+    border-color: #999;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-radius: 50%;
+    vertical-align: middle;
+    transition: border-color .3s ease;
+    -webkit-transition: border-color .3s ease;
+    -o-transition: border-color .3s ease;
+    -moz-transition: border-color .3s ease;
+    -ms-transition: border-color .3s ease;
+}
+.j-checkbox-cw{
+    border-radius: 2px;
+    width: 18px;
+    height: 18px;
+}
+.j-radio-c{
+    width: 0px;
+    height: 0px;
+    background-color: transparent;
+    position: relative;
+    display: inline-block;
+    top: -6px;
+    left: 9px;
+    border-radius: 50%;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+}
+.j-checkbox-c{
+    border-radius: 2px;
+    background-color: transparent;
+    color: transparent;
+    position: relative;
+    top: -4px;
+    font-size: 0px;
+    background-color: transparent;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+}
+.j-radio-t,.j-checkbox-t{
+    vertical-align: middle;
+    font-size: 15px;
+    color: #222;
+    transition:color .3s ease;
+    -webkit-transition:color .3s ease;
+    -o-transition:color .3s ease;
+    -moz-transition:color .3s ease;
+    -ms-transition:color .3s ease;
+}
+.j-radio:hover .j-radio-cw,.j-checkbox:hover .j-checkbox-cw{border-color: #5fbcff}
+.j-radio:hover .j-radio-t,.j-checkbox:hover .j-checkbox-t{color: #5fbcff}
+.j-radio.j-checked .j-radio-cw,.j-checkbox.j-checked .j-checkbox-cw{border-color: #1da1ff}
+.j-radio.j-checked .j-radio-t,.j-checkbox.j-checked .j-checkbox-t{color: #1da1ff}
+.j-radio.j-checked .j-radio-c{
+    background-color: #1da1ff;
+    width:12px;
+    height:12px;
+    top: -1px;
+    left: 3px;
+}
+.j-checkbox.j-checked .j-checkbox-c{
+    color: #1da1ff;
+    top: -2px;
+    font-size: 16px;
+}
+/*RADIO END************************************************************************************/
+/*SWITCH************************************************************************************/
+.j-switch{
+    position: relative;
+    cursor: pointer;
+    width: 50px;
+    height: 24px;
+    padding: 2px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background-color: #ddd;
+    transition:all .3s ease;
+    -webkit-transition:all .3s ease;
+    -o-transition:all .3s ease;
+    -moz-transition:all .3s ease;
+    -ms-transition:all .3s ease;
+}
+.j-switch:hover{
+    border: 1px solid #1da1ff;
+}
+.j-switch-c{
+    position: absolute;
+    width: 20px;
+    display: inline-block;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    left: 2px;
+    top: 1px;
+    transition:left .3s ease;
+    -webkit-transition:left .3s ease;
+    -o-transition:left .3s ease;
+    -moz-transition:left .3s ease;
+    -ms-transition:left .3s ease;
+}
+.j-switch-t{
+    position: absolute;
+    opacity: 0; 
+    width: 100%;
+    padding: 0 8px 0 3px;
+    font-size: 12px;
+    transition:opacity .3s ease;
+    -webkit-transition:opacity .3s ease;
+    -o-transition:opacity .3s ease;
+    -moz-transition:opacity .3s ease;
+    -ms-transition:opacity .3s ease;
+    text-align: left;
+    color:#fff; 
+    height: 24px;
+    top: 0;
+    line-height: 23px;
+
+}
+.j-switch-t.j-st-off{
+    opacity: 1;
+    text-align: right;
+}
+.j-switch-t .j-st-on{
+    
+}
+.j-switch-t .j-st-off{
+    
+}
+.j-switch.j-s-on{
+    background-color: #1da1ff;
+    border: 1px solid #6ca9d4;
+}
+.j-switch.j-s-on .j-switch-c{
+    left: 27px;
+}
+.j-switch.j-s-on .j-switch-t.j-st-on{
+    opacity: 1;
+}
+.j-switch.j-s-on .j-switch-t.j-st-off{
+    opacity: 0;
+}
+/*SWITCH END************************************************************************************/
+
+/*DATE************************************************************************************/
+.j-date{
+    position: relative;
+    padding: 0;
+    padding-top: 2px;
+}
+.j-date-v{
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    outline: none;
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+.j-date-w{
+    z-index: 1;
+    display: none;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    top: 0px;
+    opacity: 0;
+    border-radius: 2px;
+    transition:all .3s ease;
+    -webkit-transition:all .3s ease;
+    -o-transition:all .3s ease;
+    -moz-transition:all .3s ease;
+    -ms-transition:all .3s ease;
+}
+.j-date.j-active .j-date-w{
+    top: 35px;
+    opacity: 1;
+}
+
+.j-date-t{
+    margin: 0;
+    border-bottom:1px solid #aaa;
+    line-height: 18px;
+}
+.j-date-ty,.j-date-tm{
+    float: left;
+    width:50%;
+    position: relative;
+}
+.j-date-ty{
+
+}
+.j-date-tm{
+
+}
+.j-date-icon{
+    position: absolute;
+    top: 2px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #000;
+}
+.j-date-icon:hover{
+    color: #1da1ff;
+}
+.j-date-icon.icon-angle-left{
+    left: 0px;
+}
+.j-date-icon.icon-angle-right{
+    right:0;
+}
+.j-date-input{
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    outline: none;
+    border: none;
+}
+.j-date-dw{
+    padding: 0 2px;
+    background-color: #eee;
+}
+.j-date-di,.j-date-si{
+    float: left;
+    width: 14.285714285714286%;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+.j-date-di{
+    cursor: auto;
+}
+.j-date-sw{
+    padding: 2px;
+}
+.j-date-si{
+    background-color: transparent;
+    color:#222;
+    border-radius: 3px;
+    transition:all .3s ease;
+    -webkit-transition:all .3s ease;
+    -o-transition:all .3s ease;
+    -moz-transition:all .3s ease;
+    -ms-transition:all .3s ease;
+}
+.j-date-si:hover{
+    background-color: #70c4ff;
+    color:#fff;
+    border-radius: 10px;
+}
+.j-date-si.j-disabled{
+    color:#ddd;
+    cursor: no-drop;
+}
+.j-date-si.j-date-current{
+    background-color: #2ac32f;
+    color:#fff;
+    border-radius: 10px;
+}
+.j-date-si.j-active{
+    background-color: #1da1ff;
+    color:#fff;
+    border-radius: 10px;
+}
+.j-date-si.j-disabled:hover{
+    background-color: transparent;
+    color:#ddd;
+    border-radius: 3px;
+}
+
+.j-clearfix:after{
+    clear:both;
+}
+.j-clearfix:before, .j-clearfix:after{
+    display: table;
+    content: " ";
+}
+/*DATE END************************************************************************************/
+/*COLOR************************************************************************************/
+
+.j-color{
+    width: 30px;
+    height: 30px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: bottom;
+}
+.j-color-icon{
+    transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -o-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transition:transform .3s ease;
+    -webkit-transition:transform .3s ease;
+    -o-transition:transform .3s ease;
+    -moz-transition:transform .3s ease;
+    -ms-transition:transform .3s ease;
+    position: absolute;
+    top:0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    line-height: 30px;
+    color:#ddd;
+}
+.j-color.j-active .j-color-icon{
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+}
+.j-color-w{
+    width:220px;
+    /* display: none; */
+    position: absolute;
+    border: 1px solid #999;
+    top:0;
+    left:-95px;
+    opacity: 0;
+    transition:all .3s ease;
+    -webkit-transition:all .3s ease;
+    -o-transition:all .3s ease;
+    -moz-transition:all .3s ease;
+    -ms-transition:all .3s ease;
+}
+.j-color.j-active .j-color-w{
+    top:32px;
+    opacity: 1;
+}
+.j-color-pick:hover{
+    cursor: pointer;
+}
+.j-color-pick{
+    background-color: #f00;
+    width:200px;
+    height:150px;
+    position: relative;
+}
+.j-color-pick-s,.j-color-range-s,.j-color-alp-s{
+    position: absolute;
+    width:6px;
+    height:6px;
+    border:1px solid #888;
+    background-color: rgba(255,255,255,.7);
+}
+.j-color-cover1,.j-color-cover2,.j-color-cover-a,.j-color-range-a,.j-color-alp-a,.j-color-alp-color{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.j-color-cover1{
+    background: linear-gradient(90deg,#fff,hsla(0,0%,100%,0));
+}
+.j-color-cover2{
+    background: linear-gradient(0deg,#000,transparent);
+}
+.j-color-cover-a,.j-color-range-a,.j-color-alp-a{
+    background:transparent;
+}
+.j-color-range{
+    position: absolute;
+    right:0;
+    top:0;
+    height:150px;
+    width:15px;
+    background: linear-gradient(180deg,red 0,#ff0 17%,lime 33%,cyan 50%,blue 67%,#f0f 83%,red);
+}
+.j-color-range:hover{
+    cursor: pointer;
+}
+.j-color-range-s{
+    width:100%;
+    height:6px;
+}
+.j-color-vw{
+
+}
+.j-color-v{
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    font-size: 13px!important;
+    text-align: center!important;
+}
+.j-color-v:focus{
+    border: none;
+}
+.j-color-btn{
+    float:right;
+    margin: 0;
+    border-radius:0;
+}
+
+.j-color-alp{
+    position: relative;
+    width: 100%;
+    height: 15px;
+    margin-top:3px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+    cursor: pointer;
+}
+.j-color-alp-color{    
+    background: linear-gradient(to right, rgba(19, 206, 102, 0) 0%, rgb(19, 206, 102) 100%);
+}
+.j-color-alp-s{
+    width:6px;
+    height: 15px;
+}
+
+/*COLOR END************************************************************************************/
+
+
+
+@media screen and (max-width: 620px) {
+    .j-msg-w{
+        width:94%;
+        font-size: 12px;
+        left: 3%;
+        margin-left: 0px;
+
+    }
+}

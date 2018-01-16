@@ -11,8 +11,11 @@
     <meta name="apple-touch-fullscreen" content="yes">
     <meta content="telephone=no" name="format-detection">
     <title>jet</title>
-    <style type="text/css" src='/jet/src/css/common.css'></style>
-    <script type="text/javascript" src='/jet/assets/js/preload.js'></script>
+    <link rel="stylesheet" href="/src/css/common.css">
+    <link rel="stylesheet" href="/assets/css/icon.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/jui.css">
+    <script type="text/javascript" src='/assets/js/preload.js'></script>
     <style>
     body{width:1000px}
     #header{
@@ -40,6 +43,12 @@
   <body class="common">
     <div id="header">
       <input type='text' Jvalid='phone'/>
+      <div class="j-select">
+        <div class="j-option" value='1'><i class='icon icon-pencil'></i>选项一</div>
+        <div class="j-option" default value='2'><i class='icon icon-pencil'></i>选项二</div>
+        <div class="j-option" disabled value='3'><i class='icon icon-pencil'></i>选项三</div>
+      </div>
+
     </div>
     <div id="">
       <div id="menu">
@@ -63,17 +72,50 @@
           <span Jname='en'>sub</span>
           <span Jname='cn'>子</span>
         </div>
+        <div class="menuitem" Jrouter='/jui' Jlang>
+          <span Jname='en'>JUI</span>
+          <span Jname='cn'>子</span>
+        </div>
       </div>
       <div id="main" Jout></div>
     </div>
-    <script type="text/javascript" src="/jet/assets/js/jet.min.js"></script>
+    <!-- <script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script> -->
+    <script type="text/javascript" src="/assets/js/jet/jet.all.2.js"></script>
+    <!-- <script type="text/javascript" src="/assets/js/jet/jet.all.js"></script> -->
+    <script type="text/javascript" src="/assets/js/jetter2.0.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/main.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/select.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/message.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/radio.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/checkbox.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/switch.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/date.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/drag.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/color.js"></script>
+    
+    <!-- <script type="text/javascript" src="/assets/js/jet/jet.all.js"></script> -->
+    <!--<script type="text/javascript" src="/assets/js/jet/jettertool4jet.js"></script>
+    <script type="text/javascript" src="/assets/js/common.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/define.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/jet.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/load.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/valid.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/lang.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/router.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/bind.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/for.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/text.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/input.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/if.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/on.js"></script>
+    <script type="text/javascript" src="/assets/js/jet/run.js"></script>-->
     <script type="text/javascript">
       Jet.lang.use(['en','cn']);
       Jet.router.use({
         history:false,
         base:"/jet",
         index:'/',
-        trueBase:true,
+        trueBase:false,
         router:{
           '/':{
             name:'home',
@@ -98,6 +140,7 @@
           '/bb':'bb',
           '/cc':'cc',
           '/home/sub':'home-sub',
+          '/jui':'jui',
           '/404':'404'
         }
       });

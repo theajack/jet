@@ -37,7 +37,8 @@
   <span Jname='en'>homehomehomehomehomehome</span>
   <span Jname='cn'>主页主页主页主页主页主页</span>
 </div>
-<div J='me' Jon="click:test">
+<!--  Jstyle='display:{{$.me.name.boy}}?"block":"none";background-color:{{$.me.name.color}};color:{{$.me.name.color}}' -->
+<div J='me' Jattr='value:{{$.me.name.first}}' Jon="click:test">
   <div Jlang>
     <div Jname='en'>
       <input type='text' value='hello world'/>
@@ -48,8 +49,17 @@
   </div>
   <div J='name' >
     <div Jload='test.html'></div>
-    <div J='first' class='home2' jif='$=="thea":class[a]'></div>
+    <div J='first' jlang class='home2' jshow='{{$.first}}=="thea"' jif='{{$.first}}=="thea":class[a]'></div>
+    <input type="text" J="first">
+    <div J='age' class='home2' jshow='{{$.age}}===20'></div>
+    <input type="text" J="age">
     <div J='last'></div>
+    <input type="text" J="color">
+    <div J='me' Jroot>
+      <div J='name' >
+        <span J='first'></span>-<span J='last'></span>
+      </div>
+    </div>
   </div>
   <div J='test'  >
     <div J='$each' >
@@ -66,11 +76,12 @@
 </div>
 <div J='a' jif='$:css[display=block|color=#f00]'></div>
 <div J='b' jif='$:hide|show'></div>
-    
 <script type="text/javascript" src='home.js'></script>
 <script type="text/javascript">
   //console.log(2);
   function test2(){
     console.log('test2')
   }
+
+  
 </script>
