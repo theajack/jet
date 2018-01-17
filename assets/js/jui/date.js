@@ -26,6 +26,7 @@ JUI.DATE.prototype.init=function(){
     var _jui=this;
     var item=this.ele;
     var _d=J.ct('div.j-date-w');
+        var _close=J.ct('i.j-icon.icon-times.j-date-close');
         var _dt=J.ct('div.j-date-t.j-clearfix');
             var _dty=J.ct('div.j-date-ty');
                 var _dtyil=J.ct('i.j-icon.icon-angle-left.j-date-icon');
@@ -42,14 +43,14 @@ JUI.DATE.prototype.init=function(){
                 _dtyil.next().val(year);
                 resetDayList(_jui,_sw,year,month,
                     (year==_jui._date.year&&month==_jui._date.month)
-                    ,_d_year,_d_month);
+                    ,_d_year,_d_month,true);
             });
             _dtyir.clk(function(){
                 var year=parseInt(_d_year.val())+1,month=parseInt(_d_month.val());
                 _dtyir.prev().val(year);
                 resetDayList(_jui,_sw,year,month,
                     (year==_jui._date.year&&month==_jui._date.month)
-                    ,_d_year,_d_month);
+                    ,_d_year,_d_month,true);
             });
             _dtmil.clk(function(){
                 var year=parseInt(_d_year.val()),month=parseInt(_d_month.val());
@@ -57,7 +58,7 @@ JUI.DATE.prototype.init=function(){
                 _dtmil.next().val(fixNum(month));
                 resetDayList(_jui,_sw,year,month,
                     (year==_jui._date.year&&month==_jui._date.month)
-                    ,_d_year,_d_month);
+                    ,_d_year,_d_month,true);
             });
             _dtmir.clk(function(){
                 var year=parseInt(_d_year.val()),month=parseInt(_d_month.val());
@@ -65,14 +66,14 @@ JUI.DATE.prototype.init=function(){
                 _dtmir.prev().val(fixNum(month));
                 resetDayList(_jui,_sw,year,month,
                     (year==_jui._date.year&&month==_jui._date.month)
-                    ,_d_year,_d_month);
+                    ,_d_year,_d_month,true);
             });
             _d_year.on('input',function(){
                 if(/^([12]\d{3})$/.test(this.val())){
                     var year=parseInt(this.val()),month=parseInt(_d_month.val());
                     resetDayList(_jui,_sw,year,month,
                         (year==_jui._date.year&&month==_jui._date.month)
-                        ,_d_year,_d_month);
+                        ,_d_year,_d_month,true);
                 }
             });
             _d_month.on('input',function(){
@@ -81,7 +82,7 @@ JUI.DATE.prototype.init=function(){
                     var year=parseInt(_d_year.val());
                     resetDayList(_jui,_sw,year,month,
                         (year==_jui._date.year&&month==_jui._date.month)
-                        ,_d_year,_d_month);
+                        ,_d_year,_d_month,true);
                     this.val(fixNum(month));
                 }
             });
@@ -94,15 +95,19 @@ JUI.DATE.prototype.init=function(){
         var _sw=J.ct('div.j-date-sw.j-clearfix');
         //resetDayList(_jui,_sw,this._date.year,this._date.month,true,_d_year,_d_month);
 
-    _d.append([_dt,_dw,_sw]);
-    var _dv=J.ct('input.j-date-v[type=text][readonly=true]')
+    _d.append([_dt,_dw,_sw,_close]);
+    var _dv=J.ct('input.j-date-v[type=text]')//[readonly=true]
     item.append([_d,_dv]);
     var _dreg=/^(([12]\d{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|3(0|1))))$/;
     _jui.onchange=function(){
         if(!_dreg.test(_jui._value)){
             _throw('DATE 格式错误：请修改为xxxx-xx-xx')
         }
-        _dv.val(_jui._value);
+        if(!_jui.isFromInput){
+            _dv.val(_jui._value);
+        }else{
+            _jui.isFromInput=false;
+        }
     }
     item.$jui=_jui;
     _dv.clk(function(e){
@@ -117,9 +122,25 @@ JUI.DATE.prototype.init=function(){
                     (_val_d.year==_jui._date.year&&_val_d.month==_jui._date.month)
                     ,_d_year,_d_month);
             }
-        }else{
-            _jui.close();
+            _dv.css('cursor','text');
         }
+    });
+    _dv.oninput=function(){
+        if(_dreg.test(this.val())){
+            this.css('color','#222');
+            //_jui.isFromInput=true;
+            _jui.value=this.val();
+            var _val_d=strToDate(_jui._value,_jui._date);
+            resetDayList(_jui,_sw,_val_d.year,_val_d.month,
+                    (_val_d.year==_jui._date.year&&_val_d.month==_jui._date.month)
+                    ,_d_year,_d_month);
+        }else{
+            this.css('color','#d44');
+        }
+    };
+    _close.clk(function(){
+        _jui.close();
+        _dv.css('cursor','pointer');
     });
 };JUI.DATE.prototype.close=function(){
     if(this.ele.hasClass('j-active')){
@@ -147,7 +168,7 @@ function strToDate(v,d){
     return {};
 }
 function fixNum(d){return (d<10)?'0'+d:d};
-function resetDayList(_jui,ele,year,month,isCur,_d_year,_d_month){
+function resetDayList(_jui,ele,year,month,isCur,_d_year,_d_month,bool){
     var isCurM=false;
     ele.empty();
     var d=strToDate(_jui._value,_jui._date);
@@ -167,6 +188,10 @@ function resetDayList(_jui,ele,year,month,isCur,_d_year,_d_month){
                 _jui.close();
             }));
         }else{
+            if(!bool){
+                _d_year.val(d.year);
+                _d_month.val(fixNum(d.month));
+            }
             ele.append(J.ct('div.j-date-si.j-disabled').txt(day));
         }
     });

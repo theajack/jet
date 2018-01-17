@@ -91,128 +91,49 @@
 
     </div>
     <div>
-            <div class='j-date' jui-bind='date'></div>
+            <div class='j-date xs' jui-bind='date'></div>
+            <div class='j-date s' jui-bind='date'></div>
+            <div class='j-date m' jui-bind='date'></div>
+            <div class='j-date l' jui-bind='date'></div>
+            <div class='j-date xl' jui-bind='date'></div>
             <!-- jui-bind 优先级高于checked -->
             <!-- <div class='j-color'>
-                
+             
             </div> -->
-            <div class='j-color' jui-bind='color' alpha></div>
+    </div>
+    <div>   
+            <div class='j-color xs' jui-bind='color' alpha></div>
+            <div class='j-color s' jui-bind='color2'></div>
+            <div class='j-color m' jui-bind='color2'></div>
+            <div class='j-color l' jui-bind='color2'></div>
+            <div class='j-color xl' jui-bind='color2'></div>
+    </div>
+    <div class='j-row'>
+        <div class='j-col c8'></div>
+        <div class='j-col c6'></div>
+        <div class='j-col c4'></div>
+        <div class='j-col c4'></div>
+        <div class='j-col c2'></div>
+    </div>
+    <div class='j-row j-row-m'>
+        <div class='j-col c1'></div>
+        <div class='j-col c2'></div>
+        <div class='j-col c3'></div>
+        <div class='j-col c3'></div>
+        <div class='j-col c4'></div>
+        <div class='j-col c5'></div>
+        <div class='j-col c6'></div>
+    </div>
+    <div class='j-row j-row-m'>
+        <div class='j-col c12'></div>
+        <div class='j-row j-col c12'>
+            <div class='j-col c7'></div>
+            <div class='j-col c5'></div>
+            <div class='j-col c12 '></div>
+        </div>
     </div>
 </div>
 <script>
-    function showa(obj){obj.prev().addClass('j-active')}
-    function hidea(obj){obj.prev().removeClass('j-active')}
-    function _addClass(obj){obj.toggleClass('j-checked')}
-    function toggleActive(obj){J.cls('j-color').toggleClass('j-active')}
-//     J.cls('j-color').html(`<div class='j-color-w'>
-//                     <div class="j-color-pick">
-//                         <div class="j-color-cover1"></div>
-//                         <div class='j-color-cover2'></div>
-//                         <div class='j-color-pick-s'></div>
-//                         <div class='j-color-cover-a'></div>
-//                     </div>
-//                     <div class='j-color-range'>
-//                         <div class='j-color-range-s'></div>
-//                         <div class='j-color-range-a'></div>
-//                     </div>
-//                     <div class='j-color-alp'>
-//                         <div class='j-color-alp-color'></div>
-//                         <div class='j-color-alp-s'></div>
-//                         <div class='j-color-alp-a'></div>
-//                     </div>
-//                     <div class='j-color-vw'>
-//                         <input type="text" class='j-color-v j-input s'>
-//                         <div class='j-color-btn j-btn s info'>
-//                             清空
-//                         </div>
-//                         <div class='j-color-btn j-btn s'>
-//                             确定
-//                         </div>
-//                     </div>
-//                 </div>
-//                 <i class="j-icon j-color-icon icon-chevron-down" onclick="toggleActive()"></i>`)
-//     var r=255,g=0,b=0;
-//     var _r=255,_g=0,_b=0;
-//             var dr=255-r;
-//             var dg=255-g;
-//             var db=255-b;
-//         var alp=0;
-//         var dx=1,dy=0;
-//     var drag1=new JUI.DRAG({
-//         ele:J.cls('j-color-pick-s'),
-//         par:J.cls('j-color-cover-a'),
-//         onchange:function(d){
-//             d.x=1-d.x;
-//             dx=d.x,dy=d.y;
-//             _r=parseInt(r+d.x*dr);
-//             _g=parseInt(g+d.x*dg);
-//             _b=parseInt(b+d.x*db);
-//             _r=parseInt(_r-d.y*(_r));
-//             _g=parseInt(_g-d.y*(_g));
-//             _b=parseInt(_b-d.y*(_b));
-//             //-d.y*r-d.y*g-d.y*b
-//             _r=Math.round(_r);
-//             _g=Math.round(_g);
-//             _b=Math.round(_b);
-//             J.cls('j-color-v').val('rgba('+_r+','+_g+','+_b+','+alp+')');
-//             J.cls('j-color').css('background-color','rgba('+_r+','+_g+','+_b+','+alp+')')
-//             console.log(_r+"_"+_g+'_'+_b);
-//             console.log(d.x+"_"+d.y);
-//         }
-//     });
-// // f00->ff0->0f0->0ff->00f->f0f->f00
-//     var drag2=new JUI.DRAG({
-//         ele:J.cls('j-color-range-s'),
-//         par:J.cls('j-color-range-a'),
-//         mode:'y',
-//         onchange:function(d){
-//             var split=1/6;
-//             var rate=(d.y%split)/split;
-//             var pos=Math.floor(d.y/split);
-//             var c1=255*rate;
-//             var c2=255-c1;
-//             switch(pos){
-//                 case 0:r=255;g=c1;b=0;break;
-//                 case 1:r=c2;g=255;b=0;break;
-//                 case 2:r=0;g=255;b=c1;break;
-//                 case 3:r=0;g=c2;b=255;break;
-//                 case 4:r=c1;g=0;b=255;break;
-//                 case 5:r=255;g=0;b=c2;break;
-//                 case 6:r=255;g=0;b=0;break;
-//             }
-//             dr=255-r;
-//             dg=255-g;
-//             db=255-b;
-//             r=Math.round(r);
-//             g=Math.round(g);
-//             b=Math.round(b);
-//             J.cls('j-color-pick').css('background-color','rgb('+r+','+g+','+b+')');
-//             J.cls('j-color-alp-color').css('background','linear-gradient(to right, rgba('+r+', '+g+', '+b+', 0) 0%, rgb('+r+', '+g+', '+b+') 100%)');
-//             _r=parseInt(r+dx*dr);
-//             _g=parseInt(g+dx*dg);
-//             _b=parseInt(b+dx*db);
-//             _r=parseInt(_r-dy*(_r));
-//             _g=parseInt(_g-dy*(_g));
-//             _b=parseInt(_b-dy*(_b));
-//             _r=Math.round(_r);
-//             _g=Math.round(_g);
-//             _b=Math.round(_b);
-//             J.cls('j-color-v').val('rgba('+_r+','+_g+','+_b+','+alp+')');
-//             J.cls('j-color').css('background-color','rgba('+_r+','+_g+','+_b+','+alp+')')
-//             console.log(r+"_"+g+'_'+b);
-//         }
-//     });
-//     var drag3=new JUI.DRAG({
-//         ele:J.cls('j-color-alp-s'),
-//         par:J.cls('j-color-alp-a'),
-//         mode:'x',
-//         onchange:function(d){
-//             alp=parseFloat(d.x.toFixed(2));
-//             J.cls('j-color-v').val('rgba('+_r+','+_g+','+_b+','+alp+')');
-//             J.cls('j-color').css('background-color','rgba('+_r+','+_g+','+_b+','+alp+')')
-//             console.log('alp:'+d.x)
-//         }
-//     });
     var aa=new Jet({
         data:{
             testInput:'测试输入框绑定',
@@ -226,7 +147,8 @@
             },fruit:'西瓜',fruitList:['西瓜'],
             sv:'否',
             date:'2018-01-17',
-            color:'rgba(231,22,32,1)'
+            color:'rgba(231,22,32,1)',
+            color2:'rgb(231,22,32)'
         },
         func:{
             alert:function(d){
@@ -238,6 +160,7 @@
     });
 </script>
 <style>
-
+.j-col{background-color: #888;border: 1px solid #f44;height:30px;}
+.j-col.j-row .j-col{background-color: #eee;}
 
 </style>

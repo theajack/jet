@@ -53,6 +53,7 @@ JUI.COLOR.prototype.init=function(){
         var _ra=J.ct('div.j-color-range-a');
         _range.append([_rs,_ra]);
     _cw.append([_pick,_range]);
+    var _colorc=J.ct('div.j-color-bg');
     if(this.showAlp){
         var _alp=J.ct('div.j-color-alp');
             var _ac=J.ct('div.j-color-alp-color');
@@ -60,6 +61,7 @@ JUI.COLOR.prototype.init=function(){
             var _aa=J.ct('div.j-color-alp-a');
             _alp.append([_ac,_as,_aa]);
         _cw.append(_alp);
+        item.addClass('j-color-bg-alp');
     }
         var _vw=J.ct('div.j-color-vw');
             var _v=J.ct('input.j-color-v.j-input.s');
@@ -68,7 +70,7 @@ JUI.COLOR.prototype.init=function(){
         _vw.append([_v,_bc,_bok]);
     _cw.append(_vw);
     var _icon=J.ct('i.j-icon.j-color-icon.icon-chevron-down');
-    item.append([_cw,_icon]);
+    item.append([_cw,_colorc,_icon]);
     var setColor=function(color){
         if(color==undefined){
             if(_jui.showAlp){
@@ -77,10 +79,15 @@ JUI.COLOR.prototype.init=function(){
                 color=_jsonToSixteen(_jui._showColor);
             }
         }
-        _v.val(color);
-        item.css('background-color',color);
+        if(_jui._isFromInput){
+            _jui._isFromInput=false;
+        }else{
+            _v.val(color);
+        }
+        _colorc.css('background-color',color);
+        var r=_jui._rangeColor;
+        _pick.css('background-color','rgb('+r.r+','+r.g+','+r.b+')');
         if(_jui.showAlp){
-            var r=_jui._rangeColor;
             _ac.css('background','linear-gradient(to right, rgba('+r.r+', '+r.g+', '+r.b+', 0) 0%, rgb('+r.r+', '+r.g+', '+r.b+') 100%)');
         }
     }
@@ -91,7 +98,11 @@ JUI.COLOR.prototype.init=function(){
         }
     };
     _bc.clk(function(){//clear
-        _jui.value='rgba(255,255,255,0)';
+        if(_jui.showAlp){
+            _jui.value='rgba(255,255,255,0)';
+        }else{
+            _jui.value='#ffffff';
+        }
         close();
     });
     _bok.clk(function(){//ok
@@ -102,7 +113,9 @@ JUI.COLOR.prototype.init=function(){
         if(!item.hasClass('j-active')){
             _cw.css('display','block');
             setTimeout(function(){item.addClass('j-active')},30);
+            _jui.onchange();
         }else{
+            _jui.value=_v.val();
             close();
         }
     });
@@ -167,14 +180,27 @@ JUI.COLOR.prototype.init=function(){
             }
         });
     }
+    _v.oninput=function(){
+        _jui._isFromInput=true;
+        if(_checkColorValid(this.val(),_jui.showAlp)){
+            this.css('color','#222');
+            _jui.value=this.val();
+        }else{
+            this.css('color','#d44');
+        }
+    };
     _jui.onchange=function(){
-        var color=_jui._value;
-        initParams.call(_jui);
-        setColor();
-        color_drag.setPositionByRate(1-_jui._rate.x,_jui._rate.y);
-        alpha_drag.setPositionByRate(_jui._alpha,0);
-        if(_jui.showAlp)range_drag.setPositionByRate(0,countRangeRate(_jui._rangeColor));
+        if(_checkColorValid(_jui._value,_jui.showAlp)){
+            var color=_jui._value;
+            initParams.call(_jui);
+            setColor();
+            color_drag.setPositionByRate(1-_jui._rate.x,_jui._rate.y);
+            range_drag.setPositionByRate(0,countRangeRate(_jui._rangeColor));
+            if(_jui.showAlp)alpha_drag.setPositionByRate(_jui._alpha,0);
+        }else{
+        }
     }
+    _cw.css('display','none');
     item.$jui=_jui;
 };JUI.COLOR.prototype.close=function(){
     
@@ -185,6 +211,15 @@ JUI.COLOR.init=function(item){
         new JUI.COLOR({ele:item});
     });
 };
+function _checkColorValid(v,sa){
+    var t=_whatTypeColor(v);
+    if(t!='not'){
+        if(((t=='sixteen'||t=='rgb')&&!sa)||(t=='rgba'&&sa)){
+            return true;
+        }
+    }
+    return false;
+}
 function initParams(){
     if(this._value.has('#')){
         this._showColor=_sixteenToJson(this._value);
@@ -200,7 +235,8 @@ function colorToRangeColor(sc){
     if(sc.r==sc.g&&sc.b==sc.g&&sc.r==sc.b){
         return {
             rangeColor:{
-                r:255,g:0,b:0
+                r:255,g:0,b:0,
+                dr:0,dg:255,db:255
             },
             rate:{
                 x:1,
@@ -215,7 +251,10 @@ function colorToRangeColor(sc){
     var temp={
         r:sc.r*rate,
         g:sc.g*rate,
-        b:sc.b*rate
+        b:sc.b*rate,
+        dr:255-sc.r*rate,
+        dg:255-sc.g*rate,
+        db:255-sc.b*rate,
     };
     var min=Math.min(temp.r,temp.g,temp.b);
     rate=min/(255-min);
@@ -280,6 +319,36 @@ function _sixteenToJson(v){
         return c;
     }else{
         _throw('色值的16进制格式有误:'+v);
+    }
+}
+function _whatTypeColor(v){
+    v=v.toLowerCase();
+    if(_sixteenReg.test(v)){
+        return 'sixteen';
+    }else{
+        if(v.has('rgb')){
+            var bool=true;
+            var str=v.substring(v.indexOf('(')+1,v.indexOf(')')).split(',');
+            if(str.length!=3&&str.length!=4){
+                bool=false;
+            }else{
+                str.each(function(item){
+                    var num=parseInt(item);
+                    if(num.toString()=='NaN'||num<0||num>255){
+                        bool=false;
+                    }
+                });
+            }
+            if(bool){
+                if(v.has('rgba')){
+                    return 'rgba';
+                }else{
+                    return 'rgb';
+                }
+            }else{
+                return 'not';
+            }
+        }
     }
 }
 function _sixteenToNum(v){
