@@ -355,9 +355,9 @@ function _sixteenToNum(v){
     return _sArr.indexOf(v[0])*16+_sArr.indexOf(v[1]);
 }
 function _numToSixteen(v){
-    if(v<0||v>255){
-        _throw('色值的必须在0到255之间:'+v);
-    }
+        //console.error('色co值的必须在0到255之间:'+v);
+    if(v<0)v=0
+    else if(v>255)v=255;
     return _sArr[Math.floor(v/16)]+_sArr[v%16];
 }
 function _jsonToSixteen(v){

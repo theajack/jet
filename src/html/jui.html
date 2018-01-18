@@ -30,37 +30,59 @@
     <input class="j-input danger" value='危险' type="text">
 </div>
 
-<div>
-    <span j='testInput'></span>
-    <input class="j-input" j='testInput' value='$' type="text">
-    <input class="j-input" j='testInput' value='$' type="text">
-  </div>
+    <div>
+        <span j='testInput'></span>
+        <input class="j-input" j='testInput' value='$' type="text">
+        <input class="j-input" j='testInput' value='$' type="text">
+    </div>
 
-  <div>
-    <input class="j-input xs" value='超小' type="text">
-    <input class="j-input s" value='small' type="text">
-    <input class="j-input m" value='中等' type="text">
-    <input class="j-input l" value='large' type="text">
-    <input class="j-input xl" value='超大' type="text">
-  </div>
-  
-  <div class="j-select" id='aaa'>
-    <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
-    <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
-    <div class="j-option" disabled value='3'><i class='j-icon icon-pencil'></i>选项三</div>
-  </div>
-  <div j='vs'>
-    <span J='value' id='t'></span>
-    <div class="j-select" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
-        <div class="j-option" j=$each>
-            <i class='j-icon icon-pencil'></i><span j=$value></span>
+    <div>
+        <input class="j-input xs" value='超小' type="text">
+        <input class="j-input s" value='small' type="text">
+        <input class="j-input m" value='中等' type="text">
+        <input class="j-input l" value='large' type="text">
+        <input class="j-input xl" value='超大' type="text">
+    </div>
+
+    <div class="j-select" id='aaa'>
+        <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
+        <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
+        <div class="j-option" disabled value='3'><i class='j-icon icon-pencil'></i>选项三</div>
+    </div>
+    <div j='vs'>
+        <span J='value' id='t'></span>
+        <div class="j-select" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+            <div class="j-option" j=$each>
+                <i class='j-icon icon-pencil'></i><span j=$value></span>
+            </div>
         </div>
     </div>
-  </div>
-  <span J='value' id='t'></span>
-  <div class="j-select" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
-        <div class="j-option" j=$each>
-            <i class='j-icon icon-pencil'></i><span j=$value></span>
+    <div>
+        <span J='value' id='t'></span>
+        <div class="j-select xs" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+            <div class="j-option" j=$each>
+                <i class='j-icon icon-pencil'></i><span j=$value></span>
+            </div>
+        </div>
+        <div class="j-select s" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+            <div class="j-option" j=$each>
+                <i class='j-icon icon-pencil'></i><span j=$value></span>
+            </div>
+        </div>
+        <div class="j-select m" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+            <div class="j-option" j=$each>
+                <i class='j-icon icon-pencil'></i><span j=$value></span>
+            </div>
+        </div>
+        <div class="j-select l" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+            <div class="j-option" j=$each>
+                <i class='j-icon icon-pencil'></i><span j=$value></span>
+            </div>
+        </div>
+        <div class="j-select xl" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+            <div class="j-option" j=$each>
+                <i class='j-icon icon-pencil'></i><span j=$value></span>
+            </div>
         </div>
     </div>
     <span j='fruit'></span>
@@ -71,19 +93,31 @@
         <div class="j-radio" checked>芒果</div>
         <div class="j-radio">西瓜</div>
     </div>
-    <div j='fruitList'>
-        <div j='$value'></div>
-    </div>
+    <span j='fruitList'>
+        <span j='$value'></span>
+    </span>
     <div class="j-checkbox-group" id='cg' jui-bind='fruitList'>
         <div class="j-checkbox">芒果</div>
         <div class="j-checkbox">西瓜</div> 
     </div>
     <div>
-        <div class="j-switch" jui-bind='sv'>
+        <div class="j-switch xs" jui-bind='sv'>
             <div>是</div>
             <div>否</div>
         </div>
+        <div class="j-switch s" jui-bind='sv'>
+            <div checked>是</div>
+            <div>否</div>
+        </div>
         <div class="j-switch" jui-bind='sv'>
+            <div checked>是</div>
+            <div>否</div>
+        </div>
+        <div class="j-switch l" jui-bind='sv'>
+            <div checked>是</div>
+            <div>否</div>
+        </div>
+        <div class="j-switch xl" jui-bind='sv'>
             <div checked>是</div>
             <div>否</div>
         </div>
@@ -107,6 +141,8 @@
             <div class='j-color m' jui-bind='color2'></div>
             <div class='j-color l' jui-bind='color2'></div>
             <div class='j-color xl' jui-bind='color2'></div>
+            <span jstyle="color:{{$.color}}">颜色1</span>
+            <span jstyle="color:{{$.color2}}">颜色2</span>
     </div>
     <div class='j-row'>
         <div class='j-col c8'></div>
