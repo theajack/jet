@@ -53,7 +53,7 @@ var JUI={
                 });
                 J.attr('disabled').on('click',null);
                 J.select('.j-color[disabled] .j-color-icon').on('click',null);
-                J.select('.j-date[disabled] .j-date-v').on('click',null);
+                J.select('.j-date[disabled] .j-date-v').on('click',null).attr('disabled','true');
             })
         }
     },msg:function(opt,type,time){
