@@ -1,5 +1,5 @@
 /*common********************************************************************/
-.j-btn,.j-input,.j-select,.j-radio,.j-checkbox,.j-switch,.j-date,.j-color{
+.j-btn,.j-input,.j-select,.j-radio,.j-checkbox,.j-switch,.j-date,.j-color,.j-slider{
     margin: 3px;
     display: inline-block;
 }
@@ -145,6 +145,9 @@
     -moz-transition: border-color .2s ease;
     -ms-transition: border-color .2s ease;
 }
+textarea.j-input{
+    height:auto!important;
+}
 .j-input:focus{border: 1px solid #bbb;}
 .j-input.normal{border-color: #1da1ff}
 .j-input.normal:focus{border-color: #70c4ff}
@@ -178,6 +181,11 @@
     width: 200px;
     padding-left: 8px;
 }
+.j-input[disabled],.j-select[disabled],.j-btn[disabled],.j-switch[disabled],.j-date[disabled],.j-color[disabled]{
+    cursor:no-drop!important;
+    background-color: #ddd!important;
+    color: #999!important;
+}
 .j-select.xs{line-height: 20px;}
 .j-select.xs .j-icon{top:1px;}
 .j-select.xs .j-option-w.s-open{top:23px;}
@@ -196,13 +204,14 @@
     padding-left: 0!important;
     line-height: 30px;
     position: relative;
+    background-color:#fff;
 }
+
 .j-select-vw{
     position: relative;
     width: 100%;
     height:100%;
     text-align: center;
-    background-color:#fff;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -393,11 +402,22 @@
     top: 3px;
     left: 3px;
 }
-.j-checkbox.j-checked .j-checkbox-c{
-    color: #1da1ff;    
-    top: 0px;
-    font-size: 16px;
+.j-radio[disabled],.j-checkbox[disabled]{
+    cursor: no-drop;
 }
+.j-radio[disabled] .j-radio-cw,.j-checkbox[disabled] .j-checkbox-cw{
+    border-color: #999;
+}
+.j-radio[disabled] .j-radio-t,.j-checkbox[disabled] .j-checkbox-t{
+    color: #999;
+}
+.j-radio[disabled] .j-radio-c{
+    background-color: #999;    
+}
+.j-checkbox[disabled] .j-checkbox-c{
+    color: #999;    
+}
+
 /*RADIO END************************************************************************************/
 /*SWITCH************************************************************************************/
 .j-switch{
@@ -487,6 +507,12 @@
 }
 .j-switch.j-s-on .j-switch-t.j-st-off{
     opacity: 0;
+}
+.j-switch[disabled]{
+    border:#777;
+}
+.j-switch[disabled] .j-switch-t{
+    color:#999;
 }
 /*SWITCH END************************************************************************************/
 
@@ -696,6 +722,9 @@
 .j-date-close:hover{
     color: #e44;
 }
+.j-date[disabled] .j-date-v{
+    cursor: pointer;
+}
 /*DATE END************************************************************************************/
 /*COLOR************************************************************************************/
 
@@ -748,6 +777,9 @@
     color:#ddd;
 }
 
+.j-color[disabled] .j-color-icon{
+    display: none;
+}
 .j-color.xs .j-color-icon{
     line-height: 23px;
 }
@@ -789,6 +821,7 @@
     -moz-transition:all .3s ease;
     -ms-transition:all .3s ease;
     background-color: #fff;
+    z-index: 1;
 }
 .j-color.j-active .j-color-w{
     top:32px;
@@ -891,6 +924,48 @@
 
 /*COLOR END************************************************************************************/
 
+/*SLIDER*********************************************************************/
+.j-slider{
+    height:6px;
+    border-radius: 5px;
+    width:150px;
+    position: relative;
+    background-color: #ddd;
+    cursor: pointer;
+}
+.j-slider-bar{
+    width:0%;
+    height:100%;
+    border-radius: 15px;
+    position: relative;
+    background-color: #1da1ff;
+}
+.j-slider-c{
+    position: absolute;
+    right:-7px;
+    top:-4px;
+    height:14px;
+    width:14px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #1da1ff;
+    transition:all .3s linear;
+    -webkit-transition:all .3s linear;
+    -o-transition:all .3s linear;
+    -moz-transition:all .3s linear;
+    -ms-transition:all .3s linear;
+    cursor: pointer;
+}
+.j-slider-c:hover{
+    width:16px;
+    height:16px;
+    right:-8px;
+    top:-5px;
+}
+.j-slider-t{
+
+}
+/*SLIDER END*********************************************************************/
 
 
 @media screen and (max-width: 620px) {

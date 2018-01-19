@@ -1,4 +1,8 @@
 //加入 jattr jstyle jroot
+//bug: 对于数组，若是没有绑定元素，则无法使用$push等方法
+//      对于数组，直接对数组赋值，ui不会改变
+//jui checkbox 由于以上两点bug 很难完成
+//jui select 对绑定的选项进行$push 或其他操作，ui不变
 (function(){
 
     var _JT = {
@@ -908,7 +912,7 @@
       }
     })
   }
-  function _checkIn(data,key,value){
+  function _checkIn(data,key,value){//data[key]===value
       var _in=(data!=null&&typeof data=='object'&&key in data);
       if(arguments.length==2){
         return _in
@@ -1859,7 +1863,7 @@
   }
   function _checkLangJet(opt){
     if(_JT.type(opt._data)=='json'&&opt.name in opt._data){
-        if(_checkIn(opt._data,opt.name,_lang)){
+        if(_checkIn(opt._data[opt.name],'type',_lang)){
             Jet.lang.jets.push(this);
         }
     }
@@ -2561,7 +2565,7 @@ Jet.For.prototype.refresh=function(key){
 Jet.Text.prototype = new Super();
 Jet.Text.prototype.refresh=function(key){
     if(!key||key==this.name){
-      var val=(this.func)?this.func(this.get()):this.get();
+      var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
       this.ele._JT_txt(val);
     }
   };Jet.Text.prototype.get=function(){//indexs
@@ -2614,7 +2618,7 @@ Jet.Text.prototype.refresh=function(key){
   Jet.Input.prototype = new Super();
   Jet.Input.prototype.refresh=function(key){
     if(!key||key==this.name){
-      var val=(this.func)?this.func(this.get()):this.get();
+      var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
       this.ele._JT_val(val);
     }
   };Jet.Input.prototype.get=function(){

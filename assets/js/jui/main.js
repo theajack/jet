@@ -1,4 +1,10 @@
 var _jui_bind='jui-bind';
+var _jui_change='jui-change';
+//SELECT 动态绑定是列表不会改表 **
+//checkbox group 有bug
+//date 没设置初始值会有bug
+//date color 通过value设置初始值没反应
+
 J.ready(function(){
     JUI.init();
 });
@@ -12,6 +18,7 @@ var JUI={
         JUI.SWICTH.init(item);
         JUI.DATE.init(item);
         JUI.COLOR.init(item);
+        JUI.SLIDER.init(item);
         _jui_mounted.forEach(function(f){
             f();
         });
@@ -44,6 +51,9 @@ var JUI={
                     }
                     item.removeAttr(_jui_bind);
                 });
+                J.attr('disabled').on('click',null);
+                J.select('.j-color[disabled] .j-color-icon').on('click',null);
+                J.select('.j-date[disabled] .j-date-v').on('click',null);
             })
         }
     },msg:function(opt,type,time){
@@ -68,6 +78,15 @@ function _useBindSingle(opt){
     }else{
         d=_jet._data[_jet.name];
         //d=_jet.data[_jet.name];
+    }
+    if(item.hasAttr(_jui_change)){
+        var change=item.attr(_jui_change);
+        if(change in jet&&typeof jet[change]=='function'){
+            jui.jet=jet;
+            jui._onchange=jet[change];
+        }else if(window[change]&&typeof window[change]=='function'){
+            jui._onchange=window[change];
+        }
     }
     var jattr=getValueTxt(item);
     if(d[attr]!=undefined){

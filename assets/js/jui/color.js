@@ -197,6 +197,15 @@ JUI.COLOR.prototype.init=function(){
             color_drag.setPositionByRate(1-_jui._rate.x,_jui._rate.y);
             range_drag.setPositionByRate(0,countRangeRate(_jui._rangeColor));
             if(_jui.showAlp)alpha_drag.setPositionByRate(_jui._alpha,0);
+            item.attr('value',_jui._value);
+            if(_jui._onchange){
+                var __t=_jui.jet||_jui;
+                _jui._onchange.call(__t,{
+                    ele:item,
+                    value:_jui._value,
+                    jui:_jui
+                })
+            }
         }else{
         }
     }

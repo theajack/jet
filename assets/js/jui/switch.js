@@ -24,7 +24,7 @@ JUI.SWICTH.prototype.init=function(){
     var item=this.ele;
     var child=item.child();
     if(child.length>0){
-        if(child.length!=2){
+        if(child.length>2){
             _throw('swicth 组件只能有两个元素');
         }
         var v=getValueOrText(child[0]);
@@ -68,6 +68,14 @@ JUI.SWICTH.prototype.init=function(){
             item.removeClass('j-s-on');
         }
         item.attr('value',_jui._value);
+        if(_jui._onchange){
+            var __t=_jui.jet||_jui;
+            _jui._onchange.call(__t,{
+                ele:item,
+                value:_jui._value,
+                jui:_jui
+            })
+        }
     }
     item.$jui=_jui;
 };

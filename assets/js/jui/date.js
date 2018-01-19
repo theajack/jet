@@ -100,13 +100,24 @@ JUI.DATE.prototype.init=function(){
     item.append([_d,_dv]);
     var _dreg=/^(([12]\d{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|3(0|1))))$/;
     _jui.onchange=function(){
-        if(!_dreg.test(_jui._value)){
-            _throw('DATE 格式错误：请修改为xxxx-xx-xx')
-        }
-        if(!_jui.isFromInput){
-            _dv.val(_jui._value);
+        if(_dreg.test(_jui._value)){
+            if(!_jui.isFromInput){
+                _dv.val(_jui._value);
+            }else{
+                _jui.isFromInput=false;
+            }
+            item.attr('value',_jui._value);
+            if(_jui._onchange){
+                var __t=_jui.jet||_jui;
+                _jui._onchange.call(__t,{
+                    ele:item,
+                    value:_jui._value,
+                    jui:_jui
+                })
+            }
         }else{
-            _jui.isFromInput=false;
+            //_throw('DATE 格式错误：请修改为xxxx-xx-xx')
+            
         }
     }
     item.$jui=_jui;

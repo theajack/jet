@@ -33,6 +33,14 @@ JUI.SELECT.init=function(item){
                 this.text=this.options[this.value];
                 v_span.txt(this.text);
                 item.attr('value',this.value);
+                if(_jui._onchange){
+                    var __t=_jui.jet||_jui;
+                    _jui._onchange.call(__t,{
+                        ele:item,
+                        value:_jui._value,
+                        jui:_jui
+                    })
+                }
             };
             list.each(function(_item){
                 ow.append(_item);

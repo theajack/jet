@@ -2565,7 +2565,7 @@ Jet.Text=function(opt){
 Jet.Text.prototype = new Super();
 Jet.Text.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func(this.get()):this.get();
+    var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
     this.ele._JT_txt(val);
   }
 };Jet.Text.prototype.get=function(){//indexs
@@ -2618,7 +2618,7 @@ Jet.Input=function(opt){
 Jet.Input.prototype = new Super();
 Jet.Input.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func(this.get()):this.get();
+    var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
     this.ele._JT_val(val);
   }
 };Jet.Input.prototype.get=function(){

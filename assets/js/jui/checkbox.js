@@ -48,6 +48,14 @@ function _initOneCheckGroup(item,isBody){
                 if(ele._checked==true)ele.$checked=false;
             }
         });
+        if(_jui._onchange){
+            var __t=_jui.jet||_jui;
+            _jui._onchange.call(__t,{
+                ele:item,
+                value:_jui._value,
+                jui:_jui
+            })
+        }
     }
     item.findClass(JUI.CHECKBOX._name).each(function(check){
         if(!check.$jui){
@@ -122,6 +130,14 @@ JUI.CHECKBOX.prototype.init=function(){
             _jui.ele.removeClass('j-checked');
         }
         _jui.ele.attr('checked',_jui.checked);
+        if(_jui._onchange){
+            var __t=_jui.jet||_jui;
+            _jui._onchange.call(__t,{
+                ele:item,
+                value:_jui._value,
+                jui:_jui
+            })
+        }
     }
     if(item.hasAttr('checked')&&item.attr('checked')!='false'&&this.group.value==''){
         _jui.checked=true;

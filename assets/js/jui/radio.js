@@ -46,6 +46,14 @@ function _initOneRadioGroup(item,isBody){
             return radio.value==_jui.value;
         });
         if(_c.length>0&&_c[0]._checked==false)_c[0].$checked=true;
+        if(_jui._onchange){
+            var __t=_jui.jet||_jui;
+            _jui._onchange.call(__t,{
+                ele:item,
+                value:_jui._value,
+                jui:_jui
+            })
+        }
     }
 
 
@@ -121,6 +129,14 @@ JUI.RADIO.prototype.init=function(){
             _jui.ele.removeClass('j-checked');
         }
         _jui.ele.attr('checked',_jui.checked);
+        if(_jui._onchange){
+            var __t=_jui.jet||_jui;
+            _jui._onchange.call(__t,{
+                ele:item,
+                value:_jui._value,
+                jui:_jui
+            })
+        }
     }
     if(item.hasAttr('checked')&&item.attr('checked')!='false'&&this.group.value==''){
         _jui.checked=true;

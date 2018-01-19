@@ -52,12 +52,10 @@ JUI.DRAG=function(opt){
     J.body().on('mousemove',function(e){
         if(_this.par.onmousemove)
             _this.par.onmousemove(e);
-        return false;
     },true);
     J.body().on('mouseup',function(e){
         if(_this.par.onmouseup)
             _this.par.onmouseup(e);
-        return false;
     },true);
     
 };JUI.DRAG.prototype.setPosition=function(x,y,f){

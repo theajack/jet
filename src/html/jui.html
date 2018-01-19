@@ -1,11 +1,12 @@
 <div class=''>JUI</div>
-<div>
+<div style='padding-bottom:700px'>
   <div>
     <div class="j-btn normal">normal</div>
     <div class="j-btn success">成功</div>
     <div class="j-btn warn">warn</div>
     <div class="j-btn info">info</div>
     <div class="j-btn danger">危险</div>
+    <div class="j-btn" disabled>禁用</div>
   </div>
   <div>
     <div class="j-btn normal xs">normal</div>
@@ -28,6 +29,7 @@
     <input class="j-input warn" value='warn' type="text">
     <input class="j-input info" value='info' type="text">
     <input class="j-input danger" value='危险' type="text">
+    <input class="j-input" disabled value='禁用' type="text">
 </div>
 
     <div>
@@ -42,9 +44,15 @@
         <input class="j-input m" value='中等' type="text">
         <input class="j-input l" value='large' type="text">
         <input class="j-input xl" value='超大' type="text">
+        <textarea class="j-input xl" name="" id="">teatarea</textarea>    
     </div>
 
     <div class="j-select" id='aaa'>
+        <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
+        <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
+        <div class="j-option" disabled value='3'><i class='j-icon icon-pencil'></i>选项三</div>
+    </div>
+    <div class="j-select" disabled id='aaa'>
         <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
         <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
         <div class="j-option" disabled value='3'><i class='j-icon icon-pencil'></i>选项三</div>
@@ -92,6 +100,7 @@
     <div class="j-radio-group" jui-bind='fruit'>
         <div class="j-radio" checked>芒果</div>
         <div class="j-radio">西瓜</div>
+        <div class="j-radio" disabled>橘子禁用</div>
     </div>
     <span j='fruitList'>
         <span j='$value'></span>
@@ -99,6 +108,7 @@
     <div class="j-checkbox-group" id='cg' jui-bind='fruitList'>
         <div class="j-checkbox">芒果</div>
         <div class="j-checkbox">西瓜</div> 
+        <div class="j-checkbox" disabled>橘子禁用</div> 
     </div>
     <div>
         <div class="j-switch xs" jui-bind='sv'>
@@ -121,6 +131,10 @@
             <div checked>是</div>
             <div>否</div>
         </div>
+        <div class="j-switch" disabled jui-bind='sv'>
+            <div checked>是</div>
+            <div>否</div>
+        </div>
        
 
     </div>
@@ -130,6 +144,7 @@
             <div class='j-date m' jui-bind='date'></div>
             <div class='j-date l' jui-bind='date'></div>
             <div class='j-date xl' jui-bind='date'></div>
+            <div class='j-date' disabled jui-bind='date'></div>
             <!-- jui-bind 优先级高于checked -->
             <!-- <div class='j-color'>
              
@@ -140,7 +155,8 @@
             <div class='j-color s' jui-bind='color2'></div>
             <div class='j-color m' jui-bind='color2'></div>
             <div class='j-color l' jui-bind='color2'></div>
-            <div class='j-color xl' jui-bind='color2'></div>
+            <div class='j-color xl'></div>
+            <div class='j-color' disabled jui-bind='color2'></div>
             <span jstyle="color:{{$.color}}">颜色1</span>
             <span jstyle="color:{{$.color2}}">颜色2</span>
     </div>
@@ -168,8 +184,14 @@
             <div class='j-col c12 '></div>
         </div>
     </div>
+    <div>
+        <span j=slider>parseInt($)</span>   
+        <div class='j-slider' min='20' width='200' value='40' jui-bind='slider' jui-change='cc'></div>
+            
+    </div>
 </div>
 <script>
+    
     var aa=new Jet({
         data:{
             testInput:'测试输入框绑定',
@@ -184,13 +206,16 @@
             sv:'否',
             date:'2018-01-17',
             color:'rgba(231,22,32,1)',
-            color2:'rgb(231,22,32)'
+            color2:'rgb(231,22,32)',
+            slider:50
         },
         func:{
             alert:function(d){
                 alert(d.ele.innerHTML)
             },aa:function(d){
                 d.ele.toggleClass('j-s-on')
+            },cc:function(opt){
+                console.log(this,opt)
             }
         }
     });
