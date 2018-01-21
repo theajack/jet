@@ -20,7 +20,9 @@ var test=new Jet({
           cn:'杰克',
           en:"jack"
         }),
-        boy:true
+        color:'#777',
+        boy:true,
+        age:24
       },
       test:[{a:[1,2,3]},{a:[10,2,3]}]
     },

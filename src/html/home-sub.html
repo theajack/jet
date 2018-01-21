@@ -1,3 +1,19 @@
-homesub
-homesub
-homesub
+<div J='me'>
+    <div J='name' jshow='{{$.name}}=="theajack"'></div>
+    <input class='j-input' type="text" j='name'>
+    <div J='sex'></div>
+</div>
+<div jshow='{{$.me.name}}=="theajack"'>show</div>
+<script>
+var aa=new Jet({
+    data:{
+        me:{
+            name:'theajack',
+            sex:'boy'
+        }
+    },
+    func:{
+    }
+});
+</script>
+      

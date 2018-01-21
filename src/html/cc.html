@@ -1,9 +1,159 @@
+
+<style type="text/css" src='home.css'></style>
 <style type="text/css">
-[.Jlang]{
-  background-color:#000;
-}
+  .home2{
+    color:#0f0;
+  }
 </style>
 <div Jlang class='Jlang'>
   <span Jname='en'>cccccccccccccccccc</span>
   <span Jname='cn'>吃吃吃吃吃吃吃吃</span>
 </div>
+<select name="" id="" J='lang' Jon='change:changLange'>
+  <option J='$each' Jrun='addLangText'></option>
+</select>
+<div J='s'>
+  <div J='$each.t=1'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <span J='v' >$</span>
+  </div>
+  <div J='$each.t=2'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <span J='v' >$</span>
+  </div>
+  <div J='$each.t=3'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <input type='text' J='v' value="$+'plus'"/>
+  </div>
+  <div J='$each.t=4'>
+    <span J='$index' >$</span>
+    <span J='t' >$</span>
+    <input type='text' J='v' value="$+'plus'"/>
+  </div>
+</div>
+<div class='home' Jlang>
+  <span Jname='en'>homehomehomehomehomehome</span>
+  <span Jname='cn'>主页主页主页主页主页主页</span>
+</div>
+<div class='home2' Jlang>
+  <span Jname='en'>homehomehomehomehomehome</span>
+  <span Jname='cn'>主页主页主页主页主页主页</span>
+</div>
+
+
+<div J='me' Jattr='value:{{$.me.name.first}}' Jstyle='display:{{$.me.name.boy}}?"block":"none";background-color:{{$.me.name.color}};color:{{$.me.name.color}}' Jon="click:test">
+    <div Jlang>
+      <div Jname='en'>
+        <input type='text' value='hello world'/>
+      </div>
+      <div Jname='cn'>
+        <input type='button' value='你好世界'/>
+      </div>
+    </div>
+    <div J='name' >
+      <div Jload='test.html'></div>
+      <div J='first'  class='home2' jshow='{{$.first}}=="thea"' jif='{{$.first}}=="thea":class[a]'></div>
+      <input type="text" J="first">
+      <div J='age' class='home2' jshow='{{$.age}}===20'></div>
+      <input type="text" J="age">
+      <div J='last'></div>
+      <input type="text" J="color">
+      <div J='me' Jroot>
+        <div J='name' >
+          <span J='first'></span>-<span J='last'></span>
+        </div>
+      </div>
+    </div>
+    <div J='test'  >
+      <div J='$each' >
+        <div J='$index'></div>
+        <div J='a' >
+          <div J='$each'>
+            <span J='$index' >$</span>
+            <span J='$value' Jrun='log'> $ </span>
+            <input J='$value' type="text" value="$"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div J='a' jif='$:css[display=block|color=#f00]'></div>
+<div J='b' jif='$:hide|show'></div>
+<script type="text/javascript" src='home.js'></script>
+<script type="text/javascript">
+  //console.log(2);
+  function test2(){
+    console.log('test2')
+  }
+
+  
+var test=new Jet({
+  ready:function(){
+    //alert(this.me.name.first);
+  },
+  data:{
+    lang:Jet.lang.list,
+    a:true,
+    b:new Jet.lang({
+      cn:'啊啊啊',
+      en:'aaa'
+    }),
+    me:{
+      name:{
+        first:JL({
+          cn:'西娅',
+          en:"thea"
+        }),
+        last:JL({
+          cn:'杰克',
+          en:"jack"
+        }),
+        color:'#777',
+        boy:true,
+        age:24
+      },
+      test:[{a:[1,2,3]},{a:[10,2,3]}]
+    },
+    s:[
+      {t:2,v:'t2'},
+      {t:1,v:'t1'},
+      {t:2,v:'t2'},
+      {t:1,v:'t1'},
+      {t:4,v:'t3'},
+      {t:3,v:'t3'}
+    ]
+  },
+  func:{
+    test:function(d){
+      //console.log(d.ele)
+    },
+    log:function(d){
+      //console.log(d.data);
+    },hide:function(d){
+      d.ele._JT_css('display','none');
+    },show:function(d){
+      d.ele._JT_css('display','block');
+    },alert:function(d){
+      alert(d.ele.innerHTML)
+    },addLangText:function(d){
+      var txt='';
+      switch(d.data){
+        case 'en':txt='English';break;
+        case 'cn':txt='简体中文';break;
+        default:break;
+      }
+      d.ele._JT_txt(txt);
+      d.ele._JT_attr('value',d.data)
+    },changLange:function(d){
+      Jet.lang.type=d.ele.value;
+    }
+  }
+});
+function test(){
+  console.log('test')
+}
+</script>

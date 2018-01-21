@@ -1,0 +1,134 @@
+/*http://www.theajack.com*/
+::selection{
+  background-color: #aaa;
+  color:#fff;
+}
+::-moz-selection{
+  background-color: #aaa;
+  color:#fff;
+}
+*{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+:before, :after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html{
+  width: 100%;
+  height: 100%;
+}
+body{
+  background-color:#fff;
+  padding:5px 0;
+  width: 100%;
+  height: auto;
+  color:#222;
+  font-family: 'Microsoft Yahei',"Open Sans",Arial,sans-serif;
+  line-height: 22px;
+  margin: 0;
+  font-size: 13px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.clearfix:after{
+  clear:both;
+}
+.clearfix:before, .clearfix:after{
+  display: table;
+  content: " ";
+}
+.hide{display:none!important;}
+.show{display:block!important;}
+.f-left{float: left!important}
+.f-right{float: right!important}
+.t-left{text-align: left}
+.t-center{text-align: left}
+.t-right{text-align: right}
+.m-center{margin: 0 auto}
+.bold{font-weight: bold}
+.relative{position: relative}
+.absolute{position: absolute}
+.fixed{position: fixed}
+.w-full{width:100%}
+.c-pointer{cursor: pointer;}
+.c-disabled{cursor: no-drop;}
+.txs{font-size: 10px}
+.ts{font-size: 13px}
+.tm{font-size: 16px}
+.tl{font-size: 20px}
+.txl{font-size: 30px}
+.c-success{color:#2ac32f}
+.c-normal{color:#1da1ff}
+.c-info{color:#9e9e9e}
+.c-warn{color:#dfa02b}
+.c-error{color:#dc5454}
+.bg-success{background-color:#2ac32f}
+.bg-normal{background-color:#1da1ff}
+.bg-info{background-color:#9e9e9e}
+.bg-warn{background-color:#dfa02b}
+.bg-error{background-color:#dc5454}
+
+
+.pxs{padding: 3px!important;}
+.pxs-t{padding-top: 3px!important;}
+.pxs-r{padding-right: 3px!important;}
+.pxs-b{padding-bottom: 3px!important;}
+.pxs-l{padding-left: 3px!important;}
+
+.ps{padding: 5px!important;}
+.ps-t{padding-top: 5px!important;}
+.ps-r{padding-right: 5px!important;}
+.ps-b{padding-bottom: 5px!important;}
+.ps-l{padding-left: 5px!important;}
+
+.pm{padding: 10px!important;}
+.pm-t{padding-top: 10px!important;}
+.pm-r{padding-right: 10px!important;}
+.pm-b{padding-bottom: 10px!important;}
+.pm-l{padding-left: 10px!important;}
+
+.pl{padding: 15px!important;}
+.pl-t{padding-top: 15px!important;}
+.pl-r{padding-right: 15px!important;}
+.pl-b{padding-bottom: 15px!important;}
+.pl-l{padding-left: 15px!important;}
+
+.pxl{padding: 20px!important;}
+.pxl-t{padding-top: 20px!important;}
+.pxl-r{padding-right: 20px!important;}
+.pxl-b{padding-bottom: 20px!important;}
+.pxl-l{padding-left: 20px!important;}
+
+.mxs{margin: 3px!important;}
+.mxs-t{margin-top: 3px!important;}
+.mxs-r{margin-right: 3px!important;}
+.mxs-b{margin-bottom: 3px!important;}
+.mxs-l{margin-left: 3px!important;}
+
+.ms{margin: 5px!important;}
+.ms-t{margin-top: 5px!important;}
+.ms-r{margin-right: 5px!important;}
+.ms-b{margin-bottom: 5px!important;}
+.ms-l{margin-left: 5px!important;}
+
+.mm{margin: 10px!important;}
+.mm-t{margin-top: 10px!important;}
+.mm-r{margin-right: 10px!important;}
+.mm-b{margin-bottom: 10px!important;}
+.mm-l{margin-left: 10px!important;}
+
+.ml{margin: 15px!important;}
+.ml-t{margin-top: 15px!important;}
+.ml-r{margin-right: 15px!important;}
+.ml-b{margin-bottom: 15px!important;}
+.ml-l{margin-left: 15px!important;}
+
+.mxl{margin: 20px!important;}
+.mxl-t{margin-top: 20px!important;}
+.mxl-r{margin-right: 20px!important;}
+.mxl-b{margin-bottom: 20px!important;}
+.mxl-l{margin-left: 20px!important;}
