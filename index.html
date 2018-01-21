@@ -40,6 +40,13 @@
   <body class="common">
     <div id="header">
       <input type='text' Jvalid='phone'/>
+      <a href="http://116.62.228.3:8089/legacy/material/a4c1d02e91e010d64644ff840e553063.png">
+      <input type="button" value='不加dowmload'/></a>
+      <a href="http://116.62.228.3:8089/legacy/material/a4c1d02e91e010d64644ff840e553063.png" download>
+      <input type="button" value='download'/></a>
+      <a href="http://116.62.228.3:8089/legacy/material/a4c1d02e91e010d64644ff840e553063.png" download='a.png'>
+      <input type="button" value='download=a.png'/></a>
+      <a onclick='download()'><input type="button" value='window.location'/></a>
     </div>
     <div id="">
       <div id="menu">
@@ -68,6 +75,9 @@
     </div>
     <script type="text/javascript" src="/jet/assets/js/jet.all.js"></script>
     <script type="text/javascript">
+    function download(){
+      window.location.href='http://116.62.228.3:8089/legacy/material/a4c1d02e91e010d64644ff840e553063.png'
+    }
       Jet.lang.use(['en','cn']);
       Jet.router.use({
         history:false,
