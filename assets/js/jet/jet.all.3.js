@@ -3,6 +3,13 @@
 //      对于数组，直接对数组赋值，ui不会改变
 //jui checkbox 由于以上两点bug 很难完成
 //jui select 对绑定的选项进行$push 或其他操作，ui不变
+
+//$.$par.$index 多层循环时会有bug   2597行 2231行
+
+//暂不支持路由的嵌套
+
+
+//1-25 修复了一个for的bug 没有包裹each时，元素的孩子和文字顺序会混乱
 (function(){
 
     var _JT = {
@@ -400,12 +407,10 @@
     };
     HTMLElement.prototype._JT_allHtml = function(a) {
       if (a == undefined) {
-        return _JT.ct("div")._JT_append(this._JT_clone())._JT_html();
+        return this.outerHTML;
       } else {
-        var index=this._JT_index();
-        var par=this._JT_parent()._JT_append(a,index);
-        this._JT_remove();
-        return par._JT_child(index);
+        this.outerHTML=a;
+        return this;
       }
     };
     HTMLCollection.prototype._JT_allHtml = NodeList.prototype._JT_allHtml = function(v) {
@@ -1046,9 +1051,13 @@
     _initJet.call(this,opt,this._tools._calls);
   };Jet.prototype.get=function(){
     return this;
-  }
+  };Jet.prototype.$ajax=_ajax;
+  Jet.$ajax=_ajax;
   
   function _initJet(opt,calls){
+    if(opt.beforeinit){
+      opt.beforeinit.call(this);
+    }
     var _this=this;
     var bindList,ifList,showList,onList,runList,attrList,styleList;
     if(opt.ele){
@@ -1138,6 +1147,9 @@
         _this._tools._jetTools.push(new Jet.Style(_jetOpt(_this,item),true));
       }
     });
+    if(opt.beforemount){
+      opt.beforemount.call(this);
+    }
     temp._JT_each(function(json){
       if(json.item.__isRoot==true){
         json.par._JT_append(json.item,json.index);
@@ -1145,13 +1157,80 @@
       }
     });
     Jet.$.id('__preload_j')._JT_remove();
-    if(opt.ready)
-      opt.ready.call(this);
-      if(typeof JUI!=undefined){
-        JUI.useBind(this);
-      }
+    if(opt.onready){
+      _domSatte.ready(opt.onready,this);
+    }
+    if(opt.onload){
+      _domSatte.load(opt.onload,this);
+    }
+    if(opt.onmounted){
+      opt.onmounted.call(this);
+    }
+    if(opt.onroute){
+      Jet.router.onroute(opt.onroute,this);
+    }
+    if(opt.onrouted){
+      Jet.router.onrouted(opt.onrouted,this);
+    }
+    if(typeof JUI!=undefined){
+      JUI.useBind(this);
+    }
   };
-  
+  var _domSatte={
+    ready: (function() {
+      var b = [];
+      var d = false;
+      var jet=null;
+      function c(g) {
+        if (d) {
+          return
+        }
+        if (g.type === "onreadystatechange" && document.readyState !== "complete") {
+          return
+        }
+        for (var f = 0; f < b.length; f++) {
+          b[f].call(jet)
+        }
+        d = true;
+        b = null
+      }
+      if (document.addEventListener) {
+        document.addEventListener("DOMContentLoaded", c, false);
+        document.addEventListener("readystatechange", c, false);
+        window.addEventListener("load", c, false)
+      } else {
+        if (document.attachEvent) {
+          document.attachEvent("onreadystatechange", c);
+          window.attachEvent("onload", c)
+        }
+      }
+      return function a(e,j) {
+        jet=j;
+        if (d) {
+          e.call(jet)
+        } else {
+          b.push(e)
+        }
+      }
+    })(),
+    load: function(a,jet) {
+      if (document.addEventListener) {
+        document.addEventListener("DOMContentLoaded", function() {
+          document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+          a.call(jet)
+        }, false)
+      } else {
+        if (document.attachEvent) {
+          document.attachEvent("onreadystatechange", function() {
+            if (document.readyState == "complete") {
+              document.detachEvent("onreadystatechange", arguments.callee);
+              a.call(jet)
+            }
+          })
+        }
+      }
+    }
+  }
   
   function _jetOpt(_this,item,name,calls){
     return {
@@ -1873,7 +1952,7 @@
   }
   /*router*********************************************************************************/
   var _route="Jrouter",
-    _route_a="Jrouter-active", 
+    _route_a="jrouter-active", 
     _routeout="Jout",
     _routeScript="JrouteScript",
     _routeStyle="JrouteStyle";
@@ -1976,8 +2055,24 @@
         });
       });
     },
-    onroute:null,
-    onrouted:null,
+    __onroute:[],
+    onroute:function(f,jet){
+      if(typeof f=='function'){
+        f._jet=jet;
+        Jet.router.__onroute.push(f);
+      }else{
+        _throw('onroute:参数必须是函数');
+      }
+    },
+    __onrouted:[],
+    onrouted:function(f,jet){
+      if(typeof f=='function'){
+        f._jet=jet;
+        Jet.router.__onrouted.push(f);
+      }else{
+        _throw('onroute:参数必须是函数');
+      }
+    },
     route:function(url,push){
       var search='';
       if(url.indexOf('#')!=-1){
@@ -2008,7 +2103,7 @@
       }
       var item=_JT.attr(_route+'="'+url+'"');
       if(item.exist()){
-        item._JT_parent()._JT_findAttr(_route_a)._JT_removeAttr(_route_a);
+        _JT.attr(_route_a)._JT_removeAttr(_route_a);
         item._JT_attr(_route_a,'')
       }
   
@@ -2048,9 +2143,14 @@
         history.replaceState(stateObject,title,newUrl);
       }
       Jet.router.params=_JT.urlParam();
-      if(Jet.router.onroute!=null){
-        Jet.router.onroute.call(Jet.router);
-      }
+      
+      Jet.router.__onroute.forEach(function(item){
+        if(item._jet){
+          item.call(item._jet,Jet.router)
+        }else{
+          item.call(Jet.router)
+        }
+      });
       _JT.load(Jet.router.conf.html+file,function(html){
         var out=_JT.attr(_routeout)._JT_html(html);
         if(typeof JUI!='undefined'){
@@ -2065,9 +2165,13 @@
         if(typeof JUI!='undefined'){
           JUI.init(out);
         }
-        if(Jet.router.onrouted!=null){
-          Jet.router.onrouted.call(Jet.router);
-        }
+        Jet.router.__onrouted.forEach(function(item){
+          if(item._jet){
+            item.call(item._jet,Jet.router)
+          }else{
+            item.call(Jet.router)
+          }
+        });
       });
     }
   };
@@ -2224,7 +2328,7 @@ Jet.Bind.prototype.refresh=function(key){
               if(attr._JT_has('(')){
                 _opt._parIndex=parseInt(attr.substring(attr.indexOf('(')+1,attr.indexOf(')')));
               }else{
-                _opt._parIndex=attr.timeOf('$p');
+                _opt._parIndex=(attr.split('$p').length-1);//需要修改timeOf
               }
             }
             _jet=new Jet.Text(_opt);
@@ -2494,13 +2598,18 @@ Jet.For.prototype.refresh=function(key){
         }
       }
     }else{//普通模式
-      if(!this.ele._JT_findAttr(_bind+'="'+_each+'"')._JT_exist()){
+      if(!this.ele._JT_findAttr(_bind+'="'+_each+'"')._JT_exist()){//没有$each
         var html=this.ele._JT_html();
-        this._html='<div '+_bind+'="'+_each+'">'+html+'</div>'
+        var _tag='div';
+        if(this.ele._JT_hasAttr('jfor-inline')){
+          _tag='span';
+          this.ele._JT_removeAttr('jfor-inline')
+        }
+        this._html='<'+_tag+' '+_bind+'="'+_each+'">'+html+'</'+_tag+'>'
         for(var i=0;i<this.data[this.name].length;i++){
-          var each=_JT.ct('div')._JT_attr(_bind,_each);
+          var each=_JT.ct(_tag)._JT_attr(_bind,_each);
           if(i==0){
-            this.ele._JT_child()._JT_each(function(item){
+            this.ele.childNodes._JT_each(function(item){
               each._JT_append(item);
             });
           }else{
@@ -2508,9 +2617,9 @@ Jet.For.prototype.refresh=function(key){
           }
           this.ele._JT_append(each);
         }
-      }else if(this.ele._JT_child().length!=1||this.ele._JT_child(0)._JT_attr(_bind)!=_each){
+      }else if(this.ele._JT_child().length!=1||this.ele._JT_child(0)._JT_attr(_bind)!=_each){//不止一个元素，或者第一个元素不是each
         _throw('循环元素绑定格式错误！');
-      }else{
+      }else{//有each且只有一个元素
         var html=this.ele._JT_html();
         this._html=html;
         for(var i=0;i<this.data[this.name].length-1;i++){
@@ -2558,7 +2667,7 @@ Jet.For.prototype.refresh=function(key){
   
   Jet.Text=function(opt){
     Jet.Base.call(this,opt,_text);
-    this._parIndex=opt._parIndex;//多层循环中的父元素的索引
+    this._parIndex=opt._parIndex;//多层循环中的第几层父元素
     opt.par=this;
     _initText.call(this,opt);
   };
@@ -2591,7 +2700,10 @@ Jet.Text.prototype.refresh=function(key){
   function _getParIndex(_this,i){
     var par=_this.par;
     while(i>0){
-      par=par.par.par;
+      par=par.par;
+      if(_type(par._data)!='array'){
+        par=par.par;
+      }
       i--;
     }
     return par.ele._JT_index();
@@ -2885,20 +2997,31 @@ Jet.Text.prototype.refresh=function(key){
       _throw('j-on 属性格式错误:'+attr);
     }
     var e=attr.split(":");
+    var _f='';
     if(e[1]._JT_has('$valid')){
       if(e[1]._JT_has('=>')){
         _this.valid=true;
         _this.validPar=Jet.valid.findValidPar(_this.ele);
-        _this.func=_this.jet[e[1].substring(e[1].indexOf('=>')+2)];
+        _f=e[1].substring(e[1].indexOf('=>')+2);
+        //_this.func=_this.jet[e[1].substring(e[1].indexOf('=>')+2)];
       }else{
         _throw('valid:"'+e[1]+'" 格式有误，操作符为 =>')
       }
     }else{
-      _this.func=_this.jet[e[1]];
+      _f=e[1];
+      //_this.func=_this.jet[e[1]];
     }
-    if(!_this.func||_JT.type(_this.func)!='function'){
-      _throw('没有 '+e[1]+' 方法')
+    if(_f in _this.jet){
+      if(_JT.type(_this.jet[_f])!='function')
+        _throw(_f+' 不是一个方法');
+      else
+        _this.func=_this.jet[_f];
+    }else{
+      _this.func=new Function('opt',_f);
     }
+    // if(!_this.func||_JT.type(_this.func)!='function'){
+    //   _throw('没有 '+e[1]+' 方法')
+    // }
     this.ele._JT_on(e[0],function(event){
       var opt={
         ele:this,

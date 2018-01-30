@@ -17,8 +17,13 @@ JUI.DRAG=function(opt){
         var ph=_this.par.hei();
         var ew=_this.ele.wid();
         var eh=_this.ele.hei();
-        _this.x=oEvent.layerX;
-        _this.y=oEvent.layerY;
+
+        var o=_this.par.getBoundingClientRect();
+        _this.x=oEvent.clientX-o.left;
+        _this.y=oEvent.clientY-o.top;
+        
+        // _this.x=oEvent.layerX;
+        // _this.y=oEvent.layerY;
         _this.setPosition();
         disX=oEvent.clientX-_this.ele.offsetLeft; //鼠标的X坐标减去DIV的左边距就等于disX, 这个disXs是用于确定鼠标移动DIV时鼠标点和DIV之间的左面距离，这个距离是不会变的，通过这个新鼠标的X坐标减去disX就是DIV的Left
         disY=oEvent.clientY-_this.ele.offsetTop; //鼠标的Y坐标减去DIV的左边距就等于disY, 这个disY是用于确定鼠标移动DIV时鼠标点和DIV之间的上面距离，这个距离是不会变的，通过这个新鼠标的Y坐标减去disY就是DIV的Top
@@ -49,11 +54,11 @@ JUI.DRAG=function(opt){
         };
         return false;
     });
-    J.body().on('mousemove',function(e){
+    document.documentElement.on('mousemove',function(e){
         if(_this.par.onmousemove)
             _this.par.onmousemove(e);
     },true);
-    J.body().on('mouseup',function(e){
+    document.documentElement.on('mouseup',function(e){
         if(_this.par.onmouseup)
             _this.par.onmouseup(e);
     },true);

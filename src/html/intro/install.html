@@ -1,0 +1,44 @@
+<div class='title'>1.以script标签引入</div>
+<div class='text'>
+    直接在html引入script标签
+</div>
+
+<div class='title'>2.下载并且lite-server中开发</div>
+<div class='text'>
+    下载安装使用主要分为以下几个步骤：
+    <div class='list'>
+        <div>a.安装nodejs</div>
+        <div>b.安装lite-server</div>
+        <div>c.下载Jet并拷贝到lite-server目录下</div>
+        <div>d.运行</div>
+    </div>
+</div>
+<div class='sub'>
+    <div class='title'>a.安装nodejs</div>
+    <div class='text'>nodejs也就不过多介绍，安装请<a target='view_window' href="http://www.runoob.com/nodejs/nodejs-install-setup.html" class='link'>点击这里</a></div>
+    <div class='title'>b.安装lite-server</div>
+    <div class='text'>lite-server 是轻量级的仅适用于开发的 node 服务器。以下是被推荐的安装lite-server的方式:</div>
+    <div class='j-code' disabled width='99%' height='auto'>
+        npm install lite-server --save-dev
+    </div>
+    <div class='text'>在你的项目中的 package.json 文件中添加一个 “script” 入口:</div>
+    <div class='j-code' disabled width='99%' height='auto'>
+"scripts": {    
+    "dev": "lite-server"
+},
+    </div>
+    <div class='text'>lite-server的具体使用笔者不再展开，网上教程很多。</div>
+    <div class='title'>c.下载Jet并拷贝到lite-server目录下</div>
+    <div class='text'><a href="#" class='link'>点击这里</a>下载最新的Jet压缩包，解压后将其中所有的内容拷贝到刚刚新建的lite-server项目的目录下，使用以下命令运行项目，就可以看到一个Hello Jet的示例程序。</div>
+    <div class='j-code' disabled width='99%' height='auto'>
+        npm run dev
+    </div>
+</div>
+<script>
+    Jet.global.setLink({
+        last:'介绍',
+        lastUrl:'/intro',
+        next:'目录结构',
+        nextUrl:'/intro/contents',
+    });
+</script>

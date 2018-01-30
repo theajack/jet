@@ -1,0 +1,65 @@
+<div class='title'>属性J</div>
+<div class='text'>Jet中使用属性J将Jet中的数据和UI绑定。无论是字符串，数字，json还是数组，无论是普通文本还是输入框，都是使用属性J进行绑定。
+    Jet会根据数据的类型和html元素的类型自动选择对应的绑定类型。
+    <span class='light-text'>(绑定类型见下一节)</span> 
+</div>
+<div class='text'>以下是一个属性绑定的例子</div>
+<div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;div j='name'>
+        &lt;span j='first'>&lt;/span>-&lt;span j='last'>&lt;/span>
+    &lt;/div>
+    &lt;div j='age'>&lt;/div>
+&lt;/div>
+&lt;div j='list'>
+    &lt;div j='$value'>&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            user:{
+                name:{
+                    first:'first',
+                    last:'last'
+                },
+                age:20
+            },
+            list:['l1','l2','l3']
+        }
+    });
+&lt;/script>
+</div>
+<div class='text'>以下是输出的html:
+    <div class='out'>
+        <div j='user'>
+            <div j='name'>
+                <span j='first'></span>-<span j='last'></span>
+            </div>
+            <div j='age'></div>
+        </div>
+        <div j='list'>
+            <div j='$value'></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Jet.global.setLink({
+        last:'数据绑定',
+        lastUrl:'/bind',
+        next:'绑定的分类',
+        nextUrl:'/bind/type',
+    });
+    new Jet({
+        data:{//数据
+            user:{
+                name:{
+                    first:'first',
+                    last:'last'
+                },
+                age:20
+            },
+            list:['l1','l2','l3']
+        }
+    });
+</script>

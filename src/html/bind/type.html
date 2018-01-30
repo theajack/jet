@@ -1,0 +1,47 @@
+<div class='title'>绑定的分类</div>
+<div class='text'>
+    使用属性J进行绑定会自动被Jet分为以下几类：
+    <div class='list'>
+        <div>1.bind</div>
+        <div>2.for</div>
+        <div>3.text</div>
+        <div>4.input</div>
+    </div>
+    接下来分别介绍几种类型：
+</div>
+<div class='title'>1.bind</div>
+<div class='text'>
+    当绑定的数据是json时，就会使用 <span class='red'>new Jet.Bind()</span> 生成一个bind类型的Jet元素。
+    该类型可以包含其他三种类型，他不能单独渲染数据，需要配合text类型或者input类型来显示数据。
+    可以把该类型视为是一个容器，生成一个绑定元素的作用域。
+</div>
+<div class='title'>2.for</div>
+<div class='text'>
+    当绑定的数据是数组时，就会使用 <span class='red'>new Jet.For()</span> 生成一个for类型的Jet元素。
+    该类型只能包含有bind类型，它的每一个bind元素对应数组的一个元素，他也不能单独渲染数据，
+    需要配合bind元素中text类型或者input类型来显示数据。它也是一个容器，里面包含了多个bind元素。
+</div>
+<div class='text'>
+    当需要根据数组中元素的某字段的不同值来选择不同的html，则需要使用switch语法。
+    
+</div>
+<div class='title'>3.text</div>
+<div class='text'>
+    当绑定的数据是boolean，number，string类型（值类型）时，并且对应的html元素不是输入元素（不是input，textarea，select或contenteditable的元素），
+    就会使用 <span class='red'>new Jet.Text()</span> 生成一个text类型的Jet元素。
+    该类型是一个最小的类型，里面不能再包含任何其他类型。它只是负责渲染一个值类型的数据。
+</div>
+<div class='title'>4.input</div>
+<div class='text'>
+    当绑定的数据是boolean，number，string类型（值类型）时，并且对应的html元素是输入元素（是input，textarea，select或contenteditable的元素），，
+    就会使用 <span class='red'>new Jet.Input()</span> 生成一个input类型的Jet元素。
+    该类型是一个最小的类型，里面不能再包含任何其他类型。它负责渲染一个值类型的数据以及接收用户输入以改变Jet的数据。
+</div>
+<script>
+    Jet.global.setLink({
+        last:'属性J',
+        lastUrl:'/bind/j',
+        next:'特殊语法',
+        nextUrl:'/bind/grammer',
+    });
+</script>

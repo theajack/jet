@@ -1,5 +1,5 @@
 JUI.MESSAGE=function(opt){
-    this.txt=opt.text;
+    this.txt=opt.text||'提示文字为空';
     this.type=opt.type||JUI.MESSAGE.info;
     this.time=opt.time||2300;
     this.autoClose=opt.autoClose;
@@ -55,3 +55,11 @@ JUI.MESSAGE.res={
         info:"info-sign"
     }
 }
+
+// JUI.msg({
+//     text:'text',
+//     time:2000,
+//     type:'warn',
+//     autoClose:true,
+//     call:function(){console.log('close')},
+// })

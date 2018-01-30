@@ -1,0 +1,135 @@
+<div class='title'>1.Jet语法</div>
+<div class='text'>Jet 使用
+    <span class='red'>new Jet()</span>
+    来创建一个Jet组件，该组件的作用范围是当前html模板以及其中加载的Jload。
+    <span class='light-text'>(见jload章节)</span>
+</div>
+
+<div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='message'>
+    <!-- 会显示hello world -->
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            message:'hello word'
+        },
+        func:{
+            //函数
+        }
+    });
+&lt;/script>
+</div>
+<div class='text'>以下是输出的html:
+    <div class='out'>
+        <div j='message'>
+        </div>
+    </div>
+</div>
+
+<div class='title'>2.Jet生命周期函数</div>
+<div class='text'>
+    Jet 有以下7个生命周期函数，各自的执行先后顺序与其序号一致。
+    <div class='list'>
+        <div>1.beforeinit：<span class="light-text">(在生成Jet元素和渲染HTML元素之前执行)</span></div>
+        <div>2.beforemount：<span class="light-text">(在生成Jet元素和之后、渲染HTML元素之前执行)</span></div>
+        <div>3.onmounted：<span class="light-text">(在渲染HTML元素完成之后执行)</span></div>
+        <div>4.onroute：<span class="light-text">(在路由发生之前执行)</span></div>
+        <div>5.onready：<span class="light-text">(在HTML元素加载完成之后执行，不包括图片和其他非文本元素)</span></div>
+        <div>6.onload：<span class="light-text">(在HTML元素加载完成之后执行，包括图片和其他非文本元素)</span></div>
+        <div>7.onrouted：<span class="light-text">(在路由完成之后执行)</span></div>
+    </div>
+    但是，只有在index.html文件才会触发所有的生命周期函数。才使用路由时的html模板中只会出发以下六个函数。
+    <div class='list'>
+        <div>1.onroute</div>
+        <div>2.beforeinit</div>
+        <div>3.beforemount</div>
+        <div>4.onready</div>
+        <div>5.onmounted</div>
+        <div>6.onrouted</div>
+    </div>
+    在模板中，只有在页面跳转时才会全部执行以上六个函数，各自的执行先后顺序与其序号一致。在模板中刷新页面时，只执行以下五个函数：
+    <div class='list'>
+        <div>1.beforeinit</div>
+        <div>2.beforemount</div>
+        <div>3.onready</div>
+        <div>4.onmounted</div>
+        <div>5.onrouted</div>
+    </div>
+    生命周期函数用法如下：
+</div>
+<div class='j-code' disabled width='99%' height='auto'>
+&lt;script>
+new Jet({
+    onroute:function(){
+      console.log('onroute');
+    },
+    beforeinit:function(){
+      console.log('beforeinit');
+    },
+    beforemount:function(){
+      console.log('beforemount');
+    },
+    onready:function(){
+      console.log('onready');
+    },
+    onload:function(){
+      console.log('onload');
+    },
+    onmounted:function(){
+      console.log('onmounted');
+    },
+    onrouted:function(){
+      console.log('onrouted');
+    },
+    data:{
+    },
+    func:{
+    }
+});
+&lt;/script>
+</div>
+<!-- <div class='j-code' disabled buttons width='99%' height='auto'>
+function aa(){
+
+}
+</div> -->
+
+<script>
+    Jet.global.setLink({
+        last:'html模板',
+        lastUrl:'/intro/html',
+        next:'数据绑定',
+        nextUrl:'/bind',
+    });
+    
+    new Jet({
+        // onroute:function(){
+        //   console.log('onroute');
+        // },
+        // beforeinit:function(){
+        //   console.log('beforeinit');
+        // },
+        // beforemount:function(){
+        //   console.log('beforemount');
+        // },
+        // onready:function(){
+        //   console.log('onready');
+        // },
+        // onload:function(){
+        //   console.log('onload');
+        // },
+        // onmounted:function(){
+        //   console.log('onmounted');
+        // },
+        // onrouted:function(){
+        //   console.log('onrouted');
+        // },
+        data:{//数据
+            message:'hello word'
+        },
+        func:{
+            //函数
+        }
+    });
+</script>

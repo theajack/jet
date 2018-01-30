@@ -41,9 +41,8 @@ JUI.SLIDER.prototype.init=function(){
     var func=function(e){
         var o=item.getBoundingClientRect();
         var w=e.clientX-o.left;
-        if(w>pw){
-            w=pw;
-        }
+        if(w>pw){w=pw;}
+        if(w<0){w=0}
         _jui.value=_jui.min+(w/pw)*(_jui.max-_jui.min);
         _jui.onchange();
         return false;
@@ -79,11 +78,11 @@ JUI.SLIDER.prototype.init=function(){
         c.onmousemove=null;
         item.onmousemove=null;
     }
-    J.body().on('mousemove',function(e){
+    document.documentElement.on('mousemove',function(e){
         if(c.onmousemove)
             c.onmousemove(e);
     },true);
-    J.body().on('mouseup',function(e){
+    document.documentElement.on('mouseup',function(e){
         if(c.onmouseup)
             c.onmouseup(e);
     },true);

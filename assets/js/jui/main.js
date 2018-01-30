@@ -5,6 +5,8 @@ var _jui_change='jui-change';
 //date 没设置初始值会有bug
 //date color 通过value设置初始值没反应
 
+//color :第一次选择颜色时 左上角不是fff
+
 J.ready(function(){
     JUI.init();
 });
@@ -19,6 +21,7 @@ var JUI={
         JUI.DATE.init(item);
         JUI.COLOR.init(item);
         JUI.SLIDER.init(item);
+        Jcode.init(item);
         _jui_mounted.forEach(function(f){
             f();
         });
@@ -60,6 +63,10 @@ var JUI={
         if(typeof opt=='string')
             opt={text:opt,type:type,time:time};
         new JUI.MESSAGE(opt);
+    },confirm:function(opt,call,type){
+        if(typeof opt=='string')
+            opt={text:opt,onconfirm:call,type:type};
+        new JUI.CONFIRM(opt);
     },
     mounted:function(call){
         _jui_mounted.push(call);
@@ -126,6 +133,19 @@ function _msgDefault(txt,time,type){
     else{
         txt.type=type;
         JUI.msg(txt);
+    }
+}
+JUI.confirm.success=function(txt,call){_confirmDefault(txt,call,JUI.CONFIRM.success);};
+JUI.confirm.warn=function(txt,call){_confirmDefault(txt,call,JUI.CONFIRM.warn);};
+JUI.confirm.error=function(txt,call){_confirmDefault(txt,call,JUI.CONFIRM.error);};
+JUI.confirm.info=function(txt,call){_confirmDefault(txt,call,JUI.CONFIRM.info);};
+JUI.confirm.close=function(){if(JUI.CONFIRM.confirmList.length>0)JUI.CONFIRM.confirmList[0].close()};
+function _confirmDefault(txt,call,type){
+    if(typeof txt=='string')
+        JUI.confirm(txt,call);
+    else{
+        txt.type=type;
+        JUI.confirm(txt);
     }
 }
 function _findJetPar(item,jet){
