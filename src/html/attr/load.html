@@ -1,0 +1,82 @@
+<style>
+    ._red{
+        color:#f00;
+    }
+</style>
+<div class='title'>Jload</div>
+<div class="sub">
+    <div class='text indent'>
+        使用Jload可以在某个元素之内加载其他的html模板，加载的模板可以使用父模板的jet，也可以自己定义jet。
+        使用的格式是 <span class='red'>Jload='file'</span> html模板文件可以忽略 .html 后缀。
+        Jload使用的html模板必须位于 /src/html目录下面，可以嵌套使用文件夹。
+        接下来请看一个加载for_load.html文件的例子:
+    </div>
+    <div class='text'>
+        for_load.html：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;span j='name'>&lt;/span>:
+    &lt;span jif='{{$.age}}>20:class[_red]' j='age'>&lt;/span>
+&lt;/div>
+&lt;div j='message' jif='{{$.message}}=="hello jload":class[_red]'>&lt;/div>
+&lt;br>
+&lt;div j='user'>
+    修改父模版年龄：&lt;input type="text" j='age'>
+&lt;/div>
+&lt;div>
+    修改当前模板的message：&lt;input type="text" j='message'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            message:'hello jload'
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>
+        父模板代码:
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;style>
+    ._red{
+        color:#f00;
+    }
+&lt;/style>
+&lt;div jload='/attr/for_load.html'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            user:{
+                name:'jack',
+                age:20
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jload='/attr/for_load.html'></div>
+        </div>
+    </div>
+    
+</div>
+<script>
+    Jet.global.setLink({
+        last:'Jon',
+        lastUrl:'/attr/on',
+        next:'Jroot',
+        nextUrl:'/attr/root',
+    });
+    new Jet({
+        data:{
+            user:{
+                name:'jack',
+                age:20
+            }
+        }
+    });
+</script>

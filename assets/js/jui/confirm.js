@@ -38,7 +38,6 @@ JUI.CONFIRM=function(opt){
     });
     J.body().append(this.ele);
     JUI.CONFIRM.confirmList.push(this);
-    setTimeout(function(){_this.ele.addClass('j-confirm-show')},10);
 };JUI.CONFIRM.prototype.close=function(){
     this.ele.addClass('j-confirm-hide');
     var _this=this;

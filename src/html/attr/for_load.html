@@ -1,0 +1,19 @@
+<div j='user'>
+    <span j='name'></span>:
+    <span jif='{{$.age}}>20:class[_red]' j='age'></span>
+</div>
+<div j='message' jif='{{$.message}}=="hello jload":class[_red]'></div>
+<br>
+<div j='user'>
+    修改父模版年龄：<input type="text" j='age'>
+</div>
+<div>
+    修改当前模板的message：<input type="text" j='message'>
+</div>
+<script>
+    new Jet({
+        data:{
+            message:'hello jload'
+        }
+    })
+</script>

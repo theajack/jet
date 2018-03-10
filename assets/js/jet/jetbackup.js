@@ -7,24 +7,13 @@
 //$.$par.$index 多层循环时会有bug   2597行 2231行
 
 //暂不支持路由的嵌套
-//暂不支持动态添加元素的渲染
-//暂不支持jrepeat 重复单个元素
-//jdom获取样式有待改进
-//jif jshow jattr jstyle 数组中不支持index
 
 //2018
 //1-25 修复了一个for的bug 没有包裹each时，元素的孩子和文字顺序会混乱
 //2-1 新增了ondatachange；修复了 jif中attr的不能正确移除属性的bug
-//2-3 新增jdom 
+//jrepeat jdom
+//2-3 新增jdom
 //2-5 jrun jon 支持多个函数，支持js代码，jon支持绑定多个事件
-//2-6 jload 修复了子模版使用父模版元素的bug
-//2-6 可以越过作用域一级一级向上查找属性，不会直接报错
-//2-7 新增jhtml属性, text元素设置html值
-//2-7 新增makeChange方法，手动触发某值改变的回调函数
-//2-8 发现并修复空值不会渲染的bug
-
-//bug：jetterjs 验证express 不会显示正确的错误提示
-//bug：jetterjs 验证decimal ->float
 (function(){
 
     var _JT = {
@@ -1046,7 +1035,6 @@
     _value="$value",
     _index="$index",
     _dom='jdom';
-    _html='jhtml'
     _reg=new RegExp("({{)((.|\\n)*?)(}})","g"),
     _numReg=new RegExp("(\\[)((.|\\n)*?)(\\])","g");
   function _throw(err){
@@ -1080,11 +1068,6 @@
     })
   };Jet.prototype.get=function(){
     return this;
-  };Jet.prototype.makeChange=function(s){
-    var call=(new Function('call','return call.'+s+'._func'))(this._tools._calls);
-    call.forEach(function(f){
-      f();
-    });
   };Jet.prototype.$ajax=_ajax;
   Jet.$ajax=_ajax;
   
@@ -1118,7 +1101,7 @@
           if(v[0]!='+'&&v[0]!='-'){
             _this.ele._JT_attr('class',v);
           }else{
-            var a=v.split(';');
+            var a=v.split(' ');
             a.forEach(function(c){
               if(c[0]!='+'&&c[0]!='-'){
                 _throw('添加或删除类 第一个字符必须是+或者-');
@@ -1132,13 +1115,6 @@
           }
         }
       });
-      Object.defineProperty(this,'outerHtml',{
-        get:function(){
-          return _this.ele.outerHTML;
-        },set:function(v){
-          console.error('outerHtml 不允许赋值');
-        }
-      });
       Object.defineProperty(this,'attr',{
         get:function(){
           var a={};
@@ -1147,13 +1123,12 @@
           }
           return a;
         },set:function(v){
-          var a=v.split(';');
+          var a=v.split(' ');
           a.forEach(function(c){
             if(c[0]=='-'){
               _this.ele._JT_removeAttr(c.substring(1));
             }else{
               var pair=c.split('=');
-              if(pair.length==0)pair[1]='';
               if(pair[0]=='+'){
                 _this.ele._JT_attr(pair[0].substring(1),pair[1]);
               }else{
@@ -1167,7 +1142,7 @@
         get:function(){
           return _this.ele.style;
         },set:function(v){
-          var a=v.split(';');
+          var a=v.split(' ');
           a.forEach(function(c){
             var pair=c.split('=');
             _this.ele._JT_css(pair[0],pair[1]);
@@ -1188,9 +1163,6 @@
       });
     }
   function _initJet(opt,calls){
-    if(typeof opt.ele=='string'){
-      opt.ele=_JT.id(opt.ele);
-    }
     if(opt.beforeinit){
       opt.beforeinit.call(this);
     }
@@ -1290,7 +1262,7 @@
       opt.beforemount.call(this);
     }
     temp._JT_each(function(json){
-      if(json.item.__isRoot==true&&json.item._hasRemove!=true){
+      if(json.item.__isRoot==true){
         json.par._JT_append(json.item,json.index);
         Jet.valid.init(json.item);
       }
@@ -1429,25 +1401,11 @@
         this.par=this.jet;
         this.data=this.jet;
         //this._tools._calls=this.jet._tools._calls[this.name];
-        if(this.name){
-          this._tools._calls=this.jet._tools._calls[this.name];
-        }else{
-          this._tools._calls=this.jet._tools._calls;
-        }
+        this._tools._calls=this.jet._tools._calls[this.name];
     }
     if(this.type==_bind||this.type==_for||this.type==_text||this.type==_input){
         this.ele.__jet=this;
     }
-  };Jet.Base.prototype.makeChange=function(s){
-    var call;
-    if(s==undefined){
-      call=this._tools._calls._func
-    }else{
-      call=(new Function('$','return '+s+'._func'))(this._tools._calls);
-    }
-    call.forEach(function(f){
-      f();
-    });
   };Jet.Base.prototype.disable=function(){
     console.warn('忽略了一个元素');
     this.disable=true;
@@ -1470,9 +1428,6 @@
   };Jet.Base.prototype.regist=function(name,call){
     var isDisable=false;
     if(arguments.length==2){
-      // if(name._JT_has(_each)){
-      //   name=name._JT_replaceAll("\\"+_each,"$."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]")
-      // }
       if(name._JT_has('.')){
         var a=name.split('.');
         var _call=this._tools._calls;
@@ -1480,7 +1435,6 @@
             _call=_getCallback(_call,a[i])//_call[a[i]];
             if(_call==null){
               isDisable=true;
-              this.disable();
               break;
             }
         }
@@ -1493,7 +1447,6 @@
         var _call=_getCallback(this._tools._calls,name)
         if(_call==null){
           isDisable=true;
-          this.disable();
         }else{
           _call._func.push(call);
         }
@@ -1572,7 +1525,7 @@
     _defineArrayFormIndex(data,_data,_f._tools._calls,index);
     _f.refresh.insertArray.call(_f,arr,index);
   };Array.prototype.$remove=function(i,n){
-    if(n==undefined)n=1
+    n=n||1;
     var _f=this._jet;
     var data=_f.data[_f.name];
     var _data=_f._data[_f.name];
@@ -1589,12 +1542,6 @@
     _defineArrayFormIndex(data,_data,_f._tools._calls,i);
     data.length-=n;
     _f.refresh.remove.call(_f,i,n);
-  };Array.prototype.$clear=function(){
-    this.$remove(0,this.length);
-  };Array.prototype.$replace=function(arr){
-    this.$clear();
-    this.$pushArray(arr);
-    this._jet.makeChange();
   };
   
   //on 和 run 由自身处理，其余由父jet处理
@@ -1720,10 +1667,10 @@
     },
     conf:{
       router:"/assets/router/router.json",
-      html:"/src/html",
-      js:"/src/js",
-      css:"/src/css",
-      image:"/src/image"
+      html:"/src/html/",
+      js:"/src/js/",
+      css:"/src/css/",
+      image:"/src/image/"
     },
     init:function(obj){
       var list;
@@ -1756,7 +1703,7 @@
         _throw('onroute:参数必须是函数');
       }
     },
-    route:function(url,push,call){
+    route:function(url,push){
       var search='';
       if(url.indexOf('#')!=-1){
         var index=url.indexOf('?');
@@ -1840,7 +1787,6 @@
           if(typeof JUI!='undefined'){
             _jui_mounted=[];
           }
-          if(call){call()}
           _loadStyle(out);
           _loadScript(out);
           Jet.valid.init(out);//对out 部分
@@ -2112,10 +2058,10 @@
       'null':/^\S{0}$/,
       "date":/^(([12]\d{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|3(0|1))))$/,
       "email":/^((\w*@\w*\.[A-Za-z.]+(\.)?[A-Za-z]+))$/,
-      "decimal":/^-?[1-9]\d*.\d*|0.\d*[1-9]\d*$/,
+      "float":/^-?[1-9]\d*.\d*|0.\d*[1-9]\d*$/,
       "idcard":/^(\d{17}(X|\d))$/,
       "url":/^((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+$/,
-      "phone":/^([1]\d{10})$/,
+      "phone":/^([1]\d{10})$/
     },
     validText:{
       CN:{
@@ -2154,7 +2100,13 @@
     useDefaultStyle: true,
     showInPlaceHolder: false,
     useAlert:false,
-    validate: _validateForm,
+    validate: function(a, b, c) {
+      if (c != undefined) {
+        _validateForm(a, b, c)
+      } else {
+        _validateForm(a, b)
+      }
+    },
     addValidText: function(a, b) {
       if(_JT.type(a)=="json"&&b==undefined){
         for (var c in a) {
@@ -2187,11 +2139,7 @@
   };
   
   HTMLElement.prototype._JT_validate = function(s, f) {
-    _validateForm({
-      ele:this,
-      pass:s,
-      fail:f
-    })
+    _validateForm(this, s, f)
   };
   function _validInput(b, a) {
     var v = b._JT_attr(_valid);
@@ -2199,9 +2147,6 @@
     if(v!=null){
       if (v.indexOf("lengthOfAny") != -1) {
         var e = v.substring(12, v.length - 1).split(",");
-        if (e[1] === undefined) {
-          e[1] = e[0]
-        }
         var f = "lengthOfAny";
         var d = b._JT_content();
         if (d.length >= parseInt(e[0]) && d.length <= parseInt(e[1])) {
@@ -2253,15 +2198,11 @@
       _checkIsPw(a)
     }
   };
-  //g:元素 f：成功回调函数，c：失败回调函数
-  function _validateForm(opt) {
-    var g=opt.ele;
-    if(typeof g=='string'){
-      g=_JT.attr(_form+'='+g);
-    }
+  
+  function _validateForm(g, f, c) {
     var e = [];
     var b = true;
-    if (opt.fail == undefined) {
+    if (c == undefined) {
       b = false
     }
     var d = true;
@@ -2280,7 +2221,7 @@
     });
     if (!d) {
       if (b) {
-        _checkFunction(opt.fail)(e,g);
+        _checkFunction(c)(e,g);
       }
       var i = (Jet.valid.language == "CHINESE") ? "输入有误，请按提示改正。" : "Values is not expected";
       if (Jet.valid.useAlert) {
@@ -2289,8 +2230,8 @@
         //alert(i)
       }
     } else {
-      if (opt.pass != undefined) {
-        _checkFunction(opt.pass)(g);
+      if (f != undefined) {
+        _checkFunction(f)(g);
       }
     }
   };
@@ -2311,7 +2252,7 @@
     }
     if (c != 0) {
       var a = b.substring(c, b.length - 1).split(",");
-      if (a[1] === undefined) {
+      if (a[1] == undefined) {
         a[1] = a[0]
       }
       return _getValidText(b.substring(0, c - 1), a)
@@ -2323,33 +2264,21 @@
   function _getValidText(a, b) {
     if (Jet.valid.language == "CHINESE") {
       if (b == undefined) {
-        if(a._JT_has('express')){
-          return Jet.valid.validText.CN.express;
-        }
         return Jet.valid.validText.CN[a]
       } else {
         var c = "";
         if (a._JT_has("number")) {
           c = " 且长度为"
         }
-        if(b[0]==b[1]){
-          return Jet.valid.validText.CN[a] + c + b[0]
-        }
         return Jet.valid.validText.CN[a] + c + "[" + b[0] + "," + b[1] + "]"
       }
     } else {
       if (b == undefined) {
-        if(a._JT_has('express')){
-          return Jet.valid.validText.EN.express;
-        }
         return Jet.valid.validText.EN[a]
       } else {
         var c = "";
         if (a._JT_has("number")) {
           c = " and length between"
-        }
-        if(b[0]==b[1]){
-          return Jet.valid.validText.EN[a] + c + b[0]
         }
         return Jet.valid.validText.EN[a] + c + "[" + b[0] + "," + b[1] + "]"
       }
@@ -2583,7 +2512,7 @@ Jet.Bind.prototype.refresh=function(key){
             }else{
                 _opt=_bindOpt(_this,item,attr,_this._tools._calls[attr]);
             }
-            if(attr in _opt._data){
+            if(_opt._data[attr]){
                 var type=_JT.type(_opt._data[attr]);
                 switch(type){
                 case 'json':_jet=new Jet.Bind(_opt);break;
@@ -2813,7 +2742,7 @@ Jet.For.prototype.refresh=function(key){
     }
   }
   function _initForRule(ele){
-    if(this.ele._JT_child(0)._JT_hasAttr(_bind)&&this.ele._JT_child(0)._JT_attr(_bind)._JT_has('=')){//switch模式  $each.t=1
+    if(this.ele._JT_child(0)._JT_attr(_bind)._JT_has('=')){//switch模式  $each.t=1
       this._switch=true;
       this._html={};
       this._type=null;
@@ -2870,12 +2799,6 @@ Jet.For.prototype.refresh=function(key){
         }
       }
     }
-    if(this.data[this.name].length==0){
-      this.ele._JT_findAttr(_bind)._JT_each(function(item){
-        item._hasRemove=true;
-      })
-      this.ele._JT_empty();
-    }
   }
   function _initFor(opt){
     var _this=this;
@@ -2921,7 +2844,6 @@ Jet.For.prototype.refresh=function(key){
   
   Jet.Text=function(opt){
     Jet.Base.call(this,opt,_text);
-    this.isHtml=opt.ele._JT_hasAttr(_html);
     this._parIndex=opt._parIndex;//多层循环中的第几层父元素
     opt.par=this;
     _initText.call(this,opt);
@@ -2930,11 +2852,7 @@ Jet.Text.prototype = new Super();
 Jet.Text.prototype.refresh=function(key){
     if(!key||key==this.name){
       var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
-      if(this.isHtml){
-        this.ele._JT_html(val);
-      }else{
-        this.ele._JT_txt(val);
-      }
+      this.ele._JT_txt(val);
     }
   };Jet.Text.prototype.get=function(){//indexs
     if(this._parIndex){
@@ -3122,12 +3040,7 @@ Jet.Text.prototype.refresh=function(key){
             _this.ele.style.display='none'
         };
         if(!(ifAttr in this._data)){
-
-          // if(ifAttr._JT_has(_each)){
-          //   ifAttr=ifAttr._JT_replaceAll("\\"+_each,"d."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]").replaceAll("{{",'').replaceAll("}}",'');
-          // }else{
-            ifAttr=ifAttr._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
-          //}
+          ifAttr=ifAttr._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
         }else{
           ifAttr='d.'+ifAttr;
         }
@@ -3307,19 +3220,13 @@ Jet.Text.prototype.refresh=function(key){
       var e0=attr.substring(0,attr.indexOf(':'));
       var e1=attr.substring(attr.indexOf(':')+1);
       var _f='';
-      var _valid_false=null,_vf_func=[];
       var valid=false,validPar;
       var func=[];
       if(e1._JT_has('$valid')){
         if(e1._JT_has('=>')){
           valid=true;
           validPar=Jet.valid.findValidPar(_this.ele);
-          _f=e1.substring(e1.indexOf('=>')+2).trim();
-          if(_f._JT_has('|')){
-            var a=_f.split('|');
-            _f=a[0];
-            _valid_false=a[1];
-          }
+          _f=e1.substring(e1.indexOf('=>')+2);
           //_this.func=_this.jet[e1.substring(e1.indexOf('=>')+2)];
         }else{
           _throw('valid:"'+e1+'" 格式有误，操作符为 =>')
@@ -3338,19 +3245,17 @@ Jet.Text.prototype.refresh=function(key){
       }else{
         func=[new Function('opt',_f)];
       }
-      if(valid&&_valid_false!=null){
-        if(_valid_false in _this.jet||_valid_false.substring(0,_valid_false.indexOf(',')) in _this.jet){
-          _valid_false.split(',').forEach(function(f){
-            if(typeof _this.jet[f]!='function')
-              _throw(f+' 不是一个方法');
-            else
-              _vf_func.push(_this.jet[f]);
-          });
-        }else{
-          _vf_func=[new Function('opt',_valid_false)];
-        }
-      }
-
+      // if(_f in _this.jet){
+      //   if(_JT.type(_this.jet[_f])!='function')
+      //     _throw(_f+' 不是一个方法');
+      //   else
+      //     _this.func=_this.jet[_f];
+      // }else{
+      //   _this.func=new Function('opt',_f);
+      // }
+      // if(!_this.func||_JT.type(_this.func)!='function'){
+      //   _throw('没有 '+e1+' 方法')
+      // }
       _this.ele._JT_on(e0,function(event){
         var opt={
           ele:this,
@@ -3361,10 +3266,6 @@ Jet.Text.prototype.refresh=function(key){
         if(valid){
           validPar._JT_validate(function(){
             func.forEach(function(f){
-              f.call(_this.jet,opt);
-            });
-          },function(){
-            _vf_func.forEach(function(f){
               f.call(_this.jet,opt);
             });
           });

@@ -46,7 +46,7 @@ body{
 .f-left{float: left!important}
 .f-right{float: right!important}
 .t-left{text-align: left}
-.t-center{text-align: left}
+.t-center{text-align: center}
 .t-right{text-align: right}
 .m-center{margin: 0 auto}
 .bold{font-weight: bold}

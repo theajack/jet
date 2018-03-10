@@ -1,0 +1,68 @@
+<div class='title'>Jform</div>
+<div class='text'>
+    使用 Jform 属性来指定一个表单，从而可以与jon 配合使用来验证一个表单内的元素是否全部符合验证规则。请看一个例子：
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user' Jform>
+    &lt;div>姓名：&lt;input j='name' type="text" jvalid='notnull'>&lt;/div>
+    &lt;div>手机号：&lt;input j='phone' type="text" jvalid='phone'>&lt;/div>
+    &lt;button jon='click:$valid=>pass'>验证&lt;/button>
+    &lt;button jon='click:$valid=>pass|fail'>验证(成功和失败的回调)&lt;/button>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            user:{
+                name:'',
+                phone:''
+            }
+        },
+        func:{
+            pass:function(){
+                alert(JSON.stringify(this.user));
+            },
+            fail:function(){
+                alert('验证失败');
+            }
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div j='user' Jform>
+                <div>姓名：<input j='name' type="text" jvalid='notnull'></div>
+                <div>手机号：<input j='phone' type="text" jvalid='phone'></div>
+                <button jon='click:$valid=>pass'>验证</button>
+                <button jon='click:$valid=>pass|fail'>验证(成功和失败的回调)</button>
+            </div>
+        </div>
+        $valid=> 后面的参数与 jon的参数使用方法一致，可以使用逗号间隔使用多个jet方法，或者使用js代码。
+    </div>
+    <div class='text'>
+        除了使用 jon 触发整个表单的验证，还可以使用 Jet.valid.validate() 方法来触发表单的验证行为，我们将在下一节中介绍。
+    </div>
+</div>
+<script>
+    Jet.global.setLink({
+        last:'Jvalid',
+        lastUrl:'/valid/valid',
+        next:'Jet.valid',
+        nextUrl:'/valid/method',
+    });
+    new Jet({
+        data:{
+            user:{
+                name:'',
+                phone:''
+            }
+        },
+        func:{
+            pass:function(){
+                alert(JSON.stringify(this.user));
+            },
+            fail:function(){
+                alert('验证失败');
+            }
+        }
+    })
+</script>

@@ -1,1 +1,364 @@
-array
+<div class='title'>数组方法</div>
+<div class='text'>
+    循环类型的for元素的绑定值是一个数组，Jet 对for元素的数组定义了一些操作方法，来代替原生js的数组操作方法。一共有以下九种：
+    <span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
+    <div class="list">
+        <div class='link' jump-to='push'>1.$push <span class="light-text">(向数组尾部插入一个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='pushArray'>2.$pushArray <span class="light-text">(向数组尾部插入多个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='prep'>3.$prep <span class="light-text">(向数组头部插入一个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='prepArray'>4.$prepArray <span class="light-text">(向数组尾部插入多个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='insert'>5.$insert <span class="light-text">(向数组指定位置插入一个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='insertArray'>6.$insertArray <span class="light-text">(向数组指定位置插入多个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='remove'>7.$remove <span class="light-text">(删除数组中指定位置的一个或多个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='clear'>8.$clear <span class="light-text">(清空数组)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='replace'>9.$replace <span class="light-text">(替换数组，可用于数组整体赋值)</span><i class="icon icon-double-angle-right"></i></div>
+    </div>
+</div>
+<div class='title' jump-des='push'>1.$push</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$push()</span> 向数组尾部插入一个元素。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:push' value='添加元素'>
+&lt;div j='list_push' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_push:[11,22]
+        },
+        func:{
+            push:function(){
+                this.list_push.$push(this.list_push.last()+11);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:push' value='添加元素'>
+            <div j='list_push' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='pushArray'>2.$pushArray</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$pushArray()</span> 向数组尾部插入多个元素。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:pushArray' value='添加多个元素'>
+&lt;div j='list_pushArray' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_pushArray:[11,22]
+        },
+        func:{
+            pushArray:function(){
+                this.list_pushArray.$pushArray([11,22]);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:pushArray' value='添加多个元素'>
+            <div j='list_pushArray' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='prep'>3.$prep</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$prep()</span> 向数组头部插入一个元素。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:prep' value='头部插入一个元素'>
+&lt;div j='list_prep' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_prep:[11,22]
+        },
+        func:{
+            prep:function(){
+                this.list_prep.$prep(this.list_prep[0]+11);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:prep' value='头部插入一个元素'>
+            <div j='list_prep' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='prepArray'>4.$prepArray</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$prepArray()</span> 向数组头部插入多个元素。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:prepArray' value='头部插入多个元素'>
+&lt;div j='list_prepArray' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_prepArray:[11,22]
+        },
+        func:{
+            prepArray:function(){
+                this.list_prepArray.$prepArray([22,11]);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:prepArray' value='头部插入多个元素'>
+            <div j='list_prepArray' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='insert'>5.$insert</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$insert(element,index)</span> 向数组头部任意位置插入一个元素。其中element是要插入的元素，index是指定的位置。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:insert' value='指定位置插入一个元素'>
+&lt;div j='list_prepArray' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_insert:[1,1]
+        },
+        func:{
+            insert:function(){
+                this.list_insert.$insert(0,1);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:insert' value='指定位置插入一个元素'>
+            <div j='list_insert' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='insertArray'>6.$insertArray</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$insertArray(array,index)</span> 向数组头部任意位置插入一个元素。其中array是要插入的元素数组，index是指定的位置。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:insertArray' value='指定位置插入多个元素'>
+&lt;div j='list_insertArray' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_insertArray:[1,1]
+        },
+        func:{
+            insertArray:function(){
+                this.list_insertArray.$insertArray([0,0],1);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:insertArray' value='指定位置插入多个元素'>
+            <div j='list_insertArray' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='remove'>7.$remove</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$remove(index,n)</span> 删除数组中的一个或多个元素，其中参数index是删除的位置，n是需要删除的元素个数。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:remove' value='删除元素'>
+&lt;div j='list_remove' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_remove:[1,2,3,4,5,6]
+        },
+        func:{
+            remove:function(){
+                this.list_remove.$remove(0,1);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:remove' value='删除元素'>
+            <div j='list_remove' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='clear'>8.$clear</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$clear()</span> 可以清空一个数组。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:clear' value='清空数组'>
+&lt;div j='list_clear' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_clear:[1,2,3]
+        },
+        func:{
+            clear:function(){
+                this.list_clear.$clear();
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:clear' value='清空数组'>
+            <div j='list_clear' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='replace'>8.$replace</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$replace(arr)</span> 可以对当前数组赋一个新的值。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:replace' value='替换数组'>
+&lt;div j='list_replace' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_replace:[1,2,3]
+        },
+        func:{
+            replace:function(){
+                this.list_replace.$replace([4,5,6]);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:replace' value='替换数组'>
+            <div j='list_replace' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Jet.global.setLink({
+        last:'特殊语法',
+        lastUrl:'/bind/grammer',
+        next:'属性样式事件',
+        nextUrl:'/attr/index',
+    });
+    new Jet({
+        data:{//数据
+            list_push:[11,22],
+            list_pushArray:[11,22],
+            list_prep:[11,22],
+            list_prepArray:[11,22],
+            list_insert:[1,1],
+            list_insertArray:[1,1],
+            list_remove:[1,2,3,4,5,6],
+            list_clear:[1,2,3],
+            list_replace:[1,2,3]
+        },
+        func:{
+            push:function(){
+                this.list_push.$push(this.list_push[this.list_push.length-1]+11);
+            },
+            pushArray:function(){
+                this.list_pushArray.$pushArray([11,22]);
+            },
+            prep:function(){
+                this.list_prep.$prep(this.list_prep[0]+11);
+            },
+            prepArray:function(){
+                this.list_prepArray.$prepArray([22,11]);
+            },
+            insert:function(){
+                this.list_insert.$insert(0,1);
+            },
+            insertArray:function(){
+                this.list_insertArray.$insertArray([0,0],1);
+            },
+            remove:function(){
+                this.list_remove.$remove(0,1);
+            },
+            clear:function(){
+                this.list_clear.$clear();
+            },
+            replace:function(){
+                this.list_replace.$replace([4,5,6]);
+            }
+        }
+    });
+</script>

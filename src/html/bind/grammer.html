@@ -312,34 +312,99 @@
     </div>
 </div>
 <div class='title' jump-des='text'>3.text</div>
-<div class='text indent'>
-    text是渲染文本的类型，不接受用户输入。当绑定的数据是boolean，number，string类型（值类型）时，
-    并且对应的html元素不是输入元素（不是input，textarea，select或contenteditable的元素），
-    Jet会生成一个text类型的jet元素。
+<div class="sub">
+    <div class='text indent'>
+        text是渲染文本的类型，不接受用户输入。当绑定的数据是boolean，number，string类型（值类型）时，
+        并且对应的html元素不是输入元素（不是input，textarea，select或contenteditable的元素），
+        Jet会生成一个text类型的jet元素。
+    </div>
+
+    <div class='text'>
+        text元素可以使用 $ 来进行值的运算,并且可以使用任何符合js语法的表达式。请看下面的例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='string'>&lt;/div>
+&lt;div j='string'>$&lt;/div>
+&lt;div j='string'>$+' world'&lt;/div>
+&lt;div j='string'>$.substring(1,4)&lt;/div>
+&lt;div j='number'>$+2&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            string:'hello',
+            number:10
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的html：
+        <div class="out">
+            <div j="string"></div>
+            <div j="string">$</div>
+            <div j="string">$+' world'</div>
+            <div j="string">$.substring(1,4)</div>
+            <div j="number">$+2</div>
+        </div>
+    </div>
 </div>
 <div class='title' jump-des='input'>4.input</div>
-<div class='text indent'>
-    input也是渲染文本的类型，但它还可以接受用户输入，并且会改变数据源，从而刷新其他绑定了相同数据的UI。
-    当绑定的数据是boolean，number，string类型（值类型）时，
-    并且对应的html元素是输入元素（是input，textarea，select或contenteditable的元素），
-    Jet会生成一个text类型的jet元素
-</div>
-
-<div class='j-code' disabled width='99%' height='auto'>
-    &lt;div j='user'>
-        &lt;div j='name'>
-            &lt;span j='first'>&lt;/span>
-            &lt;span j='last'>&lt;/span>
-        &lt;/div>
-        &lt;div j='age'>&lt;/div>
-    &lt;/div>
-    &lt;script>
-        new Jet({
-            data:{//数据
-                list:[11,22,33]
-            }
-        });
-    &lt;/script>
+<div class="sub">
+    <div class='text indent'>
+        input也是渲染文本的类型，但它还可以接受用户输入，并且会改变数据源，从而刷新其他绑定了相同数据的UI。
+        当绑定的数据是boolean，number，string类型（值类型）时，
+        并且对应的html元素是输入元素（是input，textarea，select或contenteditable的元素），
+        Jet会生成一个text类型的jet元素
+    </div>
+    <div class='text'>
+        input也可以使用 $ 来进行值的运算,不过要放在 value 属性中。请看一个例子 
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j="string">&lt;/div>
+&lt;div j="number">&lt;/div>
+&lt;div>&lt;input type='text' j='string'/>&lt;/div>
+&lt;div>&lt;input type='text' j='string' value='$'/>&lt;/div>
+&lt;div>&lt;textarea j='string'>$+' world'&lt;/textarea>&lt;/div>
+&lt;div>&lt;div contenteditable="true" j='string'>&lt;/div>&lt;/div>
+&lt;div>&lt;input type='text' j='number'/>&lt;/div>
+&lt;div>&lt;input type='text' j='number' value='$+2'/>&lt;/div>
+&lt;div>
+    &lt;select j='number'>
+        &lt;option value='10'>value=10&lt;/option>
+        &lt;option value='11'>value=11&lt;/option>
+        &lt;option value='12'>value=12&lt;/option>
+    &lt;/select>
+&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            string:'hello',
+            number:10
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的html：
+        <div class="out">
+            <div j="string"></div>
+            <div j="number"></div>
+            <div><input type='text' j='string'/></div>
+            <div><input type='text' j='string' value='$'/></div>
+            <div><textarea j='string'>$+' world'</textarea></div>
+            <div><div contenteditable="true" j='string'></div></div>
+            <div><input type='text' j='number'/></div>
+            <div><input type='text' j='number' value='$+2'/></div>
+            <div>
+                <select j='number'>
+                    <option value='10'>value=10</option>
+                    <option value='11'>value=11</option>
+                    <option value='12'>value=12</option>
+                </select>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     Jet.global.setLink({
@@ -348,7 +413,7 @@
         next:'数组方法',
         nextUrl:'/bind/array',
     });
-    new Jet({
+    var grammer=new Jet({
         data:{//数据
             user:{
                 name:{
@@ -399,7 +464,9 @@
                         },
                     ]
                 },
-            ]
+            ],
+            string:'hello',
+            number:10,
         }
     });
 </script>

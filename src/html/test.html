@@ -1,0 +1,17 @@
+<div j='user'>
+    <span class='_red' j='name'></span>:<span j='age'></span>
+    <div jif='{{$.age}}>1:class[_red]'></div>
+</div>
+<div jload='attr/for_load.html'></div>
+
+</div>
+<script>
+new Jet({
+    data:{
+        user:{
+            name:'jack',
+            age:20
+        }
+    }
+});
+</script>

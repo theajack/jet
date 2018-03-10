@@ -183,7 +183,7 @@
   box-shadow: 0 5px 20px 0px #ddd;
   line-height: 27px;
 }
-.text.indent{
+.indent{
   text-indent: 2em;
 }
 .out{
@@ -276,7 +276,71 @@
   z-index: 20;
   color:#1D2B35;
 }
+.to-top{
+  position: absolute;
+  color: #00b2d7!important;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 25px!important;
+}
+#searchWrapper{
+  position: absolute;
+  right: 50px;
+  top: 6px;
+}
+#searchWrapper .j-icon{
+  position: absolute;
+  color: #00b2d7!important;
+  top: 8px;
+  font-size: 18px;
+  right: 8px;
+}
+#searchWrapper .icon-times{
+  cursor: pointer
+}
+#searchWrapper .icon-times:hover{
+  color: #028eaa!important;
+}
 
+#queryResult{
+  position: absolute;
+  width: 150px;
+  overflow: hidden;
+  margin: 3px;
+  background-color: rgba(255,255,255,.95);
+  top: 30px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  max-height: 335px;
+  overflow-y: auto;
+}
+.q-item{
+  border-bottom: 1px solid #ccc;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.q-item.b-none{
+  border-bottom: none
+}
+.q-item:hover{
+  background-color: #eee;
+}
+.q-name{
+  font-weight:bold;
+  text-align: center;
+  font-size: 18px;
+}
+.q-intro,.q-name{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.__red{
+  color:#f44;
+  margin: 0 2px;
+  text-decoration: underline;
+}
 @media screen and (max-width: 600px) {
   #menu{
     left:-220px;

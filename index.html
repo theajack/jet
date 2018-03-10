@@ -17,9 +17,9 @@
     <link rel="stylesheet" href="assets/css/jui.css">
     <script type="text/javascript" src='assets/js/preload.js'></script>
   </head>
-  <body class="common">
+  <body class="common" jstyle="overflow-y:{{$.bodyFix}}?'hidden':'auto'">
       <div id="menu" jattr='class:({{$.showMenu}})?"open":""'>
-        <div class='logo-text'>JET</div>
+        <div class='logo-text' jon='click:this.dshow=!this.dshow'>JET</div>
         <div id='menuScroll'><div class="menu-item">
             <div class="menu-main-item" Jrouter='/intro'>
               <div class="menu-main-bar"></div>
@@ -109,6 +109,14 @@
                 <div class="menu-s-bar"></div>
                 <div class='relative'>jroot</div>
               </div>
+              <div class="menu-s-item" Jrouter='/attr/dom' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>jdom</div>
+              </div>
+              <div class="menu-s-item" Jrouter='/attr/html' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>jhtml</div>
+              </div>
             </div>
           </div>
           <div class="menu-item">
@@ -126,9 +134,13 @@
                 <div class="menu-s-bar"></div>
                 <div class='relative'>jform</div>
               </div>
+              <div class="menu-s-item" Jrouter='/valid/method' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>Jet.valid</div>
+              </div>
               <div class="menu-s-item" Jrouter='/valid/custom' >
                 <div class="menu-s-bar"></div>
-                <div class='relative'>自定义</div>
+                <div class='relative'>自定义样式</div>
               </div>
             </div>
           </div>
@@ -191,8 +203,23 @@
       <div id="main">
         <div id='header'>
           <i class="j-icon icon-bars menu-bar" jon='click:this.showMenu=true'></i>
+          <i class="j-icon icon-arrow-up to-top" jon='click:J.scrollTo(0)'></i>
+          <div id="searchWrapper">
+              <i class="j-icon" jif='showResult:class[icon-times|icon-search]' jon='click:if(this.showResult)this.showResult=false'></i>
+              <input type="text" class='j-input' jon='focus:this.showResult=true' j='queryString' placeholder="搜索api">
+              <div j='queryList' jshow='{{$.queryList}}.length>0&&{{$.showResult}}' id='queryResult'>
+                <!-- 有bug -->
+                <div j='$each'>
+                  <div class='q-item' jon='click:toQueryResult'>
+                    <div j='name' class='q-name' jhtml>this.shapeQueryName($)</div>
+                    <div j='intro' class='q-intro'></div>
+                  </div>
+                  
+                </div>
+              </div>
+          </div>
         </div>
-        <div Jout></div>
+        <div Jout id='routerOut'></div>
         <div id='footer'>
           <div jshow='{{$.last}}!=""' class='last' jon='click:lastApi'>
             <i class="j-icon icon-double-angle-left"></i>
@@ -204,6 +231,9 @@
           </div>
           <span class='footer-text'>theajack@qq.com | ©2018 theajack | <a href="http://www.theajack.com">www.theajack.com</a></span>
         </div>
+      </div>
+      <div class='j-dialog' dialog-title='aaaaaa' jui-bind='dshow'>
+          <div class="j-code">function(){}</div>
       </div>
       <div jattr='class:({{$.showMenu}})?"menu-bar-cover open":"menu-bar-cover"' jon='click:this.showMenu=false'></div>
     <script type="text/javascript" src="assets/js/jet/jet.all.3.js"></script>
@@ -220,13 +250,23 @@
     <script type="text/javascript" src="assets/js/jui/color.js"></script>
     <script type="text/javascript" src="assets/js/jui/slider.js"></script>
     <script type="text/javascript" src="assets/js/jui/jcode.js"></script>
+    <script type="text/javascript" src="assets/js/jui/screenDrag.js"></script>
+    <script type="text/javascript" src="assets/js/jui/dialog.js"></script>
     <script type="text/javascript" src="src/js/common.js"></script>
+    <script type="text/javascript" src="src/js/queryApi.js"></script>
     
     <script type="text/javascript">
+    
       Jet.global=new Jet({
+        onload:function(){
+          this.needUseRouted=true;
+          this.routeFunc();
+        },
         onrouted:function(){
           //console.log('onrouted');
           this.routeFunc();
+          document.documentElement.scrollTop=0;
+          J.body().scrollTop=0;
           J.attr('jump-to').each(function(item){
               J.attr('jump-des="'+item.attr('jump-to')+'"').exist(function(ele){
                   item.clk(function(){
@@ -238,8 +278,9 @@
         onmounted:function(){
           //console.log('onmounted');
           var _this=this;
+          var max;
           var _checkScrol=function(){
-            var max=J.id('menuScroll').hei()-J.id('menu').hei();
+            max=J.id('menuScroll').hei()+40-J.id('menu').hei();
             if(max<=0){
               menuScroll=0;
               J.id('menuScroll').css('top','0px')
@@ -261,7 +302,8 @@
           },true);
           var menuScroll=0;
           J.id('menu').onmousewheel=function(e){
-            var max=J.id('menuScroll').hei()-J.id('menu').hei();
+            //stopPro(e);
+            if(!_this.bodyFix)_this.bodyFix=true;
             if(max>0){
               var _top=menuScroll+J.sign(e.wheelDelta)*80;
               if(e.wheelDelta<0){
@@ -272,19 +314,39 @@
               menuScroll=_top;
               J.id('menuScroll').css('top',_top+'px')
             }
+          };
+          J.id('routerOut').onmousewheel=function(){
+            if(_this.bodyFix)_this.bodyFix=false;
           }
           window.onresize=_checkScrol;
         },
         data:{
+          dshow:false,
           needUseRouted:false,
           last:'',
           lastUrl:'',
           next:'安装使用',
           nextUrl:'/intro/install',
-          list:['l1','l2','l3'],
-          showMenu:false
+          showMenu:false,
+          queryList:[],
+          showResult:false,
+          queryString:'',
+          bodyFix:false
+        },
+        ondatachange:{
+          queryString:function(v){
+            this.queryList.$replace(Query.query(v))
+          }
         },
         func:{
+          stopPro:function(event){
+            var e=arguments.callee.caller.arguments[0]||event;
+            if (e && e.stopPropagation) {
+                e.stopPropagation();
+            } else if (window.event) {
+                window.event.cancelBubble = true;
+            }
+          },
           routeFunc:function(){
             if(this.needUseRouted){
               J.attr('jrouter-active').exist(function(item){
@@ -294,8 +356,8 @@
                   _i.child(1).addClass('active');
                 }
               });
+              this.needUseRouted=false
             }
-            this.needUseRouted=false
           },
           nextApi:function(){
             var _this=this;
@@ -310,6 +372,29 @@
             this.lastUrl=opt.lastUrl;
             this.next=opt.next||'';
             this.nextUrl=opt.nextUrl;
+          },a1:function(){
+            alert(1)
+          },a2:function(){
+            alert(2)
+          },toQueryResult:function(opt){
+            var _this=this;
+            this.showResult=false;
+            this.needUseRouted=true;
+            Jet.router.route(opt.data.url,null,function(){
+              setTimeout(function(){
+                var top=0;
+                if(opt.data.des!=''){
+                  top=J.attr('jump-des='+opt.data.des).offsetTop-55;
+                }
+                document.documentElement.scrollTop=top;
+                J.body().scrollTop=top;
+                _this.needUseRouted=false;
+              },0);
+            });
+          },shapeQueryName:function(s){
+            var si=s.toLowerCase().indexOf(this.queryString.toLowerCase());
+            var ei=si+this.queryString.length;
+            return s.substring(0,si)+'<span class="__red">'+s.substring(si,ei)+'</span>'+s.substring(ei);
           }
         }
       })
@@ -349,12 +434,15 @@
               '/on':'/attr/on',
               '/load':'/attr/load',
               '/root':'/attr/root',
+              '/dom':'/attr/dom',
+              '/html':'/attr/html',
             }
           },
           '/valid':{
             name:'/valid/index',
             children:{
               '/form':'/valid/form',
+              '/method':'/valid/method',
               '/valid':'/valid/valid',
               '/custom':'/valid/custom',
             }
@@ -378,6 +466,7 @@
               '/out':'/router/out',
             }
           },
+          '/test':'test'
         }
       });
       

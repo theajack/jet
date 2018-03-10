@@ -1,11 +1,25 @@
-<div class='title'>1.Jet语法</div>
-<div class='text'>Jet 使用
-    <span class='red'>new Jet()</span>
-    来创建一个Jet组件，该组件的作用范围是当前html模板以及其中加载的Jload。
-    <span class='light-text'>(见jload章节)</span>
-</div>
+<div class='title'>Jet语法</div>
 
-<div class='j-code' disabled width='99%' height='auto'>
+<div class='text indent'>
+    本节将介绍以下Jet的总体语法，主要从以下四个方面介绍：
+    <span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
+    <div class="list">
+            <!-- html text class attr css  -->
+        <div class='link' jump-to='base'>1.基本使用 <span class="light-text">(获取或者设置dom元素的innerHTML)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='part'>2.局部渲染 <span class="light-text">(获取dom元素的outerHTML)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='ondatachange'>3.ondatachange <span class="light-text">(获取或者设置dom元素的innerText)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='life'>4.生命周期 <span class="light-text">(获取或者设置[增加或删除]dom元素的属性)</span><i class="icon icon-double-angle-right"></i></div>
+    </div>
+</div>
+<div class='title' jump-des='base'>1.基本使用</div>
+<div class="sub">
+    <div class='text'>Jet 使用
+        <span class='red'>new Jet()</span>
+        来创建一个Jet组件，该组件的作用范围是当前html模板以及其中加载的Jload。
+        <span class='light-text'>(见jload章节)</span>
+    </div>
+
+    <div class='j-code' disabled width='99%' height='auto'>
 &lt;div j='message'>
     <!-- 会显示hello world -->
 &lt;/div>
@@ -19,75 +33,148 @@
         }
     });
 &lt;/script>
-</div>
-<div class='text'>以下是输出的html:
-    <div class='out'>
-        <div j='message'>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div j='message'>
+            </div>
         </div>
     </div>
 </div>
 
-<div class='title'>2.Jet生命周期函数</div>
-<div class='text'>
-    Jet 有以下7个生命周期函数，各自的执行先后顺序与其序号一致。
-    <div class='list'>
-        <div>1.beforeinit：<span class="light-text">(在生成Jet元素和渲染HTML元素之前执行)</span></div>
-        <div>2.beforemount：<span class="light-text">(在生成Jet元素和之后、渲染HTML元素之前执行)</span></div>
-        <div>3.onmounted：<span class="light-text">(在渲染HTML元素完成之后执行)</span></div>
-        <div>4.onroute：<span class="light-text">(在路由发生之前执行)</span></div>
-        <div>5.onready：<span class="light-text">(在HTML元素加载完成之后执行，不包括图片和其他非文本元素)</span></div>
-        <div>6.onload：<span class="light-text">(在HTML元素加载完成之后执行，包括图片和其他非文本元素)</span></div>
-        <div>7.onrouted：<span class="light-text">(在路由完成之后执行)</span></div>
+<div class='title' jump-des='part'>2.局部渲染</div>
+<div class="sub">
+    <div class='text'>通过给 new Jet() 参数增加一个 ele 属性（值是一个id值或者是一个dom元素）。可以局部渲染html元素，请看一个例子
     </div>
-    但是，只有在index.html文件才会触发所有的生命周期函数。才使用路由时的html模板中只会出发以下六个函数。
-    <div class='list'>
-        <div>1.onroute</div>
-        <div>2.beforeinit</div>
-        <div>3.beforemount</div>
-        <div>4.onready</div>
-        <div>5.onmounted</div>
-        <div>6.onrouted</div>
-    </div>
-    在模板中，只有在页面跳转时才会全部执行以上六个函数，各自的执行先后顺序与其序号一致。在模板中刷新页面时，只执行以下五个函数：
-    <div class='list'>
-        <div>1.beforeinit</div>
-        <div>2.beforemount</div>
-        <div>3.onready</div>
-        <div>4.onmounted</div>
-        <div>5.onrouted</div>
-    </div>
-    生命周期函数用法如下：
-</div>
-<div class='j-code' disabled width='99%' height='auto'>
+
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='message'>初始值&lt;/div><!-- 不会被渲染 -->
+&lt;div id='test'>
+    &lt;div j='message'>初始值&lt;/div>
+&lt;/div>
 &lt;script>
-new Jet({
-    onroute:function(){
-      console.log('onroute');
-    },
-    beforeinit:function(){
-      console.log('beforeinit');
-    },
-    beforemount:function(){
-      console.log('beforemount');
-    },
-    onready:function(){
-      console.log('onready');
-    },
-    onload:function(){
-      console.log('onload');
-    },
-    onmounted:function(){
-      console.log('onmounted');
-    },
-    onrouted:function(){
-      console.log('onrouted');
-    },
-    data:{
-    },
-    func:{
-    }
-});
+    new Jet({
+        ele:'test',//或者使用document.getElementById('test')
+        data:{//数据
+            message:'hello word'
+        }
+    });
 &lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>   
+            <div>初始值</div>
+            <div>
+                <div>hello word</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='title' jump-des='ondatachange'>3.ondatachange</div>
+<div class="sub">
+    <div class='text'>
+        ondatachange 属性用于为Jet数据添加一个数据变化的监听事件，事件方法的 this 指代的是根Jet元素，方法有两个参数，第一个是改变之后的值，改变数据的键。请看下面一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;script>
+    new Jet({
+        data:{//数据
+            string:'hello word',
+            json:{
+                key:'value'
+            },
+            array:[0,1]
+        },
+        ondatachange:{
+            'string':function(value,key){
+                alert('string:'+key+"--"+value);
+            },
+            'json.key':function(value,key){
+                alert('json:'+key+"--"+value);
+            },
+            'array[0]':function(value,key){
+                alert('array:'+key+"--"+value);
+            },
+            'array[1]':function(value,key){
+                alert('array:'+key+"--"+value);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>输入以改变数据值</div>
+            <div>字符串类型(值类型)：<input type="text" j='string'></div>
+            <div j='json'>json：<input type="text" j='key'></div>
+            <div j='array'>数组[<span j='$index'></span>]：<input type="text" j='$value'></div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='life'>4.Jet生命周期函数</div>
+<div class="sub">
+    <div class='text'>
+        Jet 有以下7个生命周期函数，各自的执行先后顺序与其序号一致。
+        <div class='list'>
+            <div>1.beforeinit：<span class="light-text">(在生成Jet元素和渲染HTML元素之前执行)</span></div>
+            <div>2.beforemount：<span class="light-text">(在生成Jet元素和之后、渲染HTML元素之前执行)</span></div>
+            <div>3.onmounted：<span class="light-text">(在渲染HTML元素完成之后执行)</span></div>
+            <div>4.onroute：<span class="light-text">(在路由发生之前执行)</span></div>
+            <div>5.onready：<span class="light-text">(在HTML元素加载完成之后执行，不包括图片和其他非文本元素)</span></div>
+            <div>6.onload：<span class="light-text">(在HTML元素加载完成之后执行，包括图片和其他非文本元素)</span></div>
+            <div>7.onrouted：<span class="light-text">(在路由完成之后执行)</span></div>
+        </div>
+        但是，只有在index.html文件才会触发所有的生命周期函数。才使用路由时的html模板中只会出发以下六个函数。
+        <div class='list'>
+            <div>1.onroute</div>
+            <div>2.beforeinit</div>
+            <div>3.beforemount</div>
+            <div>4.onready</div>
+            <div>5.onmounted</div>
+            <div>6.onrouted</div>
+        </div>
+        在模板中，只有在页面跳转时才会全部执行以上六个函数，各自的执行先后顺序与其序号一致。在模板中刷新页面时，只执行以下五个函数：
+        <div class='list'>
+            <div>1.beforeinit</div>
+            <div>2.beforemount</div>
+            <div>3.onready</div>
+            <div>4.onmounted</div>
+            <div>5.onrouted</div>
+        </div>
+        生命周期函数用法如下：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;script>
+    new Jet({
+        onroute:function(){
+        console.log('onroute');
+        },
+        beforeinit:function(){
+        console.log('beforeinit');
+        },
+        beforemount:function(){
+        console.log('beforemount');
+        },
+        onready:function(){
+        console.log('onready');
+        },
+        onload:function(){
+        console.log('onload');
+        },
+        onmounted:function(){
+        console.log('onmounted');
+        },
+        onrouted:function(){
+        console.log('onrouted');
+        },
+        data:{
+        },
+        func:{
+        }
+    });
+&lt;/script>
+    </div>
 </div>
 <!-- <div class='j-code' disabled buttons width='99%' height='auto'>
 function aa(){
@@ -103,7 +190,7 @@ function aa(){
         nextUrl:'/bind',
     });
     
-    new Jet({
+    var b=new Jet({
         // onroute:function(){
         //   console.log('onroute');
         // },
@@ -126,7 +213,26 @@ function aa(){
         //   console.log('onrouted');
         // },
         data:{//数据
-            message:'hello word'
+            message:'hello word',
+            string:'hello word',
+            json:{
+                key:'value'
+            },
+            array:[0,1]
+        },
+        ondatachange:{
+            'string':function(value,key){
+                alert('string:'+key+"--"+value);
+            },
+            'json.key':function(value,key){
+                alert('json:'+key+"--"+value);
+            },
+            'array[0]':function(value,key){
+                alert('array:'+key+"--"+value);
+            },
+            'array[1]':function(value,key){
+                alert('array:'+key+"--"+value);
+            }
         },
         func:{
             //函数
