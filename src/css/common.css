@@ -267,7 +267,7 @@
 .logo-text{
   position: fixed;
   top: 0;
-  left:-220px;
+  left:0;
   font-size: 30px;
   height: 40px;
   text-align: center;
@@ -351,6 +351,7 @@
 }
 @media screen and (max-width: 600px) {
   .logo-text{
+    left:-220px;
     transition: left .3s ease;
     -webkit-transition: left .3s ease;
   }
