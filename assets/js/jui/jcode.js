@@ -104,6 +104,10 @@
       }else{
         throw new Error("extend:参数类型错误");
       }
+    },txt:function(obj,txt){
+      var c=obj.findClass("code_editor");
+      c.val(txt).focus();
+      _geneViewCode(c);
     }
   };
   function _checkParent(obj){

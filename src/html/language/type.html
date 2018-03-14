@@ -1,0 +1,72 @@
+<div class='title'>Jet.lang.type</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.lang.type</span> 可以获取当前的语言，并且可以设置语言。请看一个例子：
+    </div>
+    
+    <div class='text'>
+        index.js 或者 index.html 中插入以下代码：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en']);
+    </div>
+    <div class='text'>
+        html模板中：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;select j='type' jon='change:changeLang'>
+    &lt;option value="cn">中文&lt;/option>
+    &lt;option value="en">英文&lt;/option>
+&lt;/select>
+&lt;div jlang>
+    &lt;span jname='cn'>你好，世界&lt;/span>
+    &lt;span jname='en'>hello world&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        onmounted:function(){
+            this.type=Jet.lang.type;
+        },
+        data:{
+            type:'',
+        },func:{
+            changeLang:function(){
+                Jet.lang.type=this.type;
+            }
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <select j='type' jon='change:changeLang'>
+                <option value="cn">中文</option>
+                <option value="en">英文</option>
+            </select>
+            <div jlang>
+                <span jname='cn'>你好，世界</span>
+                <span jname='en'>hello world</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Jet.global.setLink({
+        last:'Jet.lang.list',
+        lastUrl:'/lang/list',
+        next:'Jet.lang.init',
+        nextUrl:'/lang/init',
+    });
+    new Jet({
+        onmounted:function(){
+            this.type=Jet.lang.type;
+        },
+        data:{
+            type:'',
+        },func:{
+            changeLang:function(){
+                Jet.lang.type=this.type;
+            }
+        }
+    })
+</script>

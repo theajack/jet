@@ -1,0 +1,76 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+<div class='text'>
+    消息类型的默认值为info ,可选值有 success，info，warn，error
+    <div class="out">
+        <button jon='allParam'>所有参数</button>
+        <button jon='confirm'>简写</button>
+        <button jon='close'>关闭队列首部的确认框</button>
+                
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;button jon='allParam'>所有参数&lt;/button>
+&lt;button jon='confirm'>简写&lt;/button>
+&lt;button jon='close'>关闭队列首部的确认框&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            allParam:function(){
+                JUI.confirm({
+                    title:"title",
+                    text:'text',
+                    type:'warn',
+                    onconfirm:function(){console.log('confirm')},
+                    oncancel:function(){console.log('cancel')},
+                    onclose:function(){console.log('close')},
+                })
+            },confirm:function(){
+                JUI.confirm('是否确认',function(){
+                    JUI.msg('确认')
+                },'info')
+            },close:function(){
+                JUI.confirm.close();
+            }
+        }
+    });
+&lt;/script>
+    </div>
+</div>
+
+<script>
+    Jet.global.setLink({
+        last:'提示框',
+        lastUrl:'/jui/msg',
+        next:'对话框',
+        nextUrl:'/jui/dialog',
+    });
+    new Jet({
+        func:{
+            allParam:function(){
+                JUI.confirm({
+                    title:"title",
+                    text:'text',
+                    type:'warn',
+                    onconfirm:function(){console.log('confirm')},
+                    oncancel:function(){console.log('cancel')},
+                    onclose:function(){console.log('close')},
+                })
+            },confirm:function(){
+                JUI.confirm('是否确认',function(){
+                    JUI.msg('确认')
+                },'info')
+            },close:function(){
+                JUI.confirm.close();
+            }
+        }
+    });
+</script>

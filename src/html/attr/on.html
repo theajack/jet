@@ -9,6 +9,9 @@
     <div class='text indent'>
         Jon可以给html元素绑定多个事件，每个之间使用 双冒号隔开(;;)。Jon支持所有的html支持的事件。
     </div>
+    <div class='text indent'>
+        Jon属性如果没有事件名，则默认为click事件。Jon="func" 等价于 Jon="click:func"
+    </div>
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;div>&lt;input type="button" jon='click:func1' value='单个事件，单个jet方法'>&lt;/div>
 &lt;div>&lt;input type="button" jon='click:func1,func2' value='单个事件，多个jet方法'>&lt;/div>

@@ -50,6 +50,9 @@
         nextUrl:'/valid/method',
     });
     new Jet({
+        onmounted:function(){
+            Jet.valid.useDefaultStyle=true;
+        },
         data:{
             user:{
                 name:'',

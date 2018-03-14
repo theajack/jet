@@ -1,0 +1,85 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+        <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class="j-switch xs" jui-bind='sv'>
+    &lt;div>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch s" jui-bind='sv'>
+    &lt;div checked>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch" jui-bind='sv'>
+    &lt;div checked>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch l" jui-bind='sv'>
+    &lt;div checked>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch xl" jui-bind='sv'>
+    &lt;div checked>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch" disabled jui-bind='sv'>
+    &lt;div checked>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        sv:'否',
+    }
+});
+&lt;/script>
+        </div>
+        <div class="out">
+            <div class="j-switch xs" jui-bind='sv'>
+                <div>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch s" jui-bind='sv'>
+                <div checked>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch" jui-bind='sv'>
+                <div checked>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch l" jui-bind='sv'>
+                <div checked>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch xl" jui-bind='sv'>
+                <div checked>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch" disabled jui-bind='sv'>
+                <div checked>是</div>
+                <div>否</div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    Jet.global.setLink({
+        last:'下拉框',
+        lastUrl:'/jui/select',
+        next:'时间选择器',
+        nextUrl:'/jui/date',
+    });
+    new Jet({
+        data:{
+            sv:'否',
+        }
+    });
+</script>

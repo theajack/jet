@@ -1,0 +1,22 @@
+<div class='title'>use()</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.lang.use()</span> 方法启用国际化语言，并且设置支持的语种，参数是一个数组，数组中第一个元素是默认的语种。
+        对语种的名称没有格式要求，可以自己命名。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en','jp']);
+    </div>
+    <div class='text'>
+        一般在入口文件 index.html 中使用该方法。我们将在下一节介绍具体使用。
+    </div>
+</div>
+<script>
+    Jet.global.setLink({
+        last:'国际化语言',
+        lastUrl:'/lang',
+        next:'静态',
+        nextUrl:'/lang/static',
+    });
+</script>

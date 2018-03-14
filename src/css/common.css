@@ -189,6 +189,7 @@
 .out{
   background-color: #444;
   color: #fff;
+  word-wrap: break-word;
 }
 .list{
   margin: 7px 0;
@@ -340,6 +341,12 @@
   color:#f44;
   margin: 0 2px;
   text-decoration: underline;
+}
+#number{
+  position: absolute;
+  right: 210px;
+  top: 13px;
+  color: #c00;
 }
 @media screen and (max-width: 600px) {
   #menu{

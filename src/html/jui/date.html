@@ -1,0 +1,51 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+    <div class='text'>时间选择器：j-date [size,disabled]
+            <div class="out">
+                <div class='j-date xs' jui-bind='date'></div>
+                <div class='j-date s' jui-bind='date'></div>
+                <div class='j-date m' jui-bind='date'></div>
+                <div class='j-date l' jui-bind='date'></div>
+                <div class='j-date xl' jui-bind='date'></div>
+                <div class='j-date' disabled jui-bind='date'></div>
+            </div>
+        <div class='j-code' disabled width='99%' height='auto'>
+
+&lt;div class='j-date xs' jui-bind='date'>&lt;/div>
+&lt;div class='j-date s' jui-bind='date'>&lt;/div>
+&lt;div class='j-date m' jui-bind='date'>&lt;/div>
+&lt;div class='j-date l' jui-bind='date'>&lt;/div>
+&lt;div class='j-date xl' jui-bind='date'>&lt;/div>
+&lt;div class='j-date' disabled jui-bind='date'>&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        date:'2018-01-17',
+    }
+});
+&lt;/script>
+        </div>
+    </div>
+
+<script>
+    Jet.global.setLink({
+        last:'切换按钮',
+        lastUrl:'/jui/switch',
+        next:'颜色选择器',
+        nextUrl:'/jui/color',
+    });
+    new Jet({
+        data:{
+            date:'2018-01-17',
+        }
+    });
+</script>

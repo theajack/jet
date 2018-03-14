@@ -1,0 +1,52 @@
+<style>
+        .out{
+            background-color: #fff;
+            border: 1px solid #888;
+            width:99%;
+            color:#444;
+        }
+    </style>
+    <div class='title'>未完成...</div>
+    
+    <div class="sub">
+        <div class='text'>
+                &lt;div class='j-slider' min='0' max='100' width='150' value='0' jui-change=''>&lt;/div>
+            <div class="out">
+                <span j=slider>parseInt($)</span>   
+                <div class='j-slider' min='20' width='200' value='40' jui-bind='slider' jui-change='cc'></div>
+                       
+            </div>
+            <div class='j-code' disabled width='99%' height='auto'>
+&lt;span j=slider>parseInt($)&lt;/span>   
+&lt;div class='j-slider' min='20' width='200' value='40' jui-bind='slider' jui-change='cc'>&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        slider:50
+    },func:{
+        cc:function(opt){
+            console.log(this,opt)
+        }
+    }
+});
+&lt;/script>
+            </div>
+        </div>
+    
+    <script>
+        Jet.global.setLink({
+            last:'颜色选择器',
+            lastUrl:'/jui/color',
+            next:'提示框',
+            nextUrl:'/jui/msg',
+        });
+        new Jet({
+            data:{
+                slider:50
+            },func:{
+                cc:function(opt){
+                    console.log(this,opt)
+                }
+            }
+        });
+    </script>

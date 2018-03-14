@@ -56,9 +56,6 @@ function _initOneRadioGroup(item,isBody){
         }
     }
 
-
-
-
     var arr=[];
     item.findClass(JUI.RADIO._name).each(function(radio){
         if(!radio.$jui){
@@ -76,6 +73,9 @@ function _initOneRadioGroup(item,isBody){
     // if(item.hasAttr('checked')&&item.attr('checked')!='false'){
     //     _jui.checked=true;
     // }
+    if(isBody){
+        
+    }
 }
 /*RADIO*************************************************************/
 JUI.RADIO=function(opt){
@@ -91,7 +91,7 @@ JUI.RADIO=function(opt){
         get:function(){
             return _this._checked;
         },set:function(v){
-            if(typeof v!='boolean')_throw('radio.checked只支持布尔类型');
+            if(typeof v!='boolean'){_throw('radio.checked只支持布尔类型')};
             if(_this._checked!=v){
                 _this._checked==v;
                 if(v==true){
@@ -119,9 +119,11 @@ JUI.RADIO.prototype.init=function(){
     var item=this.ele;
     item.html('<div class="j-radio-cw"><div class="j-radio-c"></div></div>'+
         '<span class="j-radio-t">'+_jui.text+'</span>');
-    item.clk(function(){
-        _jui.group.value=_jui.value;
-    });
+    if(!item.hasAttr('disabled')||item.attr('disabled')=="false"){
+        item.clk(function(){
+            _jui.group.value=_jui.value;
+        });
+    }
     _jui.onchange=function(){
         if(_jui.checked){
             _jui.ele.addClass('j-checked');

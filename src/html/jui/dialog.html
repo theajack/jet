@@ -1,0 +1,46 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+<div class='text'>
+    <div class="out">
+        <button jon='click:this.dshow=!this.dshow'>弹出对话框</button>
+        <div class='j-dialog' dialog-title='对话框' jui-bind='dshow'>
+            <input class='j-input' type="text">
+            <div class="j-btn">确认</div>
+        </div> 
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;button jon='click:this.dshow=!this.dshow'>弹出对话框&lt;/button>
+&lt;div class='j-dialog' dialog-title='对话框' jui-bind='dshow'>
+    &lt;input class='j-input' type="text">
+    &lt;div class="j-btn">确认&lt;/div>
+&lt;/div> 
+&lt;script>
+    new Jet({
+        data:{
+            dshow:false
+        }
+    });
+&lt;/script>
+    </div>
+</div>
+
+<script>
+    Jet.global.setLink({
+        last:'确认框',
+        lastUrl:'/jui/confirm'
+    });
+    new Jet({
+        data:{
+            dshow:false
+        }
+    });
+</script>

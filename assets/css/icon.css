@@ -26,6 +26,19 @@
   min-width: 14px;
   text-align: center;
   }
+  
+.j-icon.xs{
+  font-size: 10px;
+}
+.j-icon.s{
+  font-size: 12px;
+}
+.j-icon.l{
+  font-size: 18px;
+}
+.j-icon.xl{
+  font-size: 22px;
+}
 a .j-icon,
 a [class^="icon-"],
 a [class*=" icon-"] {

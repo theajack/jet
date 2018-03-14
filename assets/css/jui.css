@@ -146,7 +146,6 @@
     -ms-transition: border-color .2s ease;
 }
 textarea.j-input{
-    height:auto!important;
 }
 .j-input:focus{border: 1px solid #bbb;}
 .j-input.normal{border-color: #1da1ff}
@@ -420,6 +419,9 @@ textarea.j-input{
 }
 .j-checkbox[disabled] .j-checkbox-c{
     color: #999;    
+}
+.j-checkbox[disabled][checked=false] .j-checkbox-c{
+    color: transparent;    
 }
 
 /*RADIO END************************************************************************************/

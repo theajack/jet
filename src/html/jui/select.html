@@ -1,0 +1,83 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+        <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class="j-select" id='aaa'>
+    &lt;div class="j-option" value='1'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项一&lt;/div>
+    &lt;div class="j-option" default value='2'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项二&lt;/div>
+    &lt;div class="j-option" disabled value='3'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项三&lt;/div>
+&lt;/div>
+&lt;div class="j-select" disabled id='aaa'>
+    &lt;div class="j-option" value='1'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项一&lt;/div>
+    &lt;div class="j-option" default value='2'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项二&lt;/div>
+    &lt;div class="j-option" disabled value='3'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项三&lt;/div>
+&lt;/div>
+&lt;div j='vs'>
+    &lt;span J='value' id='t'>&lt;/span>
+    &lt;div class="j-select" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+        &lt;div class="j-option" j=$each>
+            &lt;i class='j-icon icon-pencil'>&lt;/i>&lt;span j=$value>&lt;/span>
+        &lt;/div>
+    &lt;/div>
+&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        list:['选项a','选项b'],
+        select:null,
+        vs:{
+            value:'选项1',
+            list:['选项1','选项2']
+        },
+    }
+});
+&lt;/script>
+        </div>
+        <div class="out">
+            <div class="j-select" id='aaa'>
+                <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
+                <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
+                <div class="j-option" disabled value='3'><i class='j-icon icon-pencil'></i>选项三</div>
+            </div>
+            <div class="j-select" disabled id='aaa'>
+                <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
+                <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
+                <div class="j-option" disabled value='3'><i class='j-icon icon-pencil'></i>选项三</div>
+            </div>
+            <div j='vs'>
+                <span J='value' id='t'></span>
+                <div class="j-select" id='bbb' jui-bind='value' jattr='aaa:{{$.list}}' j='list'>
+                    <div class="j-option" j=$each>
+                        <i class='j-icon icon-pencil'></i><span j=$value></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    Jet.global.setLink({
+        last:'复选框与复选框组',
+        lastUrl:'/jui/check',
+        next:'切换按钮',
+        nextUrl:'/jui/switch',
+    });
+    new Jet({
+        data:{
+            list:['选项a','选项b'],
+            select:null,
+            vs:{
+                value:'选项1',
+                list:['选项1','选项2']
+            },
+        }
+    });
+</script>

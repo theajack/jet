@@ -118,7 +118,7 @@ JUI.CHECKBOX.prototype.init=function(){
     item.html('<div class="j-checkbox-cw"><i class="j-icon icon-check j-checkbox-c"></i></div>'+
         '<span class="j-checkbox-t">'+_jui.text+'</span>');
     item.clk(function(){
-        var arr=_jui.group._value;
+        var arr=_jui.group._value.clone();
         if(arr.has(_jui.value))arr.remove(_jui.value);
         else arr.push(_jui.value);
         _jui.group.value=arr;

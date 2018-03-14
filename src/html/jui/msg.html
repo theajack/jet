@@ -1,0 +1,76 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+<div class='text'>
+    消息类型的默认值为info ,可选值有 success，info，warn，error
+    <div class="out">
+        <button jon='allParam'>所有参数</button>
+        <button jon='success'>简写</button>
+        <button jon='error'>独立的函数</button>
+        <button jon='close'>关闭队列首部的消息框</button>
+                
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;button jon='allParam'>所有参数&lt;/button>
+&lt;button jon='success'>简写&lt;/button>
+&lt;button jon='error'>独立的函数&lt;/button>
+&lt;button jon='close'>关闭队列首部的消息框&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            allParam:function(){
+                JUI.msg({
+                    text:'text',
+                    time:2000,//默认为2300
+                    type:'warn',//默认为info ,可选值有 success，info，warn，error
+                    autoClose:true, //默认为true
+                    call:function(){console.log('close')},
+                })
+            },success:function(){
+                JUI.msg('success');
+            },error:function(){
+                JUI.msg.error('error');
+            },close:function(){
+                JUI.msg.close();
+            }
+        }
+    });
+&lt;/script>
+    </div>
+</div>
+
+<script>
+    Jet.global.setLink({
+        last:'滑动选择器',
+        lastUrl:'/jui/slider',
+        next:'确认框',
+        nextUrl:'/jui/confirm',
+    });
+    new Jet({
+        func:{
+            allParam:function(){
+                JUI.msg({
+                    text:'text',
+                    time:2000,//默认为2300
+                    type:'warn',//默认为info ,可选值有 success，info，warn，error
+                    autoClose:true, //默认为true
+                    call:function(){console.log('close')},
+                })
+            },success:function(){
+                JUI.msg('success');
+            },error:function(){
+                JUI.msg.error('error');
+            },close:function(){
+                JUI.msg.close();
+            }
+        }
+    });
+</script>

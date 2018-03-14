@@ -46,8 +46,13 @@
 <script>
     Jet.global.setLink({
         last:'表单验证',
-        lastUrl:'/valid/index',
+        lastUrl:'/valid',
         next:'Jform',
         nextUrl:'/valid/form',
     });
+    new Jet({
+        onmounted:function(){
+            Jet.valid.useDefaultStyle=true;
+        }
+    })
 </script>

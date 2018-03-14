@@ -1,51 +1,439 @@
-<div class='title'>Jet.valid</div>
 
+
+<div class='title'>Jet.valid</div>
 <div class='text'>
-        Jet.valid对象中含有很多可以定制的属性的：
+    Jet.valid对象中含有很多可以定制的属性的，以下是可用的属性或者方法的列表：<span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
+    <div class="list">
+        <div class='link' jump-to='language'>1.language <span class="light-text">(设置验证提示信息语言，默认值为 CHINESE，可选值为CHINESE和ENGLISH，不区分大小写)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='useDefaultStyle'>2.useDefaultStyle <span class="light-text">(是否使用默认的错误提示样式，默认值为true)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='showInPlaceHolder'>3.showInPlaceHolder <span class="light-text">(是否将格式要求使用 placeholder 显示，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='useAlert'>4.useAlert <span class="light-text">(是否使用alert方法打印出验证失败信息，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='init'>5.init() <span class="light-text">(初始化验证元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='validate'>6.validate() <span class="light-text">(代码调用验证表单)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='validInput'>7.validInput() <span class="light-text">(代码调用验证单个输入元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='addRegExp'>8.addRegExp() <span class="light-text">(修改或者添加验证的正则表达式)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='addValidText'>9.addValidText() <span class="light-text">(修改或者添加验证失败的提示文字)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='onOnePass'>10.onOnePass() <span class="light-text">(单个输入元素验证成功的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='onOneFail'>11.onOneFail() <span class="light-text">(单个输入元素验证失败的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
+    </div>
+</div>
+
+<div class='title' jump-des='language'>1.language</div>
+<div class="sub">
+    <div class='text'>
+        修改 <span class="red">Jet.valid.language</span> 可以设置验证提示信息语言，默认值为 CHINESE，可选值为 CHINESE 和 ENGLISH，不区分大小写。
+        请看一个例子：
+    </div>
+    
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;div>使用phone：&lt;input type="text" jvalid='phone'>&lt;/div>
-&lt;div>使用带规定值的规则：&lt;input type="text" jvalid='number[2]'>&lt;/div>
-&lt;div>使用带范围的规则：&lt;input type="text" jvalid='range[10,20]'>&lt;/div>
-&lt;div>使用null来允许空值：&lt;input type="text" jvalid='date null'>&lt;/div>
-&lt;div>使用自定义的规则（手机号验证）：&lt;input type="text" jvalid='express[^([1]\d{10})$]'>&lt;/div>
+&lt;div>输入电话号码：&lt;input type="text" jvalid='phone' jdom='lang_dom'>&lt;/div>
+&lt;button jon="click:Jet.valid.language='english';Jet.valid.validInput('lang_dom')">设置英文&lt;/button>
+&lt;button jon="click:Jet.valid.language='chinese';Jet.valid.validInput('lang_dom')">设置中文&lt;/button>
+&lt;script>
+    new Jet();//为了初始化 jon 元素
+&lt;/script>
     </div>
     <div class='text'>以下是输出的html:
         <div class='out'>
-            <div>使用phone：<input type="text" jvalid='phone'></div>
-            <div>使用带规定值的规则：<input type="text" jvalid='number[2]'></div>
-            <div>使用带范围的规则：<input type="text" jvalid='range[10,20]'></div>
-            <div>使用null来允许空值：<input type="text" jvalid='date null'></div>
-            <div>使用自定义的规则（手机号验证）：<input type="text" jvalid='express[^([1]\d{10})$]'></div>
+            <div>输入电话号码：<input type="text" jvalid='phone' jdom='lang_dom'></div>
+            <button jon="click:Jet.valid.language='english';Jet.valid.validInput('lang_dom')">设置英文</button>
+            <button jon="click:Jet.valid.language='chinese';Jet.valid.validInput('lang_dom')">设置中文</button>
         </div>
     </div>
 </div>
 
-<div class='title' jump-des='regExp'>预定义的验证规则</div>
-<div class='text'>
-    Jet中预定义的验证规则有以下几种，你可以直接使用规则名来使用它们。
-    <div class="list">
-        <div>1.notnull <span class="light-text">(非空值)</span> </div>
-        <div>2.null <span class="light-text">(允许空值)</span> </div>
-        <div>3.date <span class="light-text">(日期格式:XXXX-XX-XX)</span> </div>
-        <div>4.email <span class="light-text">(邮箱：XXX@XX.XX)</span> </div>
-        <div>5.idcard <span class="light-text">(身份证号：17位数字加一位数字或X)</span> </div>
-        <div>6.decimal <span class="light-text">(小数)</span> </div>
-        <div>7.url <span class="light-text">(链接)</span> </div>
-        <div>9.phone <span class="light-text">(手机号码)</span> </div>
-        <div>10.number <span class="light-text">(数字，可以使用 number[a] 来限定必须是a位数字；使用 number[a,b] 来限定数字必须是在a位到b位之间)</span> </div>
-        <div>11.length <span class="light-text">(指定长度的字符串，后面方括号的使用规则与number一致)</span> </div>
-        <div>12.lengthOfAny <span class="light-text">(指定长度的可包含任意字符（汉字）字符串，后面方括号的使用规则与number一致)</span> </div>
-        <div>13.letterStart <span class="light-text">(指定长度的字母打头的字符串，后面方括号的使用规则与number一致)</span> </div>
-        <div>14.range <span class="light-text">(指定范围的数字，后面方括号的使用规则与number一致)</span> </div>
-        <div>15.express[exp] <span class="light-text">(自定义验证规则)</span> </div>
+<div class='title' jump-des='useDefaultStyle'>2.useDefaultStyle</div>
+<div class="sub">
+    <div class='text'>
+        修改 <span class="red">Jet.valid.useDefaultStyle</span> 可以设置使用默认的错误提示样式，默认值为 true。请看一个例子：
     </div>
-    上述的规则中 除了null 其他都只能单独使用，null可以和其他任何规则共同使用，表示可以为空或者符合验证的规则。当与notnull共同使用时会忽略null。
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>输入电话号码：&lt;input type="text" jvalid='phone' jdom='default_dom'>&lt;/div>
+&lt;button jon="click:Jet.valid.useDefaultStyle=false;Jet.valid.validInput('default_dom')">禁用默认样式&lt;/button>
+&lt;button jon="click:Jet.valid.useDefaultStyle=true;Jet.valid.validInput('default_dom')">使用默认样式&lt;/button>
+&lt;script>
+    new Jet();//为了初始化 jon 元素
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>输入电话号码：<input type="text" jvalid='phone' jdom='default_dom'></div>
+            <button jon="click:Jet.valid.useDefaultStyle=false;Jet.valid.validInput('default_dom')">禁用默认样式</button>
+            <button jon="click:Jet.valid.useDefaultStyle=true;Jet.valid.validInput('default_dom')">使用默认样式</button>
+        </div>
+    </div>
+    <div class='text'>
+        一般使用该属性与 onOneFail() 方法相结合来自定义用户自己的错误提示，我们将在下面的内容介绍 onOneFail 的用法。：
+    </div>
+</div>
+<div class='title' jump-des='showInPlaceHolder'>3.showInPlaceHolder</div>
+<div class="sub">
+    <div class='text'>
+        修改 <span class="red">Jet.valid.showInPlaceHolder</span> 可以设置是否将格式要求使用 placeholder 显示，默认值为false。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>输入电话号码：&lt;input type="text" jvalid='phone'>&lt;/div>
+&lt;button jon="click:Jet.valid.showInPlaceHolder=true">使用placeholder&lt;/button>
+&lt;button jon="click:Jet.valid.showInPlaceHolder=false">禁用placeholder&lt;/button>
+&lt;script>
+    new Jet();//为了初始化 jon 元素
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>输入电话号码：<input type="text" jvalid='phone'></div>
+            <button jon="click:Jet.valid.showInPlaceHolder=true">使用placeholder</button>
+            <button jon="click:Jet.valid.showInPlaceHolder=false">禁用placeholder</button>
+        </div>
+    </div>
+    <div class='text'>
+        除了上述方式设置 showInPlaceHolder 外，还可以在Jet的生命周期函数中对其进行初始化设置。
+    </div>
+</div>
+<div class='title' jump-des='useAlert'>4.useAlert</div>
+<div class="sub">
+    <div class='text'>
+        修改 <span class="red">Jet.valid.useAlert</span> 可以设置是否使用alert方法打印出验证失败信息，默认值为false。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>输入电话号码：&lt;input type="text" jvalid='phone' jdom='alert_dom'>&lt;/div>
+&lt;button jon="click:Jet.valid.useAlert=true;Jet.valid.validInput('alert_dom')">使用alert&lt;/button>
+&lt;button jon="click:Jet.valid.useAlert=false;Jet.valid.validInput('alert_dom')">禁用alert&lt;/button>
+&lt;script>
+    new Jet();//为了初始化 jon 元素
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>输入电话号码：<input type="text" jvalid='phone' jdom='alert_dom'></div>
+            <button jon="click:Jet.valid.useAlert=true;Jet.valid.validInput('alert_dom')">使用alert</button>
+            <button jon="click:Jet.valid.useAlert=false;Jet.valid.validInput('alert_dom')">禁用alert</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='init'>5.init</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.valid.init()</span> 可以初始化验证元素，适用于使用脚本动态添加dom元素之后对其做初始化操作。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='init_dom'>&lt;/div>
+&lt;button jon="click:addInput">添加元素&lt;/button>
+&lt;button jon="click:initInput">初始化元素&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            addInput:function(){
+                this.$dom.init_dom.html='输入电话号码：<input type="text" jvalid="phone">'
+            },
+            initInput:function(){
+                Jet.valid.init('init_dom');
+                //参数可以使用 Jet.DOM 元素 或者 dom元素
+                //使用参数时是对指定元素的所有子验证元素进行初始化
+                //也可以不使用参数，表示对所有未初始化的验证元素进行初始化
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div jdom='init_dom'></div>
+            <button jon="click:addInput">添加元素</button>
+            <button jon="click:initInput">初始化元素</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='validate'>6.validate</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.valid.validate()</span> 可以代码调用验证表单。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>使用jform&lt;/div>
+&lt;div jform='validate_dom'>
+    name：&lt;input type="text" jvalid="notnull">&lt;br>
+    phone：&lt;input type="text" jvalid="phone">
+&lt;/div>
+&lt;button jon="click:Jet.valid.validate('validate_dom')">验证表单&lt;/button>&lt;br>&lt;br>
+&lt;div>使用jdom&lt;/div>
+&lt;div jdom='validate_dom1'>
+    name：&lt;input type="text" jvalid="notnull">&lt;br>
+    phone：&lt;input type="text" jvalid="phone">
+&lt;/div>
+&lt;button jon="click:Jet.valid.validate('validate_dom1')">验证表单&lt;/button>
+&lt;!--参数还可以使用 Jet.DOM 元素 或者 dom元素 -->
+&lt;br>&lt;br>
+&lt;div>使用json格式参数，并且使用成功和失败的回调函数&lt;/div>
+&lt;div jdom='validate_dom2'>
+    name：&lt;input type="text" jvalid="notnull">&lt;br>
+    phone：&lt;input type="text" jvalid="phone">
+&lt;/div>
+&lt;button jon="click:validate">验证表单&lt;/button>
+&lt;br>&lt;br>
+&lt;div>使用jon:click触发验证&lt;/div>
+&lt;div jform>
+    name：&lt;input type="text" jvalid="notnull">&lt;br>
+    phone：&lt;input type="text" jvalid="phone">&lt;br>
+    &lt;button jon="click:$valid=>alert('验证通过')|alert('验证失败')">验证(成功和失败的回调)&lt;/button>
+    &lt;!-- jon 元素必须与验证元素在同一个jform下 -->
+&lt;/div>
+&lt;script>
+    new Jet({
+        func:{
+            validate:function(){
+                Jet.valid.validate({
+                    ele:'validate_dom2',
+                    pass:function(){
+                        alert('验证通过')
+                    },fail:function(err){
+                        alert(JSON.stringify(err))
+                    }
+                });
+            },
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>使用jform</div>
+            <div jform='validate_dom'>
+                name：<input type="text" jvalid="notnull"><br>
+                phone：<input type="text" jvalid="phone">
+            </div>
+            <button jon="click:Jet.valid.validate('validate_dom')">验证表单</button><br><br>
+            <div>使用jdom</div>
+            <div jdom='validate_dom1'>
+                name：<input type="text" jvalid="notnull"><br>
+                phone：<input type="text" jvalid="phone">
+            </div>
+            <button jon="click:Jet.valid.validate('validate_dom1')">验证表单</button>
+            <!--参数还可以使用 Jet.DOM 元素 或者 dom元素 -->
+            <br><br>
+            <div>使用json格式参数，并且使用成功和失败的回调函数</div>
+            <div jdom='validate_dom2'>
+                name：<input type="text" jvalid="notnull"><br>
+                phone：<input type="text" jvalid="phone">
+            </div>
+            <button jon="click:validate">验证表单</button>
+            <br><br>
+            <div>使用jon:click触发验证</div>
+            <div jform>
+                name：<input type="text" jvalid="notnull"><br>
+                phone：<input type="text" jvalid="phone"><br>
+                <button jon="click:$valid=>alert('验证通过')|alert('验证失败')">验证(成功和失败的回调)</button>
+                <!-- jon 元素必须与验证元素在同一个jform下 -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='validInput'>7.validInput</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.valid.validInput()</span> 可以代码调用验证单个输入元素。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+phone：&lt;input type="text" jdom='validInput_dom1' jvalid="phone">&lt;br>
+&lt;button jon="click:alert(Jet.valid.validInput('validInput_dom1'),false)">使用alert&lt;/button>&lt;br>
+phone：&lt;input type="text" jdom='validInput_dom2' jvalid="phone">&lt;br>
+&lt;button jon="click:Jet.valid.validInput('validInput_dom2')">不使用alert&lt;/button>
+&lt;script>
+    new Jet();
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            phone：<input type="text" jdom='validInput_dom1' jvalid="phone"><br>
+            <button jon="click:alert(Jet.valid.validInput('validInput_dom1'),false)">使用alert</button><br>
+            phone：<input type="text" jdom='validInput_dom2' jvalid="phone"><br>
+            <button jon="click:Jet.valid.validInput('validInput_dom2')">不使用alert</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='addRegExp'>8.addRegExp</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.valid.addRegExp()</span> 可以修改或者添加验证的正则表达式。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+请输入四位数字:&lt;input type="text" jdom='regExp_dom' jvalid="fourNumber">&lt;br>
+&lt;button jon="click:addRegExp">添加验证规则&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            addRegExp:function(){
+                Jet.valid.addRegExp('fourNumber',/^\d{4}$/,'请输入四位数字');
+                Jet.valid.validInput('regExp_dom');
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            请输入四位数字:<input type="text" jdom='regExp_dom' jvalid="fourNumber"><br>
+            <button jon="click:addRegExp">添加验证规则</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='addValidText'>9.addValidText</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.valid.addValidText()</span> 可以修改或者添加验证的错误提示文字。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
+&lt;button jon="click:addValidText">字符串修改错误提示文字&lt;/button>&lt;br>
+&lt;button jon="click:addValidTextJson">json修改错误提示文字&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            addValidText:function(){
+                Jet.valid.addValidText('email','修改后的邮箱提示文字');
+                Jet.valid.validInput('validText_dom');
+            },addValidTextJson:function(){
+                Jet.valid.addValidText({
+                    'email':'json格式修改后的邮箱提示文字'
+                });
+                Jet.valid.validInput('validText_dom');
+                //以json格式可以一次修改多个
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            email:<input type="text" jdom='validText_dom' jvalid="email"><br>
+            <button jon="click:addValidText">字符串修改错误提示文字</button><br>
+            <button jon="click:addValidTextJson">json修改错误提示文字</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='onOnePass'>10.onOnePass</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.valid.onOnePass()</span> 可以设置单个输入元素验证成功的回调函数。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+不为空:&lt;input type="text" jvalid="notnull">&lt;br>
+数字:&lt;input type="text" jvalid="number">&lt;br>
+&lt;button jon="click:onOnePass">设置验证通过的回调函数&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            onOnePass:function(opt){
+                Jet.valid.onOnePass(function(ele){
+                    alert(ele.value);
+                });
+                opt.ele.innerText='设置成功';
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            不为空:<input type="text" jvalid="notnull"><br>
+            数字:<input type="text" jvalid="number"><br>
+            <button jon="click:onOnePass">设置验证通过的回调函数</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='onOneFail'>11.onOneFail</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.valid.onOneFail()</span> 可以设置单个输入元素验证失败的回调函数。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+不为空:&lt;input type="text" jvalid="notnull">&lt;br>
+数字:&lt;input type="text" jvalid="number">&lt;br>
+&lt;button jon="click:onOneFail">设置验证失败的回调函数&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            onOneFail:function(opt){
+                Jet.valid.onOneFail(function(ele,err){
+                    alert(ele.value+" : "+err);
+                });
+                opt.ele.innerText='设置成功';
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            不为空:<input type="text" jvalid="notnull"><br>
+            数字:<input type="text" jvalid="number"><br>
+            <button jon="click:onOneFail">设置验证失败的回调函数</button>
+        </div>
+    </div>
+    <div class='text'>
+        使用 onOnePass，onOneFail 和 useDefaultStyle 结合可以定制验证成功或者失败的提示信息，我们将在下一节提供具体实例。
+    </div>
 </div>
 <script>
     Jet.global.setLink({
-        last:'表单验证',
-        lastUrl:'/valid/index',
-        next:'Jform',
-        nextUrl:'/valid/form',
+        last:'Jform',
+        lastUrl:'/valid/form',
+        next:'自定义样式',
+        nextUrl:'/valid/custom',
+    });
+    new Jet({
+        onmounted:function(){
+            Jet.valid.useDefaultStyle=true;
+        },
+        func:{
+            addInput:function(){
+                this.$dom.init_dom.html='输入电话号码：<input type="text" jvalid="phone">'
+            },
+            initInput:function(){
+                Jet.valid.init('init_dom');
+                //参数可以使用 Jet.DOM 元素 或者 dom元素
+            },
+            validate:function(){
+                Jet.valid.validate({
+                    ele:'validate_dom2',
+                    pass:function(){
+                        alert('验证通过')
+                    },fail:function(err){
+                        alert(JSON.stringify(err))
+                    }
+                });
+            },
+            addValidText:function(){
+                Jet.valid.addValidText('email','修改后的邮箱提示文字');
+                Jet.valid.validInput('validText_dom');
+            },addValidTextJson:function(){
+                Jet.valid.addValidText({
+                    'email':'json格式修改后的邮箱提示文字'
+                });
+                Jet.valid.validInput('validText_dom');
+                //以json格式可以一次修改多个
+            },addRegExp:function(){
+                Jet.valid.addRegExp('fourNumber',/^\d{4}$/,'请输入四位数字');
+                Jet.valid.validInput('regExp_dom');
+            },onOnePass:function(opt){
+                Jet.valid.onOnePass(function(ele){
+                    alert(ele.value);
+                });
+                opt.ele.innerText='设置成功';
+            },onOneFail:function(opt){
+                Jet.valid.onOneFail(function(ele,err){
+                    alert(ele.value+" : "+err);
+                });
+                opt.ele.innerText='设置成功';
+            }
+        }
     });
 </script>

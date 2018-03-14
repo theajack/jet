@@ -79,12 +79,14 @@ function _useBindSingle(opt){
     var jui=item.$jui;
     var attr=item.attr(_jui_bind);
     var _jet=(opt.isDef)?jet:_findJetPar(item,jet);
-    var d;
+    var d,cd;
     if(_jet==jet){
         d=_jet._tools._data;
+        cd=_jet;
         //d=_jet;
     }else{
         d=_jet._data[_jet.name];
+        cd=_jet.data[_jet.name];
         //d=_jet.data[_jet.name];
     }
     if(item.hasAttr(_jui_change)){
@@ -94,6 +96,8 @@ function _useBindSingle(opt){
             jui._onchange=jet[change];
         }else if(window[change]&&typeof window[change]=='function'){
             jui._onchange=window[change];
+        }else{
+            jui._onchange=new Function('opt',change);
         }
     }
     var jattr=getValueTxt(item);
@@ -101,7 +105,7 @@ function _useBindSingle(opt){
         jui[jattr]=d[attr];
     }
     _jet._tools._calls[attr]._func.push(function(k,v){
-        if(jui['_'+jattr]!=v){
+        if(jui['_'+jattr]!=v&&v!=undefined){
             jui['_'+jattr]=v;
             jui.onchange.call(jui);
         }
@@ -109,7 +113,11 @@ function _useBindSingle(opt){
     Object.defineProperty(jui,jattr,{
         get:function(){return d[attr]},
         set:function(v){
-            d[attr]=v;
+            if(typeof d[attr]=='object'){
+                cd[attr].$replace(v);
+            }else{
+                d[attr]=v;
+            }
             _jet._tools._calls[attr]._func.forEach(function(f){
                 f(attr,v);
             });

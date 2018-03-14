@@ -1,0 +1,53 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+        <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class="j-checkbox-group" jui-bind='fruitList'>
+    &lt;div class="j-checkbox">芒果&lt;/div>
+    &lt;div class="j-checkbox">西瓜&lt;/div> 
+    &lt;div class="j-checkbox" disabled>橘子禁用&lt;/div> 
+&lt;/div>
+&lt;div j='fruitList' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        fruitList:['芒果']
+    }
+});
+&lt;/script>
+        </div>
+        <div class="out">
+            <div class="j-checkbox-group" jui-bind='fruitList'>
+                <div class="j-checkbox">芒果</div>
+                <div class="j-checkbox">西瓜</div> 
+                <div class="j-checkbox" disabled>橘子禁用</div> 
+            </div>
+            <div j='fruitList' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+
+<script>
+    Jet.global.setLink({
+        last:'单选框与单选框组',
+        lastUrl:'/jui/radio',
+        next:'下拉框',
+        nextUrl:'/jui/select',
+    });
+    new Jet({
+        data:{
+            fruitList:['芒果']
+        }
+    });
+</script>

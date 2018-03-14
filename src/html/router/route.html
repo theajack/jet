@@ -1,0 +1,27 @@
+<div class='title'>route()</div>
+<div class="sub">
+    <div class='text'>
+        <span class='red'>Jet.router.route()</span>方法可供开发者使用代码进行路由跳转，该方法仅接收一个字符串参数，
+        该参数应是Jet.router.use() 方法设置的一个存在的路由地址，否则无效。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;button jon='Jet.router.route("/intro")'>点击跳转到介绍页&lt;/button>
+&lt;script>
+new Jet();
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <button jon='Jet.router.route("/intro")'>点击跳转到介绍页</button>
+        </div>
+    </div>
+</div>
+<script>
+    Jet.global.setLink({
+        last:'路由事件',
+        lastUrl:'/router/on',
+        next:'属性',
+        nextUrl:'/router/prop',
+    });
+    new Jet();
+</script>

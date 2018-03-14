@@ -1,0 +1,60 @@
+<div class='title'>use()</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.router.use()</span> 方法启用路由模块，并且设置路由规则，参数是一个json。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+Jet.router.use({
+    history:false,
+    base:"/jet",
+    trueBase:false,
+    index:'/',
+    router:{
+        '/index':'/index',
+        '/intro':{
+            name:'/intro/index?id=2',
+            children:{
+                '/install':'/intro/install',
+                '/contents':'/intro/contents',
+                '/html':'/intro/html',
+                '/grammer':'/intro/grammer',
+            }
+        },
+        '/attr':{
+            name:'/attr/index',
+            params:{
+                id:1
+            }
+        }
+    }
+})
+    </div>
+    <div class='text indent'>
+        history参数表示是否启用history模式，关闭history模式则在链接中会含有 # ，但是对后端开发人员要求较小。
+        若是开启了history模式，则链接中不含有 #，但是需要后端开发人员将所有访问地址都指向index.html文件。该参数默认为false。
+    </div>
+    <div class='text indent'>
+        base参数表示是否在host和路由地址之间增加一级地址，改地址可以使虚拟的也可以是真实的文件目录。
+    </div>
+    <div class='text indent'>
+        trueBase参数用于指明base参数设置的增加的根目录地址是否是真实的。该参数默认为false，在没有设置base参数是，该参数不起作用。
+    </div>
+    <div class='text indent'>
+        index参数用于指定应用程序的入口路由地址。
+    </div>
+    <div class='text indent'>
+        router参数是最重要的一个参数，它是一个json数据，将路由地址映射成真实的html文件。
+        json的键是一个路由地址，值可以是字符串，表示在 /src/html 文件夹中的一个文件，可以使用多重文件夹嵌套，另外.html的后缀可以省略。
+        对于get类型请求的参数，如上面的例子，可以在值后面带上 ?parame=v... 。
+        值除了可以使字符串还可以是json数据，json数据中可用的属性有 name、params和children，name指的是 路由地址html文件路径，
+        params指的是get参数，是一个json，params和直接写在文件地址后面只能使用一种；children指的该地址下的路由地址。
+    </div>
+</div>
+<script>
+    Jet.global.setLink({
+        last:'路由',
+        lastUrl:'/router',
+        next:'jrouter&jout',
+        nextUrl:'/router/ele',
+    });
+</script>

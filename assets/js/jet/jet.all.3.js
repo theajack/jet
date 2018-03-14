@@ -25,6 +25,8 @@
 
 //bug：jetterjs 验证express 不会显示正确的错误提示
 //bug：jetterjs 验证decimal ->float
+
+//Jet新增 $jui
 (function(){
 
     var _JT = {
@@ -158,7 +160,7 @@
       }
       return b.join("&")
     }
-  
+    
     function _checkSelect(b) {
       if(b==null||b==undefined){
         return [];
@@ -294,6 +296,9 @@
     };
     HTMLElement.prototype._JT_findAttr = function(a) {
       return _checkSelect(this.querySelectorAll("[" + a + "]"))
+    };
+    HTMLElement.prototype._JT_findClass = function(a) {
+      return _checkSelect(this.getElementsByClassName(a))
     };
     HTMLElement.prototype._JT_select = function(a) {
       return _checkSelect(this.querySelectorAll(a))
@@ -759,7 +764,7 @@
               case FormData:type="formdata";break;
               case Error:type="error";break;
               case Date:type="date";break;
-              default:if(con.toString()._JT_has("HTML")){
+              default:if(con.name._JT_has("HTML")){
                         type="htmlelement";
                       }else{
                         type="object";
@@ -1053,6 +1058,7 @@
     throw new Error(err);
   }
   window.Jet=function(opt){
+    if(opt===undefined)opt={};
     this._tools={
       _jets:[],
       _jetTools:[],
@@ -1086,7 +1092,11 @@
       f();
     });
   };Jet.prototype.$ajax=_ajax;
+  Jet.prototype.$jui=function(s){
+    return _getJdomEle(s).$jui;
+  };
   Jet.$ajax=_ajax;
+  Jet.$=_JT;
   
 //html text class attr css 
 //
@@ -1095,7 +1105,7 @@
       this.jet=opt.jet;
       this.ele=opt.ele;
       this.name=opt.ele._JT_attr(_dom);
-      this.ele._JT_removeAttr(_dom);
+      //this.ele._JT_removeAttr(_dom);
       var _this=this;
       Object.defineProperty(this,'html',{
         get:function(){
@@ -1109,6 +1119,13 @@
           return _this.ele.innerText;
         },set:function(v){
           _this.ele.innerText=v;
+        }
+      });
+      Object.defineProperty(this,'value',{
+        get:function(){
+          return _this.ele.value;
+        },set:function(v){
+          _this.ele.value=v;
         }
       });
       Object.defineProperty(this,'class',{
@@ -1681,7 +1698,11 @@
   }
   function _addIntoRouter(k,name,_s){
     if(!name._JT_has('.html')){
-      name+='.html';
+      if(name._JT_has('?')){
+        name=name.replace('?','.html?')
+      }else{
+        name+='.html';
+      }
     }
     if(_s!=undefined){
       name+=_s;
@@ -2080,11 +2101,21 @@
     }
   }
   /*valid*********************************************************************************/
+  function _getJdomEle(b){
+    if(b===undefined)return b;
+    if(typeof b=='string'){
+      b=_JT.attr(_dom+'='+b);
+    }else if(_JT.type(b)!='htmlelement'){
+      b=b.ele;
+    }
+    return b;
+  }
   var _form='Jform',_valid='Jvalid';
   //第一个含有 _form 的父元素
   Jet.valid={
     init:function(b){
       var c;
+      b=_getJdomEle(b);
       if (b == undefined) {
         c = _JT.attr(_valid)
       } else {
@@ -2093,10 +2124,10 @@
       c._JT_each(function(a) {
         if(!a.__valided){
           a._JT_on({
-            "blur": "Jet.valid.validInput(this)",
+            "blur": "Jet.valid.validInput(this,true,true)",
             "focus": "Jet.valid.addValidValue(this)"
           },true).__valided=true;
-          if (Jet.valid.showInPlaceHolder) {
+          if (Jet.valid.__placeholder) {
             a._JT_attr("placeholder", _getValueText(a._JT_attr(_valid)))
           }
         }
@@ -2150,9 +2181,9 @@
         express: "*wrong express"
       }
     },
-    language:"CHINESE",
-    useDefaultStyle: true,
-    showInPlaceHolder: false,
+    __lang:"CHINESE",
+    __default: true,
+    __placeholder: false,
     useAlert:false,
     validate: _validateForm,
     addValidText: function(a, b) {
@@ -2161,11 +2192,20 @@
           Jet.valid.addValidText(c,a[c]);
         }
       }else{
-        if(Jet.valid.language=="CHINESE"){
+        if(Jet.valid.__lang=="CHINESE"){
           Jet.valid.validText.CN[a]=b;
         }else{
           Jet.valid.validText.EN[a]=b;
         }
+      }
+    },
+    addRegExp:function(name,reg,text){
+      if(typeof reg==='string'){
+        reg=new RegExp(reg)
+      }
+      Jet.valid.regExp[name]=reg;
+      if(text!==undefined){
+        Jet.valid.addValidText(name,text);
       }
     },
     validInput:_validInput,
@@ -2177,11 +2217,45 @@
       _onOneFail=_checkFunction(c);
     }
   }
+  Object.defineProperty(Jet.valid,'language',{
+    get:function(){return Jet.valid.__lang;},
+    set:function(val){
+      Jet.valid.__lang=val.toUpperCase()
+    }
+  });
+  Object.defineProperty(Jet.valid,'useDefaultStyle',{
+    get:function(){return Jet.valid.__default;},
+    set:function(val){
+      Jet.valid.__default=val;
+      if(val===false){
+        _JT.cls("jet-unpass").each(function(a) {
+          _checkIsPw(a);
+          a.removeClass("jet-unpass").val(a._JT_validValue);
+          a._JT_validValue=undefined;
+        })
+      }
+    }
+  });
+  Object.defineProperty(Jet.valid,'showInPlaceHolder',{
+    get:function(){return Jet.valid.__placeholder;},
+    set:function(val){
+      Jet.valid.__placeholder=val;
+      if(val===true){
+        _JT.attr(_valid).each(function(a) {
+          a._JT_attr("placeholder", _getValueText(a._JT_attr(_valid)))
+        })
+      }else if(val===false){
+        _JT.attr(_valid).each(function(a) {
+          a._JT_removeAttr("placeholder")
+        })
+      }
+    }
+  });
   Jet.valid.init();
   var _onOnePass = null,
       _onOneFail = null;
   function _checkIsPw(a) {
-    if (a._JT_attr("jet-ispw") == "true") {
+    if (a._JT_ispw===true) {
       a._JT_attr("type", "password")
     }
   };
@@ -2193,7 +2267,9 @@
       fail:f
     })
   };
-  function _validInput(b, a) {
+  //第一个参数是元素，第二个是是否提示，第三个是是否不是代码调用
+  function _validInput(b, a,isFromBlur) {
+    b=_getJdomEle(b);
     var v = b._JT_attr(_valid);
     var c = "";
     if(v!=null){
@@ -2213,22 +2289,24 @@
         c = _checkValue(v, b._JT_content())
       }
       if (c == "true") {
-        if (Jet.valid.useDefaultStyle) {
+        if (Jet.valid.__default) {
           b._JT_removeClass("jet-unpass");
           b._JT_validValue=undefined;
           _checkIsPw(b)
         }
-        if (_onOnePass != undefined) _onOnePass(b, c)
+        if (_onOnePass != undefined) _onOnePass(b)
       } else {
-        if (Jet.valid.useDefaultStyle) {
-          b._JT_validValue=b._JT_content();
+        if (_onOneFail != undefined) _onOneFail(b, c);
+        if (Jet.valid.__default) {
+          if(isFromBlur===true)
+            b._JT_validValue=b._JT_content();
           b._JT_content(c)._JT_addClass("jet-unpass");
           if (b._JT_attr("type") == "password") {
-            b._JT_attr("jet-ispw", "true")._JT_attr("type", "text")
+            b._JT_ispw=true;
+            b._JT_attr("type", "text")
           }
         }
-        if (_onOneFail != undefined) _onOneFail(b, c);
-        if (Jet.valid.useAlert && a != false) {
+        if (Jet.valid.useAlert && a !== false) {
           alert(c)
         }
       }
@@ -2255,9 +2333,15 @@
   };
   //g:元素 f：成功回调函数，c：失败回调函数
   function _validateForm(opt) {
+    if(typeof opt=='string'){
+      opt={ele:opt}
+    }
     var g=opt.ele;
     if(typeof g=='string'){
       g=_JT.attr(_form+'='+g);
+      if(!g._JT_exist()){
+        g=_getJdomEle(opt.ele);
+      }
     }
     var e = [];
     var b = true;
@@ -2282,7 +2366,7 @@
       if (b) {
         _checkFunction(opt.fail)(e,g);
       }
-      var i = (Jet.valid.language == "CHINESE") ? "输入有误，请按提示改正。" : "Values is not expected";
+      var i = (Jet.valid.__lang == "CHINESE") ? "输入有误，请按提示改正。" : "Values is not expected";
       if (Jet.valid.useAlert) {
         alert(i)
       } else {
@@ -2321,7 +2405,7 @@
   };
   
   function _getValidText(a, b) {
-    if (Jet.valid.language == "CHINESE") {
+    if (Jet.valid.__lang == "CHINESE") {
       if (b == undefined) {
         if(a._JT_has('express')){
           return Jet.valid.validText.CN.express;
@@ -2473,6 +2557,7 @@
     if(obj==undefined){
       list=_JT.attr(_lang);
     }else{
+      obj=_getJdomEle(obj);
       list=obj._JT_findAttr(_lang)
     }
     list._JT_each(function(item){
@@ -3012,7 +3097,6 @@ Jet.Text.prototype.refresh=function(key){
     if(this.ele._attrVal==_index){
       _throw('输入框不能绑定数组的索引');
     }
-    _checkJetTools.call(this,opt);
     this.regist(function(key,val){
       _this.refresh();
     });
@@ -3036,6 +3120,7 @@ Jet.Text.prototype.refresh=function(key){
         }
       },true);
     }
+    _checkJetTools.call(this,opt);
     this.refresh();
   }
   function _dealOnInputOn(_this){
@@ -3302,7 +3387,8 @@ Jet.Text.prototype.refresh=function(key){
     this._attrVal.split(';;')._JT_each(function(attr){
       
       if(!attr._JT_has(":")){
-        _throw('jon 属性格式错误:'+attr);
+        //_throw('jon 属性格式错误:'+attr);
+        attr='click:'+attr;
       }
       var e0=attr.substring(0,attr.indexOf(':'));
       var e1=attr.substring(attr.indexOf(':')+1);

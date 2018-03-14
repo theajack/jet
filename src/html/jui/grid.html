@@ -1,0 +1,91 @@
+<style>
+    .j-col{
+        height:50px;
+    }
+    .j-col:nth-child(odd){
+        background-color:#1da1ff;
+    }
+    .j-col:nth-child(even){
+        background-color:#dc5454;
+    }
+</style>
+<div class='title'>栅格</div>
+<div class='text indent'>
+    JUI 提供了一套栅格系统，开发者可以最多将一行分为24列。它们支持嵌套使用。
+    使用 j-row 和 j-col 类定义行和列，使用 c1至c24 类来定义某栅格占的列数。使用 j-row-m 可以是栅格之间有一个0.5%的margin。请看几个例子：
+</div>
+<div class="sub">
+    <div class='text'>1.普通使用：</div>
+    <div class='j-code' disabled width='99%' height='auto'>
+<div class='j-row'>
+    <div class='j-col c8'></div>
+    <div class='j-col c6'></div>
+    <div class='j-col c4'></div>
+    <div class='j-col c4'></div>
+    <div class='j-col c2'></div>
+</div>
+    </div>
+    <div class="out">
+        <div class='j-row'>
+            <div class='j-col c8'></div>
+            <div class='j-col c6'></div>
+            <div class='j-col c4'></div>
+            <div class='j-col c4'></div>
+            <div class='j-col c2'></div>
+        </div>
+    </div>
+
+    <div class='text'>2.带有边距：</div>
+    <div class='j-code' disabled width='99%' height='auto'>
+<div class='j-row j-row-m'>
+    <div class='j-col c2'></div>
+    <div class='j-col c4'></div>
+    <div class='j-col c4'></div>
+    <div class='j-col c6'></div>
+    <div class='j-col c4'></div>
+    <div class='j-col c2'></div>
+    <div class='j-col c2'></div>
+</div>
+    </div>
+    <div class="out">
+        <div class='j-row j-row-m'>
+            <div class='j-col c2'></div>
+            <div class='j-col c4'></div>
+            <div class='j-col c4'></div>
+            <div class='j-col c6'></div>
+            <div class='j-col c4'></div>
+            <div class='j-col c2'></div>
+            <div class='j-col c2'></div>
+        </div>
+    </div>
+    <div class='text'>3.嵌套使用：</div>
+    <div class='j-code' disabled width='99%' height='auto'>
+<div class='j-row j-row-m'>
+    <div class='j-col c12'></div>
+    <div class='j-row j-col c12'>
+        <div class='j-col c7'></div>
+        <div class='j-col c5'></div>
+        <div class='j-col c12 '></div>
+    </div>
+</div>
+    </div>
+    <div class="out">
+        <div class='j-row j-row-m'>
+            <div class='j-col c12'></div>
+            <div class='j-row j-col c12'>
+                <div class='j-col c7'></div>
+                <div class='j-col c5'></div>
+                <div class='j-col c12 '></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Jet.global.setLink({
+        last:'图标',
+        lastUrl:'/jui/icon',
+        next:'按钮',
+        nextUrl:'/jui/btn',
+    });
+</script>
