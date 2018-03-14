@@ -101,12 +101,7 @@ var Query={
     },{
         name:'$prepArray方法',
         url:'/bind/array',
-        intro:'使用 .$pushArray() 向数组头部插入多个元素',
-        des:'prepArray'
-    },{
-        name:'$prepArray方法',
-        url:'/bind/array',
-        intro:'使用 .$pushArray() 向数组头部插入多个元素',
+        intro:'使用 .$prepArray方法() 向数组头部插入多个元素',
         des:'prepArray'
     },{
         name:'$insert方法',

@@ -527,6 +527,7 @@ textarea.j-input{
     position: relative;
     padding: 0;
     padding-top: 2px;
+    line-height: 22px;
 }
 .j-date.xs{
     height: 23px;
@@ -1442,5 +1443,10 @@ cd_note,cd_note * {color: #019d00!important}
         left: 3%;
         margin-left: 0px;
 
+    }
+    .j-dialog{
+        width:94%;
+        left: 3%;
+        margin-left: 0px;
     }
 }

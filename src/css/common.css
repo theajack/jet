@@ -267,6 +267,7 @@
 .logo-text{
   position: fixed;
   top: 0;
+  left:-220px;
   font-size: 30px;
   height: 40px;
   text-align: center;
@@ -349,6 +350,13 @@
   color: #c00;
 }
 @media screen and (max-width: 600px) {
+  .logo-text{
+    transition: left .3s ease;
+    -webkit-transition: left .3s ease;
+  }
+  #menu.open .logo-text{
+    left:0;
+  }
   #menu{
     left:-220px;
     overflow-y: auto;
