@@ -6,22 +6,26 @@
 <div class='text'>
     Jet主要由以下几个部分构成：
     <div class='list'>
-        <div>1.数据绑定</div>
-        <div>2.属性</div>
-        <div>3.表单验证</div>
-        <div>4.国际化语言</div>
-        <div>5.路由</div>
+        <div class='link' jon='jump' data-route='/bind'>1.数据绑定 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/attr'>2.属性 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/valid'>3.表单验证 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/lang'>4.国际化语言 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/router'>5.路由 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/tool'>6.工具方法 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/jui'>7.JUI <i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
-<!-- <div class='j-code' disabled buttons width='99%' height='auto'>
-function aa(){
-
-}
-</div> -->
 
 <script>
     Jet.global.setLink({
         next:'安装使用',
         nextUrl:'/intro/install',
     });
+    new Jet({
+        func:{
+            jump:function(opt){
+                Jet.router.route(opt.ele.attr('data-route'))
+            }
+        }
+    })
 </script>
