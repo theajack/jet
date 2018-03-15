@@ -149,7 +149,7 @@ Jet.router.use({
   history:false,
   base:"/jet",
   index:'/',
-  trueBase:false,
+  trueBase:true,
   router:{
     '/':'/intro/index',
     '/intro':{
