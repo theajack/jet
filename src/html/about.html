@@ -1,0 +1,35 @@
+<style>
+    .wechat{
+        width:250px;
+    }
+</style>
+<div j=info>
+    <div>
+        <img class='wechat ml' jattr='src:{{$.wechat}}' alt="">
+    </div>
+    <div class='tl mxl-b'>
+        个人微信
+    </div>
+    <div class='txl ml'>
+        版本：<span j=version></span>
+    </div>
+    <div class='txl ml'>
+        作者： <span j=author></span>
+    </div>
+    <div class='txl ml'>
+        时间：<span j=date></span>
+    </div>
+</div>
+<script>
+new Jet({
+    data:{
+        info:{
+            img:'',
+            wechat:'/src/images/wechat.png',
+            author:'theajack',
+            version:'1.0',
+            date:'2018/3/15'
+        }
+    }
+})
+</script>
