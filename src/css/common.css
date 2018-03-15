@@ -1,4 +1,16 @@
-
+.loading{
+  padding-top: 200px;
+  text-align: center;
+}
+.loading .j-icon{
+  font-size: 80px;
+  color: #888;
+}
+.loading-text{
+  font-size: 20px;
+  margin-top: 10px;
+  color: #444;
+}
 .frame-i{
     margin-right: 5px;
 }
