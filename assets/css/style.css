@@ -56,11 +56,11 @@ body{
 .w-full{width:100%}
 .c-pointer{cursor: pointer;}
 .c-disabled{cursor: no-drop;}
-.txs{font-size: 10px}
-.ts{font-size: 13px}
-.tm{font-size: 16px}
-.tl{font-size: 20px}
-.txl{font-size: 30px}
+.txs{font-size: 10px;line-height: 10px;}
+.ts{font-size: 13px;line-height: 13px;}
+.tm{font-size: 16px;line-height: 16px;}
+.tl{font-size: 20px;line-height: 20px;}
+.txl{font-size: 30px;line-height: 30px;}
 .c-success{color:#2ac32f}
 .c-normal{color:#1da1ff}
 .c-info{color:#9e9e9e}

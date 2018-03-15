@@ -29,12 +29,12 @@ JUI.SWICTH.prototype.init=function(){
         }
         var v=getValueOrText(child[0]);
         this._valueList.push(v);
-        var _on_t=J.ct('div.j-switch-t.j-st-on').txt(child[0].txt()).attr('value',v);
+        var _on_t=$J.ct('div.j-switch-t.j-st-on').txt(child[0].txt()).attr('value',v);
         var v=getValueOrText(child[1]);
         if(this._valueList[0]==v)_throw('swicth 两个元素值不能相等');
         this._valueList.push(v);
         this._value=v;
-        var _off_t=J.ct('div.j-switch-t.j-st-off').txt(child[1].txt()).attr('value',v);
+        var _off_t=$J.ct('div.j-switch-t.j-st-off').txt(child[1].txt()).attr('value',v);
         if(child[0].hasAttr('checked')){
             item.addClass('j-s-on');
             child[0].removeAttr('checked')
@@ -53,7 +53,7 @@ JUI.SWICTH.prototype.init=function(){
         }
     }
     item.attr('value',this._value);
-    item.append(J.ct('div.j-switch-c'));
+    item.append($J.ct('div.j-switch-c'));
     item.clk(function(){
         if(_jui._valueList.indexOf(_jui._value)==0){
             _jui.value=_jui._valueList[1]

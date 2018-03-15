@@ -35,8 +35,8 @@ JUI.SLIDER.prototype.init=function(){
         item.css('width',w);
     }
     var pw=item.wid();
-    var bar=J.ct('div.j-slider-bar');
-    var c=J.ct('div.j-slider-c');
+    var bar=$J.ct('div.j-slider-bar');
+    var c=$J.ct('div.j-slider-c');
     item.append(bar.append(c));
     var func=function(e){
         var o=item.getBoundingClientRect();

@@ -45,6 +45,15 @@ var Query={
         intro:'Jet 有7个生命周期函数',
         des:'life'
     },{
+        name:'关于',
+        url:'/intro/about',
+        intro:'作者信息，版本信息',
+    },{
+        name:'赞助',
+        url:'/intro/about',
+        intro:'赞助与支持',
+        des:'donate'
+    },{
         name:'数据绑定',
         url:'/bind',
         intro:'Jet中的UI是由数据驱动，所有动态的html内容都与Jet的数据绑定，当数据改变时，对应的UI内容会自动更新',

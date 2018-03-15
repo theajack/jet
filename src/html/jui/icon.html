@@ -444,7 +444,7 @@
         },
         onmounted:function(){
             var _this=this;
-            J.id('iconsExample').findTag('li').clk(function(){
+            $J.id('iconsExample').findTag('li').clk(function(){
                 _this.value=this.child(0).allHtml();
                 _this.class=this.child(0).className;
             });
@@ -452,7 +452,7 @@
         },
         func:{
             copy:function(){
-                if(J.copy(this.value)){
+                if($J.copy(this.value)){
                     JUI.msg.success('复制成功')
                 }
             }

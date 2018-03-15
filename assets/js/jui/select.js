@@ -24,10 +24,10 @@ JUI.SELECT.init=function(item){
         var list=item.child();
         if(list.length>0){
             var def=list[0];
-            var ow=J.ct('div.j-option-w');
-            var vw=J.ct('div.j-select-vw');
-                var v_span=J.ct('span.j-select-v');
-                var icon=J.ct('i.j-icon.icon-caret-down');
+            var ow=$J.ct('div.j-option-w');
+            var vw=$J.ct('div.j-select-vw');
+                var v_span=$J.ct('span.j-select-v');
+                var icon=$J.ct('i.j-icon.icon-caret-down');
             vw.append([v_span,icon]);
             _jui.onchange=function(){
                 this.text=this.options[this.value];

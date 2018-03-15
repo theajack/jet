@@ -25,18 +25,18 @@ JUI.DATE.prototype.init=function(){
     //var _jui=new JUI.DATE({ele:item,text:item.txt(),value:getValueOrText(item)});
     var _jui=this;
     var item=this.ele;
-    var _d=J.ct('div.j-date-w');
-        var _close=J.ct('i.j-icon.icon-times.j-date-close');
-        var _dt=J.ct('div.j-date-t.j-clearfix');
-            var _dty=J.ct('div.j-date-ty');
-                var _dtyil=J.ct('i.j-icon.icon-angle-left.j-date-icon');
-                var _d_year=J.ct('input.j-date-input[attr=text][value='+this._date.year+']');
-                var _dtyir=J.ct('i.j-icon.icon-angle-right.j-date-icon');
+    var _d=$J.ct('div.j-date-w');
+        var _close=$J.ct('i.j-icon.icon-times.j-date-close');
+        var _dt=$J.ct('div.j-date-t.j-clearfix');
+            var _dty=$J.ct('div.j-date-ty');
+                var _dtyil=$J.ct('i.j-icon.icon-angle-left.j-date-icon');
+                var _d_year=$J.ct('input.j-date-input[attr=text][value='+this._date.year+']');
+                var _dtyir=$J.ct('i.j-icon.icon-angle-right.j-date-icon');
             _dty.append([_dtyil,_d_year,_dtyir]);
-            var _dtm=J.ct('div.j-date-ty');
-                var _dtmil=J.ct('i.j-icon.icon-angle-left.j-date-icon');
-                var _d_month=J.ct('input.j-date-input[attr=text][value='+fixNum(this._date.month)+']');
-                var _dtmir=J.ct('i.j-icon.icon-angle-right.j-date-icon');
+            var _dtm=$J.ct('div.j-date-ty');
+                var _dtmil=$J.ct('i.j-icon.icon-angle-left.j-date-icon');
+                var _d_month=$J.ct('input.j-date-input[attr=text][value='+fixNum(this._date.month)+']');
+                var _dtmir=$J.ct('i.j-icon.icon-angle-right.j-date-icon');
             _dtm.append([_dtmil,_d_month,_dtmir]);
             _dtyil.clk(function(){
                 var year=parseInt(_d_year.val())-1,month=parseInt(_d_month.val());
@@ -88,15 +88,15 @@ JUI.DATE.prototype.init=function(){
             });
         _dt.append([_dty,_dtm]);
 
-        var _dw=J.ct('div.j-date-dw.j-clearfix');
+        var _dw=$J.ct('div.j-date-dw.j-clearfix');
         ['日','一','二','三','四','五','六'].forEach(function(name){
-            _dw.append(J.ct('div.j-date-di').txt(name));
+            _dw.append($J.ct('div.j-date-di').txt(name));
         });
-        var _sw=J.ct('div.j-date-sw.j-clearfix');
+        var _sw=$J.ct('div.j-date-sw.j-clearfix');
         //resetDayList(_jui,_sw,this._date.year,this._date.month,true,_d_year,_d_month);
 
     _d.append([_dt,_dw,_sw,_close]);
-    var _dv=J.ct('input.j-date-v[type=text]')//[readonly=true]
+    var _dv=$J.ct('input.j-date-v[type=text]')//[readonly=true]
     item.append([_d,_dv]);
     var _dreg=/^(([12]\d{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|3(0|1))))$/;
     _jui.onchange=function(){
@@ -190,7 +190,7 @@ function resetDayList(_jui,ele,year,month,isCur,_d_year,_d_month,bool){
             isCurM=false;
         }
         if(isCurM){
-            ele.append(J.ct('div.j-date-si'+
+            ele.append($J.ct('div.j-date-si'+
                 ((isCur&&day==_jui._date.day)?'.j-date-current':'')+
                 ((d.year==year&&d.month==month&&d.day==day)?'.j-active':'')).txt(day).clk(function(){
                 this.parent().findClass('j-active').removeClass('j-active');
@@ -203,7 +203,7 @@ function resetDayList(_jui,ele,year,month,isCur,_d_year,_d_month,bool){
                 _d_year.val(d.year);
                 _d_month.val(fixNum(d.month));
             }
-            ele.append(J.ct('div.j-date-si.j-disabled').txt(day));
+            ele.append($J.ct('div.j-date-si.j-disabled').txt(day));
         }
     });
 }

@@ -8,11 +8,11 @@ Jet.global=new Jet({
     //console.log('onrouted');
     this.routeFunc();
     document.documentElement.scrollTop=0;
-    J.body().scrollTop=0;
-    J.attr('jump-to').each(function(item){
-        J.attr('jump-des="'+item.attr('jump-to')+'"').exist(function(ele){
+    $J.body().scrollTop=0;
+    $J.attr('jump-to').each(function(item){
+        $J.attr('jump-des="'+item.attr('jump-to')+'"').exist(function(ele){
             item.clk(function(){
-                J.scrollTo(ele.offsetTop-60);
+                $J.scrollTo(ele.offsetTop-60);
             });
         });
     });
@@ -22,17 +22,17 @@ Jet.global=new Jet({
     var _this=this;
     var max;
     window._checkScrol=function(){
-      max=J.id('menuScroll').hei()+40-J.id('menu').hei();
+      max=$J.id('menuScroll').hei()+40-$J.id('menu').hei();
       if(max<=0){
         menuScroll=0;
-        J.id('menuScroll').css('top','0px')
+        $J.id('menuScroll').css('top','0px')
       }else if(menuScroll<=-max){
         menuScroll=-max;
-        J.id('menuScroll').css('top',menuScroll+'px')
+        $J.id('menuScroll').css('top',menuScroll+'px')
       }
     };
     var isLock=false;
-    J.cls('menu-main-item').on('click',function(e){
+    $J.cls('menu-main-item').on('click',function(e){
       if(!isLock){
         isLock=true;
         this.next().slideToggle(function(){
@@ -43,21 +43,21 @@ Jet.global=new Jet({
       }
     },true);
     var menuScroll=0;
-    J.id('menu').onmousewheel=function(e){
+    $J.id('menu').onmousewheel=function(e){
       //stopPro(e);
       if(!_this.bodyFix)_this.bodyFix=true;
       if(max>0){
-        var _top=menuScroll+J.sign(e.wheelDelta)*80;
+        var _top=menuScroll+$J.sign(e.wheelDelta)*80;
         if(e.wheelDelta<0){
           if(_top<-max){_top=-max;}
         }else{
           if(_top>0){_top=0;}
         }
         menuScroll=_top;
-        J.id('menuScroll').css('top',_top+'px')
+        $J.id('menuScroll').css('top',_top+'px')
       }
     };
-    J.id('routerOut').onmousewheel=function(){
+    $J.id('routerOut').onmousewheel=function(){
       if(_this.bodyFix)_this.bodyFix=false;
     }
     window.onresize=_checkScrol;
@@ -94,7 +94,7 @@ Jet.global=new Jet({
     },
     routeFunc:function(){
       if(this.needUseRouted){
-        J.attr('jrouter-active').exist(function(item){
+        $J.attr('jrouter-active').exist(function(item){
           if(item.hasClass('menu-s-item')){
             var _i=item.parent().prev();
             _i.next().slideDown(function(){
@@ -131,10 +131,10 @@ Jet.global=new Jet({
         setTimeout(function(){
           var top=0;
           if(opt.data.des!=''){
-            top=J.attr('jump-des='+opt.data.des).offsetTop-55;
+            top=$J.attr('jump-des='+opt.data.des).offsetTop-55;
           }
           document.documentElement.scrollTop=top;
-          J.body().scrollTop=top;
+          $J.body().scrollTop=top;
           _this.needUseRouted=false;
         },0);
       });
@@ -149,7 +149,7 @@ Jet.router.use({
   history:false,
   base:"/jet",
   index:'/',
-  trueBase:true,
+  trueBase:false,
   router:{
     '/':'/intro/index',
     '/intro':{
@@ -159,6 +159,7 @@ Jet.router.use({
         '/contents':'/intro/contents',
         '/html':'/intro/html',
         '/grammer':'/intro/grammer',
+        '/about':'/intro/about',
       }
     },
     '/bind':{

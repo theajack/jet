@@ -1,6 +1,22 @@
 <div class='title'>1.以script标签引入</div>
-<div class='text'>
-    直接在html引入script标签
+<div class='sub'>
+    <div class='text'>
+        a.Jet可以以直接在html引入script标签的方式使用，并且支持不在http服务器中运行，不过不在http服务器中使用的话就不支持路由功能和jload属性。在html文件中插入以下代码:
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+        &lt;script src='http://www.theajack.com/jet/assets/js/jet.min.js'>&lt;/script>
+    </div>
+    <div class='text'>
+        b.可以根据需要选择是否要使用Jet自带的UI框架JUI，JUI同样可以使用script标签插入使用。如需使用，请在HTML文件中插入以下代码
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;!-- JUI css -->
+&lt;link rel="stylesheet" href='http://www.theajack.com/jet/assets/css/jui.min.css'/>
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;!-- JUI js -->
+&lt;script src='http://www.theajack.com/jet/assets/js/jui.min.js'>&lt;/script>
+    </div>
 </div>
 
 <div class='title'>2.下载并且lite-server中开发</div>
@@ -30,12 +46,28 @@
     <div class='text'>lite-server的具体使用笔者不再展开，网上教程很多。</div>
     <div class='title'>c.下载Jet并拷贝到lite-server目录下</div>
     <div class='text'>
-        <!-- <a href="" download='jet-example.zip' class='link'>点击这里</a> -->
-        <span jon='JUI.msg.warn("暂未发布，敬请期待！")' class='link'>点击这里</span>
+        <a href="/jet-demo.zip" download='jet-demo.zip' class='link'>点击这里</a>
+        <!-- <span jon='JUI.msg.warn("暂未发布，敬请期待！")' class='link'>点击这里</span> -->
         下载最新的Jet压缩包，解压后将其中所有的内容拷贝到刚刚新建的lite-server项目的目录下，使用以下命令运行项目，就可以看到一个Hello Jet的示例程序。</div>
     <div class='j-code' disabled width='99%' height='auto'>
         npm run dev
     </div>
+    <div class='title'>d.生产环境中使用</div>
+    <div class='text'>
+        完整项目之后，只需要将 原本的四个文件（如下）放入生产环境中http服务器中即可，值得注意的是配置路由时的路径与根目录等参数必须配置正确。
+        <div class='list'>
+            <div><i class="icon icon-folder-close-alt"></i> 
+                assets 
+                <span class='light-text'>(框架相关的代码和资源，无需用户操作)</span>
+            </div>
+            <div><i class="icon icon-folder-close-alt"></i> 
+                src<span class='light-text'>(使用者主要编写代码的地方)</span>
+            </div>
+            <div><i class="icon icon-file-code"></i> index.html
+                <span class='light-text'>(入口html文件)</span></div>
+            <div><i class="icon icon-file-code"></i> index.js
+                <span class='light-text'>(入口js文件，也可将js代码以script标签放到index.html文件中)</span></div>
+        </div>
 </div>
 <script>
     Jet.global.setLink({

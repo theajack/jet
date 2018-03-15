@@ -14,15 +14,15 @@ JUI.MESSAGE=function(opt){
     }
 };JUI.MESSAGE.prototype.init=function(){
     var _this=this;
-    this.ele=J.ct('div.j-msg-w.'+this.type);
-        var _i=J.ct('i.j-icon.icon-'+JUI.MESSAGE.res.icon[this.type]+'.j-msg-i');
-        var _c=J.ct('i.j-icon.icon-times.j-msg-close');
+    this.ele=$J.ct('div.j-msg-w.'+this.type);
+        var _i=$J.ct('i.j-icon.icon-'+JUI.MESSAGE.res.icon[this.type]+'.j-msg-i');
+        var _c=$J.ct('i.j-icon.icon-times.j-msg-close');
         _c.clk(function(){
             _this.close();
         });
-        var _t=J.ct('div.j-msg-txt').txt(this.txt);
+        var _t=$J.ct('div.j-msg-txt').txt(this.txt);
     this.ele.append([_i,_c,_t]);
-    J.body().append(this.ele);
+    $J.body().append(this.ele);
     JUI.MESSAGE.msgList.push(this);
     setTimeout(function(){_this.ele.addClass('msg-open')},10);
 };JUI.MESSAGE.prototype.close=function(){

@@ -21,7 +21,7 @@ JUI.RADIO_GROUP.init=function(item){
     getEleList(item,this._name).each(function(item){
         _initOneRadioGroup(item);
     });
-    _initOneRadioGroup(J.body(),true);
+    _initOneRadioGroup($J.body(),true);
 };
 function _initOneRadioGroup(item,isBody){
     if(!isBody&&item.findClass(JUI.RADIO_GROUP._name).length>0){
@@ -29,7 +29,7 @@ function _initOneRadioGroup(item,isBody){
     }
     var _jui;
     if(isBody){
-        JUI.RADIO_GROUP.def_r_group=new JUI.RADIO_GROUP({ele:J.ct('div.'+JUI.RADIO_GROUP._name)});
+        JUI.RADIO_GROUP.def_r_group=new JUI.RADIO_GROUP({ele:$J.ct('div.'+JUI.RADIO_GROUP._name)});
         _jui=JUI.RADIO_GROUP.def_r_group;
         _jui.ele.$jui=_jui;
     }else{

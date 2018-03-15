@@ -24,7 +24,7 @@ JUI.CHECKBOX_GROUP.init=function(item){
     getEleList(item,this._name).each(function(item){
         _initOneCheckGroup(item);
     });
-    _initOneCheckGroup(J.body(),true);
+    _initOneCheckGroup($J.body(),true);
 };
 function _initOneCheckGroup(item,isBody){
     if(!isBody&&item.findClass(JUI.CHECKBOX_GROUP._name).length>0){
@@ -32,7 +32,7 @@ function _initOneCheckGroup(item,isBody){
     }
     var _jui;
     if(isBody){
-        JUI.CHECKBOX_GROUP.def_c_group=new JUI.CHECKBOX_GROUP({ele:J.ct('div.'+JUI.CHECKBOX_GROUP._name)});
+        JUI.CHECKBOX_GROUP.def_c_group=new JUI.CHECKBOX_GROUP({ele:$J.ct('div.'+JUI.CHECKBOX_GROUP._name)});
         _jui=JUI.CHECKBOX_GROUP.def_c_group;
         _jui.ele.$jui=_jui;
     }else{

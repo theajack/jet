@@ -1050,8 +1050,8 @@
     _each="$each",
     _value="$value",
     _index="$index",
-    _dom='jdom';
-    _html='jhtml'
+    _dom='jdom',
+    _html='jhtml',
     _reg=new RegExp("({{)((.|\\n)*?)(}})","g"),
     _numReg=new RegExp("(\\[)((.|\\n)*?)(\\])","g");
   function _throw(err){
@@ -1337,7 +1337,7 @@
     if(opt.onrouted){
       Jet.router.onrouted(opt.onrouted,this);
     }
-    if(typeof JUI!=undefined){
+    if(typeof JUI!='undefined'){
       JUI.useBind(this);
     }
   };
@@ -1381,14 +1381,14 @@
     load: function(a,jet) {
       if (document.addEventListener) {
         document.addEventListener("DOMContentLoaded", function() {
-          document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+          document.removeEventListener("DOMContentLoaded", arguments, false);
           a.call(jet)
         }, false)
       } else {
         if (document.attachEvent) {
           document.attachEvent("onreadystatechange", function() {
             if (document.readyState == "complete") {
-              document.detachEvent("onreadystatechange", arguments.callee);
+              document.detachEvent("onreadystatechange", arguments);
               a.call(jet)
             }
           })
@@ -1673,6 +1673,9 @@
     }else{
       Jet.router.base=(opt.history)?'':"/#";
     }
+    if(!opt.router['/404']){
+      opt.router['/404']='/404';
+    }
     for(var k in opt.router){
       _checkRouterName(k,opt.router[k]);
     }
@@ -1740,7 +1743,6 @@
       Jet.router.route(url);
     },
     conf:{
-      router:"/assets/router/router.json",
       html:"/src/html",
       js:"/src/js",
       css:"/src/css",
@@ -1806,7 +1808,7 @@
         Jet.router.hash='';
       }
       var item=_JT.attr(_route+'="'+url+'"');
-      if(item.exist()){
+      if(item._JT_exist()){
         _JT.attr(_route_a)._JT_removeAttr(_route_a);
         item._JT_attr(_route_a,'')
       }
@@ -1859,7 +1861,7 @@
         _JT.load(Jet.router.conf.html+file,function(html){
           var out=_JT.attr(_routeout)._JT_html(html);
           if(typeof JUI!='undefined'){
-            _jui_mounted=[];
+            JUI._jui_mounted=[];
           }
           if(call){call()}
           _loadStyle(out);
@@ -2730,7 +2732,7 @@ Jet.Bind.prototype.refresh=function(key){
             if(item._JT_hasAttr(_root)){
                 _this._tools._jetTools.push(new Jet.Attr(_bindRootOpt(_this.jet,item)));
             }else{
-                _this._tools._jetTools.push(new Jet.Attr(_jetOpt(_this,item)));
+                _this._tools._jetTools.push(new Jet.Attr(_bindOpt(_this,item)));
             }
         }
     });
@@ -2739,7 +2741,7 @@ Jet.Bind.prototype.refresh=function(key){
             if(item._JT_hasAttr(_root)){
                 _this._tools._jetTools.push(new Jet.Style(_bindRootOpt(_this.jet,item),true));
             }else{
-                _this._tools._jetTools.push(new Jet.Style(_jetOpt(_this,item),true));
+                _this._tools._jetTools.push(new Jet.Style(_bindOpt(_this,item),true));
             }
         }
     });

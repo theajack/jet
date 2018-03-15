@@ -41,35 +41,35 @@ JUI.COLOR=function(opt){
 JUI.COLOR.prototype.init=function(){
     var _jui=this;
     var item=this.ele;
-    var _cw=J.ct('div.j-color-w');
-        var _pick=J.ct('div.j-color-pick');
-        var _pc1=J.ct('div.j-color-cover1');
-        var _pc2=J.ct('div.j-color-cover2');
-        var _ps=J.ct('div.j-color-pick-s');
-        var _pca=J.ct('div.j-color-cover-a');
+    var _cw=$J.ct('div.j-color-w');
+        var _pick=$J.ct('div.j-color-pick');
+        var _pc1=$J.ct('div.j-color-cover1');
+        var _pc2=$J.ct('div.j-color-cover2');
+        var _ps=$J.ct('div.j-color-pick-s');
+        var _pca=$J.ct('div.j-color-cover-a');
         _pick.append([_pc1,_pc2,_ps,_pca]);
-        var _range=J.ct('div.j-color-range');
-        var _rs=J.ct('div.j-color-range-s');
-        var _ra=J.ct('div.j-color-range-a');
+        var _range=$J.ct('div.j-color-range');
+        var _rs=$J.ct('div.j-color-range-s');
+        var _ra=$J.ct('div.j-color-range-a');
         _range.append([_rs,_ra]);
     _cw.append([_pick,_range]);
-    var _colorc=J.ct('div.j-color-bg');
+    var _colorc=$J.ct('div.j-color-bg');
     if(this.showAlp){
-        var _alp=J.ct('div.j-color-alp');
-            var _ac=J.ct('div.j-color-alp-color');
-            var _as=J.ct('div.j-color-alp-s');
-            var _aa=J.ct('div.j-color-alp-a');
+        var _alp=$J.ct('div.j-color-alp');
+            var _ac=$J.ct('div.j-color-alp-color');
+            var _as=$J.ct('div.j-color-alp-s');
+            var _aa=$J.ct('div.j-color-alp-a');
             _alp.append([_ac,_as,_aa]);
         _cw.append(_alp);
         item.addClass('j-color-bg-alp');
     }
-        var _vw=J.ct('div.j-color-vw');
-            var _v=J.ct('input.j-color-v.j-input.s');
-            var _bc=J.ct('div.j-color-btn.j-btn.s.info').txt('清空');
-            var _bok=J.ct('div.j-color-btn.j-btn.s').txt('确定');
+        var _vw=$J.ct('div.j-color-vw');
+            var _v=$J.ct('input.j-color-v.j-input.s');
+            var _bc=$J.ct('div.j-color-btn.j-btn.s.info').txt('清空');
+            var _bok=$J.ct('div.j-color-btn.j-btn.s').txt('确定');
         _vw.append([_v,_bc,_bok]);
     _cw.append(_vw);
-    var _icon=J.ct('i.j-icon.j-color-icon.icon-chevron-down');
+    var _icon=$J.ct('i.j-icon.j-color-icon.icon-chevron-down');
     item.append([_cw,_colorc,_icon]);
     var setColor=function(color){
         if(color==undefined){

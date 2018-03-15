@@ -10,12 +10,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta content="telephone=no" name="format-detection">
+    <link rel="icon" href="/src/images/icon.ico" type="image/x-icon"/> 
     <title>jet</title>
-    <link rel="stylesheet" href="src/css/common.css">
-    <link rel="stylesheet" href="assets/css/icon.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/jui.css">
-    <script type="text/javascript" src='assets/js/preload.js'></script>
+    <link rel="stylesheet" href="/src/css/common.css">
+    <!-- <link rel="stylesheet" href="/assets/css/icon.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/jui.css"> -->
+    <link rel="stylesheet" href="/assets/css/jui.min.css">
+    <script type="text/javascript" src='/assets/js/preload.js'></script>
   </head>
   <body class="common" jstyle="overflow-y:{{$.bodyFix}}?'hidden':'auto'">
       <div id="menu" jattr='class:({{$.showMenu}})?"open":""'>
@@ -42,6 +44,10 @@
               <div class="menu-s-item" Jrouter='/intro/grammer' >
                 <div class="menu-s-bar"></div>
                 <div class='relative'>Jet语法</div>
+              </div>
+              <div class="menu-s-item" Jrouter='/intro/about' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>关于</div>
               </div>
             </div>
           </div>
@@ -297,7 +303,7 @@
       <div id="main">
         <div id='header'>
           <i class="j-icon icon-bars menu-bar" jon='click:this.showMenu=true'></i>
-          <i class="j-icon icon-arrow-up to-top" jon='click:J.scrollTo(0)'></i>
+          <i class="j-icon icon-arrow-up to-top" jon='click:$J.scrollTo(0)'></i>
           <span j='number' jshow='{{$.showResult}}' id='number'>$+'条记录'</span>
           <div id="searchWrapper">
               <i class="j-icon" jif='showResult:class[icon-times|icon-search]' jon='click:if(this.showResult)this.showResult=false'></i>
@@ -328,24 +334,30 @@
         </div>
       </div>
       <div jattr='class:({{$.showMenu}})?"menu-bar-cover open":"menu-bar-cover"' jon='click:this.showMenu=false'></div>
-    <script type="text/javascript" src="assets/js/jet/jet.all.3.js"></script>
-    <script type="text/javascript" src="assets/js/jetter2.0.js"></script>
-    <script type="text/javascript" src="assets/js/jui/main.js"></script>
-    <script type="text/javascript" src="assets/js/jui/select.js"></script>
-    <script type="text/javascript" src="assets/js/jui/message.js"></script>
-    <script type="text/javascript" src="assets/js/jui/confirm.js"></script>
-    <script type="text/javascript" src="assets/js/jui/radio.js"></script>
-    <script type="text/javascript" src="assets/js/jui/checkbox.js"></script>
-    <script type="text/javascript" src="assets/js/jui/switch.js"></script>
-    <script type="text/javascript" src="assets/js/jui/date.js"></script>
-    <script type="text/javascript" src="assets/js/jui/drag.js"></script>
-    <script type="text/javascript" src="assets/js/jui/color.js"></script>
-    <script type="text/javascript" src="assets/js/jui/slider.js"></script>
-    <script type="text/javascript" src="assets/js/jui/jcode.js"></script>
-    <script type="text/javascript" src="assets/js/jui/screenDrag.js"></script>
-    <script type="text/javascript" src="assets/js/jui/dialog.js"></script>
-    <script type="text/javascript" src="src/js/common.js"></script>
-    <script type="text/javascript" src="index.js"></script>
-    <script type="text/javascript" src="src/js/queryApi.js"></script>
+
+
+    <script type="text/javascript" src="/assets/js/jet.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jui.min.js"></script>
+
+    <!-- <script type="text/javascript" src="/assets/js/jet/jet.all.3.js"></script>
+    <script type="text/javascript" src="/assets/js/jetter-lite.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/main.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/select.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/message.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/confirm.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/radio.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/checkbox.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/switch.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/date.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/drag.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/color.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/slider.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/screenDrag.js"></script>
+    <script type="text/javascript" src="/assets/js/jui/dialog.js"></script> -->
+
+    <script type="text/javascript" src="/assets/js/jui/jcode.js"></script>
+    <script type="text/javascript" src="/src/js/common.js"></script>
+    <script type="text/javascript" src="/index.js"></script>
+    <script type="text/javascript" src="/src/js/queryApi.js"></script>
   </body>
 </html>

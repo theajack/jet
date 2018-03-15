@@ -20,21 +20,21 @@ JUI.DIALOG.init=function(item){
     getEleList(item,this._name).each(function(item){
         var _jui=new JUI.DIALOG({ele:item});
         var childs=item.childNodes;
-        var _head=J.ct('div.j-dialog-head');
-            var _i=J.ct('i.j-icon.icon-times');
+        var _head=$J.ct('div.j-dialog-head');
+            var _i=$J.ct('i.j-icon.icon-times');
             _i.clk(function(){
                 _jui.value=false;
             });
-            var _t=J.ct('div.j-dialog-title').txt(_jui.title);
+            var _t=$J.ct('div.j-dialog-title').txt(_jui.title);
         _head.append([_t,_i]);
-        var _body=J.ct('div.j-dialog-body');
+        var _body=$J.ct('div.j-dialog-body');
             childs.each(function(_item){
                 _body.append(_item);
             });
         item.append([_head,_body]);
         item.css({
             'margin-top':'0',
-            'top':(J.height()-item.hei())/2+'px'
+            'top':($J.height()-item.hei())/2+'px'
         })
         _jui.onchange=function(){
             if(_jui._value){

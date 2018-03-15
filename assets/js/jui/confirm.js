@@ -8,17 +8,17 @@ JUI.CONFIRM=function(opt){
     this.init();
 };JUI.CONFIRM.prototype.init=function(){
     var _this=this;
-    this.ele=J.ct('div.j-confirm');
-        var _close=J.ct('i.j-confirm-close.j-icon.icon-times');
-        var _t=J.ct('div.j-confirm-t');
+    this.ele=$J.ct('div.j-confirm');
+        var _close=$J.ct('i.j-confirm-close.j-icon.icon-times');
+        var _t=$J.ct('div.j-confirm-t');
             if(this.type!=null){
-                _t.addClass(this.type).append(J.ct('i.j-icon.icon-'+JUI.CONFIRM.res.icon[this.type]));
+                _t.addClass(this.type).append($J.ct('i.j-icon.icon-'+JUI.CONFIRM.res.icon[this.type]));
             }
-        _t.append(J.ct('span').txt(this.title));
-        var _c=J.ct('div.j-confirm-c').html(this.txt);
-        var _b=J.ct('div.j-confirm-bw');
-            var _ok=J.ct('button.j-confirm-b.j-btn').txt('确定');
-            var _cancel=J.ct('button.j-confirm-b.j-btn.info').txt('取消');
+        _t.append($J.ct('span').txt(this.title));
+        var _c=$J.ct('div.j-confirm-c').html(this.txt);
+        var _b=$J.ct('div.j-confirm-bw');
+            var _ok=$J.ct('button.j-confirm-b.j-btn').txt('确定');
+            var _cancel=$J.ct('button.j-confirm-b.j-btn.info').txt('取消');
         _b.append([_ok,_cancel]);
     this.ele.append([_close,_t,_c,_b]);
     _close.clk(function(){
@@ -36,7 +36,7 @@ JUI.CONFIRM=function(opt){
         }
         _this.close();
     });
-    J.body().append(this.ele);
+    $J.body().append(this.ele);
     JUI.CONFIRM.confirmList.push(this);
 };JUI.CONFIRM.prototype.close=function(){
     this.ele.addClass('j-confirm-hide');

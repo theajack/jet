@@ -7,11 +7,11 @@ var _jui_change='jui-change';
 
 //color :第一次选择颜色时 左上角不是fff
 
-J.ready(function(){
+$J.ready(function(){
     JUI.init();
 });
-var _jui_mounted=[];
-var JUI={
+window.JUI={
+    _jui_mounted:[],
     init:function(item){
         JUI.SELECT.init(item);
         //JUI.RADIO.init(item);
@@ -23,13 +23,13 @@ var JUI={
         JUI.SLIDER.init(item);
         JUI.DIALOG.init(item);
         Jcode.init(item);
-        _jui_mounted.forEach(function(f){
+        JUI._jui_mounted.forEach(function(f){
             f();
         });
     },useBind:function(jet){
-        if(J.attr(_jui_bind).exist()){
-            _jui_mounted.push(function(){
-                J.attr(_jui_bind).each(function(item){
+        if($J.attr(_jui_bind).exist()){
+            JUI._jui_mounted.push(function(){
+                $J.attr(_jui_bind).each(function(item){
                     if(item.hasClass(JUI.RADIO._name)&&!JUI.RADIO_GROUP.def_r_group.hasBind){
                         JUI.RADIO_GROUP.def_r_group.hasBind=true;
                         JUI.RADIO_GROUP.def_r_group.ele.attr(_jui_bind,item.attr(_jui_bind));
@@ -55,9 +55,9 @@ var JUI={
                     }
                     item.removeAttr(_jui_bind);
                 });
-                J.attr('disabled').on('click',null);
-                J.select('.j-color[disabled] .j-color-icon').on('click',null);
-                J.select('.j-date[disabled] .j-date-v').on('click',null).attr('disabled','true');
+                $J.attr('disabled').on('click',null);
+                $J.select('.j-color[disabled] .j-color-icon').on('click',null);
+                $J.select('.j-date[disabled] .j-date-v').on('click',null).attr('disabled','true');
             })
         }
     },msg:function(opt,type,time){
@@ -70,7 +70,7 @@ var JUI={
         new JUI.CONFIRM(opt);
     },
     mounted:function(call){
-        _jui_mounted.push(call);
+        JUI._jui_mounted.push(call);
     },
 }
 function _useBindSingle(opt){
@@ -184,6 +184,6 @@ function getEleList(item,name){
     if(item){
         return item.findClass(name);
     }else{
-        return J.cls(name)
+        return $J.cls(name)
     }
 }

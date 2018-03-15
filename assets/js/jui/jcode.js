@@ -14,10 +14,10 @@
   Jcode={
     init:function(element){
       if(element==undefined){
-        J.cls("j-code").each(function(item){
+        $J.cls("j-code").each(function(item){
           _initFrame(item);
         });
-        _initCodeMain(J.cls("code_editor"));
+        _initCodeMain($J.cls("code_editor"));
       }else{
         if(element.hasClass('j-code')){
           _initFrame(element);
@@ -46,19 +46,19 @@
       par.findClass("code_editor_view").fadeToggle();
     },
     clearCode:function(obj){
-      J.confirm("是否确认清空代码(该操作不可撤销)？",function(){
+      $J.confirm("是否确认清空代码(该操作不可撤销)？",function(){
         var par=_checkParent(obj);
         par.findClass("code_editor_view").empty();
         par.findClass("code_editor").val("").focus();
       });
     },resetCode:function(obj){
-      J.confirm("是否确认重置代码(该操作不可撤销)？",function(){
+      $J.confirm("是否确认重置代码(该操作不可撤销)？",function(){
         var c=_checkParent(obj).findClass("code_editor");
         c.val(c.data("code")).focus();
         _geneViewCode(c);
       });
     },copy:function(obj){
-      if(J.isMobile()){
+      if($J.isMobile()){
         JUI.msg('移动端不支持该方法',"warn");
       }else{
         var par=_checkParent(obj);
@@ -72,7 +72,7 @@
     },fullScreen:function(obj){
       _checkParent(obj).toggleClass(_ce_full);
       obj.toggleClass('icon-collapse-full');
-      J.body().toggleClass(_ce_hidden);
+      $J.body().toggleClass(_ce_hidden);
     },fontSizeUp:function(obj){
       var n=_getFontSize(obj);
       if(n<35){
@@ -145,9 +145,9 @@
         h+="px";
       }
       item.empty();
-      item.append(J.ct("pre.code_editor_view._bottom").html(cont));
-      item.append(J.ct("pre.code_editor_view").html(cont));
-      var ta=J.ct("textarea.code_editor[spellcheck=false]").html(cont).data("code",cont);
+      item.append($J.ct("pre.code_editor_view._bottom").html(cont));
+      item.append($J.ct("pre.code_editor_view").html(cont));
+      var ta=$J.ct("textarea.code_editor[spellcheck=false]").html(cont).data("code",cont);
       if(item.hasAttr(_ce_disabled)){
         ta.attr(_ce_disabled,_ce_disabled).css("cursor","no-drop");
       }
@@ -180,7 +180,7 @@
         var btn=item.attr(_ce_btn);
         var arr=[];
         if(btn==_ce_btn||btn=="true"||btn==""){
-          J.each(_buttons,function(item,attr){
+          $J.each(_buttons,function(item,attr){
             if(attr!="submit"||needSubmit){
               arr.push(_getButton(item));
             }
@@ -195,7 +195,7 @@
             }
           });
         }
-        item.append(J.ct("div.code_set_w").append(arr));
+        item.append($J.ct("div.code_set_w").append(arr));
       }
       item.css("min-height",mh+"px");
       if(cont!=""){
@@ -207,7 +207,7 @@
     }
   }
   function _getButton(a){
-    return J.ct("i.j-icon.icon-"+a[2]).clk(a[0]).tip(a[1]);
+    return $J.ct("i.j-icon.icon-"+a[2]).clk(a[0]).tip(a[1]);
   }
   var _buttons={
     fontsizeup:["Jcode.fontSizeUp(this)","放大字体","zoom-in"],
@@ -263,8 +263,8 @@
     _sign:["#","=","&gt;","&lt;","{","}","\\(","\\)","\\[","\\]",",","&&","\\.",
       "\\?","\\|","\\+","-",";\n",":","!","%","\\^"],//转义
   };
-  J.ready(function(){
-    //J.tag("head").append(J.ct("style").txt(""));
+  $J.ready(function(){
+    //$J.tag("head").append($J.ct("style").txt(""));
     Jcode.init();
   });
 
