@@ -18,9 +18,6 @@ A.介绍
     3.Jet 语法格式
     <script>
         new Jet({
-            ready:function(){
-                //可选，生成之后回调函数
-            },
             data:{
                 //Jet数据
             },
