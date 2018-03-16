@@ -79,14 +79,6 @@
 20.JUI.msg()
 21.j-icon
 
-有待改进：
-    //SELECT 动态绑定是列表不会改表 **
-    //checkbox group 有bug
-    //date 没设置初始值会有bug
-    //date color 通过value设置初始值没反应
 
-    //color :第一次选择颜色时 左上角不是fff
-    //confirm dialog
-    jcode需要重写
-    栅格使用flex布局
+
     
