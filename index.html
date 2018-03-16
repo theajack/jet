@@ -303,9 +303,9 @@
       <div id="main">
         <div id='header'>
           <i class="j-icon icon-bars menu-bar" jon='click:this.showMenu=true'></i>
-          <i class="j-icon icon-arrow-up to-top" jon='click:$J.scrollTo(0)'></i>
-          <span j='number' jshow='{{$.showResult}}' id='number'>$+'条记录'</span>
-          <div id="searchWrapper">
+          <i class="j-icon icon-github h-icon f-right" jon='click:$J.open("https://github.com/theajack/jet")'></i>
+          <i class="j-icon icon-arrow-up h-icon f-right" jon='click:$J.scrollTo(0)'></i>
+          <div id="searchWrapper" class='f-right'>
               <i class="j-icon" jif='showResult:class[icon-times|icon-search]' jon='click:if(this.showResult)this.showResult=false'></i>
               <input type="text" class='j-input' jon='focus:this.showResult=true' j='queryString' placeholder="搜索api">
               <div j='queryList' jshow='{{$.queryList}}.length>0&&{{$.showResult}}' id='queryResult'>
@@ -315,10 +315,10 @@
                     <div j='name' class='q-name' jhtml>this.shapeQueryName($)</div>
                     <div j='intro' class='q-intro'></div>
                   </div>
-                  
                 </div>
               </div>
           </div>
+          <span j='number' class='f-right' jshow='{{$.showResult}}' id='number'>$+'条记录'</span>
         </div>
         <div Jout id='routerOut' jdom='out'></div>
         <div id='footer'>

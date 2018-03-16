@@ -290,18 +290,15 @@
   z-index: 20;
   color:#1D2B35;
 }
-.to-top{
-  position: absolute;
+.h-icon{
   color: #00b2d7!important;
-  right: 15px;
-  top: 10px;
   cursor: pointer;
   font-size: 25px!important;
+  margin: 13px 5px;
 }
 #searchWrapper{
-  position: absolute;
-  right: 50px;
-  top: 6px;
+  position: relative;
+  margin: 7px 5px;
 }
 #searchWrapper .j-icon{
   position: absolute;
@@ -315,6 +312,10 @@
 }
 #searchWrapper .icon-times:hover{
   color: #028eaa!important;
+}
+#number{
+  color: #c00;
+  margin-top: 15px;
 }
 
 #queryResult{
@@ -355,12 +356,6 @@
   margin: 0 2px;
   text-decoration: underline;
 }
-#number{
-  position: absolute;
-  right: 210px;
-  top: 13px;
-  color: #c00;
-}
 @media screen and (max-width: 600px) {
   .logo-text{
     left:-220px;
@@ -384,12 +379,14 @@
     padding-left: 0px;
   }
   #header{
-    padding: 10px;
+    padding: 0px;
   }
   .menu-bar{
     display: inline-block;
     font-size: 30px!important;
     color: #1D2B35;
+    margin: 10px 0px;
+    margin-left: 10px;
   }
   .menu-bar-cover{
     position: fixed;
@@ -402,6 +399,12 @@
     transition: opacity .3s ease;
     -webkit-transition: opacity .3s ease;
     z-index: 10;
+  }
+  #searchWrapper{
+    margin: 7px 0;
+  }
+  .h-ico{
+    margin: 13px 2px;
   }
   .menu-bar-cover.open{
     display: block;
