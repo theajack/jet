@@ -2537,6 +2537,7 @@ window.JUI={
         JUI.DIALOG.init(item);
         JUI.PAGE.init(item);
         JUI.TAB.init(item);
+        if(typeof Jcode!=='undefined')Jcode.init(item);
         //Jcode.init(item);
         JUI._jui_mounted.forEach(function(f){
             f();
