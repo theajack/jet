@@ -25,6 +25,11 @@ var Query={
         intro:'Jet的HTML模板使用的html后缀的文件，语法与普通的html一样。',
         des:''
     },{
+        name:'图片',
+        url:'/intro/html',
+        intro:'src只需要指定图片的名称即可',
+        des:'img'
+    },{
         name:'Jet语法',
         url:'/intro/grammer',
         intro:'Jet 使用 new Jet() 来创建一个Jet组件',
@@ -314,9 +319,31 @@ var Query={
         url:'/router/prop',
         intro:'许多与路由相关的属性',
     },{
+        name:'css配置文件',
+        url:'/css/',
+        intro:'名为css.conf的配置文件',
+    },{
+        name:'css变量',
+        url:'/css/var',
+        intro:'variable属性中以键值对的方式定义css变量',
+        des:'var'
+    },{
+        name:'css函数',
+        url:'/css/var',
+        intro:'variable属性同样可以定义css函数',
+        des:'func'
+    },{
+        name:'路由页面公共样式',
+        url:'/css/common',
+        intro:'定义部分路由页面的公有样式',
+    },{
         name:'工具方法',
         url:'/tool/',
         intro:'封装了一些常用的函数以及操作dom元素的方法',
+    },{
+        name:'$ajax',
+        url:'/tool/ajax',
+        intro:'与服务器交互数据或是请求文件',
     },{
         name:'Jet.$',
         url:'/tool/tool',
@@ -343,7 +370,7 @@ var Query={
         name:'$jui',
         url:'/jui/',
         intro:'获取JUI对象',
-        des:'$jui'
+        des:'jui'
     },{
         name:'基础样式类',
         url:'/jui/base',
@@ -409,5 +436,13 @@ var Query={
         name:'对话框dialog',
         url:'/jui/dialog',
         intro:'弹出一个对话框',
+    },{
+        name:'分页器page',
+        url:'/jui/page',
+        intro:'数据分页器',
+    },{
+        name:'选项卡tab',
+        url:'/jui/tab',
+        intro:'选项卡tab',
     }],
 }

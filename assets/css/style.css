@@ -102,6 +102,7 @@ body{
 .pxl-r{padding-right: 20px!important;}
 .pxl-b{padding-bottom: 20px!important;}
 .pxl-l{padding-left: 20px!important;}
+.pn{padding: 0!important;}
 
 .mxs{margin: 3px!important;}
 .mxs-t{margin-top: 3px!important;}
@@ -132,3 +133,4 @@ body{
 .mxl-r{margin-right: 20px!important;}
 .mxl-b{margin-bottom: 20px!important;}
 .mxl-l{margin-left: 20px!important;}
+.mn{margin: 0!important;}

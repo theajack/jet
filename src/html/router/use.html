@@ -44,8 +44,9 @@ Jet.router.use({
     </div>
     <div class='text indent'>
         router参数是最重要的一个参数，它是一个json数据，将路由地址映射成真实的html文件。
-        json的键是一个路由地址，值可以是字符串，表示在 /src/html 文件夹中的一个文件，可以使用多重文件夹嵌套，另外.html的后缀可以省略。
-        对于get类型请求的参数，如上面的例子，可以在值后面带上 ?parame=v... 。
+        json的键是一个路由地址，值可以是字符串，表示在 /src/html 文件夹中的一个文件，可以使用多重文件夹嵌套，另外.html的后缀可以省略，如果值与键相等，则可以使用空字符串代替值。
+    </div>
+    <div class='text indent'>对于get类型请求的参数，如上面的例子，可以在值后面带上 ?parame=v... 。
         值除了可以使字符串还可以是json数据，json数据中可用的属性有 name、params和children，name指的是 路由地址html文件路径，
         params指的是get参数，是一个json，params和直接写在文件地址后面只能使用一种；children指的该地址下的路由地址。
     </div>

@@ -1,0 +1,43 @@
+
+<div class='title'>$ajax()</div>
+<div class="sub">
+    <div class='text indent'>
+            Jet中封装了ajax方法，在Jet方法中，可以直接使用 this.$ajax() 调用，其与 Jet.$.ajax 等价。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+new Jet({
+    func:{
+        useAjax:function(){//可选参数，后面的是默认参数
+            this.$ajax({
+                type: a.type "get",
+                url: a.url || "",
+                async: a.async || "true",
+                data: a.data || null,
+                dataType: a.dataType || "text",
+                contentType: a.contentType || "application/x-www-form-urlencoded",
+                beforeSend: a.beforeSend ||function() {},
+                success: a.success ||function() {},
+                error: a.error ||function() {}
+            });
+        }
+    }
+});
+    </div>
+    <div class='title'>1.$ajax.get()</div>
+    <div class='text indent'>
+            $ajax.get() 是对get请求的封装，该方法有四个参数，依次为 url,data,successCallback,errorCallback
+    </div>
+    <div class='title'>2.$ajax.post()</div>
+    <div class='text indent'>
+            $ajax.post() 是对post请求的封装，该方法有四个参数，依次为 url,data,successCallback,errorCallback
+    </div>
+</div>    
+
+<script>
+    Jet.global.setLink({
+        last:'工具方法',
+        lastUrl:'/tool',
+        next:'Jet.$',
+        nextUrl:'/tool/tool',
+    });
+</script>

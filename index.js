@@ -19,6 +19,7 @@ Jet.global=new Jet({
             });
         });
     });
+    Jcode.init();
   },
   onmounted:function(){
     //console.log('onmounted');
@@ -219,9 +220,17 @@ Jet.router.use({
         '/prop':'/router/prop',
       }
     },
+    '/css':{
+      name:'/css/index',
+      children:{
+        '/var':'/css/var',
+        '/common':'/css/common',
+      }
+    },
     '/tool':{
       name:'/tool/index',
       children:{
+        '/ajax':'/tool/ajax',
         '/tool':'/tool/tool',
         '/prototype':'/tool/prototype'
       }
@@ -244,6 +253,8 @@ Jet.router.use({
         '/msg':'/jui/msg',
         '/confirm':'/jui/confirm',
         '/dialog':'/jui/dialog',
+        '/page':'/jui/page',
+        '/tab':'/jui/tab',
       }
     },
     '/test':'test'

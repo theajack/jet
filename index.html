@@ -10,14 +10,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta content="telephone=no" name="format-detection">
-    <link rel="icon" href="src/images/icon.ico" type="image/x-icon"/> 
+    <link rel="icon" href="src/image/icon.ico" type="image/x-icon"/> 
     <title>jet</title>
-    <link rel="stylesheet" href="src/css/common.css">
+    <link rel="stylesheet" id='commonCss' href="src/css/common.css">
     <!-- <link rel="stylesheet" href="assets/css/icon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/jui.css"> -->
     <link rel="stylesheet" href="assets/css/jui.min.css">
-    <script type="text/javascript" src='assets/js/preload.js'></script>
+    <!-- <script type="text/javascript" src='assets/js/preload.js'></script> -->
+    <script type="text/javascript" src='assets/js/preload.min.js'></script>
   </head>
   <body class="common" jstyle="overflow-y:{{$.bodyFix}}?'hidden':'auto'">
       <div id="menu" jattr='class:({{$.showMenu}})?"open":""'>
@@ -213,12 +214,33 @@
             </div>
           </div>
           <div class="menu-item">
+            <div class="menu-main-item" Jrouter='/css'>
+              <div class="menu-main-bar"></div>
+              <i class="j-icon icon-chevron-down"></i>
+              <div class='relative'>css配置文件</div>
+            </div>
+            <div class='item-w'>
+              <div class="menu-s-item" Jrouter='/css/var' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>css变量与函数</div>
+              </div>
+              <div class="menu-s-item" Jrouter='/css/common' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>路由页面公共样式</div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-item">
             <div class="menu-main-item" Jrouter='/tool'>
               <div class="menu-main-bar"></div>
               <i class="j-icon icon-chevron-down"></i>
               <div class='relative'>工具方法</div>
             </div>
             <div class='item-w'>
+                <div class="menu-s-item" Jrouter='/tool/ajax' >
+                  <div class="menu-s-bar"></div>
+                  <div class='relative'>$ajax</div>
+                </div>
               <div class="menu-s-item" Jrouter='/tool/tool' >
                 <div class="menu-s-bar"></div>
                 <div class='relative'>Jet.$</div>
@@ -296,6 +318,14 @@
                 <div class="menu-s-bar"></div>
                 <div class='relative'>对话框</div>
               </div>
+              <div class="menu-s-item" Jrouter='/jui/page' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>分页器</div>
+              </div>
+              <div class="menu-s-item" Jrouter='/jui/tab' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>tab</div>
+              </div>
             </div>
           </div>
         </div>
@@ -338,6 +368,8 @@
 
     <script type="text/javascript" src="assets/js/jet.min.js"></script>
     <script type="text/javascript" src="assets/js/jui.min.js"></script>
+    <!-- <script type="text/javascript" src="assets/js/jet.all.3.js"></script>
+    <script type="text/javascript" src="assets/js/jui.all.js"></script> -->
 
     <!-- <script type="text/javascript" src="assets/js/jet/jet.all.3.js"></script>
     <script type="text/javascript" src="assets/js/jetter-lite.js"></script>

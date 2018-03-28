@@ -1,0 +1,52 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>未完成...</div>
+
+<div class="sub">
+<div class='text'>
+    <div class="out">
+        <div class='j-page' jui-bind='current' jui-page-total='total' jui-change='pageChange'></div>
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class='j-page' jui-bind='current' jui-page-total='total' jui-change='pageChange'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            current:3,
+            total:20,
+        },
+        func:{
+            pageChange:function(opt){
+                JUI.msg(opt.value)
+            }
+        }
+    });
+&lt;/script>
+    </div>
+</div>
+
+<script>
+    Jet.global.setLink({
+        last:'对话框',
+        lastUrl:'/jui/dialog',
+        next:'tab',
+        nextUrl:'/jui/tab'
+    });
+    new Jet({
+        data:{
+            current:3,
+            total:20,
+        },
+        func:{
+            pageChange:function(opt){
+                JUI.msg(opt.value)
+            }
+        }
+    });
+</script>
