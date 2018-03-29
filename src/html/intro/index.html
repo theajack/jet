@@ -1,6 +1,44 @@
+<style>
+    .logo{
+        width:200px;
+        margin:10px; 
+        width:200px;
+        animation: rotateY 20s infinite linear;
+        -moz-animation: rotateY 20s infinite linear;	/* Firefox */
+        -webkit-animation: rotateY 20s infinite linear;	/* Safari 和 Chrome */
+        -o-animation: rotateY 20s infinite linear;
+    }
+    @keyframes rotateY{
+        from {transform: perspective(600px) rotateY(0deg);}
+        to {transform: perspective(600px) rotateY(360deg);}
+    }
+
+    @-moz-keyframes rotateY{
+        from {-moz-transform: perspective(600px) rotateY(0deg);}
+        to {-moz-transform: perspective(600px) rotateY(360deg);}
+    }
+
+    @-webkit-keyframes rotateY{
+        from {-webkit-transform: perspective(600px) rotateY(0deg);}
+        to {-webkit-transform: perspective(600px) rotateY(360deg);}
+    }
+
+    @-o-keyframes rotateY{
+        from {-o-transform: perspective(600px) rotateY(0deg);}
+        to {-o-transform: perspective(600px) rotateY(360deg);}
+    }
+    @media screen and (max-width: 620px) {
+        .logo{
+            width:120px;
+        }
+    }
+</style>
 <div class='title'>Jet简介</div>
-<div class='text'>Jet是一个前端的轻量级的js框架，不依赖任何第三方库。Jet采用数据双向绑定，以数据驱动视图。</div>
-<div class='text'>
+<div class='text t-center'>
+    <img class='logo' src="jet.png">
+</div>
+<div class='text indent'>Jet是一个前端的轻量级的js框架，不依赖任何第三方库。Jet采用数据双向绑定，以数据驱动视图。</div>
+<div class='text indent'>
     Jet使用css和es5，可以在非服务器环境中开发，但是在非服务其环境中无法使用路由功能和jload属性。
     在服务器环境中开发，推荐使用lite-server。lite-server 是轻量级的仅适用于开发的 node 服务器。</div>
 <div class='text'>

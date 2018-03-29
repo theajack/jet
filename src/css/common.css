@@ -291,6 +291,10 @@
   z-index: 20;
   color:#1D2B35;
 }
+.logo-img{
+  height:23px;
+  margin-right:5px;
+}
 .h-icon{
   color: #00b2d7!important;
   cursor: pointer;
