@@ -8,6 +8,7 @@ Jet.global=new Jet({
     this.$dom.out.html='<div class="loading"><i class="j-icon icon-spin icon-spinner-snake"></i><div class="loading-text"> 加载中...</div></div>';
   },
   onrouted:function(){
+    this.needUseRouted=true;
     this.routeFunc();
     document.documentElement.scrollTop=0;
     $J.body().scrollTop=0;

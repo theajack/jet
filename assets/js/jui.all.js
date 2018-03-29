@@ -215,7 +215,7 @@
         return c;
       };
       function _load(name,call,ecall){
-        $J.ajax({ 
+        return $J.ajax({ 
           url : name, 
           async:true,
           success : function(result){ 
@@ -224,7 +224,7 @@
           error : function(err){ 
             if(ecall!=undefined)
               ecall(err);
-            throw new Error("加载失败");
+            console.warn("加载失败:"+name);
           },
         })
       };

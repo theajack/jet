@@ -18,10 +18,11 @@
         call(c.response);
       }
     }
+    return c;
   }
   var _reg=new RegExp("({{)((.|\\n)*?)(}})","g");
   var _numReg=new RegExp("(\\[)((.|\\n)*?)(\\])","g");
-  var _replaceCssVar=function(t,call){
+  window.__preload_css=function(t,call){
     var m=t.match(new RegExp("(\\(\\()((.|\\n)*?)(\\)\\))","g"));
     if(m!==null){
       var vars=[];
@@ -67,10 +68,10 @@
   //var t=e.cloneNode();
   var common=document.getElementById('commonCss');
   var url=common.href;
-  _load(url.replace('common.css','css.conf'),function(res){
+  window.__css_conf_xhr=_load(url.replace('common.css','css.conf'),function(res){
     eval('window.jet_css_conf='+res);
     _load(url,function(res2){
-      _replaceCssVar(res2,function(d){
+      window.__preload_css(res2,function(d){
         var comStyle=o.cloneNode();
         comStyle.innerHTML=d.replace(/[\r\n]/g,"");//去掉回车换行;
         document.head.insertBefore(comStyle,common);

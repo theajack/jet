@@ -24,8 +24,8 @@
 //2-8 发现并修复空值不会渲染的bug
 //2-9 修复多层循环 使用 $.$par.$index 的bug
 
-//bug：jetterjs 验证express 不会显示正确的错误提示
-//bug：jetterjs 验证decimal ->float
+//修复bug：jetterjs 验证express 不会显示正确的错误提示
+//修复bug：jetterjs 验证decimal ->float
 
 //Jet新增 $jui()
 
@@ -141,7 +141,7 @@
       error : function(err){ 
         if(ecall!=undefined)
           ecall(err);
-        _throw("加载失败");
+        console.warn("加载失败:"+name);
       },
     })
   };
@@ -1164,7 +1164,7 @@ window.Jet=function(opt){
   });
 };Jet.prototype.$ajax.abort=function(){
   if(Jet.prototype.$ajax.xhr){
-    Jet.prototype.$ajax.xhr.close();
+    Jet.prototype.$ajax.xhr.abort();
     Jet.prototype.$ajax.xhr=null;
   }
 };Jet.prototype.$jui=function(s){
@@ -1960,7 +1960,8 @@ Jet.router={
       }
     }else{
       if(Jet.router.__xhr!==null){
-        Jet.router.__xhr.close();
+        Jet.router.__xhr.abort();
+        console.warn('忽略了一个路由：'+Jet.router.path);
         Jet.router.__xhr=null;
       }
       var search='';
@@ -2140,6 +2141,16 @@ function _loadScript(out){
 }
 
 function _loadStyle(out){
+  if('undefined'===typeof jet_css_conf){
+    _reloadCssConf(function(){
+      _loadStyleCall(out);
+    });
+  }else{
+    window.__css_conf_xhr=undefined;
+    _loadStyleCall(out);
+  }
+}
+function _loadStyleCall(out){
   var style=_JT.id(_routeStyle);
   if(!style._JT_exist()){
     style=_JT.ct('style')._JT_attr({
@@ -2228,6 +2239,22 @@ function _loadCommonCssCall(commonCss,length){
       });
     }
   }
+}
+function _reloadCssConf(call){
+  if(window.__css_conf_xhr)window.__css_conf_xhr.abort();
+  window.__css_conf_xhr=_JT.load(Jet.router.conf.css+'/css.conf',function(res){
+    eval('window.jet_css_conf='+res);
+    window.__css_conf_xhr=undefined;
+    _JT.load(Jet.router.conf.css+'/common.css',function(res2){
+      window.__preload_css(res2,function(d){
+        var comStyle=document.createElement('style');
+        comStyle.innerHTML=d.replace(/[\r\n]/g,"");//去掉回车换行;
+        document.head.insertBefore(comStyle,_JT.id('commonCss'));
+        document.head.removeChild(_JT.id('commonCss'));
+        call();
+      })
+    });
+  });
 }
 function _replaceCssVar(t){
   var m=t.match(new RegExp("(\\(\\()((.|\\n)*?)(\\)\\))","g"));
@@ -2354,6 +2381,16 @@ function _loadCompScript(out,attr){
   }
 }
 function _loadCompStyle(out,attr){
+  if('undefined'===typeof jet_css_conf){
+    _reloadCssConf(function(){
+      _loadCompStyleCall(out,attr);
+    });
+  }else{
+    window.__css_conf_xhr=undefined;
+    _loadCompStyleCall(out,attr);
+  }
+}
+function _loadCompStyleCall(out,attr){
   if(!_JT.attr('load-style="'+attr+'"')._JT_exist()){
     var style=_JT.ct('style')._JT_attr({
       'load-style':attr,
