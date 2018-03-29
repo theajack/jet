@@ -11,7 +11,7 @@
 //
 (function(){
   var _ce_btn="buttons",_ce_disabled="disabled",_ce_callback="callback",_ce_full="j_full",_ce_hidden="j_hidden",_def_w=300,_def_h=200;
-  window.Jcode={
+  Jcode={
     init:function(element){
       if(element==undefined){
         $J.cls("j-code").each(function(item){

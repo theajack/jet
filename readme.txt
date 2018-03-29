@@ -29,7 +29,7 @@ A.介绍
 B.数据绑定
     1.J 绑定数据,$each,$value,$index,$,$.$par.$index的使用
     2.绑定的分类：JBind,JFor,Jinput,JText (都使用J属性)
-    2.数组的方法：$push,$pushArray,$prep,$prepArray,$insert,$insertArray,$remove
+    2.数组的方法：$push,$pushArray,$prep,$prepArray,$insert,$insertArray,$remove,$clear,$replace
 C.属性样式事件
     1.Jif
     2.Jshow
