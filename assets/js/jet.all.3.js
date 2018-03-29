@@ -134,6 +134,7 @@
       url : name, 
       async:true,
       success : function(result){ 
+        alert(1)
         call(result);
       },
       base:false,
@@ -2033,10 +2034,12 @@ Jet.router={
           }
         });
         _JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
+          
+          alert(2)
           var out=_JT.attr(_routeout)._JT_html(html);
-          if(typeof JUI!='undefined'){
+          //if(typeof JUI!='undefined'){
             JUI._jui_mounted=[];
-          }
+          //}
           if(call){call()}
           _loadStyle(out);
           _loadScript(out);
