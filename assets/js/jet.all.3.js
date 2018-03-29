@@ -2044,10 +2044,10 @@ Jet.router={
           Jet.valid.init(out);//对out 部分
           Jet.lang.init(out);
           Jet.router.init(out);
-          if(typeof JUI!='undefined'){
+          //if('undefined'!=typeof JUI){
             JUI.init(out);
-            alert('route init')
-          }
+            alert('route init new')
+          //}
           Jet.load.init(out);
           Jet.router.__onrouted.forEach(function(item){
             if(item._jet){
