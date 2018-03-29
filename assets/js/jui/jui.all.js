@@ -2064,7 +2064,7 @@
       };
       function _type(obj){
         if(arguments.length==0){
-          throw new Error("This function need a argument");
+          _throw("This function need a argument");
         }else{
           var type=typeof obj;
           if(type=="object"){
@@ -2080,7 +2080,7 @@
                 case FormData:type="formdata";break;
                 case Error:type="error";break;
                 case Date:type="date";break;
-                default:if(con.prototype.toString().has("HTML")){
+                default:if(obj.nodeType===1&&typeof obj.nodeName === 'string'){
                           type="htmlelement";
                         }else{
                           type="object";
@@ -2537,8 +2537,6 @@ window.JUI={
         JUI.DIALOG.init(item);
         JUI.PAGE.init(item);
         JUI.TAB.init(item);
-        if(typeof Jcode!=='undefined')Jcode.init(item);
-        //Jcode.init(item);
         JUI._jui_mounted.forEach(function(f){
             f();
         });

@@ -8,7 +8,6 @@ Jet.global=new Jet({
     this.$dom.out.html='<div class="loading"><i class="j-icon icon-spin icon-spinner-snake"></i><div class="loading-text"> 加载中...</div></div>';
   },
   onrouted:function(){
-    //console.log('onrouted');
     this.routeFunc();
     document.documentElement.scrollTop=0;
     $J.body().scrollTop=0;
@@ -22,7 +21,6 @@ Jet.global=new Jet({
     Jcode.init();
   },
   onmounted:function(){
-    //console.log('onmounted');
     var _this=this;
     var max;
     window._checkScrol=function(){

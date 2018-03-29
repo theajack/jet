@@ -802,7 +802,7 @@
             case FormData:type="formdata";break;
             case Error:type="error";break;
             case Date:type="date";break;
-            default:if(con.prototype.toString()._JT_has("HTML")){
+            default:if(obj.nodeType===1&&typeof obj.nodeName === 'string'){
                       type="htmlelement";
                     }else{
                       type="object";
@@ -1451,7 +1451,7 @@ function _initJet(opt,calls){
   if(opt.onrouted){
     Jet.router.onrouted(opt.onrouted,this);
   }
-  if(typeof JUI!='undefined'){
+  if('undefined'!=typeof JUI){
     JUI.useBind(this);
   }
 };
@@ -2033,18 +2033,19 @@ Jet.router={
           }
         });
         _JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
+          
           var out=_JT.attr(_routeout)._JT_html(html);
-          if(typeof JUI!='undefined'){
+          if('undefined'!=typeof JUI){
             JUI._jui_mounted=[];
           }
           if(call){call()}
           _loadStyle(out);
           _loadScript(out);
           _loadCompImg(out);
-          Jet.valid.init(out);//对out 部分
+          Jet.valid.init(out);
           Jet.lang.init(out);
           Jet.router.init(out);
-          if(typeof JUI!='undefined'){
+          if('undefined'!=typeof JUI){
             JUI.init(out);
           }
           Jet.load.init(out);
@@ -2384,7 +2385,7 @@ function _dealSrc(s){
 }
 /*valid*********************************************************************************/
 function _getJdomEle(b,ele){
-  if(b===undefined)return b;
+  if('undefined'==typeof b)return b;
   if(typeof b=='string'){
     if(ele){
       b=ele._JT_findAttr(_dom+'='+b);
@@ -2856,7 +2857,7 @@ Jet.lang.init=function(obj){
   if(obj==undefined){
     list=_JT.attr(_lang);
   }else{
-    obj=_getJdomEle(obj);
+    var a=_getJdomEle(obj);
     list=obj._JT_findAttr(_lang)
   }
   list._JT_each(function(item){
