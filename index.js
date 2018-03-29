@@ -19,7 +19,7 @@ Jet.global=new Jet({
             });
         });
     });
-    //Jcode.init();
+    Jcode.init();
   },
   onmounted:function(){
     //console.log('onmounted');

@@ -2046,6 +2046,7 @@ Jet.router={
           Jet.router.init(out);
           if(typeof JUI!='undefined'){
             JUI.init(out);
+            alert('route init')
           }
           Jet.load.init(out);
           Jet.router.__onrouted.forEach(function(item){
