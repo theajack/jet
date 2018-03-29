@@ -65,8 +65,15 @@ F.路由
     1.Jet.router.use()
     2.Jroute
     3.Jout
-G.工具方法
-H.JUI
+G.css配置文件
+    1.css变量
+    2.css函数
+    3.路由页面公共样式
+H.工具方法
+    1.$ajax , $ajax.get , $ajax.post , $ajax.abort , $ajax.base , $ajax.xhr
+    2.Jet.$
+    3.prototype 扩展
+I.JUI
         1.使用border-box 
         2.基础的类
             clearfix,hide,show,f-left,f-right,t-left,t-center,t-right,
@@ -145,11 +152,41 @@ H.JUI
             备注：alpha 为是否启用透明度
         19.slider: j-slider
             <div class='j-slider' min='0' max='100' width='150' value='0'></div>
-        20.JUI.msg()
-        21.j-icon
+        20.j-icon 图标
+        21.JUI.msg()
+            JUI.msg({
+                text:'text',
+                time:2000,//默认为2300
+                type:'warn',//默认为info ,可选值有 success，info，warn，error
+                autoClose:true, //默认为true
+                call:function(){console.log('close')},
+            })
         22.JUI.confirm
+            JUI.confirm({
+                title:"title",
+                text:'text',
+                type:'warn',
+                onconfirm:function(){console.log('confirm')},
+                oncancel:function(){console.log('cancel')},
+                onclose:function(){console.log('close')},
+            })
         23.dialog 对话框
-
+            <div class='j-dialog' dialog-title='title' jui-bind='bool'>
+            </div> 
+        24.page 数据分页器
+            <div class='j-page' jui-bind='current' jui-page-total='total' jui-change='pageChange'></div>
+        25.tab 标签页
+            <div class='j-tab' jui-bind='page'>
+                <div value='p1' title='第一页'>
+                    1
+                </div>
+                <div value='p2' title='第二页'>
+                    2
+                </div>
+                <div value='p3' title='第三页'>
+                    3
+                </div>
+            </div>
 
 生命周期，在index.html
 (index):242 beforeinit
@@ -192,8 +229,35 @@ __dynamic.js:31 onrouted
 //2-7 新增makeChange方法，手动触发某值改变的回调函数
 //2-8 发现并修复空值不会渲染的bug
 //2-9 修复多层循环 使用 $.$par.$index 的bug
+//修复bug：jetterjs 验证express 不会显示正确的错误提示
+//修复bug：jetterjs 验证decimal ->float
+//Jet新增 $jui()
 //3-10: 
     validInput() 支持jdom 
     修复一个 J.type 关于 以变量是声明的类的识别的 bug var a=function(){};因为该类型构造函数的名字是函数本身
     修复了 new Jet() 没有参数是会报错的 bug
 //3-12:新增 addRegExp 
+//18-3-20:
+// 路由配置 默认与名称一样
+// 新增 css.conf 文件 可以设置css变量和函数 设置路由模板的公共样式
+// Jet.$route Jet.$route.back Jet.$route.forward
+//valid 可以设置 useJUI
+//$remove 支持元素
+//18-3-21
+//新增jui page tab
+// message 为了不让提示框跳出而不是滑下来，增加了30ms延迟
+// message 增加hover属性
+//18 3-22
+//修复一个ie上的hash模式时的页面不会正确加载的bug
+//3-23 新增了 $r 获取根元素数据，修改了get方法
+//JUI msg新增 hover参数 默认为true 鼠标移上时不会自动消失
+//18 3-27 完善了ajax $ajax $ajax.get $ajax.post $ajax.abort $ajax.base $ajax.xhr 
+//j-icon font-size 初始值为 inherit
+// 修复了 for 的关于索引的 bug 
+// for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代替其所绑定的数据 ,对数组操作进行了完善
+/*3-28 修复了jload和路由组件模式下 JUI绑定的bug 现在如果jui-bind的属性不在当前Jet元素的数据中，则会在子Jet元素中寻找，如果都没有则会忽略掉
+  子页面的Jet最好使用 ele:jdom 指定Jet绑定的html元素，这样可以很好地解决子页面与父页面和子页面与子页面之间的命名冲突的问题
+  增加了Jet name属性，用于生成一个在Jet.$ele 中的以 name属性命名的 Jet元素变量
+*/
+//修复 3-29 路由页面跳转时，如果上一页面没有加载出，现在会取消上一个页面的路由
+

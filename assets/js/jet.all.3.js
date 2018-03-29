@@ -128,9 +128,10 @@
         }
       }
     }
-    };
+    return c;
+  };
   function _load(name,call,ecall){
-    _JT.ajax({ 
+    return _JT.ajax({ 
       url : name, 
       async:true,
       success : function(result){ 
@@ -1144,22 +1145,28 @@ window.Jet=function(opt){
   if(opt.base!=false&&Jet.prototype.$ajax.base!==undefined){
     opt.url=Jet.prototype.$ajax.base+opt.url;
   }
-  _ajax(opt);
+  Jet.prototype.$ajax.xhr=_ajax(opt);
+  return Jet.prototype.$ajax.xhr;
 };Jet.prototype.$ajax.get=function(url,data,sc,fc){
-  Jet.prototype.$ajax({
+  return Jet.prototype.$ajax({
     data:data,
     url:url,
     success:sc,
     error:fc
   });
 };Jet.prototype.$ajax.post=function(url,data,sc,fc){
-  Jet.prototype.$ajax({
+  return Jet.prototype.$ajax({
     type:'post',
     data:data,
     url:url,
     success:sc,
     error:fc
   });
+};Jet.prototype.$ajax.abort=function(){
+  if(Jet.prototype.$ajax.xhr){
+    Jet.prototype.$ajax.xhr.close();
+    Jet.prototype.$ajax.xhr=null;
+  }
 };Jet.prototype.$jui=function(s){
   return _getJdomEle(s,this._tools._ele).$jui;
 };
@@ -1923,6 +1930,7 @@ Jet.router={
       });
     });
   },
+  __xhr:null,
   __onroute:[],
   onroute:function(f,jet){
     if(typeof f=='function'){
@@ -1951,6 +1959,10 @@ Jet.router={
         Jet.$.jump(url);
       }
     }else{
+      if(Jet.router.__xhr!==null){
+        Jet.router.__xhr.close();
+        Jet.router.__xhr=null;
+      }
       var search='';
       if(url.indexOf('#')!=-1){
         var index=url.indexOf('?');
@@ -2032,8 +2044,8 @@ Jet.router={
             item.call(Jet.router)
           }
         });
-        _JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
-          
+        Jet.router.__xhr=_JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
+          Jet.router.__xhr=null;
           var out=_JT.attr(_routeout)._JT_html(html);
           if('undefined'!=typeof JUI){
             JUI._jui_mounted=[];

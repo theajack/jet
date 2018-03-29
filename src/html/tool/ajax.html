@@ -2,14 +2,14 @@
 <div class='title'>$ajax()</div>
 <div class="sub">
     <div class='text indent'>
-            Jet中封装了ajax方法，在Jet方法中，可以直接使用 this.$ajax() 调用，其与 Jet.$.ajax 等价。请看一个例子：
+        Jet中封装了ajax方法，在Jet方法中，可以直接使用 this.$ajax() 调用，该方法会返回一个XMLHttpRequest对象，其与 Jet.$.ajax 等价。请看一个例子：
     </div>
-    <div class='j-code' disabled width='99%' height='auto'>
+        <div class='j-code' disabled width='99%' height='auto'>
 new Jet({
     func:{
         useAjax:function(){//可选参数，后面的是默认参数
             this.$ajax({
-                type: a.type "get",
+                type: a.type || "get",
                 url: a.url || "",
                 async: a.async || "true",
                 data: a.data || null,
@@ -17,19 +17,35 @@ new Jet({
                 contentType: a.contentType || "application/x-www-form-urlencoded",
                 beforeSend: a.beforeSend ||function() {},
                 success: a.success ||function() {},
-                error: a.error ||function() {}
+                error: a.error ||function() {},
+                base: a.base||true
             });
         }
     }
 });
+        </div>
+    <div class='text indent'>
+        双竖线后的是各属性的默认值，base属性 在Jet.$.ajax 中不存在，该属性表示是否采用设置的根地址，根地址使用 Jet.prototype.$ajax.base 或 this.$ajax.base 来设置。
     </div>
-    <div class='title'>1.$ajax.get()</div>
+    <div class='title'>1.$ajax.base</div>
+    <div class='text indent'>
+        $ajax.base属性用于设置一个发送请求的根地址，该属性所有的Jet对象共用一个。
+    </div>
+    <div class='title'>2.$ajax.xhr</div>
+    <div class='text indent'>
+        $ajax.base属性用于获取上一个http请求的XMLHttpRequest对象，该属性所有的Jet对象共用一个。如果要获取其他的XMLHttpRequest对象，请使用 $ajax 对象的返回值。
+    </div>
+    <div class='title'>3.$ajax.get()</div>
     <div class='text indent'>
             $ajax.get() 是对get请求的封装，该方法有四个参数，依次为 url,data,successCallback,errorCallback
     </div>
-    <div class='title'>2.$ajax.post()</div>
+    <div class='title'>4.$ajax.post()</div>
     <div class='text indent'>
             $ajax.post() 是对post请求的封装，该方法有四个参数，依次为 url,data,successCallback,errorCallback
+    </div>
+    <div class='title'>5.$ajax.abort()</div>
+    <div class='text indent'>
+            $ajax.abort() 方法可以终止上一个发送的请求。
     </div>
 </div>    
 
@@ -40,4 +56,5 @@ new Jet({
         next:'Jet.$',
         nextUrl:'/tool/tool',
     });
+    var aa=new Jet();
 </script>

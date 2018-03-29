@@ -212,6 +212,7 @@
             }
           }
         }
+        return c;
       };
       function _load(name,call,ecall){
         $J.ajax({ 
