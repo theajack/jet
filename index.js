@@ -20,6 +20,18 @@ Jet.global=new Jet({
         });
     });
     Jcode.init();
+    if(Jet.router.lastTrueHash!=="#/code"){
+      $J.cls('j-code').each(function(item){
+        if(!item.hasClass('not-test')){
+          item.before('<button class="j-btn test-online" onclick="Jet.global.testOnLine(this)"><i class="j-icon icon-edit"></i> 在线使用</button>')
+        }
+      });
+      
+      if(typeof Jet.global._top!=='undefined'){
+        $J.body().scrollTop=Jet.global._top;
+        Jet.global._top=undefined;
+      }
+    }
   },
   onmounted:function(){
     var _this=this;
@@ -103,6 +115,11 @@ Jet.global=new Jet({
       } else if (window.event) {
           window.event.cancelBubble = true;
       }
+    },
+    testOnLine:function(item){
+      Jet.global._top=$J.body().scrollTop;
+      Jet.global._code=Jcode.txt(item.next());
+      this.$route('/code');
     },
     routeFunc:function(){
       if(this.needUseRouted){
@@ -265,7 +282,8 @@ Jet.router.use({
         '/tab':'/jui/tab',
       }
     },
-    '/test':'test'
+    '/test':'test',
+    '/code':'code'
   }
 });
       

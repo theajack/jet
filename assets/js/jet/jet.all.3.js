@@ -24,8 +24,8 @@
 //2-8 发现并修复空值不会渲染的bug
 //2-9 修复多层循环 使用 $.$par.$index 的bug
 
-//bug：jetterjs 验证express 不会显示正确的错误提示
-//bug：jetterjs 验证decimal ->float
+//修复bug：jetterjs 验证express 不会显示正确的错误提示
+//修复bug：jetterjs 验证decimal ->float
 
 //Jet新增 $jui()
 
@@ -51,8 +51,9 @@
   子页面的Jet最好使用 ele:jdom 指定Jet绑定的html元素，这样可以很好地解决子页面与父页面和子页面与子页面之间的命名冲突的问题
   增加了Jet name属性，用于生成一个在Jet.$ele 中的以 name属性命名的 Jet元素变量
 */
-
-//待修改： j-dialog提取到最外层，路由切换时删除； $r的测试
+//3-30 jattr和jstyle添加 $r 的支持
+//3-31 新增Jet.valid.useOnInput
+//待修改： j-dialog提取到最外层，路由切换时删除；
 (function(){
   var _JT = {
     cls: function(a) {
@@ -92,7 +93,7 @@
     var b = {
       type: a.type || "get",
       url: a.url || "",
-      async: a.async || "true",
+      async: a.async || true,
       data: a.data || null,
       dataType: a.dataType || "text",
       contentType: a.contentType || "application/x-www-form-urlencoded",
@@ -128,9 +129,10 @@
         }
       }
     }
-    };
+    return c;
+  };
   function _load(name,call,ecall){
-    _JT.ajax({ 
+    return _JT.ajax({ 
       url : name, 
       async:true,
       success : function(result){ 
@@ -140,7 +142,7 @@
       error : function(err){ 
         if(ecall!=undefined)
           ecall(err);
-        _throw("加载失败");
+        console.warn("加载失败:"+name);
       },
     })
   };
@@ -1144,22 +1146,28 @@ window.Jet=function(opt){
   if(opt.base!=false&&Jet.prototype.$ajax.base!==undefined){
     opt.url=Jet.prototype.$ajax.base+opt.url;
   }
-  _ajax(opt);
+  Jet.prototype.$ajax.xhr=_ajax(opt);
+  return Jet.prototype.$ajax.xhr;
 };Jet.prototype.$ajax.get=function(url,data,sc,fc){
-  Jet.prototype.$ajax({
+  return Jet.prototype.$ajax({
     data:data,
     url:url,
     success:sc,
     error:fc
   });
 };Jet.prototype.$ajax.post=function(url,data,sc,fc){
-  Jet.prototype.$ajax({
+  return Jet.prototype.$ajax({
     type:'post',
     data:data,
     url:url,
     success:sc,
     error:fc
   });
+};Jet.prototype.$ajax.abort=function(){
+  if(Jet.prototype.$ajax.xhr){
+    Jet.prototype.$ajax.xhr.abort();
+    Jet.prototype.$ajax.xhr=null;
+  }
 };Jet.prototype.$jui=function(s){
   return _getJdomEle(s,this._tools._ele).$jui;
 };
@@ -1923,6 +1931,7 @@ Jet.router={
       });
     });
   },
+  __xhr:null,
   __onroute:[],
   onroute:function(f,jet){
     if(typeof f=='function'){
@@ -1951,6 +1960,11 @@ Jet.router={
         Jet.$.jump(url);
       }
     }else{
+      if(Jet.router.__xhr!==null){
+        Jet.router.__xhr.abort();
+        console.warn('忽略了一个路由：'+Jet.router.path);
+        Jet.router.__xhr=null;
+      }
       var search='';
       if(url.indexOf('#')!=-1){
         var index=url.indexOf('?');
@@ -2032,8 +2046,8 @@ Jet.router={
             item.call(Jet.router)
           }
         });
-        _JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
-          
+        Jet.router.__xhr=_JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
+          Jet.router.__xhr=null;
           var out=_JT.attr(_routeout)._JT_html(html);
           if('undefined'!=typeof JUI){
             JUI._jui_mounted=[];
@@ -2128,6 +2142,16 @@ function _loadScript(out){
 }
 
 function _loadStyle(out){
+  if('undefined'===typeof jet_css_conf){
+    _reloadCssConf(function(){
+      _loadStyleCall(out);
+    });
+  }else{
+    window.__css_conf_xhr=undefined;
+    _loadStyleCall(out);
+  }
+}
+function _loadStyleCall(out){
   var style=_JT.id(_routeStyle);
   if(!style._JT_exist()){
     style=_JT.ct('style')._JT_attr({
@@ -2216,6 +2240,23 @@ function _loadCommonCssCall(commonCss,length){
       });
     }
   }
+}
+function _reloadCssConf(call){
+  if(window.__css_conf_xhr)window.__css_conf_xhr.abort();
+  window.__css_conf_xhr=_JT.load(Jet.router.conf.css+'/css.conf',function(res){
+    eval('window.jet_css_conf='+res);
+    window.__css_conf_xhr=undefined;
+    _JT.load(Jet.router.conf.css+'/common.css',function(res2){
+      window.__preload_css(res2,function(d){
+        var comStyle=document.createElement('style');
+        comStyle.innerHTML=d.replace(/[\r\n]/g,"");//去掉回车换行;
+        document.head.insertBefore(comStyle,_JT.id('commonCss'));
+        document.head.removeChild(_JT.id('commonCss'));
+        window.__preload_css=undefined;
+        call();
+      })
+    });
+  });
 }
 function _replaceCssVar(t){
   var m=t.match(new RegExp("(\\(\\()((.|\\n)*?)(\\)\\))","g"));
@@ -2342,6 +2383,16 @@ function _loadCompScript(out,attr){
   }
 }
 function _loadCompStyle(out,attr){
+  if('undefined'===typeof jet_css_conf){
+    _reloadCssConf(function(){
+      _loadCompStyleCall(out,attr);
+    });
+  }else{
+    window.__css_conf_xhr=undefined;
+    _loadCompStyleCall(out,attr);
+  }
+}
+function _loadCompStyleCall(out,attr){
   if(!_JT.attr('load-style="'+attr+'"')._JT_exist()){
     var style=_JT.ct('style')._JT_attr({
       'load-style':attr,
@@ -2412,6 +2463,10 @@ Jet.valid={
       if(!a.__valided){
         a._JT_on({
           "blur": "Jet.valid.validInput(this,true,true)",
+          "input": function(){
+            if(Jet.valid.useOnInput)
+              Jet.valid.validInput(this,true,true)
+          },
           "focus": "Jet.valid.addValidValue(this)"
         },true).__valided=true;
         if (Jet.valid.__placeholder) {
@@ -2472,6 +2527,7 @@ Jet.valid={
   __default: true,
   __placeholder: false,
   __useJUI:false,
+  __useOnInput:false,
   useAlert:false,
   validate: _validateForm,
   addValidText: function(a, b) {
@@ -2522,13 +2578,38 @@ Object.defineProperty(Jet.valid,'useJUI',{
 Object.defineProperty(Jet.valid,'useDefaultStyle',{
   get:function(){return Jet.valid.__default;},
   set:function(val){
-    Jet.valid.__default=val;
-    if(val===false){
-      _JT.cls("jet-unpass").each(function(a) {
-        _checkIsPw(a);
-        a.removeClass("jet-unpass").val(a._JT_validValue);
-        a._JT_validValue=undefined;
-      })
+    if(Jet.valid.__default!==val){
+      if(Jet.valid.__useOnInput===true&&val===true){
+        console.warn('useOnInput 模式下不可使用默认样式');
+      }else{
+        Jet.valid.__default=val;
+        Jet.valid.__lastUseDef=val;
+        if(val===false){
+          _JT.cls("jet-unpass")._JT_each(function(a) {
+            _checkIsPw(a);
+            a.removeClass("jet-unpass")._JT_val(a._JT_validValue);
+            a._JT_validValue=undefined;
+          })
+        }
+      }
+    }
+  }
+});
+Object.defineProperty(Jet.valid,'useOnInput',{
+  get:function(){return Jet.valid.__useOnInput;},
+  set:function(val){
+    if(Jet.valid.__useOnInput!==val){
+      Jet.valid.__useOnInput=val;
+      if(val===false){
+        if(Jet.valid.__default!==Jet.valid.__lastUseDef){
+          Jet.valid.useDefaultStyle=Jet.valid.__lastUseDef
+        }
+      }else{
+        if(Jet.valid.useDefaultStyle){
+          Jet.valid.useDefaultStyle=false;
+          Jet.valid.__lastUseDef=true;
+        }
+      }
     }
   }
 });
@@ -2857,8 +2938,7 @@ Jet.lang.init=function(obj){
   if(obj==undefined){
     list=_JT.attr(_lang);
   }else{
-    var a=_getJdomEle(obj);
-    list=obj._JT_findAttr(_lang)
+    list=_getJdomEle(obj)._JT_findAttr(_lang)
   }
   list._JT_each(function(item){
     item._jet_langs={};
@@ -3932,7 +4012,7 @@ Jet.Attr.prototype.get=function(){
 };Jet.Attr.prototype.refresh=function(i){
   var d=this.get();
   for(var k in this.attrs){
-    this.setFunc.call(this.ele,k,this.attrs[k](d))
+    this.setFunc.call(this.ele,k,this.attrs[k](d,this.jet))
   }
 };
 function _initAttr(opt){
@@ -3957,7 +4037,7 @@ function _initOneAttr(attr){
       if(_s._JT_has('{{')){//动态
         _registForWrapperVar(this,_s);
         _s=_s._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
-        this.attrs[attr.substring(0,index)]=new Function("d","return ("+_s+")");
+        this.attrs[attr.substring(0,index)]=new Function("d",'dr',"return ("+_s+")");
       }else{//静态
         this.attrs[attr.substring(0,index)]=new Function("return '"+_s+"'");
       }

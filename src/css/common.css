@@ -361,6 +361,9 @@
   margin: 0 2px;
   text-decoration: underline;
 }
+.test-online{
+  margin: 5px 0;
+}
 @media screen and (max-width: 600px) {
   .logo-text{
     left:-220px;

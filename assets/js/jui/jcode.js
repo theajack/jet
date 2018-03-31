@@ -46,15 +46,15 @@
       par.findClass("code_editor_view").fadeToggle();
     },
     clearCode:function(obj){
-      $J.confirm("是否确认清空代码(该操作不可撤销)？",function(){
+      JUI.confirm("是否确认清空代码(该操作不可撤销)？",function(){
         var par=_checkParent(obj);
         par.findClass("code_editor_view").empty();
         par.findClass("code_editor").val("").focus();
       });
     },resetCode:function(obj){
-      $J.confirm("是否确认重置代码(该操作不可撤销)？",function(){
+      JUI.confirm("是否确认重置代码(该操作不可撤销)？",function(){
         var c=_checkParent(obj).findClass("code_editor");
-        c.val(c.data("code")).focus();
+        c.val(c.data("code").replaceAll('&lt;','<').replaceAll('&gt;','>')).focus();
         _geneViewCode(c);
       });
     },copy:function(obj){
@@ -106,8 +106,12 @@
       }
     },txt:function(obj,txt){
       var c=obj.findClass("code_editor");
-      c.val(txt).focus();
-      _geneViewCode(c);
+      if(typeof txt=='undefined'){
+        return c.val();
+      }else{
+        c.val(txt).focus();
+        _geneViewCode(c);
+      }
     }
   };
   function _checkParent(obj){
@@ -241,6 +245,11 @@
       //onclick:moveCursor
     });
     _tabEnable(item);
+    item.each(function(_i){
+      if(_i.parent().hasAttr('onload')){
+        window[_i.parent().attr('onload')](item.parent());
+      }
+    });
   }
   var _code={
     _str:1,

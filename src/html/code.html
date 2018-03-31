@@ -1,0 +1,115 @@
+<style>
+    .j-code,.code_editor_view,.code_editor{
+        min-height:400px;
+    }
+    .code-text{
+        vertical-align: top;
+        line-height: 28px;
+        font-size: 20px;
+    }
+    .back{
+        position: relative;
+        top: -5px;
+        left: -10px;
+    }
+    .switch-w{
+        float: left;
+        margin-top: 3px;
+        margin-left: 15px;
+    }
+    .result{
+        border: 1px solid #aaa;    
+        word-wrap: break-word;
+    }
+</style>
+<div class='title'>在线使用Jet <button class='j-btn f-right back' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i> 返回</button></div>
+<div class='text clearfix'>    
+    <button class='j-btn f-left' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i> 返回</button>
+    <div class='switch-w'>
+        <span class='code-text'>编辑</span>
+        <div class="j-switch" jui-bind='code' jui-change='changeMode'>
+            <div></div>
+            <div></div>
+        </div>
+        <span class='code-text'>运行</span>
+    </div>
+</div>
+<div jshow='{{!$.code}}'>
+    <div class='text'>
+        <div class='j-code' jdom='code' width='99%' onload='loadCode' height='auto' buttons min-height='500px'>
+&lt;div j='message'>&lt;/div>&lt;br>
+&lt;div j='user'>
+&lt;div j=name>'姓名:'+$&lt;/div>
+&lt;div>年龄:&lt;input j="age" type='text' class='j-input' jon='input:console.log(this.user.age)'/>&lt;/div>
+&lt;div jif='{{$.age}}<18:text[未成年|成年人]'>&lt;/div>
+&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        message:'Hello Jet',
+        user:{
+            name:'theajack',
+            age:24
+        }
+    },
+    func:{
+    }
+})
+&lt;/script>
+        </div>
+    </div>
+</div>
+<div jshow='code'>
+    <div jdom='result' class='text result tm '>
+
+    </div>
+</div>
+
+<script>
+function loadCode(ele){
+    if(typeof Jet.global._code!=='undefined'){
+        Jcode.txt(ele,Jet.global._code);
+        Jet.global._code=undefined;
+        test.back=true;
+    }
+}
+Jet.global.setLink({
+    last:'tab',
+    lastUrl:'/jui/tab'
+});
+var test=new Jet({
+    name:'test',
+    onrouted:function(){
+    },
+    onmounted:function(){
+    },
+    data:{
+        code:false,
+        back:false,
+    },func:{
+        changeMode:function() {
+            this.$dom.result.html=Jcode.txt(this.$dom.code.ele);
+            var txt=['//# sourceURL=__code_online.js\r\n'];
+            this.$dom.result.ele.findTag('script').each(function(item){
+                txt.push(item.txt());
+                item.remove();
+            })
+            if($J.id('codejs').exist()){
+                $J.id('codejs').remove();
+            }
+            var script=$J.ct('script').attr({
+                'id':'codejs',
+                'type':'text/javascript'
+            }).html(txt.join(''));
+            document.body.append(script);
+            if(this.$dom.result.ele.findAttr('jvalid').exist()){
+                Jet.valid.init();
+            }
+            if(this.$dom.result.ele.findAttr('jlang').exist()){
+                Jet.lang.init();
+            }
+            JUI.init();
+        }
+    }
+});
+</script>

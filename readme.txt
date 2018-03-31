@@ -260,3 +260,6 @@ __dynamic.js:31 onrouted
   增加了Jet name属性，用于生成一个在Jet.$ele 中的以 name属性命名的 Jet元素变量
 */
 //修复 3-29 路由页面跳转时，如果上一页面没有加载出，现在会取消上一个页面的路由
+//3-30 jattr和jstyle添加 $r 的支持
+//3-31 新增Jet.valid.useOnInput
+

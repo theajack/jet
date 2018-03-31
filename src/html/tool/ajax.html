@@ -4,26 +4,61 @@
     <div class='text indent'>
         Jet中封装了ajax方法，在Jet方法中，可以直接使用 this.$ajax() 调用，该方法会返回一个XMLHttpRequest对象，其与 Jet.$.ajax 等价。请看一个例子：
     </div>
-        <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
 new Jet({
-    func:{
-        useAjax:function(){//可选参数，后面的是默认参数
+func:{
+    useAjax:function(){//可选参数，后面的是默认参数
+        this.$ajax({
+            type: a.type || "get",
+            url: a.url || "",
+            async: a.async || "true",
+            data: a.data || null,
+            dataType: a.dataType || "text",
+            contentType: a.contentType || "application/x-www-form-urlencoded",
+            beforeSend: a.beforeSend ||function() {},
+            success: a.success ||function() {},
+            error: a.error ||function() {},
+            base: a.base||true
+        });
+    }
+}
+});
+    </div>
+
+    <div class='text'>
+        使用$ajax除了可以与服务器端通信，还可以加载文件，请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;button jon='loadFile'>点击加载文件&lt;/button>
+&lt;button jon='this.js=""'>收起内容&lt;/button>
+&lt;div j='js' style='white-space: pre'>&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        js:""
+    },func:{
+        loadFile:function(){
+            var _this=this;
             this.$ajax({
-                type: a.type || "get",
-                url: a.url || "",
-                async: a.async || "true",
-                data: a.data || null,
-                dataType: a.dataType || "text",
-                contentType: a.contentType || "application/x-www-form-urlencoded",
-                beforeSend: a.beforeSend ||function() {},
-                success: a.success ||function() {},
-                error: a.error ||function() {},
-                base: a.base||true
-            });
+                url : 'http://www.theajack.com/jet/src/html/intro/contents.html', 
+                success : function(result){ 
+                        _this.js=result
+                }
+            })
         }
     }
 });
+&lt;/script>
+    </div>
+        
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <button jon='loadFile'>点击加载文件</button>
+            <button jon='this.js=""'>收起内容</button>
+            <div j='js' style='white-space: pre'></div>
         </div>
+    </div>
+
     <div class='text indent'>
         双竖线后的是各属性的默认值，base属性 在Jet.$.ajax 中不存在，该属性表示是否采用设置的根地址，根地址使用 Jet.prototype.$ajax.base 或 this.$ajax.base 来设置。
     </div>
@@ -56,5 +91,19 @@ new Jet({
         next:'Jet.$',
         nextUrl:'/tool/tool',
     });
-    var aa=new Jet();
+    new Jet({
+        data:{
+            js:""
+        },func:{
+            loadFile:function(){
+                var _this=this;
+                this.$ajax({
+                    url : 'http://www.theajack.com/jet/src/html/intro/contents.html', 
+                    success : function(result){ 
+                            _this.js=result
+                    }
+                })
+            }
+        }
+    });
 </script>

@@ -17,13 +17,24 @@
 <div class="sub">
     <div class='text'>1.普通使用：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-<div class='j-row'>
-    <div class='j-col c8'></div>
-    <div class='j-col c6'></div>
-    <div class='j-col c4'></div>
-    <div class='j-col c4'></div>
-    <div class='j-col c2'></div>
-</div>
+&lt;style>
+    .j-col{
+        height:50px;
+    }
+    .j-col:nth-child(odd){
+        background-color:#1da1ff;
+    }
+    .j-col:nth-child(even){
+        background-color:#dc5454;
+    }
+&lt;/style>
+&lt;div class='j-row'>
+    &lt;div class='j-col c8'>&lt;/div>
+    &lt;div class='j-col c6'>&lt;/div>
+    &lt;div class='j-col c4'>&lt;/div>
+    &lt;div class='j-col c4'>&lt;/div>
+    &lt;div class='j-col c2'>&lt;/div>
+&lt;/div>
     </div>
     <div class="out">
         <div class='j-row'>
@@ -37,15 +48,26 @@
 
     <div class='text'>2.带有边距：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-<div class='j-row j-row-m'>
-    <div class='j-col c2'></div>
-    <div class='j-col c4'></div>
-    <div class='j-col c4'></div>
-    <div class='j-col c6'></div>
-    <div class='j-col c4'></div>
-    <div class='j-col c2'></div>
-    <div class='j-col c2'></div>
-</div>
+&lt;style>
+    .j-col{
+        height:50px;
+    }
+    .j-col:nth-child(odd){
+        background-color:#1da1ff;
+    }
+    .j-col:nth-child(even){
+        background-color:#dc5454;
+    }
+&lt;/style>
+&lt;div class='j-row j-row-m'>
+    &lt;div class='j-col c2'>&lt;/div>
+    &lt;div class='j-col c4'>&lt;/div>
+    &lt;div class='j-col c4'>&lt;/div>
+    &lt;div class='j-col c6'>&lt;/div>
+    &lt;div class='j-col c4'>&lt;/div>
+    &lt;div class='j-col c2'>&lt;/div>
+    &lt;div class='j-col c2'>&lt;/div>
+&lt;/div>
     </div>
     <div class="out">
         <div class='j-row j-row-m'>
@@ -60,14 +82,25 @@
     </div>
     <div class='text'>3.嵌套使用：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-<div class='j-row j-row-m'>
-    <div class='j-col c12'></div>
-    <div class='j-row j-col c12'>
-        <div class='j-col c7'></div>
-        <div class='j-col c5'></div>
-        <div class='j-col c12 '></div>
-    </div>
-</div>
+&lt;style>
+    .j-col{
+        height:50px;
+    }
+    .j-col:nth-child(odd){
+        background-color:#1da1ff;
+    }
+    .j-col:nth-child(even){
+        background-color:#dc5454;
+    }
+&lt;/style>
+&lt;div class='j-row j-row-m'>
+    &lt;div class='j-col c12'>&lt;/div>
+    &lt;div class='j-row j-col c12'>
+        &lt;div class='j-col c7'>&lt;/div>
+        &lt;div class='j-col c5'>&lt;/div>
+        &lt;div class='j-col c12 '>&lt;/div>
+    &lt;/div>
+&lt;/div>
     </div>
     <div class="out">
         <div class='j-row j-row-m'>

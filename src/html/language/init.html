@@ -8,7 +8,7 @@
     <div class='text'>
         index.js 或者 index.html 中插入以下代码：
     </div>
-    <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
 Jet.lang.use(['cn','en']);
     </div>
     <div class='text'>
@@ -23,10 +23,10 @@ Jet.lang.use(['cn','en']);
     new Jet({
         func:{
             add:function(){
-                this.$dom.init_dom.html="<div jlang>\
-                    <span jname='cn'>你好，世界</span>\
-                    <span jname='en'>hello world</span>\
-                </div>"
+                this.$dom.init_dom.html="&lt;div jlang>\
+                    &lt;span jname='cn'>你好，世界&lt;/span>\
+                    &lt;span jname='en'>hello world&lt;/span>\
+                &lt;/div>"
             },init:function(){
                 Jet.lang.init('init_dom');
             },type:function(){

@@ -7,17 +7,17 @@
     <div class='text'>
         a.Jet可以以直接在html引入script标签的方式使用，并且支持不在http服务器中运行，不过不在http服务器中使用的话就不支持路由功能和jload属性。在html文件中插入以下代码:
     </div>
-    <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
         &lt;script src='http://www.theajack.com/jet/assets/js/jet.min.js'>&lt;/script>
     </div>
     <div class='text'>
         b.可以根据需要选择是否要使用Jet自带的UI框架JUI，JUI同样可以使用script标签插入使用。如需使用，请在HTML文件中插入以下代码
     </div>
-    <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
 &lt;!-- JUI css -->
 &lt;link rel="stylesheet" href='http://www.theajack.com/jet/assets/css/jui.min.css'/>
     </div>
-    <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
 &lt;!-- JUI js -->
 &lt;script src='http://www.theajack.com/jet/assets/js/jui.min.js'>&lt;/script>
     </div>
@@ -38,11 +38,11 @@
     <div class='text'>nodejs也就不过多介绍，安装请<a target='view_window' href="http://www.runoob.com/nodejs/nodejs-install-setup.html" class='link'>点击这里</a></div>
     <div class='title'>b.安装lite-server</div>
     <div class='text'>lite-server 是轻量级的仅适用于开发的 node 服务器。以下是被推荐的安装lite-server的方式:</div>
-    <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
         npm install lite-server --save-dev
     </div>
     <div class='text'>在你的项目中的 package.json 文件中添加一个 “script” 入口:</div>
-    <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
 "scripts": {    
     "dev": "lite-server"
 },
@@ -53,7 +53,7 @@
         <a href="/jet-demo.zip" download='jet-demo.zip' class='link'>点击这里</a>
         <!-- <span jon='JUI.msg.warn("暂未发布，敬请期待！")' class='link'>点击这里</span> -->
         下载最新的Jet压缩包，解压后将其中所有的内容拷贝到刚刚新建的lite-server项目的目录下，使用以下命令运行项目，就可以看到一个Hello Jet的示例程序。</div>
-    <div class='j-code' disabled width='99%' height='auto'>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
         npm run dev
     </div>
     <div class='title'>d.生产环境中使用</div>

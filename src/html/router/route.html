@@ -21,9 +21,19 @@ new Jet();
         当跳转目标是http地址时，第二参数是是否设置为新打开一个页面。请看一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;button jon='Jet.router.route("/intro")'>点击跳转到介绍页&lt;/button>
+&lt;button jon='jump'>点击跳转到百度&lt;/button>
+&lt;button jon='open'>新标签页打开百度&lt;/button>
 &lt;script>
-new Jet();
+    new Jet({
+        func:{
+            jump:function(){
+                this.$route('https://www.baidu.com');
+            },
+            open:function(){
+                this.$route('https://www.baidu.com',true);
+            }
+        }
+    });
 &lt;/script>
     </div>
     <div class='text'>以下是输出的html:

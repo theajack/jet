@@ -212,9 +212,10 @@
             }
           }
         }
+        return c;
       };
       function _load(name,call,ecall){
-        $J.ajax({ 
+        return $J.ajax({ 
           url : name, 
           async:true,
           success : function(result){ 
@@ -223,7 +224,7 @@
           error : function(err){ 
             if(ecall!=undefined)
               ecall(err);
-            throw new Error("加载失败");
+            console.warn("加载失败:"+name);
           },
         })
       };
@@ -2530,7 +2531,7 @@ window.JUI={
         //JUI.RADIO.init(item);
         JUI.RADIO_GROUP.init(item);
         JUI.CHECKBOX_GROUP.init(item);
-        JUI.SWICTH.init(item);
+        JUI.SWITCH.init(item);
         JUI.DATE.init(item);
         JUI.COLOR.init(item);
         JUI.SLIDER.init(item);
@@ -2630,8 +2631,8 @@ function _useBindSingle(opt){
 }
 function _getCallbackForBind(jet,jui,func){
   if(func!==""){
+    jui.jet=jet;
     if(func in jet&&typeof jet[func]=='function'){
-      jui.jet=jet;
       return jet[func];
     }else if(window[func]&&typeof window[func]=='function'){
       return window[func];
@@ -3301,7 +3302,7 @@ JUI.CHECKBOX.init=function(opt){
   }
 };
 JUI.CHECKBOX._name='j-checkbox';
-JUI.SWICTH=function(opt){
+JUI.SWITCH=function(opt){
     this.ele=opt.ele||null;
     this._value=opt.value||false;
     this.onchange=opt.onchange||function(){};
@@ -3321,20 +3322,22 @@ JUI.SWICTH=function(opt){
     });
     this.init();
 };
-JUI.SWICTH.prototype.init=function(){
-    //var _jui=new JUI.SWICTH({ele:item,text:item.txt(),value:getValueOrText(item)});
+JUI.SWITCH.prototype.init=function(){
+    //var _jui=new JUI.SWITCH({ele:item,text:item.txt(),value:getValueOrText(item)});
     var _jui=this;
     var item=this.ele;
     var child=item.child();
     if(child.length>0){
         if(child.length>2){
-            _throw('swicth 组件只能有两个元素');
+            _throw('switch 组件只能有两个元素');
         }
         var v=getValueOrText(child[0]);
+        if(v==='')v=true;
         this._valueList.push(v);
         var _on_t=$J.ct('div.j-switch-t.j-st-on').txt(child[0].txt()).attr('value',v);
-        var v=getValueOrText(child[1]);
-        if(this._valueList[0]==v)_throw('swicth 两个元素值不能相等');
+        v=getValueOrText(child[1]);
+        if(v==='')v=false;
+        if(this._valueList[0]==v)_throw('switch 两个元素值不能相等');
         this._valueList.push(v);
         this._value=v;
         var _off_t=$J.ct('div.j-switch-t.j-st-off').txt(child[1].txt()).attr('value',v);
@@ -3354,6 +3357,10 @@ JUI.SWICTH.prototype.init=function(){
             item.addClass('j-s-on');
             item.removeAttr('on');
         }
+        var _on_t=$J.ct('div.j-switch-t.j-st-on').attr('value','true');
+        var _off_t=$J.ct('div.j-switch-t.j-st-off').attr('value','false');
+        this._valueList=[true,false];
+        item.append([_on_t,_off_t]);
     }
     item.attr('value',this._value);
     item.append($J.ct('div.j-switch-c'));
@@ -3382,12 +3389,12 @@ JUI.SWICTH.prototype.init=function(){
     }
     item.$jui=_jui;
 };
-JUI.SWICTH._name='j-switch';
-JUI.SWICTH.init=function(item){
+JUI.SWITCH._name='j-switch';
+JUI.SWITCH.init=function(item){
     getEleList(item,this._name).each(function(item){
       if(!item._hasInitJui){
         item._hasInitJui=true;
-        new JUI.SWICTH({ele:item});
+        new JUI.SWITCH({ele:item});
       }
     });
 };

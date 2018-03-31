@@ -179,6 +179,11 @@ var Query={
         url:'/attr/root',
         intro:'可以将html元素绑定到Jet根元素上',
     },{
+        name:'$r',
+        url:'/attr/root',
+        intro:'使用 $r 来调用Jet数据',
+        des:'r'
+    },{
         name:'Jdom',
         url:'/attr/dom',
         intro:'生成一个可以使用Jet特殊语法操作的类dom元素',
@@ -218,6 +223,11 @@ var Query={
         intro:'设置使用默认的错误提示样式',
         des:'useDefaultStyle'
     },{
+        name:'Jet.valid.useOnInput',
+        url:'/valid/method',
+        intro:'设置使用oninput触发验证',
+        des:'useOnInput'
+    },{
         name:'Jet.valid.showInPlaceHolder',
         url:'/valid/method',
         intro:'设置是否将格式要求使用 placeholder 显示',
@@ -227,6 +237,11 @@ var Query={
         url:'/valid/method',
         intro:'设置是否使用alert方法打印出验证失败信息',
         des:'useAlert'
+    },{
+        name:'Jet.valid.useJUI',
+        url:'/valid/method',
+        intro:'设置是否使用JUI的消息框打印出验证失败信息',
+        des:'useJUI'
     },{
         name:'Jet.valid.init',
         url:'/valid/method',
@@ -444,5 +459,9 @@ var Query={
         name:'选项卡tab',
         url:'/jui/tab',
         intro:'选项卡tab',
+    },{
+        name:'在线使用',
+        url:'/code',
+        intro:'在线使用和调试Jet',
     }],
 }

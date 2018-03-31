@@ -21,8 +21,8 @@
 
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;div j='message'>
-    <!-- 会显示hello world -->
 &lt;/div>
+<!-- 会显示hello world -->
 &lt;script>
     new Jet({
         data:{//数据
@@ -48,9 +48,9 @@
     </div>
 
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;div j='message'>初始值&lt;/div><!-- 不会被渲染 -->
-&lt;div id='test'>
-    &lt;div j='message'>初始值&lt;/div>
+&lt;div j='message'>$&lt;/div><!-- 不会被渲染 -->
+&lt;div jdom='test'>
+    &lt;div j='message'>$&lt;/div>
 &lt;/div>
 &lt;script>
     new Jet({
@@ -63,7 +63,7 @@
     </div>
     <div class='text'>以下是输出的html:
         <div class='out'>   
-            <div>初始值</div>
+            <div>$</div>
             <div>
                 <div>hello word</div>
             </div>
@@ -77,6 +77,10 @@
         ondatachange 属性用于为Jet数据添加一个数据变化的监听事件，事件方法的 this 指代的是根Jet元素，方法有两个参数，第一个是改变之后的值，改变数据的键。请看下面一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>输入以改变数据值&lt;/div>
+&lt;div>字符串类型(值类型)：&lt;input type="text" j='string'>&lt;/div>
+&lt;div j='json'>json：&lt;input type="text" j='key'>&lt;/div>
+&lt;div j='array'>数组[&lt;span j='$index'>&lt;/span>]：&lt;input type="text" j='$value'>&lt;/div>
 &lt;script>
     new Jet({
         data:{//数据

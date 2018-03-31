@@ -1,13 +1,18 @@
+<style>
+    ._red{color:#f44}
+</style>
 <div j='user'>
-    <span class='_red' j='name'></span>:<span j='age'></span>
-    <div jif='{{$.age}}>1:class[_red]'></div>
+    <!-- <span class='_red' j='name'></span>:<span j='age'></span> -->
+    <div jstyle='color:"#aa"+{{$r.index}}' jshow='{{$r.index}}>1' j=index></div>
 </div>
-<div jload='attr/for_load.html'></div>
+<!-- <div jload='attr/for_load.html'></div> -->
 
 </div>
 <script>
-new Jet({
+var test=new Jet({
+    name:'test',
     data:{
+        index:3,
         user:{
             name:'jack',
             age:20

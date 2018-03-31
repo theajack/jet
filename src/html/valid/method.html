@@ -6,15 +6,17 @@
     <div class="list">
         <div class='link' jump-to='language'>1.language <span class="light-text">(设置验证提示信息语言，默认值为 CHINESE，可选值为CHINESE和ENGLISH，不区分大小写)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='useDefaultStyle'>2.useDefaultStyle <span class="light-text">(是否使用默认的错误提示样式，默认值为true)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='showInPlaceHolder'>3.showInPlaceHolder <span class="light-text">(是否将格式要求使用 placeholder 显示，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='useAlert'>4.useAlert <span class="light-text">(是否使用alert方法打印出验证失败信息，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='init'>5.init() <span class="light-text">(初始化验证元素)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='validate'>6.validate() <span class="light-text">(代码调用验证表单)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='validInput'>7.validInput() <span class="light-text">(代码调用验证单个输入元素)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='addRegExp'>8.addRegExp() <span class="light-text">(修改或者添加验证的正则表达式)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='addValidText'>9.addValidText() <span class="light-text">(修改或者添加验证失败的提示文字)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='onOnePass'>10.onOnePass() <span class="light-text">(单个输入元素验证成功的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='onOneFail'>11.onOneFail() <span class="light-text">(单个输入元素验证失败的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='useOnInput'>3.useOnInput <span class="light-text">(是否使用oninput事件触发验证，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='showInPlaceHolder'>4.showInPlaceHolder <span class="light-text">(是否将格式要求使用 placeholder 显示，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='useAlert'>5.useAlert <span class="light-text">(是否使用alert方法打印出验证失败信息，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='useAlert'>6.useJUI <span class="light-text">(是否使用JUI的消息框打印出验证失败信息，默认值为false)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='init'>7.init() <span class="light-text">(初始化验证元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='validate'>8.validate() <span class="light-text">(代码调用验证表单)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='validInput'>9.validInput() <span class="light-text">(代码调用验证单个输入元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='addRegExp'>10.addRegExp() <span class="light-text">(修改或者添加验证的正则表达式)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='addValidText'>11.addValidText() <span class="light-text">(修改或者添加验证失败的提示文字)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='onOnePass'>12.onOnePass() <span class="light-text">(单个输入元素验证成功的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='onOneFail'>13.onOneFail() <span class="light-text">(单个输入元素验证失败的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 
@@ -67,6 +69,40 @@
         一般使用该属性与 onOneFail() 方法相结合来自定义用户自己的错误提示，我们将在下面的内容介绍 onOneFail 的用法。：
     </div>
 </div>
+<div class='title' jump-des='useOnInput'>2.useOnInput</div>
+<div class="sub">
+    <div class='text'>
+        修改 <span class="red">Jet.valid.useOnInput</span> 可以设置是否使用oninput事件触发验证，默认值为 false，在开启了useOnInput模式下，useDefaultStyle将会变为false，无法设置其为true。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>输入电话号码：&lt;input type="text" jvalid='phone' jdom='input_dom'>&lt;/div>
+&lt;button jon="useoninput">启用oninput&lt;/button>
+&lt;button jon="banoninput">禁用用oninput&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            useoninput:function(){
+                Jet.valid.useOnInput=true;
+                Jet.valid.useJUI=true;
+                Jet.valid.validInput('input_dom');
+            },banoninput:function(){
+                Jet.valid.useOnInput=false;
+                Jet.valid.useJUI=false;
+                Jet.valid.validInput('input_dom');
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>输入电话号码：<input type="text" jvalid='phone' jdom='input_dom'></div>
+            <button jon="useoninput">启用oninput</button>
+            <button jon="banoninput">禁用用oninput</button>
+        </div>
+    </div>
+</div>
 <div class='title' jump-des='showInPlaceHolder'>3.showInPlaceHolder</div>
 <div class="sub">
     <div class='text'>
@@ -114,7 +150,29 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='init'>5.init</div>
+<div class='title' jump-des='useJUI'>5.useJUI</div>
+<div class="sub">
+    <div class='text'>
+        修改 <span class="red">Jet.valid.useJUI</span> 可以设置是否使用JUI的消息框方法打印出验证失败信息，默认值为false。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>输入电话号码：&lt;input type="text" jvalid='phone' jdom='jui_dom'>&lt;/div>
+&lt;button jon="click:Jet.valid.useJUI=true;Jet.valid.validInput('jui_dom')">使用JUI消息框&lt;/button>
+&lt;button jon="click:Jet.valid.useJUI=false;Jet.valid.validInput('jui_dom')">禁用JUI消息框&lt;/button>
+&lt;script>
+    new Jet();//为了初始化 jon 元素
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>输入电话号码：<input type="text" jvalid='phone' jdom='jui_dom'></div>
+            <button jon="click:Jet.valid.useJUI=true;Jet.valid.validInput('jui_dom')">使用JUI消息框</button>
+            <button jon="click:Jet.valid.useJUI=false;Jet.valid.validInput('jui_dom')">禁用JUI消息框</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='init'>6.init</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.init()</span> 可以初始化验证元素，适用于使用脚本动态添加dom元素之后对其做初始化操作。请看一个例子：
@@ -148,7 +206,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='validate'>6.validate</div>
+<div class='title' jump-des='validate'>7.validate</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.validate()</span> 可以代码调用验证表单。请看一个例子：
@@ -232,7 +290,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='validInput'>7.validInput</div>
+<div class='title' jump-des='validInput'>8.validInput</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.validInput()</span> 可以代码调用验证单个输入元素。请看一个例子：
@@ -256,7 +314,7 @@ phone：&lt;input type="text" jdom='validInput_dom2' jvalid="phone">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='addRegExp'>8.addRegExp</div>
+<div class='title' jump-des='addRegExp'>9.addRegExp</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.addRegExp()</span> 可以修改或者添加验证的正则表达式。请看一个例子：
@@ -282,7 +340,7 @@ phone：&lt;input type="text" jdom='validInput_dom2' jvalid="phone">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='addValidText'>9.addValidText</div>
+<div class='title' jump-des='addValidText'>10.addValidText</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.addValidText()</span> 可以修改或者添加验证的错误提示文字。请看一个例子：
@@ -317,7 +375,7 @@ email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='onOnePass'>10.onOnePass</div>
+<div class='title' jump-des='onOnePass'>11.onOnePass</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.onOnePass()</span> 可以设置单个输入元素验证成功的回调函数。请看一个例子：
@@ -348,7 +406,7 @@ email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='onOneFail'>11.onOneFail</div>
+<div class='title' jump-des='onOneFail'>12.onOneFail</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.onOneFail()</span> 可以设置单个输入元素验证失败的回调函数。请看一个例子：
@@ -433,6 +491,15 @@ email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
                     alert(ele.value+" : "+err);
                 });
                 opt.ele.innerText='设置成功';
+            },
+            useoninput:function(){
+                Jet.valid.useOnInput=true;
+                Jet.valid.useJUI=true;
+                Jet.valid.validInput('input_dom');
+            },banoninput:function(){
+                Jet.valid.useOnInput=false;
+                Jet.valid.useJUI=false;
+                Jet.valid.validInput('input_dom');
             }
         }
     });

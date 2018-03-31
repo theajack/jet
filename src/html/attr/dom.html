@@ -63,10 +63,10 @@
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 
-&lt;div jdom='htmlDiv'>&lt;div>一个测试元素&lt;/div>&lt;/div>
-&lt;input type="button" jon='click:getHtml' value='获取innerHTML'>
-&lt;input type="button" jon='click:setHtml' value='设置innerHTML'>
-&lt;div j='html'>&lt;/div>
+&lt;div jdom='outerHtmlDiv'>&lt;div>一个测试元素&lt;/div>&lt;/div>
+&lt;input type="button" jon='click:getOuterHtml' value='获取innerHTML'>
+&lt;input type="button" jon='click:setOuterHtml' value='设置innerHTML'>
+&lt;div j='outerHtml'>&lt;/div>
 &lt;script>
     new Jet({
         data:{
@@ -75,7 +75,11 @@
         func:{
             getOuterHtml:function(){
                 this.outerHtml=this.$dom.outerHtmlDiv.outerHtml;
-            }
+            },
+            setOuterHtml:function(){
+                this.$dom.outerHtmlDiv.html='<input type="button" value="一个新的测试元素"/>';
+                this.getOuterHtml();
+            },
         }
     });
 &lt;/script>
@@ -85,6 +89,7 @@
         <div class='out'>
             <div jdom='outerHtmlDiv'><div>一个测试元素</div></div>
             <input type="button" jon='click:getOuterHtml' value='获取outerHTML'>
+            <input type="button" jon='click:setOuterHtml' value='设置outerHTML'>
             <div j='outerHtml'></div>
         </div>
     </div>
@@ -285,10 +290,10 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='dom'>7.this.$()</div>
+<div class='title' jump-des='dom'>7.this.$DOM()</div>
 <div class="sub">
     <div class='text'>
-        使用Jet元素的$方法可以将一个dom元素转换成类dom元素以进行方便的dom操作。请看一个例子：
+        使用Jet元素的$DOM方法可以将一个dom元素转换成类dom元素以进行方便的dom操作。请看一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;div jon='click:test$'>点击这个元素&lt;/div>
@@ -296,7 +301,7 @@
     new Jet({
         func:{
             test$:function(opt){
-                var dom=this.$(opt.ele);
+                var dom=this.$DOM(opt.ele);
                 dom.text='修改之后的text';
                 dom.css='color=#4f4';
             }
@@ -341,6 +346,10 @@
             }, 
             getOuterHtml:function(){
                 this.outerHtml=this.$dom.outerHtmlDiv.outerHtml;
+            },
+            setOuterHtml:function(){
+                this.$dom.outerHtmlDiv.html='<input type="button" value="一个新的测试元素"/>';
+                this.getOuterHtml();
             },
             getText:function(){
                 this.text=this.$dom.textDiv.text;
@@ -391,7 +400,7 @@
             },refreshCssHtml:function(){
                 this.css=this.$dom.cssDiv.outerHtml;
             },test$:function(opt){
-                var dom=this.$(opt.ele);
+                var dom=this.$DOM(opt.ele);
                 dom.text='修改之后的text';
                 dom.css='color=#4f4';
             }
