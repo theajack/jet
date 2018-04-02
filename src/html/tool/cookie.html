@@ -1,0 +1,62 @@
+<div class='title'>$cookie()</div>
+<div class="sub">
+    <div class='text indent'>
+        Jet中封装了操作cookie方法，在Jet方法中，可以直接使用 this.$cookie() 调用。该方法接受四个参数，当只使用一个参数时，表示从cookie从获取该键对应的值，当时用两个或两个以上参数时，表示设置一个cookie值。
+        其中第一个参数是键，第二个是值，第三个是过期时间，默认值为1，单位为天，第四个是路径，默认值为 / (全局)。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+键：&lt;input type='text' j='key'/>
+值：&lt;input type='text' j='value'/>
+&lt;button jon='setCookie'>设置cookie&lt;/button>
+&lt;button jon='getCookie'>获取cookie&lt;/button>
+&lt;script>
+    new Jet({
+        data:{
+            message:'Hello World'
+        },
+        func:{
+            addEle:function(opt){
+                this.$dom.test_init.html="&lt;span jon='alert(opt.data)' j='message' >&lt;/span>";
+                this.$init()
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            键：<input type='text' j='key'/>
+            值：<input type='text' j='value'/>
+            <button jon='setCookie'>设置cookie</button>
+            <button jon='getCookie'>获取cookie</button>
+            <div jdom='cookie'></div>
+        </div>
+    </div>
+
+    <div class='text'>
+        $cookie 只支持存储字符串类型，若要存储其他类型，请使用 $storage，也可以自行进行类型转换。
+    </div>
+    
+</div>    
+
+<script>
+    Jet.global.setLink({
+        last:'工具方法',
+        lastUrl:'/tool',
+        next:'Jet.$',
+        nextUrl:'/tool/tool',
+    });
+    new Jet({
+        data:{
+            key:"",
+            value:""
+        },func:{
+            setCookie:function(){
+                this.$dom.cookie.html=this.$cookie(this.key,this.value);
+            },
+            getCookie:function(){
+                this.$dom.cookie.html=this.$cookie(this.key);
+            }
+        }
+    });
+</script>

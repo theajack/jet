@@ -97,6 +97,7 @@
         load:_load,
         jsonp:_jsonp,
         cookie:_cookie,
+        storage:_storage,
         initTip:function(){
           $J.attr("jet-tip").each(function(item){
             item.tip(item.attr("jet-tip"));
@@ -297,6 +298,26 @@
           }
         }
       };
+      function _storage(a,b){
+        if(b===undefined){
+          var d=localStorage.getItem(a);
+          try{
+            return JSON.parse(d)
+          }catch(e){
+            if(d===parseFloat(d).toString()){
+              return parseFloat(d);
+            }
+            return d;
+          }
+        }else{
+          if(typeof b==='object'){
+            localStorage.setItem(a, JSON.stringify(b))
+          }else{
+            localStorage.setItem(a, b)
+          }
+          return b
+        }
+      }
       function _create(a) {
         if (a.has("#") || a.has(".") || a.has("[")) {
           var b = a.split('#');
@@ -2547,28 +2568,31 @@ window.JUI={
         if(list.exist()){
             JUI._jui_mounted.push(function(){
               list.each(function(item){
-                if(item.hasClass(JUI.RADIO._name)&&!JUI.RADIO_GROUP.def_r_group.hasBind){
-                    JUI.RADIO_GROUP.def_r_group.hasBind=true;
-                    JUI.RADIO_GROUP.def_r_group.ele.attr(_jui_bind,item.attr(_jui_bind));
-                    _useBindSingle({
-                        item:JUI.RADIO_GROUP.def_r_group.ele,
-                        jet:jet,
-                        isDef:true
-                    });
-                }else if(item.hasClass(JUI.CHECKBOX._name)&&!JUI.CHECKBOX_GROUP.def_c_group.hasBind){
-                    JUI.CHECKBOX_GROUP.def_c_group.hasBind=true;
-                    JUI.CHECKBOX_GROUP.def_c_group.ele.attr(_jui_bind,item.attr(_jui_bind));
-                    _useBindSingle({
-                        item:JUI.CHECKBOX_GROUP.def_c_group.ele,
-                        jet:jet,
-                        isDef:true,
-                        type:JUI.CHECKBOX._name
-                    });
-                }else{
-                    _useBindSingle({
-                        item:item,
-                        jet:jet
-                    });
+                if(item.hasBind!==true){
+                  item.hasBind=true;
+                  if(item.hasClass(JUI.RADIO._name)&&!JUI.RADIO_GROUP.def_r_group.hasBind){
+                      JUI.RADIO_GROUP.def_r_group.hasBind=true;
+                      JUI.RADIO_GROUP.def_r_group.ele.attr(_jui_bind,item.attr(_jui_bind));
+                      _useBindSingle({
+                          item:JUI.RADIO_GROUP.def_r_group.ele,
+                          jet:jet,
+                          isDef:true
+                      });
+                  }else if(item.hasClass(JUI.CHECKBOX._name)&&!JUI.CHECKBOX_GROUP.def_c_group.hasBind){
+                      JUI.CHECKBOX_GROUP.def_c_group.hasBind=true;
+                      JUI.CHECKBOX_GROUP.def_c_group.ele.attr(_jui_bind,item.attr(_jui_bind));
+                      _useBindSingle({
+                          item:JUI.CHECKBOX_GROUP.def_c_group.ele,
+                          jet:jet,
+                          isDef:true,
+                          type:JUI.CHECKBOX._name
+                      });
+                  }else{
+                      _useBindSingle({
+                          item:item,
+                          jet:jet
+                      });
+                  }
                 }
             });
             $J.attr('disabled').on('click',null);

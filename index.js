@@ -195,6 +195,7 @@ Jet.router.use({
       name:'/bind/index',
       children:{
         '/j':'/bind/j',
+        '/init':'/bind/init',
         '/type':'/bind/type',
         '/array':'/bind/array',
         '/grammer':'/bind/grammer',
@@ -256,6 +257,8 @@ Jet.router.use({
       name:'/tool/index',
       children:{
         '/ajax':'/tool/ajax',
+        '/cookie':'/tool/cookie',
+        '/storage':'/tool/storage',
         '/tool':'/tool/tool',
         '/prototype':'/tool/prototype'
       }

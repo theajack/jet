@@ -68,6 +68,10 @@ var Query={
         intro:'Jet中使用属性J将Jet中的数据和UI绑定',
         des:''
     },{
+        name:'$init',
+        url:'/bind/init',
+        intro:'初始化动态添加的Jet元素',
+    },{
         name:'绑定的分类',
         url:'/bind/type',
         intro:'bind,for,text和input',
@@ -359,6 +363,14 @@ var Query={
         name:'$ajax',
         url:'/tool/ajax',
         intro:'与服务器交互数据或是请求文件',
+    },{
+        name:'$cookie',
+        url:'/tool/cookie',
+        intro:'操作cookie',
+    },{
+        name:'$storage',
+        url:'/tool/storage',
+        intro:'操作storage',
     },{
         name:'Jet.$',
         url:'/tool/tool',

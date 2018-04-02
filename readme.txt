@@ -262,4 +262,10 @@ __dynamic.js:31 onrouted
 //修复 3-29 路由页面跳转时，如果上一页面没有加载出，现在会取消上一个页面的路由
 //3-30 jattr和jstyle添加 $r 的支持
 //3-31 新增Jet.valid.useOnInput
+/*4-2 新增 Jet.prototype.$init 对动态添加的元素 初始化
+  新增 Jet.prototype.$cookie 操作cookie
+  新增 Jet.prototype.$storage 操作localStorage
+  修复了 input类型元素 绑定的是数字 后可能会导致的类型紊乱的错误
+  修复了 input类型元素输入焦点会到最后面的bug
+*/
 

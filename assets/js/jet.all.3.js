@@ -53,6 +53,13 @@
 */
 //3-30 jattr和jstyle添加 $r 的支持
 //3-31 新增Jet.valid.useOnInput
+/*4-2 新增 Jet.prototype.$init 对动态添加的元素 初始化
+  新增 Jet.prototype.$cookie 操作cookie
+  新增 Jet.prototype.$storage 操作localStorage
+  修复了 input类型元素 绑定的是数字 后可能会导致的类型紊乱的错误
+  修复了 input类型元素输入焦点会到最后面的bug
+*/
+
 //待修改： j-dialog提取到最外层，路由切换时删除；
 (function(){
   var _JT = {
@@ -80,6 +87,7 @@
     type:_type,
     ct: _create,
     ajax:_ajax,
+    cookie:_cookie,
     load:_load,
     html5:function(){
       if (window.applicationCache) {
@@ -88,6 +96,62 @@
       return false;
     },
     urlParam: _getUrlParam
+  };
+  function _storage(a,b){
+    if(b===undefined){
+      var d=localStorage.getItem(a);
+      try{
+        return JSON.parse(d)
+      }catch(e){
+        if(d===parseFloat(d).toString()){
+          return parseFloat(d);
+        }
+        return d;
+      }
+    }else{
+      if(typeof b==='object'){
+        localStorage.setItem(a, JSON.stringify(b))
+      }else{
+        localStorage.setItem(a, b)
+      }
+      return b
+    }
+  }
+  function _cookie(a, b, d, e) {
+    if (arguments.length == 1) {
+      if (document.cookie.length > 0) {
+        var f = document.cookie.indexOf(a + "=");
+        if (f != -1) {
+          f = f + a.length + 1;
+          var g = document.cookie.indexOf(";", f);
+          if (g == -1) g = document.cookie.length;
+          return unescape(document.cookie.substring(f, g))
+        }
+      }
+      return ""
+    } else {
+      if (b == null) {
+        $J.cookie(a, "", -1)
+      } else {
+        var c = a + "=" + escape(b);
+        if (d != undefined) {
+          var h = new Date();
+          h.setDate(h.getDate() + d);
+          c += ";expires=" + h.toGMTString()
+        }
+        if (e != undefined) {
+          if ($J.type(e)=="boolean") {
+            if (e) {
+              c += (";path=/")
+            }
+          } else {
+            c += (";path=" + e)
+          }
+        }
+        document.cookie = c;
+        return a + "=" + b
+      }
+    }
   };
   function _ajax(a) {
     var b = {
@@ -1143,7 +1207,10 @@ window.Jet=function(opt){
   call.forEach(function(f){
     f();
   });
-};Jet.prototype.$ajax=function(opt){
+};
+Jet.prototype.$cookie=_cookie;
+Jet.prototype.$storage=_storage;
+Jet.prototype.$ajax=function(opt){
   if(opt.base!=false&&Jet.prototype.$ajax.base!==undefined){
     opt.url=Jet.prototype.$ajax.base+opt.url;
   }
@@ -1156,7 +1223,8 @@ window.Jet=function(opt){
     success:sc,
     error:fc
   });
-};Jet.prototype.$ajax.post=function(url,data,sc,fc){
+};
+Jet.prototype.$ajax.post=function(url,data,sc,fc){
   return Jet.prototype.$ajax({
     type:'post',
     data:data,
@@ -1172,8 +1240,8 @@ window.Jet=function(opt){
 };Jet.prototype.$jui=function(s){
   return _getJdomEle(s,this._tools._ele).$jui;
 };
-Jet.prototype.$init=function(s){
-  //
+Jet.prototype.$init=function(ele){
+  _initJetEle.call(this,ele);
 };
 function _findParJet(ele){
   var par=ele._JT_parent();
@@ -1325,11 +1393,21 @@ Jet.$=_JT;
       }
     });
   };
-  function _initJetDom(opt){
+  function _initJetDom(ele){
     var doms;
+    var type=_JT.type(ele);
+    if(type!=='undefined'){
+      if(type==='string'){
+        var s=ele;
+        ele=_JT.attr(_dom+'='+s);
+        if(!ele._JT_exist()){
+          ele=_JT.id(s);
+        }
+      }
+    }
     var _this=this;
-    if(opt.ele){
-      doms=opt.ele._JT_findAttr(_dom);
+    if(ele){
+      doms=ele._JT_findAttr(_dom);
     }else{
       doms=_JT.attr(_dom);
     }
@@ -1347,7 +1425,7 @@ function _initJet(opt,calls){
   if(opt.beforeinit){
     opt.beforeinit.call(this);
   }
-  _initJetDom.call(this,opt)
+  _initJetDom.call(this,opt.ele)
   var _this=this;
   var bindList,ifList,showList,onList,runList,attrList,styleList;
   if(opt.ele){
@@ -1367,18 +1445,18 @@ function _initJet(opt,calls){
     attrList=_JT.attr(_attr);
     styleList=_JT.attr(_style);
   }
-  var temp=[];
-  var dom=document.createDocumentFragment();
-  bindList._JT_each(function(item,index){
-    temp.push({
-      par:item._JT_parent(),
-      index:item._JT_index(),
-      item:item
-    });
-  });
+  //var temp=[];
+  //var dom=document.createDocumentFragment();
+  // bindList._JT_each(function(item,index){
+  //   temp.push({
+  //     par:item._JT_parent(),
+  //     index:item._JT_index(),
+  //     item:item
+  //   });
+  // });
   bindList._JT_each(function(item,index){
     if(!item._hasBind){
-      dom.appendChild(item);
+      //dom.appendChild(item);
       var attr=item._JT_attr(_bind);
       if(opt.data==undefined||attr==''){
         var _opt=_jetOpt(_this,item,attr,{_func:[]});
@@ -1442,12 +1520,12 @@ function _initJet(opt,calls){
   if(opt.beforemount){
     opt.beforemount.call(this);
   }
-  temp._JT_each(function(json){
-    if(json.item.__isRoot==true&&json.item._hasRemove!=true){
-      json.par._JT_append(json.item,json.index);
-      Jet.valid.init(json.item);
-    }
-  });
+  // temp._JT_each(function(json){
+  //   if(json.item.__isRoot==true&&json.item._hasRemove!=true){
+  //     json.par._JT_append(json.item,json.index);
+  //     Jet.valid.init(json.item);
+  //   }
+  // });
   Jet.$.id('__preload_j')._JT_remove();
   
   if(opt.ondatachange){
@@ -1477,6 +1555,115 @@ function _initJet(opt,calls){
     JUI.useBind(this);
   }
 };
+
+
+function _getInitData(item,attr,_this){
+  var jet=_findParJet(item);
+  var isJet=(typeof jet.$DOM!=='undefined');
+  if(!isJet&&jet.type!==_bind){
+    _throw('只可在Jet元素或Bind元素作用于域下动态插入DOM元素初始化，当前插入作用域为'+jet.type);
+  }
+  var _data=(isJet)?jet._tools._data:jet._data[jet.name];
+  var _j_opt=(attr===undefined)?_jetOpt(jet,item):_jetOpt(jet,item,attr,jet._tools._calls[attr]);
+  var _opt=(isJet)?_j_opt:_bindOpt(jet,item,attr,jet._tools._calls[attr]);
+  return {
+    isRoot:isJet,
+    jet:jet,
+    data:_data,
+    opt:_opt
+  }
+}
+
+function _initJetEle(ele){
+  ele=ele||this._tools._ele;
+  if(typeof ele==='string'){
+    ele=_getJdomEle(ele);
+  }
+  _initJetDom.call(this,ele);
+  var _this=this;
+  var bindList=ele._JT_findAttr(_bind),
+    ifList=ele._JT_findAttr(_if),
+    showList=ele._JT_findAttr(_show),
+    onList=ele._JT_findAttr(_on),
+    runList=ele._JT_findAttr(_run),
+    attrList=ele._JT_findAttr(_attr),
+    styleList=ele._JT_findAttr(_style);
+  bindList._JT_each(function(item,index){
+    if(!item._hasBind){
+      //dom.appendChild(item);
+      var attr=item._JT_attr(_bind);
+      var opt=_getInitData(item,attr,_this);
+      if(opt.data==undefined||attr==''){
+        var _opt=_jetOpt(_this,item,attr,{_func:[]});
+        item.__isRoot=true;
+        opt._tools._jets.push(new Jet.Bind(_opt));
+      }else if(attr in opt.data){
+        var type=_JT.type(opt.data[attr]);
+        var _jet;
+        switch(type){
+          case 'json':_jet=new Jet.Bind(opt.opt);break;
+          case 'array':_jet=new Jet.For(opt.opt);break;
+          default:{
+            if(isInput(item)){
+              _jet=new Jet.Input(opt.opt);
+            }else{
+              _jet=new Jet.Text(opt.opt);
+            }
+          };break;
+        }
+        if(opt.isRoot)
+          item.__isRoot=true;//为了记录根元素的初始位置，忽略非根元素
+        opt.jet._tools._jets.push(_jet);
+      }else{
+        item.__isRoot=true;
+      }
+    }
+  });
+  ifList._JT_each(function(item){
+    if(!item._hasIf){//不需要加root判断 因为本来就是root
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.If(opt.opt));
+    }
+  });
+  showList._JT_each(function(item){
+    if(!item._hasShow){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Show(opt.opt,true));
+    }
+  });
+  onList._JT_each(function(item){
+    if(!item._hasOn){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.On(opt.opt));
+    }
+  });
+  runList._JT_each(function(item){
+    if(!item._hasRun){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Run(opt.opt));
+    }
+  });
+  attrList._JT_each(function(item){
+    if(!item._hasAttr){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Attr(opt.opt));
+    }
+  });
+  styleList._JT_each(function(item){
+    if(!item._hasStyle){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Style(opt.opt,true));
+    }
+  });
+  if(typeof JUI!=='undefined'){
+    JUI.init(ele);
+    JUI.useBind(this);
+  }
+  Jet.valid.init(ele);
+  Jet.lang.init(ele);
+  Jet.load.init(ele);
+}
+
 var _domSatte={
   ready: (function() {
     var b = [];
@@ -1547,7 +1734,7 @@ function _jetOpt(_this,item,name,calls){
 }
 function isInput(obj){
   var tag=obj.tagName;
-  return (tag=="INPUT"||tag=="TEXTAREA"||tag=="SELECT"||(obj._JT_hasAttr('contenteditable')&&obj.attr('contenteditable')!='false'))
+  return (tag=="INPUT"||tag=="TEXTAREA"||tag=="SELECT"||(obj._JT_hasAttr('contenteditable')&&obj._JT_attr('contenteditable')!='false'))
 }
 Jet.Base=function(opt,type){
   this.jet=opt.jet;
@@ -2244,9 +2431,9 @@ function _loadCommonCssCall(commonCss,length){
           _JT.id(_commonStyle)._JT_html(commonCss.join(''))
         }
       }else if(_JT.id(_routeStyle)._JT_exist()){
-        document.head.insertBefore(_JT.ct('style')._JT_attr('id',_commonStyle).html(commonCss.join('')),_JT.id(_routeStyle));
+        document.head.insertBefore(_JT.ct('style')._JT_attr('id',_commonStyle)._JT_html(commonCss.join('')),_JT.id(_routeStyle));
       }else{
-        document.head.appendChild(_JT.ct('style')._JT_attr('id',_commonStyle).html(commonCss.join('')));
+        document.head.appendChild(_JT.ct('style')._JT_attr('id',_commonStyle)._JT_html(commonCss.join('')));
       }
     }else{
       _JT.id(_commonStyle)._JT_exist(function(item){
@@ -2452,10 +2639,14 @@ function _dealSrc(s){
 function _getJdomEle(b,ele){
   if('undefined'==typeof b)return b;
   if(typeof b=='string'){
+    var s=b;
     if(ele){
-      b=ele._JT_findAttr(_dom+'='+b);
+      b=ele._JT_findAttr(_dom+'='+s);
     }else{
-      b=_JT.attr(_dom+'='+b);
+      b=_JT.attr(_dom+'='+s);
+    }
+    if(!b._JT_exist()){
+      b=_JT.id(s);
     }
   }else if(_JT.type(b)!='htmlelement'){
     b=b.ele;
@@ -2601,7 +2792,7 @@ Object.defineProperty(Jet.valid,'useDefaultStyle',{
         if(val===false){
           _JT.cls("jet-unpass")._JT_each(function(a) {
             _checkIsPw(a);
-            a.removeClass("jet-unpass")._JT_val(a._JT_validValue);
+            a._JT_removeClass("jet-unpass")._JT_val(a._JT_validValue);
             a._JT_validValue=undefined;
           })
         }
@@ -2632,11 +2823,11 @@ Object.defineProperty(Jet.valid,'showInPlaceHolder',{
   set:function(val){
     Jet.valid.__placeholder=val;
     if(val===true){
-      _JT.attr(_valid).each(function(a) {
+      _JT.attr(_valid)._JT_each(function(a) {
         a._JT_attr("placeholder", _getValueText(a._JT_attr(_valid)))
       })
     }else if(val===false){
-      _JT.attr(_valid).each(function(a) {
+      _JT.attr(_valid)._JT_each(function(a) {
         a._JT_removeAttr("placeholder")
       })
     }
@@ -3525,9 +3716,11 @@ Jet.Input.prototype.refresh=function(key){
   if(!key||key==this.name){
     var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
     if(this.isContent){
-      this.ele._JT_html(val);
+      if(val!==((this.isNum)?parseFloat(this.ele.innerHTML):this.ele.innerHTML))
+        this.ele._JT_html(val);
     }else{
-      this.ele._JT_val(val);
+      if(val!==((this.isNum)?parseFloat(this.ele.value):this.ele.value))
+        this.ele._JT_val(val);
     }
   }
 };Jet.Input.prototype.get=function(){
@@ -3574,11 +3767,15 @@ function _initInput(opt){
 }
 function _dealOnInputOn(_this){
   var val=(_this.isContent)?this._JT_html():this._JT_val();
-  if(_this.isNum){
+  //if(_this.isNum){
     var _v=parseFloat(val);
-    if(val==_v.toString())
+    if(val==_v.toString()){
+      _this.isNum=true;
       val=_v;
-  }
+    }else{
+      _this.isNum=false;
+    }
+  //}
   _this.data[_this.name]=val;
 }
 /*if*********************************************************************************/
@@ -3626,7 +3823,7 @@ Jet.If.prototype.get=function(){
     root:this.jet
   }
   //if(this.exp.call(opt,d)===true){//弃用原因 不好做数据改变的检测
-  // if(this.exp.toString().has('"a"'))
+  // if(this.exp.toString()._JT_has('"a"'))
   // console.loconsole.log(this.exp)
   if(this.exp(d,this.jet)===true){
     this.func_true.call(this.jet,opt);
@@ -3637,7 +3834,7 @@ Jet.If.prototype.get=function(){
 function _registForWrapperVar(_this,content){
   var m=content.match(_reg);
   if(m==null){
-      if(!(content in _this._data)&&!content.has("$.")){
+      if(!(content in _this._data)&&!content._JT_has("$.")){
           //_throw(_this.type+':['+content+']若值是表达式，请使用{{}}将表达式里的变量包裹起来');
       }
       _this.regist(content,function(key,val){
@@ -3679,9 +3876,9 @@ function _initIf(){
       if(!(ifAttr in this._data)){
 
         // if(ifAttr._JT_has(_each)){
-        //   ifAttr=ifAttr._JT_replaceAll("\\"+_each,"d."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]").replaceAll("{{",'').replaceAll("}}",'');
+        //   ifAttr=ifAttr._JT_replaceAll("\\"+_each,"d."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
         // }else{
-          ifAttr=ifAttr._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
+          ifAttr=ifAttr._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
         //}
       }else{
         ifAttr='d.'+ifAttr;
@@ -3691,10 +3888,10 @@ function _initIf(){
       var temp=ifAttr.substring(0,ifAttr.indexOf(":"));
       _registForWrapperVar(this,temp);
       if(typeof this._data!=='object'){
-        temp=temp._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
+        temp=temp._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
       }else{
         if(!(temp in this._data)){
-          temp=temp._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
+          temp=temp._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
         }else{
           temp='d.'+temp;
         }

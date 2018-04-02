@@ -1,0 +1,68 @@
+
+<div class='title'>$storage()</div>
+<div class="sub">
+    <div class='text indent'>
+        Jet中封装了操作localStorage方法，在Jet方法中，可以直接使用 this.$storage() 调用。该方法接受两个个参数，当只使用一个参数时，表示从localStorage从获取该键对应的值，当时用两个参数时，表示设置localStorage值。
+        支持任何类型的值。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+键：&lt;input type='text' j='key'/>
+值：&lt;input type='text' j='value'/>
+&lt;button jon='setStorage'>设置cookie&lt;/button>
+&lt;button jon='getStorage'>获取cookie&lt;/button>
+&lt;div jdom='storage'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            key:"",
+            value:""
+        },func:{
+            setStorage:function(){
+                this.$storage(this.key,this.value);
+                this.$dom.storage.html='设置成功';
+            },
+            getStorage:function(){
+                this.$dom.storage.html=this.$storage(this.key);
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            键：<input type='text' j='key'/>
+            值：<input type='text' j='value'/>
+            <button jon='setStorage'>设置cookie</button>
+            <button jon='getStorage'>获取cookie</button>
+            <div jdom='storage'></div>
+        </div>
+    </div>
+
+    <div class='text'>
+        $storage 支持任何类型的值，读者可自行尝试。
+    </div>
+    
+</div>    
+
+<script>
+    Jet.global.setLink({
+        last:'工具方法',
+        lastUrl:'/tool',
+        next:'Jet.$',
+        nextUrl:'/tool/tool',
+    });
+    new Jet({
+        data:{
+            key:"",
+            value:""
+        },func:{
+            setStorage:function(){
+                this.$storage(this.key,this.value);
+                this.$dom.storage.html='设置成功';
+            },
+            getStorage:function(){
+                this.$dom.storage.html=this.$storage(this.key);
+            }
+        }
+    });
+</script>
