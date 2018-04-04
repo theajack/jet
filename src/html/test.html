@@ -1,11 +1,10 @@
-<style>
+<!-- <style>
     ._red{color:#f44}
 </style>
 <div j='user'>
-    <!-- <span class='_red' j='name'></span>:<span j='age'></span> -->
+    <span class='_red' j='name'></span>:<span j='age'></span>
     <div jstyle='color:"#aa"+{{$r.index}}' jshow='{{$r.index}}>1' j=index></div>
 </div>
-<!-- <div jload='attr/for_load.html'></div> -->
 
 </div>
 <script>
@@ -15,8 +14,115 @@ var test=new Jet({
         index:3,
         user:{
             name:'jack',
-            age:20
+            age:20,
+            index:0
         }
     }
 });
+</script> -->
+
+<div class='title'>动态元素</div>
+<div class="sub">
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <!-- <div j='a'></div>
+            <div j='b'>
+                <div j='test'></div>
+            </div>
+            
+            <div j='c'>
+                <div j='a0'>
+                    <div j='$each'>
+                        <div j='a'>
+                            <div j='$value'></div>
+                        </div>
+                    </div>
+                </div><br>
+                <div j='a1'></div><br>
+                <div j='a2'>
+                    <div j='a'></div>
+                </div><br>
+                <div j='a3'>
+                    <div j='a'></div>
+                    <div j='b'>
+                        <div j='$value'></div>
+                    </div>
+                </div><br>
+                <div j='a4'>
+                    <div j='$each'>
+                        <div j='$value'></div>
+                    </div>
+                </div><br>
+                <div j='a5'>
+                    <div j='$each'>
+                        <div j='a'></div>
+                    </div>
+                </div>
+
+
+            </div> -->
+            <div j='a'>
+                <div j='aa'></div>
+            </div>
+            <div j='b'></div>
+            <div j='cc'><div j='$value'></div></div>
+            <button jon='click:Jet.lang.type="cn"'>设置中文</button>
+            <button jon='click:Jet.lang.type="en"'>设置英文</button>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        name:'test',
+        data:{
+            cc:[1,2],
+            a:[{aa:JL({
+                en:'hello',
+                cn:'你好'
+            })},{aa:JL({
+                en:'hello',
+                cn:'你好'
+            })}],
+            // a:[JL({
+            //     en:{aa:'hello'},
+            //     cn:{aa:'你好'}
+            // }),JL({
+            //     en:{aa:'hello2'},
+            //     cn:{aa:'你好2'}
+            // })],
+            // a:[{aa:'hello'},{aa:'你好'}],
+            b:JL({
+                en:'hello3',
+                cn:'你好3'
+            })
+            // a:1,
+            // b:JL({
+            //     en:{
+            //         test:'hello'
+            //     },
+            //     cn:{
+            //         test:'你好'
+            //     },
+            // }),
+            // c:JL({
+            //     en:{
+            //         a1:'a',
+            //         a2:{a:1},
+            //         a3:{a:1,b:[1,2,3]},
+            //         a4:[1,2,3],
+            //         a5:[{a:1},{a:2}],
+            //         a0:[{a:[1,2,3]},{a:[3,2,1]}],
+            //     },
+            //     cn:{
+            //         a1:'啊',
+            //         a2:{a:'啊'},
+            //         a3:{a:'啊',b:['啊','啊','啊']},
+            //         a4:['啊','啊','啊'],
+            //         a5:[{a:'啊'},{a:'啊'}],
+            //         a0:[{a:['啊','啊','啊']},{a:['啊','啊','啊']}],
+            //     },
+            // })
+        }
+        
+    })
 </script>

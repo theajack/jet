@@ -20,7 +20,7 @@
 //2-6 jload 修复了子模版使用父模版元素的bug
 //2-6 可以越过作用域一级一级向上查找属性，不会直接报错
 //2-7 新增jhtml属性, text元素设置html值
-//2-7 新增makeChange方法，手动触发某值改变的回调函数
+//2-7 新增$makeChange方法，手动触发某值改变的回调函数
 //2-8 发现并修复空值不会渲染的bug
 //2-9 修复多层循环 使用 $.$par.$index 的bug
 
@@ -59,9 +59,10 @@
   修复了 input类型元素 绑定的是数字 后可能会导致的类型紊乱的错误
   修复了 input类型元素输入焦点会到最后面的bug
 */
+//4-4 修复了 数组元素的国际化 bug
+// 国际化现在可以包含一个json或者数组，而不只是一个值类型
 
-//待修改： j-dialog提取到最外层，路由切换时删除；
-(function(){
+//(function(){
   var _JT = {
     cls: function(a) {
       return _checkSelect(document.getElementsByClassName(a))
@@ -89,6 +90,7 @@
     ajax:_ajax,
     cookie:_cookie,
     load:_load,
+    clone:_clone,
     html5:function(){
       if (window.applicationCache) {
         return true;
@@ -96,6 +98,33 @@
       return false;
     },
     urlParam: _getUrlParam
+  };
+  function _clone(obj){
+    if(obj==undefined){
+      return undefined;
+    }
+    var type=_type(obj);
+    if(type=="htmlelement"||type=="array"){
+      return obj._JT_clone();
+    }else if(type=="json"||type=="object"){
+      var a=new Object();
+      for(var attr in obj){
+        if(obj[attr]==null||obj[attr]==undefined){
+          a[attr]=obj[attr];
+        }else if(_type(obj[attr])=="array"){
+          a[attr]=obj[attr].clone();
+        }else if(_type(obj[attr])=="json"||_type(obj[attr])=="object"){
+          a[attr]=_clone(obj[attr]);
+        }else{
+          a[attr]=obj[attr];
+        }
+      }
+      return a;
+    }else if(type=="number"||type=="boolean"||type=="string"||type=="function"){
+      return obj;
+    }else{
+      return obj;
+    }
   };
   function _storage(a,b){
     if(b===undefined){
@@ -131,7 +160,7 @@
       return ""
     } else {
       if (b == null) {
-        $J.cookie(a, "", -1)
+        _cookie(a, "", -1)
       } else {
         var c = a + "=" + escape(b);
         if (d != undefined) {
@@ -140,7 +169,7 @@
           c += ";expires=" + h.toGMTString()
         }
         if (e != undefined) {
-          if ($J.type(e)=="boolean") {
+          if (_type(e)=="boolean") {
             if (e) {
               c += (";path=/")
             }
@@ -167,10 +196,10 @@
     };
     b.beforeSend();
     var c;
-    if (window.ActiveXObject) {
-      c = ActiveXObject("Microsoft.XMLHTTP")
-    } else if (window.XMLHttpRequest) {
+    if (window.XMLHttpRequest) {
       c =new XMLHttpRequest()
+    } else if (window.ActiveXObject) {
+      c = ActiveXObject("Microsoft.XMLHTTP")
     }
     var _d=_convertData(b.data);
     if(b.type.toLowerCase()=='get'&&_d!==''){
@@ -187,9 +216,9 @@
     c.onreadystatechange = function() {
       if (c.readyState == 4) {
         if (c.status == 200) {
-          b.success(c.response)
+          b.success(c.response||c.responseText)
         } else {
-          b.error(c.response)//errInfo
+          b.error(c.response||c.responseText)//errInfo
         }
       }
     }
@@ -778,6 +807,13 @@
     }
     return this
   };
+  Array.prototype._JT_clone = function() {
+    var a=new Array();
+    this.forEach(function(item){
+      a.push(_clone(item));
+    });
+    return a;
+  };
   Array.prototype._JT_empty = function(b) {
     this.length = 0;
     return this;
@@ -865,7 +901,7 @@
             case Array:type="array";break;
             case HTMLCollection:type="htmlcollection";break;
             case NodeList:type="nodelist";break;
-            case FormData:type="formdata";break;
+            //case FormData:type="formdata";break;
             case Error:type="error";break;
             case Date:type="date";break;
             default:if(obj.nodeType===1&&typeof obj.nodeName === 'string'){
@@ -1163,8 +1199,109 @@ var _bind="J",
 function _throw(err){
   throw new Error(err);
 }
+
+// var opt={data:JL({
+//   en:{
+//     	a1:'a',
+//       a2:{a:1},
+//       a3:{a:1,b:[1,2,3]},
+//       a4:[1,2,3],
+//       a5:[{a:1},{a:2}],
+//       a0:[{a:[1,2,3]},{a:[3,2,1]}],
+//   },
+//   cn:{
+//     	a1:'啊',
+//       a2:{a:1},
+//       a3:{a:1,b:[1,2,3]},
+//       a4:[1,2,3],
+//       a5:[{a:1},{a:2}],
+//       a0:[{a:[1,2,3]},{a:[3,2,1]}],
+//   },
+// })};_checkDataForData(opt)
+function _checkDataForData(opt){
+  var d=opt.data;
+  if(typeof d!=='undefined'&&d.type===_lang){
+    var newd={};
+    var path='';
+    var _d=_JT.clone(d.data[Jet.lang.list[0]]);
+    _addDataWrapper(_d,newd,path,d.data);
+    opt.data=newd;
+  }else{
+    _searchData(d);
+  }
+}
+function _searchData(d){
+  for(var k in d){
+    _searchDataBase(d,k)
+  }
+}
+function _searchDataArray(d){
+  for(var i=0;i<d.length;i++){
+    _searchDataBase(d,i)
+  }
+}
+function _searchDataBase(d,k){
+  var t=_JT.type(d[k]);
+  if(typeof d[k]==='object'&&d[k].type===_lang){
+    var newd={};
+    var path='';
+    var _d=_JT.clone(d[k].data[Jet.lang.list[0]]);
+    if(typeof _d==='object'){
+      _addDataWrapper(_d,newd,path,d[k].data);
+      d[k]=newd;
+    }
+  }else if(t==='json'){
+    _searchData(d[k])
+  }else if(t==='array'){
+    _searchDataArray(d[k])
+  }
+}
+function _addDataWrapper(data,newd,path,base){
+  if(typeof data==='object'){
+    for(var k in data){
+      _addDataBase(data,newd,path,base,k)
+    }
+  }
+}
+function _addDataWrapperArray(data,newd,path,base){
+  for(var i=0;i<data.length;i++){
+    _addDataBase(data,newd,path,base,i)
+  }
+}
+function _addDataBase(data,newd,path,base,key){
+  var t=_JT.type(data[key]);
+  if(typeof key==='string'){
+    path+=('.'+key);
+  }else{
+    path+=('['+key+']');
+  }
+  if(t==='json'){
+    newd[key]={};
+    newd=newd[key];
+    data=data[key];
+    _addDataWrapper(data,newd,path,base);
+  }else if(t==='array'){
+    newd[key]=[];
+    newd=newd[key];
+    data=data[key];
+    _addDataWrapperArray(data,newd,path,base);
+  }else if(t==='string'||t==='number'||t==='boolean'){
+    newd[key]=_concatLangObj(base,path);
+    newd=newd[key];
+  }else{
+    _throw(t+'数据类型错误：'+data[key])
+  }
+}
+function _concatLangObj(base,path){
+  var obj={};
+  for(var k in base){
+    obj[k]=(new Function('d',"return d"+path))(base[k]);
+  }
+  return JL(obj);
+}
 window.Jet=function(opt){
   if(opt===undefined)opt={};
+  _checkDataForData(opt);
   opt.ele=(opt.ele)?_getJdomEle(opt.ele):document.documentElement;
   opt.ele.__jet=this;
   if(opt.name){
@@ -1183,9 +1320,6 @@ window.Jet=function(opt){
   }
   this.$dom={};
   var _this=this;
-  this.$DOM=function(ele){//用于判断是否是Jet元素，不可轻易删除
-    return new Jet.DOM({ele:ele,jet:_this});
-  }
   _define(this,opt.data,this._tools._calls);
   if(opt.func){
     for(var key in opt.func){
@@ -1200,15 +1334,17 @@ window.Jet=function(opt){
   Jet.load.init(function(){
     _initJet.call(_this,opt,_this._tools._calls);
   })
-};Jet.prototype.get=function(){
+};Jet.prototype.$get=function(){
   return this;
-};Jet.prototype.makeChange=function(s){
+};Jet.prototype.$makeChange=function(s){
   var call=(new Function('call','return call.'+s+'._func'))(this._tools._calls);
   call.forEach(function(f){
     f();
   });
 };
-Jet.prototype.$cookie=_cookie;
+Jet.prototype.$DOM=function(ele){//用于判断是否是Jet元素，不可轻易删除
+  return new Jet.DOM({ele:ele,jet:this});
+};Jet.prototype.$cookie=_cookie;
 Jet.prototype.$storage=_storage;
 Jet.prototype.$ajax=function(opt){
   if(opt.base!=false&&Jet.prototype.$ajax.base!==undefined){
@@ -1260,7 +1396,7 @@ Jet.prototype.$route.forward=function(s){
   Jet.router.forward();
 };
 Jet.prototype.$=_JT;
-Jet.prototype.regist=function(name,call){
+Jet.prototype.$regist=function(name,call){
   var isDisable=false;
   if(arguments.length==2){
     if(name._JT_has('.')){
@@ -1531,7 +1667,7 @@ function _initJet(opt,calls){
   if(opt.ondatachange){
     this.ondatachange=opt.ondatachange;
     for(var k in opt.ondatachange){
-      Jet.Base.prototype.regist.call(this,'.'+k,function(key,value){
+      Jet.Base.prototype.$regist.call(this,'.'+k,function(key,value){
         opt.ondatachange[k].call(_this,value,key)
       });
     }
@@ -1778,7 +1914,7 @@ Jet.Base=function(opt,type){
   if(this.type==_bind||this.type==_for||this.type==_text||this.type==_input){
       this.ele.__jet=this;
   }
-};Jet.Base.prototype.makeChange=function(s){
+};Jet.Base.prototype.$makeChange=function(s){
   var call;
   if(s==undefined){
     call=this._tools._calls._func
@@ -1807,7 +1943,7 @@ Jet.Base=function(opt,type){
     this.par._tools._jetTools._JT_remove(this)
   }
   this.ele.__jet=undefined;
-};Jet.Base.prototype.regist=function(name,call){
+};Jet.Base.prototype.$regist=function(name,call){
   var isDisable=false;
   if(arguments.length==2){
     // if(name._JT_has(_each)){
@@ -1979,7 +2115,7 @@ Array.prototype.$push=function(d){
 };Array.prototype.$replace=function(arr){
   this.$clear();
   this.$pushArray(arr);
-  if(typeof this._jet!=='undefined')this._jet.makeChange();
+  if(typeof this._jet!=='undefined')this._jet.$makeChange();
 };
 
 //on 和 run 由自身处理，其余由父jet处理
@@ -3179,7 +3315,8 @@ function _refreshLang(){
   }
 }
 function _checkLangJet(opt){
-  if(_JT.type(opt._data)=='json'&&opt.name in opt._data){
+  var t=_JT.type(opt._data)
+  if((t==='json'&&opt.name in opt._data)||(t==='array'&&typeof opt._data[opt.name]!=='undefined')){
       if(_checkIn(opt._data[opt.name],'type',_lang)){
           Jet.lang.jets.push(this);
       }
@@ -3204,7 +3341,7 @@ Jet.Bind.prototype.refresh=function(key){
       item.refresh(key);
     });
   //}
-};Jet.Bind.prototype.get=function(){
+};Jet.Bind.prototype.$get=function(){
   return this.data[this.name];
 };
 function _initBind(opt){
@@ -3330,7 +3467,7 @@ function _initBind(opt){
   });
   _checkJetTools.call(this,opt);
   
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
 };
@@ -3372,7 +3509,7 @@ Jet.For.prototype.refresh=function(key){
       item.refresh(key);
     });
   }
-};Jet.For.prototype.get=function(){
+};Jet.For.prototype.$get=function(){
   return this.data[this.name];
 };Jet.For.prototype.refreshParIndex=function(){
   this._tools._jets._JT_each(function(item){
@@ -3496,7 +3633,7 @@ function _refreshIndex(start){
   }
 }
 function _initForRule(ele){
-  if(this.ele._JT_child(0)._JT_hasAttr(_bind)&&this.ele._JT_child(0)._JT_attr(_bind)._JT_has('=')){//switch模式  $each.t=1
+  if(this.ele._JT_child(0)!=undefined&&this.ele._JT_child(0)._JT_hasAttr(_bind)&&this.ele._JT_child(0)._JT_attr(_bind)._JT_has('=')){//switch模式  $each.t=1
     this._switch=true;
     this._html={};
     this._type=null;
@@ -3580,7 +3717,7 @@ function _initFor(opt){
     }
   });
   _checkJetTools.call(this,opt);
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
 };
@@ -3646,14 +3783,14 @@ Jet.Text=function(opt){
 Jet.Text.prototype = new Super();
 Jet.Text.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
+    var val=(this.func)?this.func.call(this.jet,this.$get()):this.$get();
     if(this.isHtml){
       this.ele._JT_html(val);
     }else{
       this.ele._JT_txt(val);
     }
   }
-};Jet.Text.prototype.get=function(){//indexs
+};Jet.Text.prototype.$get=function(){//indexs
   if(this._parIndex){
     return _getParIndex(this,this._parIndex)
     //return this.indexs[this.indexs.length-1-this._parIndex];
@@ -3699,7 +3836,7 @@ function _initText(opt){
     this.func=new Function("$",'return '+this.ele._JT_html());
   }
   _checkJetTools.call(this,opt);
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
   this.refresh();
@@ -3714,7 +3851,7 @@ Jet.Input=function(opt){
 Jet.Input.prototype = new Super();
 Jet.Input.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
+    var val=(this.func)?this.func.call(this.jet,this.$get()):this.$get();
     if(this.isContent){
       if(val!==((this.isNum)?parseFloat(this.ele.innerHTML):this.ele.innerHTML))
         this.ele._JT_html(val);
@@ -3723,7 +3860,7 @@ Jet.Input.prototype.refresh=function(key){
         this.ele._JT_val(val);
     }
   }
-};Jet.Input.prototype.get=function(){
+};Jet.Input.prototype.$get=function(){
   return this.data[this.name];
 };
 function _initInput(opt){
@@ -3739,10 +3876,10 @@ function _initInput(opt){
   if(this.ele._attrVal==_index){
     _throw('输入框不能绑定数组的索引');
   }
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
-  this.isNum=(_JT.type(this.get())=='number');
+  this.isNum=(_JT.type(this.$get())=='number');
   if(this.ele.tagName=='SELECT'||(this.ele.tagName=='INPUT'&&this.ele._JT_attr('type').toLowerCase()!='text')){
     this.ele._JT_on("change",function(){
       _dealOnInputOn.call(this,_this);
@@ -3792,7 +3929,7 @@ Jet.If=function(opt,isShow){
   }
 };
 Jet.If.prototype = new Super();
-Jet.If.prototype.get=function(){
+Jet.If.prototype.$get=function(){
   if(this.name==_index){
     if(this.needParData){
       //会refresh 不需要修改
@@ -3815,7 +3952,7 @@ Jet.If.prototype.get=function(){
   if(this.index!=undefined&&i!=undefined&&this.index!=i){
     this.index==i;
   }
-  var d=this.get();
+  var d=this.$get();
   var opt={
     ele:this.ele,
     data:d,
@@ -3837,7 +3974,7 @@ function _registForWrapperVar(_this,content){
       if(!(content in _this._data)&&!content._JT_has("$.")){
           //_throw(_this.type+':['+content+']若值是表达式，请使用{{}}将表达式里的变量包裹起来');
       }
-      _this.regist(content,function(key,val){
+      _this.$regist(content,function(key,val){
           _this.refresh();
       });
   }else{
@@ -3846,7 +3983,7 @@ function _registForWrapperVar(_this,content){
           if(arr.indexOf(_ele)==-1){
               arr.push(_ele);
               if(_ele=="{{$}}"){
-                  _this.regist(function(key,val){
+                  _this.$regist(function(key,val){
                       _this.refresh();
                   });
               }else{
@@ -3854,7 +3991,7 @@ function _registForWrapperVar(_this,content){
                 if(_ele._JT_has('$r.')){
                   obj=_this.jet;
                 }
-                obj.regist(_ele.substring(2,_ele.length-2),function(key,val){
+                obj.$regist(_ele.substring(2,_ele.length-2),function(key,val){
                   _this.refresh();
                 })
               }
@@ -4041,7 +4178,7 @@ Jet.On=function(opt){
   }
 };
 Jet.On.prototype = new Super();
-Jet.On.prototype.get=function(){
+Jet.On.prototype.$get=function(){
   if(this.index!=undefined){
     return this.index;
   }
@@ -4123,7 +4260,7 @@ function _initOn(){
     _this.ele._JT_on(e0,function(event){
       var opt={
         ele:this,
-        data:_this.get(),
+        data:_this.$get(),
         event:event,
         jet:_this
       };
@@ -4154,7 +4291,7 @@ Jet.Run=function(opt){
   _initRun.call(this,opt);
 };
 Jet.Run.prototype = new Super();
-Jet.Run.prototype.get=function(){
+Jet.Run.prototype.$get=function(){
   if(this.index!=undefined){
     return this.index;
   }
@@ -4174,7 +4311,7 @@ Jet.Run.prototype.get=function(){
   var _this=this;
   var opt={
     ele:_this.ele,
-    data:_this.get(),
+    data:_this.$get(),
     jet:_this
   };
   this.runs._JT_each(function(name){
@@ -4206,7 +4343,7 @@ Jet.Attr=function(opt,isStyle){
   }
 };
 Jet.Attr.prototype = new Super();
-Jet.Attr.prototype.get=function(){
+Jet.Attr.prototype.$get=function(){
   if(this.index!=undefined){
     return this.index;
   }
@@ -4221,7 +4358,7 @@ Jet.Attr.prototype.get=function(){
     return this.data[this.name];
   }
 };Jet.Attr.prototype.refresh=function(i){
-  var d=this.get();
+  var d=this.$get();
   for(var k in this.attrs){
     this.setFunc.call(this.ele,k,this.attrs[k](d,this.jet))
   }
@@ -4262,7 +4399,7 @@ Jet.Style=Jet.Attr;
 Jet.Show=Jet.If;
 
 
-})();
+//})();
 
 
 

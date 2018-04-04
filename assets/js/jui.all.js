@@ -187,10 +187,10 @@
         };
         b.beforeSend();
         var c;
-        if (window.ActiveXObject) {
-          c = ActiveXObject("Microsoft.XMLHTTP")
-        } else if (window.XMLHttpRequest) {
+        if (window.XMLHttpRequest) {
           c =new XMLHttpRequest()
+        } else if (window.ActiveXObject) {
+          c = ActiveXObject("Microsoft.XMLHTTP")
         }
         var _d=_convertData(b.data);
         if(b.type.toLowerCase()=='get'&&_d!==''){
@@ -207,9 +207,9 @@
         c.onreadystatechange = function() {
           if (c.readyState == 4) {
             if (c.status == 200) {
-              b.success(c.response)
+              b.success(c.response||c.responseText)
             } else {
-              b.error(c.response)//errInfo
+              b.error(c.response||c.responseText)//errInfo
             }
           }
         }
@@ -2099,7 +2099,7 @@
                 case Array:type="array";break;
                 case HTMLCollection:type="htmlcollection";break;
                 case NodeList:type="nodelist";break;
-                case FormData:type="formdata";break;
+                //case FormData:type="formdata";break;
                 case Error:type="error";break;
                 case Date:type="date";break;
                 default:if(obj.nodeType===1&&typeof obj.nodeName === 'string'){

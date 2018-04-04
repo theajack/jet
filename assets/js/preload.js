@@ -3,10 +3,10 @@
 (function(){
   var _load=function(url,call){
     var c;
-    if (window.ActiveXObject) {
-      c = ActiveXObject("Microsoft.XMLHTTP")
-    } else if (window.XMLHttpRequest) {
+    if (window.XMLHttpRequest) {
       c =new XMLHttpRequest()
+    } else if (window.ActiveXObject) {
+      c = ActiveXObject("Microsoft.XMLHTTP")
     }
     c.open('GET', url, true);
     c.responseType = 'text';
@@ -15,7 +15,7 @@
     c.send();
     c.onreadystatechange = function() {
       if (c.readyState == 4&&c.status == 200) {
-        call(c.response);
+        call(c.response||c.responseText);
       }
     }
     return c;
