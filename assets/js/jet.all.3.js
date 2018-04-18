@@ -1220,7 +1220,7 @@ function _throw(err){
 // })};_checkDataForData(opt)
 function _checkDataForData(opt){
   var d=opt.data;
-  if(typeof d!=='undefined'&&d.type===_lang){
+  if(_checkIn(d,'type',_lang)){
     var newd={};
     var path='';
     var _d=_JT.clone(d.data[Jet.lang.list[0]]);
@@ -1242,7 +1242,7 @@ function _searchDataArray(d){
 }
 function _searchDataBase(d,k){
   var t=_JT.type(d[k]);
-  if(typeof d[k]==='object'&&d[k].type===_lang){
+  if(_checkIn(d[k],'type',_lang)){
     var newd={};
     var path='';
     var _d=_JT.clone(d[k].data[Jet.lang.list[0]]);
@@ -3282,15 +3282,19 @@ Jet.lang.init=function(obj){
     list=_getJdomEle(obj)._JT_findAttr(_lang)
   }
   list._JT_each(function(item){
-    item._jet_langs={};
-    item._JT_findAttr(_name)._JT_each(function(_item){
-      var attr=_item._JT_attr(_name);
-      item._jet_langs[attr]=_item._JT_html();
-    });
-    item._JT_html(item._jet_langs[Jet.lang.type]);
-    Jet.valid.init(item);
+      if(typeof item._jet_langs==='undefined'){
+        item._jet_langs={};
+        item._JT_findAttr(_name)._JT_each(function(_item){
+          var attr=_item._JT_attr(_name);
+          item._jet_langs[attr]=_item._JT_html();
+        });
+        item._JT_html(item._jet_langs[Jet.lang.type]);
+        Jet.valid.init(item);
+      }
   });
-  Jet.$.id('__preload_jl')._JT_remove();
+  Jet.$.id('__preload_jl')._JT_exist(function(item){
+      item._JT_remove();
+  })
 };
 Object.defineProperty(Jet.lang, 'type', {
   configurable:true,
@@ -3299,8 +3303,10 @@ Object.defineProperty(Jet.lang, 'type', {
     return _jl_name;
   },
   set: function (val) {
-    _jl_name = val;
-    _refreshLang();
+    if(val!==_jl_name&&Jet.lang.list.indexOf(val)!==-1){
+      _jl_name = val;
+      _refreshLang();
+    }
   }
 });
 function _refreshLang(){
