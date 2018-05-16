@@ -15,12 +15,16 @@
         <button jon='allParam'>所有参数</button>
         <button jon='confirm'>简写</button>
         <button jon='close'>关闭队列首部的确认框</button>
+        <button jon='isOpen'>查看是否有打开的确认框</button>
+        <button jon='clear'>关闭所有确认框</button>
                 
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;button jon='allParam'>所有参数&lt;/button>
 &lt;button jon='confirm'>简写&lt;/button>
 &lt;button jon='close'>关闭队列首部的确认框&lt;/button>
+&lt;button jon='isOpen'>查看是否有打开的确认框&lt;/button>
+&lt;button jon='clear'>关闭所有确认框&lt;/button>
 &lt;script>
     new Jet({
         func:{
@@ -39,6 +43,10 @@
                 },'info')
             },close:function(){
                 JUI.confirm.close();
+            },isOpen:function(){
+                JUI.msg(JUI.confirm.isOpen());
+            },clear:function(){
+                JUI.confirm.clear();
             }
         }
     });
@@ -70,6 +78,10 @@
                 },'info')
             },close:function(){
                 JUI.confirm.close();
+            },isOpen:function(){
+                JUI.msg(JUI.confirm.isOpen());
+            },clear:function(){
+                JUI.confirm.clear();
             }
         }
     });

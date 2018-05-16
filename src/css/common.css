@@ -1,3 +1,24 @@
+::-webkit-scrollbar {
+  width:10px;
+}
+::-webkit-scrollbar-button    {
+  display: none;
+}
+::-webkit-scrollbar-track     {
+  display: none;
+}
+::-webkit-scrollbar-track-piece {
+  background-color:rgba(100,100,100,.2);
+}
+::-webkit-scrollbar-thumb{
+  background-color:#bbb;
+  border-radius:10px;
+  cursor: pointer;
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color:#aaa;
+}
+
 .loading{
   padding-top: 200px;
   text-align: center;
@@ -304,13 +325,17 @@
 #searchWrapper{
   position: relative;
   margin: 7px 5px;
+  width: 250px;
+}
+#searchWrapper .j-input{
+  width: 100%;
 }
 #searchWrapper .j-icon{
   position: absolute;
   color: #00b2d7!important;
   top: 8px;
   font-size: 18px;
-  right: 8px;
+  right: 4px;
 }
 #searchWrapper .icon-times{
   cursor: pointer
@@ -325,7 +350,7 @@
 
 #queryResult{
   position: absolute;
-  width: 150px;
+  width: 100%;
   overflow: hidden;
   margin: 3px;
   background-color: rgba(255,255,255,.95);
@@ -348,13 +373,13 @@
 }
 .q-name{
   font-weight:bold;
-  text-align: center;
   font-size: 18px;
 }
 .q-intro,.q-name{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: center;
 }
 .__red{
   color:#f44;
@@ -410,6 +435,7 @@
   }
   #searchWrapper{
     margin: 7px 0;
+    width: 150px;
   }
   .h-ico{
     margin: 13px 2px;

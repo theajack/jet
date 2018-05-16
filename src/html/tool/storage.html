@@ -8,8 +8,8 @@
     <div class='j-code' disabled width='99%' height='auto'>
 键：&lt;input type='text' j='key'/>
 值：&lt;input type='text' j='value'/>
-&lt;button jon='setStorage'>设置cookie&lt;/button>
-&lt;button jon='getStorage'>获取cookie&lt;/button>
+&lt;button jon='setStorage'>设置localStorage&lt;/button>
+&lt;button jon='getStorage'>获取localStorage&lt;/button>
 &lt;div jdom='storage'>&lt;/div>
 &lt;script>
     new Jet({
@@ -32,8 +32,8 @@
         <div class='out'>
             键：<input type='text' j='key'/>
             值：<input type='text' j='value'/>
-            <button jon='setStorage'>设置cookie</button>
-            <button jon='getStorage'>获取cookie</button>
+            <button jon='setStorage'>设置localStorage</button>
+            <button jon='getStorage'>获取localStorage</button>
             <div jdom='storage'></div>
         </div>
     </div>
@@ -46,8 +46,8 @@
 
 <script>
     Jet.global.setLink({
-        last:'工具方法',
-        lastUrl:'/tool',
+        last:'$cookie',
+        lastUrl:'/tool/cookie',
         next:'Jet.$',
         nextUrl:'/tool/tool',
     });

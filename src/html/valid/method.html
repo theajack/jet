@@ -17,6 +17,9 @@
         <div class='link' jump-to='addValidText'>11.addValidText() <span class="light-text">(修改或者添加验证失败的提示文字)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='onOnePass'>12.onOnePass() <span class="light-text">(单个输入元素验证成功的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='onOneFail'>13.onOneFail() <span class="light-text">(单个输入元素验证失败的回调函数)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='addValid'>14.addValid() <span class="light-text">(给输入框添加验证)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='resetValid'>15.resetValid() <span class="light-text">(重置框验证样式)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='clearValid'>16.clearValid() <span class="light-text">(清除验证)</span><i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 
@@ -69,7 +72,7 @@
         一般使用该属性与 onOneFail() 方法相结合来自定义用户自己的错误提示，我们将在下面的内容介绍 onOneFail 的用法。：
     </div>
 </div>
-<div class='title' jump-des='useOnInput'>2.useOnInput</div>
+<div class='title' jump-des='useOnInput'>3.useOnInput</div>
 <div class="sub">
     <div class='text'>
         修改 <span class="red">Jet.valid.useOnInput</span> 可以设置是否使用oninput事件触发验证，默认值为 false，在开启了useOnInput模式下，useDefaultStyle将会变为false，无法设置其为true。请看一个例子：
@@ -103,7 +106,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='showInPlaceHolder'>3.showInPlaceHolder</div>
+<div class='title' jump-des='showInPlaceHolder'>4.showInPlaceHolder</div>
 <div class="sub">
     <div class='text'>
         修改 <span class="red">Jet.valid.showInPlaceHolder</span> 可以设置是否将格式要求使用 placeholder 显示，默认值为false。请看一个例子：
@@ -128,7 +131,7 @@
         除了上述方式设置 showInPlaceHolder 外，还可以在Jet的生命周期函数中对其进行初始化设置。
     </div>
 </div>
-<div class='title' jump-des='useAlert'>4.useAlert</div>
+<div class='title' jump-des='useAlert'>5.useAlert</div>
 <div class="sub">
     <div class='text'>
         修改 <span class="red">Jet.valid.useAlert</span> 可以设置是否使用alert方法打印出验证失败信息，默认值为false。请看一个例子：
@@ -150,7 +153,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='useJUI'>5.useJUI</div>
+<div class='title' jump-des='useJUI'>6.useJUI</div>
 <div class="sub">
     <div class='text'>
         修改 <span class="red">Jet.valid.useJUI</span> 可以设置是否使用JUI的消息框方法打印出验证失败信息，默认值为false。请看一个例子：
@@ -172,10 +175,12 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='init'>6.init</div>
+<div class='title' jump-des='init'>7.init</div>
 <div class="sub">
-    <div class='text'>
+    <div class='text indent'>
         使用 <span class="red">Jet.valid.init()</span> 可以初始化验证元素，适用于使用脚本动态添加dom元素之后对其做初始化操作。请看一个例子：
+        该方法接受一个可选参数，可以是jdom字符串，jdom元素，id或dom元素，当没有传入参数时则对整个页面所有验证进行初始化。
+        如果参数含有 jvalid 属性，那么只对当前元素进行初始化，否则对该元素所有子元素含有jvalid且没有初始化的元素进行初始化，请看一个例子：
     </div>
     
     <div class='j-code' disabled width='99%' height='auto'>
@@ -206,7 +211,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='validate'>7.validate</div>
+<div class='title' jump-des='validate'>8.validate</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.validate()</span> 可以代码调用验证表单。请看一个例子：
@@ -290,7 +295,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='validInput'>8.validInput</div>
+<div class='title' jump-des='validInput'>9.validInput</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.validInput()</span> 可以代码调用验证单个输入元素。请看一个例子：
@@ -314,7 +319,7 @@ phone：&lt;input type="text" jdom='validInput_dom2' jvalid="phone">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='addRegExp'>9.addRegExp</div>
+<div class='title' jump-des='addRegExp'>10.addRegExp</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.addRegExp()</span> 可以修改或者添加验证的正则表达式。请看一个例子：
@@ -340,7 +345,7 @@ phone：&lt;input type="text" jdom='validInput_dom2' jvalid="phone">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='addValidText'>10.addValidText</div>
+<div class='title' jump-des='addValidText'>11.addValidText</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.addValidText()</span> 可以修改或者添加验证的错误提示文字。请看一个例子：
@@ -375,7 +380,7 @@ email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='onOnePass'>11.onOnePass</div>
+<div class='title' jump-des='onOnePass'>12.onOnePass</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.onOnePass()</span> 可以设置单个输入元素验证成功的回调函数。请看一个例子：
@@ -406,7 +411,7 @@ email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
         </div>
     </div>
 </div>
-<div class='title' jump-des='onOneFail'>12.onOneFail</div>
+<div class='title' jump-des='onOneFail'>13.onOneFail</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">Jet.valid.onOneFail()</span> 可以设置单个输入元素验证失败的回调函数。请看一个例子：
@@ -440,6 +445,92 @@ email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
         使用 onOnePass，onOneFail 和 useDefaultStyle 结合可以定制验证成功或者失败的提示信息，我们将在下一节提供具体实例。
     </div>
 </div>
+<div class='title' jump-des='addValid'>14.addValid</div>
+<div class="sub">
+    <div class='text indent'>
+        使用 <span class="red">Jet.valid.addValid()</span> 可以给输入框添加验证。
+        该方法接受两个参数，第一个参数可以是jdom字符串，jdom元素，id或dom元素。第二个参数是验证类型，可以是Jet内置类型或者是正则表达式。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>
+    &lt;input type="text" jdom='add_dom'>
+&lt;/div>
+&lt;button jon="Jet.valid.addValid('add_dom','phone')">添加验证&lt;/button>
+&lt;script>
+    new Jet();
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>
+                <input type="text" jdom='add_dom'>
+            </div>
+            <button jon="Jet.valid.addValid('add_dom','phone')">添加验证</button>
+        </div>
+    </div>
+</div>
+
+<div class='title' jump-des='resetValid'>15.resetValid</div>
+<div class="sub">
+    <div class='text indent'>
+        使用 <span class="red">Jet.valid.resetValid()</span> 可以重置验证输入框的样式。
+        该方法接受一个可选参数，可以是jdom字符串，jdom元素，id或dom元素，当没有传入参数时则对整个页面所有验证进行重置。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='reset_form'>
+    请先输入以出发验证失败：&lt;input type="text" jvalid='phone' jdom='reset_dom'>
+&lt;/div>
+&lt;button jon="Jet.valid.resetValid('reset_dom')">参数输入框&lt;/button>
+&lt;button jon="Jet.valid.resetValid('reset_form')">参数为表单&lt;/button>
+&lt;button jon="Jet.valid.resetValid()">缺省参数&lt;/button>
+&lt;script>
+    new Jet();//为了初始化 jon 元素
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div jdom='reset_form'>
+                请先输入以出发验证失败：<input type="text" jvalid='phone' jdom='reset_dom'>
+            </div>
+            <button jon="Jet.valid.resetValid('reset_dom')">参数输入框</button>
+            <button jon="Jet.valid.resetValid('reset_form')">参数为表单</button>
+            <button jon="Jet.valid.resetValid()">缺省参数</button>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='clearValid'>16.clearValid</div>
+<div class="sub">
+    <div class='text indent'>
+        使用 <span class="red">Jet.valid.clearValid()</span> 可以清除验证输入框的样式并且清除验证。
+        该方法接受一个可选参数，可以是jdom字符串，jdom元素，id或dom元素，当没有传入参数时则对整个页面所有验证进行清除。请看一个例子：
+    </div>
+    
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='clear_form'>
+    请先输入以出发验证失败：&lt;input type="text" jvalid='phone' jdom='clear_dom'>
+&lt;/div>
+&lt;button jon="Jet.valid.clearValid('clear_dom')">参数输入框&lt;/button>
+&lt;button jon="Jet.valid.clearValid('clear_form')">参数为表单&lt;/button>
+&lt;button jon="Jet.valid.clearValid()">缺省参数&lt;/button>
+&lt;button jon="Jet.valid.addValid('clear_dom','phone')">重新添加验证&lt;/button>
+&lt;script>
+    new Jet();//为了初始化 jon 元素
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div jdom='clear_form'>
+                请先输入以出发验证失败：<input type="text" jvalid='phone' jdom='clear_dom'>
+            </div>
+            <button jon="Jet.valid.clearValid('clear_dom')">参数输入框</button>
+            <button jon="Jet.valid.clearValid('clear_form')">参数为表单</button>
+            <button jon="Jet.valid.clearValid()">缺省参数</button>
+            <button jon="Jet.valid.addValid('clear_dom','phone')">重新添加验证</button>
+        </div>
+    </div>
+</div>
 <script>
     Jet.global.setLink({
         last:'Jform',
@@ -450,6 +541,7 @@ email:&lt;input type="text" jdom='validText_dom' jvalid="email">&lt;br>
     new Jet({
         onmounted:function(){
             Jet.valid.useDefaultStyle=true;
+            this.$dom.init_dom
         },
         func:{
             addInput:function(){

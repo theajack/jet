@@ -6,11 +6,11 @@
 
 
 //暂不支持路由的嵌套
-//暂不支持动态添加元素的渲染
+//暂不支持动态添加元素的渲染 已通过init解决
 //暂不支持jrepeat 重复单个元素
 //jdom获取样式有待改进
 //jif jshow jattr jstyle 数组中不支持index
-//jimg 的想法
+//jimg 的想法 已通过js修改图片的src解决
 
 //2018
 //1-25 修复了一个for的bug 没有包裹each时，元素的孩子和文字顺序会混乱
@@ -62,6 +62,18 @@
 //4-4 修复了 数组元素的国际化 bug
 // 国际化现在可以包含一个json或者数组，而不只是一个值类型
 
+//4-19 JUI 新增 j-drag
+//4-23 修复：数组的方法不会触发数组的监听回掉，现在使用数组的长度的绑定会被正确刷新
+//4-24 新增 $define，$export，$use，$import，$module，，as 关键字
+//4-24 新增css scoped 属性，默认值为true; JUI.clearDialog 不同组件之间切换时使用，路由切换已经写进源码
+//     新增 JUI.dialog.isOpen clear ; 新增JUI.confirm.isOpen clear 
+//     数组removeByIndex
+//     新增 new Jet()的name 参数
+//5-14 完善js模块规范
+//5-15 修复css scoped的bug
+//  需要新增 index.html 文件中加载资源的介绍 目录的介绍 在路由设置tureBase=true的时候
+//5-16：修复了 JUI 组件关于disabled属性的bug
+///     完成了ondatachange的嵌套，并修复了$regist 多层数组嵌套时的bug ,(a[0][0]时用出错)
 //(function(){
   var _JT = {
     cls: function(a) {
@@ -1030,7 +1042,7 @@
   
 
  _JT.tag("head")._JT_append(_JT.ct("style")._JT_txt(".jet-hide{display:none!important}.jet-unpass{border-color:#f20!important;border-style:solid!important;background-color:rgba(255,0,0,.1)!important;color:red!important}"));
-   
+
 /*define*********************************************************************************/
 
 function _define(obj,data,calls) {
@@ -1199,6 +1211,9 @@ var _bind="J",
 function _throw(err){
   throw new Error(err);
 }
+function _isUd(o){
+  return (typeof o==='undefined');
+}
 
 // var opt={data:JL({
 //   en:{
@@ -1299,6 +1314,11 @@ function _concatLangObj(base,path){
   }
   return JL(obj);
 }
+function _createEmpty(){
+  var a={};
+  a.__proto__=null;
+  return a;
+}
 window.Jet=function(opt){
   if(opt===undefined)opt={};
   _checkDataForData(opt);
@@ -1334,7 +1354,9 @@ window.Jet=function(opt){
   Jet.load.init(function(){
     _initJet.call(_this,opt,_this._tools._calls);
   })
-};Jet.prototype.$get=function(){
+};
+Jet.prototype=_createEmpty();
+Jet.prototype.$get=function(){
   return this;
 };Jet.prototype.$makeChange=function(s){
   var call=(new Function('call','return call.'+s+'._func'))(this._tools._calls);
@@ -1444,88 +1466,84 @@ Jet.$=_JT;
     this.name=opt.ele._JT_attr(_dom);
     //this.ele._JT_removeAttr(_dom);
     var _this=this;
-    Object.defineProperty(this,'html',{
-      get:function(){
-        return _this.ele.innerHTML;
-      },set:function(v){
-        _this.ele.innerHTML=v;
-      }
-    });
-    Object.defineProperty(this,'text',{
-      get:function(){
-        return _this.ele.innerText;
-      },set:function(v){
-        _this.ele.innerText=v;
-      }
-    });
-    Object.defineProperty(this,'value',{
-      get:function(){
-        return _this.ele.value;
-      },set:function(v){
-        _this.ele.value=v;
-      }
-    });
-    Object.defineProperty(this,'class',{
-      get:function(){
-        return _this.ele._JT_attr('class');
-      },set:function(v){
-        if(v[0]!='+'&&v[0]!='-'){
-          _this.ele._JT_attr('class',v);
-        }else{
+    Object.defineProperties(this,{
+      'html':{
+        get:function(){
+          return _this.ele.innerHTML;
+        },set:function(v){
+          _this.ele.innerHTML=v;
+        }
+      },'text':{
+        get:function(){
+          return _this.ele.innerText;
+        },set:function(v){
+          _this.ele.innerText=v;
+        }
+      },'value':{
+        get:function(){
+          return _this.ele.value;
+        },set:function(v){
+          _this.ele.value=v;
+        }
+      },'class':{
+        get:function(){
+          return _this.ele._JT_attr('class');
+        },set:function(v){
+          if(v[0]!='+'&&v[0]!='-'){
+            _this.ele._JT_attr('class',v);
+          }else{
+            var a=v.split(';');
+            a.forEach(function(c){
+              if(c[0]!='+'&&c[0]!='-'){
+                _throw('添加或删除类 第一个字符必须是+或者-');
+              }
+              if(c[0]=='+'){
+                _this.ele._JT_addClass(c.substring(1));
+              }else{
+                _this.ele._JT_removeClass(c.substring(1));
+              }
+            });
+          }
+        }
+      },'outerHtml':{
+        get:function(){
+          return _this.ele.outerHTML;
+        },set:function(v){
+          console.error('outerHtml 不允许赋值');
+        }
+      },'attr':{
+        get:function(){
+          var a={};
+          for(var i=0;i<_this.ele.attributes.length;i++){
+            a[_this.ele.attributes[i].name]=_this.ele.attributes[i].textContent;
+          }
+          return a;
+        },set:function(v){
           var a=v.split(';');
           a.forEach(function(c){
-            if(c[0]!='+'&&c[0]!='-'){
-              _throw('添加或删除类 第一个字符必须是+或者-');
-            }
-            if(c[0]=='+'){
-              _this.ele._JT_addClass(c.substring(1));
+            if(c[0]=='-'){
+              _this.ele._JT_removeAttr(c.substring(1));
             }else{
-              _this.ele._JT_removeClass(c.substring(1));
+              var pair=c.split('=');
+              if(pair.length==0)pair[1]='';
+              if(pair[0]=='+'){
+                _this.ele._JT_attr(pair[0].substring(1),pair[1]);
+              }else{
+                _this.ele._JT_attr(pair[0],pair[1]);
+              }
             }
           });
         }
-      }
-    });
-    Object.defineProperty(this,'outerHtml',{
-      get:function(){
-        return _this.ele.outerHTML;
-      },set:function(v){
-        console.error('outerHtml 不允许赋值');
-      }
-    });
-    Object.defineProperty(this,'attr',{
-      get:function(){
-        var a={};
-        for(var i=0;i<_this.ele.attributes.length;i++){
-          a[_this.ele.attributes[i].name]=_this.ele.attributes[i].textContent;
-        }
-        return a;
-      },set:function(v){
-        var a=v.split(';');
-        a.forEach(function(c){
-          if(c[0]=='-'){
-            _this.ele._JT_removeAttr(c.substring(1));
-          }else{
+      },'css':{
+        get:function(){
+          return _this.ele.style;
+        },set:function(v){
+          var a=v.split(';');
+          a.forEach(function(c){
             var pair=c.split('=');
-            if(pair.length==0)pair[1]='';
-            if(pair[0]=='+'){
-              _this.ele._JT_attr(pair[0].substring(1),pair[1]);
-            }else{
-              _this.ele._JT_attr(pair[0],pair[1]);
-            }
-          }
-        });
-      }
-    });
-    Object.defineProperty(this,'css',{
-      get:function(){
-        return _this.ele.style;
-      },set:function(v){
-        var a=v.split(';');
-        a.forEach(function(c){
-          var pair=c.split('=');
-          _this.ele._JT_css(pair[0],pair[1]);
-        });
+            _this.ele._JT_css(pair[0],pair[1]);
+          });
+        }
       }
     });
   };
@@ -1663,15 +1681,8 @@ function _initJet(opt,calls){
   //   }
   // });
   Jet.$.id('__preload_j')._JT_remove();
+  _initOnDataChange(this,opt.ondatachange);
   
-  if(opt.ondatachange){
-    this.ondatachange=opt.ondatachange;
-    for(var k in opt.ondatachange){
-      Jet.Base.prototype.$regist.call(this,'.'+k,function(key,value){
-        opt.ondatachange[k].call(_this,value,key)
-      });
-    }
-  }
   if(opt.onready){
     _domSatte.ready(opt.onready,this);
   }
@@ -1692,7 +1703,108 @@ function _initJet(opt,calls){
   }
 };
 
+// function _initOnDataChange(jet,json){
+//   if(json){
+//     jet.ondatachange=json;
+//     for(var k in json){
+//       if(typeof json[k]==='function'){
+//         Jet.Base.prototype.$regist.call(jet,'.'+k,function(key,value){
+//           json[k].call(jet,value,key)
+//         });
+//       }else{
+//         if(!_isUd(json[k].$func)){
+//           Jet.Base.prototype.$regist.call(jet,'.'+k,function(key,value){
+//             json[k].$func.call(jet,value,key)
+//           });
+//         }
+//       }
+//     }
+//   }
+// }
+function _initOnDataChange(jet,json){
+  var path='';
+  var index=[];
+  if(json){
+    _initDcBase(jet,json,path,index,true);
+  }
+}
+function _initDcBase(jet,json,path,index,isFirst){
+  if(!_isUd(json.$each)){//数组
+    var arr=(new Function('jet','return jet'+path))(jet);
+    arr.__oldLength=arr.length;
+    _addRegistDc(jet,path,'',function(){//监测数组长度是否变化，如果变化重新绑定ondatachange
+      if(arr.__oldLength!==arr.length){
+        arr.forEach(function(item,i){
+          var _index=index.slice(0,index.length);
+          _index.push(i);
+          _initDcBase(jet,json.$each,path+'['+i+']',_index);
+        });
+      }
+    },index);
+    if(!_isUd(json.$func)){
+      _addRegistDc(jet,path,'',json.$func,index);
+    }
+    arr.forEach(function(item,i){
+      var _index=index.slice(0,index.length);
+      _index.push(i);
+      //var _p=path+((k==='$each')?('['+i+']'):('.'+k+'['+i+']'))
+      _initDcBase(jet,json.$each,path+'['+i+']',_index);
+    });
+  }else{
+    if(typeof json==='function'){
+      if(isFirst!==true){
+        _addRegistDc(jet,path,'',json,index);
+      }
+    }
+    if(!_isUd(json.$func)){
+      _addRegistDc(jet,path,'',json.$func,index);
+    }
+    for(var k in json){
+      if(k!=='$func'){
+        _initDcBase(jet,json[k],path+'.'+k,index);
+      }
+    }
+  }
+}
+function _addRegistDc(jet,path,attr,call,index){
+  Jet.Base.prototype.$regist.call(jet,path+attr,function(key,value){
+    call.call(jet,value,key,index)
+  });
+}
+// ondatachange:{
+//   string:{
+//       $func:function(value,key){
 
+//       }
+//   },
+//   string:function(value,key){
+      
+//   },
+//   json:{
+//       $func:function(value,key){
+          
+//       },
+//       key:function(){
+//           $func:function(value,key){
+          
+//           },
+//       }
+//   },
+//   array:{
+//       $func:function(item,i){
+          
+//       },$each:{
+//           $func:function(item,i){
+          
+//           },
+//           key:function(item,i){
+//               $func:function(item,i){
+              
+//               },
+//           }
+//       }
+//   }
+// }
 function _getInitData(item,attr,_this){
   var jet=_findParJet(item);
   var isJet=(typeof jet.$DOM!=='undefined');
@@ -1914,7 +2026,9 @@ Jet.Base=function(opt,type){
   if(this.type==_bind||this.type==_for||this.type==_text||this.type==_input){
       this.ele.__jet=this;
   }
-};Jet.Base.prototype.$makeChange=function(s){
+};
+Jet.Base.prototype=_createEmpty();
+Jet.Base.prototype.$makeChange=function(s){
   var call;
   if(s==undefined){
     call=this._tools._calls._func
@@ -1992,20 +2106,33 @@ function _getCallback(call,s){
       }
       return call[s];
   }else{
-      var _c=call;
+      var attr=s.substring(0,s.indexOf('['));
+      var _c=call[attr];
       a.forEach(function(item){
           var _ss=item.substring(1,item.length-1);
-          var attr=s.substring(0,s.indexOf('['));
-          if(!call[attr][_ss]){
+          if(!_c[_ss]){
             //_throw('索引为'+s+'的位置没有值');
             return null;
           }
-          _c=call[attr][_ss]
+          _c=_c[_ss]
       });
       return _c;
   }
 }
 var Super = function(){};
+function _jsonEven(a,b){
+  return JSON.stringify(a)===JSON.stringify(b)
+}
+function _indexOf(p,c){
+  if(typeof c==='object'){
+    for(var i=0;i<p.length;i++){
+      if(_jsonEven(c,p[i])){
+        return i;
+      }
+    }
+  }
+  return p.indexOf(c);
+}
 Super.prototype = Jet.Base.prototype;
 Array.prototype.$push=function(d){
   var _f=this._jet;
@@ -2081,9 +2208,13 @@ Array.prototype.$push=function(d){
   _call._JT_insertArray(calls,index);
   _defineArrayFormIndex(data,_data,_call,index);
   if(!_un)_f.refresh.insertArray.call(_f,arr,index);
-};Array.prototype.$remove=function(i,n){
-  if(typeof i=='object'){
-    i=this.indexOf(i);
+};Array.prototype.$remove=function(){
+  for(var i=0;i<arguments.length;i++){
+    this.$removeByIndex(_indexOf(this,arguments[i]));
+  }
+};Array.prototype.$removeByIndex=function(i,n){
+  if(i==-1){
+    return 
   }
   if(n==undefined)n=1
   var _f=this._jet;
@@ -2107,11 +2238,13 @@ Array.prototype.$push=function(d){
   }
   _data.splice(i,n);
   _call.splice(i,n);
-  _defineArrayFormIndex(data,_data,_call,i);
   data.length-=n;
+  //data.splice(i,n);
+  //_defineArrayFormIndex(data,_data,_call,i);
+  //data.length-=n;
   if(!_un)_f.refresh.remove.call(_f,i,n);
 };Array.prototype.$clear=function(){
-  this.$remove(0,this.length);
+  this.$removeByIndex(0,this.length);
 };Array.prototype.$replace=function(arr){
   this.$clear();
   this.$pushArray(arr);
@@ -2159,7 +2292,9 @@ Jet.$=_JT;
   _route_a="jrouter-active", 
   _routeout="Jout",
   _routeScript="JrouteScript",
-  _routeStyle="JrouteStyle",
+  //_routeStyle="JrouteStyle",
+  _globalStyle="JglobalStyle",
+  _scopeStyle="JscopeStyle",
   _commonStyle="JcommonStyle";
   
 function _initRouterConf(opt){
@@ -2289,6 +2424,9 @@ Jet.router={
   },
   back: function() {window.history.back()},
   forward: function() {window.history.forward()},
+  clearScoped:function(){
+    _JT.cls(_scopeStyle)._JT_remove();
+  },
   route:function(url,push,call){
     if(url._JT_has('http://')||url._JT_has('https://')){
       if(push===true){
@@ -2336,7 +2474,6 @@ Jet.router={
         item._JT_attr(_route_a,'');
         Jet.router.active=item;
       }
-  
       url=_checkUrl(url);
       var _r=false;
       if(!(url in Jet.router.router)){
@@ -2383,6 +2520,9 @@ Jet.router={
             item.call(Jet.router)
           }
         });
+        if(typeof JUI!=='undefined')
+          JUI.dialog.clear();
+        Jet.router.clearScoped();
         Jet.router.__xhr=_JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
           Jet.router.__xhr=null;
           var out=_JT.attr(_routeout)._JT_html(html);
@@ -2481,49 +2621,78 @@ function _loadScript(out){
 function _loadStyle(out){
   if('undefined'===typeof jet_css_conf){
     _reloadCssConf(function(){
-      _loadStyleCall(out);
+      _loadStyleCall(out,Jet.router.path);
     });
   }else{
     window.__css_conf_xhr=undefined;
-    _loadStyleCall(out);
+    _loadStyleCall(out,Jet.router.path);
   }
 }
-function _loadStyleCall(out){
-  var style=_JT.id(_routeStyle);
-  if(!style._JT_exist()){
-    style=_JT.ct('style')._JT_attr({
-      'id':_routeStyle,
-      'type':'text/css'
-    });
-    _JT.tag('head')._JT_append(style);
-  }
-  style._JT_empty();
-  var txt=[];
-  var styles=out._JT_findTag("style")._JT_toArray(false);
-  var index=-1;
-  for(var i=styles.length-1;i>=0;i--){
-    if(styles[i]._JT_hasAttr("src")){
-      index=i;
-      break;
-    }
-  }
-  styles._JT_each(function(item,i){
-    if(item._JT_hasAttr("src")){
-      _JT.load(Jet.router.conf.css+_dealSrc(item._JT_attr("src")),function(css){
-        txt[i]=_replaceCssVar(css);
-        if(i==index){
-          style._JT_html(txt.join(''));
-        }
-      });
-    }else{
-      txt[i]=_replaceCssVar(item._JT_html());
-    }
-    item._JT_remove();
+function _isUd(a){
+  return (typeof a==='undefined')
+}
+function _addScopeCss(attr){
+  var s=_JT.ct('style')._JT_attr({
+    'class':_scopeStyle,
+    'type':'text/css',
+    'scope-src':attr
   });
-  if(index==-1){//index==-1 时表示 没有外链加载的css
-    style._JT_html(txt.join(''));
-  }
+  return s;
+}
+function _loadStyleCall(out,attr){
+  var gStyle=_JT.id(_globalStyle);
+  var scopeCss=_addScopeCss(attr);
+  var txt=[];
+  var scopeTxt=[];
+  var styles=out._JT_findTag("style")._JT_toArray(false);
+  var cssTotal=styles.length;
+  var cssCount=0;
+  styles._JT_each(function(item,i){
+    var isScope=(item._JT_attr('scoped')!=='false');
+    if(isScope||(!isScope&&gStyle._styles.indexOf(attr)===-1)){
+      if(!isScope)gStyle._styles.push(attr);
+      if(item._JT_hasAttr("src")){
+        _JT.load(Jet.router.conf.css+_dealSrc(item._JT_attr("src")),function(css){
+          if(isScope){
+            scopeTxt[i]=_replaceCssVar(css);
+          }else{
+            //if(!cssExist)
+              txt[i]=_replaceCssVar(css);
+          }
+          cssCount++;
+          _checkLoadStyles(cssCount,cssTotal,gStyle,scopeCss,txt,scopeTxt)
+          item._JT_remove();
+        });
+      }else{
+        if(isScope){
+          scopeTxt[i]=_replaceCssVar(item._JT_html());
+        }else{
+          //if(!cssExist)
+            txt[i]=_replaceCssVar(item._JT_html());
+        }
+        cssCount++;
+        _checkLoadStyles(cssCount,cssTotal,gStyle,scopeCss,txt,scopeTxt)
+        item._JT_remove();
+      }
+    }else{
+      cssCount++;
+      item._JT_remove();
+    }
+  });
   _loadCommonCss();
+}
+function _checkLoadStyles(cssCount,cssTotal,gStyle,scopeCss,txt,scopeTxt,cssExist){
+  if(cssCount==cssTotal){
+    //if(!cssExist){
+      if(txt.length>0){
+        gStyle._JT_html(gStyle.innerHTML+txt.join(''));
+      }
+    //}
+    if(scopeTxt.length>0){
+      scopeCss._JT_html(scopeTxt.join(''))
+      _JT.tag('head').append(scopeCss);
+    }
+  }
 }
 //
 function _loadCommonCss(){
@@ -2566,8 +2735,8 @@ function _loadCommonCssCall(commonCss,length){
         if(commonCss.join('')!=_JT.id(_commonStyle).innerHTML){
           _JT.id(_commonStyle)._JT_html(commonCss.join(''))
         }
-      }else if(_JT.id(_routeStyle)._JT_exist()){
-        document.head.insertBefore(_JT.ct('style')._JT_attr('id',_commonStyle)._JT_html(commonCss.join('')),_JT.id(_routeStyle));
+      // }else if(_JT.id(_routeStyle)._JT_exist()){
+      //   document.head.insertBefore(_JT.ct('style')._JT_attr('id',_commonStyle)._JT_html(commonCss.join('')),_JT.id(_routeStyle));
       }else{
         document.head.appendChild(_JT.ct('style')._JT_attr('id',_commonStyle)._JT_html(commonCss.join('')));
       }
@@ -2722,46 +2891,11 @@ function _loadCompScript(out,attr){
 function _loadCompStyle(out,attr){
   if('undefined'===typeof jet_css_conf){
     _reloadCssConf(function(){
-      _loadCompStyleCall(out,attr);
+      _loadStyleCall(out,attr);
     });
   }else{
     window.__css_conf_xhr=undefined;
-    _loadCompStyleCall(out,attr);
-  }
-}
-function _loadCompStyleCall(out,attr){
-  if(!_JT.attr('load-style="'+attr+'"')._JT_exist()){
-    var style=_JT.ct('style')._JT_attr({
-      'load-style':attr,
-      'type':'text/css'
-    });
-    _JT.tag('head')._JT_append(style);
-    style._JT_empty();
-    var txt=[];
-    var styles=out._JT_findTag("style")._JT_toArray(false);
-    var index=-1;
-    for(var i=styles.length-1;i>=0;i--){
-      if(styles[i]._JT_hasAttr("src")){
-        index=i;
-        break;
-      }
-    }
-    styles._JT_each(function(item,i){
-      if(item._JT_hasAttr("src")){
-        _JT.load(Jet.router.conf.css+_dealSrc(item._JT_attr("src")),function(css){
-          txt[i]=_replaceCssVar(css);
-          if(i==index){
-            style._JT_html(txt.join(''));
-          }
-        });
-      }else{
-        txt[i]=_replaceCssVar(item._JT_html());
-      }
-      item._JT_remove();
-    });
-    if(index==-1){
-      style._JT_html(txt.join(''));
-    }
+    _loadStyleCall(out,attr);
   }
 }
 function _dealSrc(s){
@@ -2773,7 +2907,7 @@ function _dealSrc(s){
 }
 /*valid*********************************************************************************/
 function _getJdomEle(b,ele){
-  if('undefined'==typeof b)return b;
+  if('undefined'==typeof b)return document.body;
   if(typeof b=='string'){
     var s=b;
     if(ele){
@@ -2798,7 +2932,11 @@ Jet.valid={
     if (b == undefined) {
       c = _JT.attr(_valid)
     } else {
-      c = b._JT_findAttr(_valid)
+      if(b._JT_hasAttr(_valid)){
+        c=b;
+      }else{
+        c = b._JT_findAttr(_valid)
+      }
     }
     c._JT_each(function(a) {
       if(!a.__valided){
@@ -2895,6 +3033,31 @@ Jet.valid={
   },
   validInput:_validInput,
   addValidValue:_addValidValue,
+  clearValid:function(obj){
+    obj=_getJdomEle(obj);
+    if(obj._JT_hasAttr(_valid)){
+      _clearValid(obj);
+    }else{
+      obj._JT_findAttr(_valid)._JT_each(function(item){
+        _clearValid(item);
+      })
+    }
+  },
+  resetValid:function(obj){
+    obj=_getJdomEle(obj);
+    if(obj._JT_hasAttr(_valid)){
+      _resetValid(obj);
+    }else{
+      obj._JT_findAttr(_valid)._JT_each(function(item){
+        _resetValid(item);
+      })
+    }
+  },
+  addValid:function(obj,type){
+    obj=_getJdomEle(obj);
+    obj._JT_attr(_valid,type);
+    Jet.valid.init(obj);
+  },
   onOnePass: function(c) {
     _onOnePass=_checkFunction(c);
   },
@@ -2902,70 +3065,77 @@ Jet.valid={
     _onOneFail=_checkFunction(c);
   }
 }
-Object.defineProperty(Jet.valid,'language',{
-  get:function(){return Jet.valid.__lang;},
-  set:function(val){
-    Jet.valid.__lang=val.toUpperCase()
+function _clearValid(obj){
+  _resetValid(obj)
+  obj._JT_removeAttr("jvalid jet-value");
+}
+function _resetValid(obj){
+  if (obj._JT_hasClass("jet-unpass")) {
+    obj._JT_removeClass("jet-unpass")._JT_val(obj._JT_validValue)
   }
-});
-Object.defineProperty(Jet.valid,'useJUI',{
-  get:function(){return Jet.valid.__useJUI;},
-  set:function(val){
-    if(typeof JUI!=='undefined'){
-      Jet.valid.__useJUI=val
+}
+Object.defineProperties(Jet.valid,{
+  'language':{
+    get:function(){return Jet.valid.__lang;},
+    set:function(val){
+      Jet.valid.__lang=val.toUpperCase()
     }
-  }
-});
-Object.defineProperty(Jet.valid,'useDefaultStyle',{
-  get:function(){return Jet.valid.__default;},
-  set:function(val){
-    if(Jet.valid.__default!==val){
-      if(Jet.valid.__useOnInput===true&&val===true){
-        console.warn('useOnInput 模式下不可使用默认样式');
-      }else{
-        Jet.valid.__default=val;
-        Jet.valid.__lastUseDef=val;
+  },'useJUI':{
+    get:function(){return Jet.valid.__useJUI;},
+    set:function(val){
+      if(typeof JUI!=='undefined'){
+        Jet.valid.__useJUI=val
+      }
+    }
+  },'useDefaultStyle':{
+    get:function(){return Jet.valid.__default;},
+    set:function(val){
+      if(Jet.valid.__default!==val){
+        if(Jet.valid.__useOnInput===true&&val===true){
+          console.warn('useOnInput 模式下不可使用默认样式');
+        }else{
+          Jet.valid.__default=val;
+          Jet.valid.__lastUseDef=val;
+          if(val===false){
+            _JT.cls("jet-unpass")._JT_each(function(a) {
+              _checkIsPw(a);
+              a._JT_removeClass("jet-unpass")._JT_val(a._JT_validValue);
+              a._JT_validValue=undefined;
+            })
+          }
+        }
+      }
+    }
+  },'useOnInput':{
+    get:function(){return Jet.valid.__useOnInput;},
+    set:function(val){
+      if(Jet.valid.__useOnInput!==val){
+        Jet.valid.__useOnInput=val;
         if(val===false){
-          _JT.cls("jet-unpass")._JT_each(function(a) {
-            _checkIsPw(a);
-            a._JT_removeClass("jet-unpass")._JT_val(a._JT_validValue);
-            a._JT_validValue=undefined;
-          })
+          if(Jet.valid.__default!==Jet.valid.__lastUseDef){
+            Jet.valid.useDefaultStyle=Jet.valid.__lastUseDef
+          }
+        }else{
+          if(Jet.valid.useDefaultStyle){
+            Jet.valid.useDefaultStyle=false;
+            Jet.valid.__lastUseDef=true;
+          }
         }
       }
     }
-  }
-});
-Object.defineProperty(Jet.valid,'useOnInput',{
-  get:function(){return Jet.valid.__useOnInput;},
-  set:function(val){
-    if(Jet.valid.__useOnInput!==val){
-      Jet.valid.__useOnInput=val;
-      if(val===false){
-        if(Jet.valid.__default!==Jet.valid.__lastUseDef){
-          Jet.valid.useDefaultStyle=Jet.valid.__lastUseDef
-        }
-      }else{
-        if(Jet.valid.useDefaultStyle){
-          Jet.valid.useDefaultStyle=false;
-          Jet.valid.__lastUseDef=true;
-        }
+  },'showInPlaceHolder':{
+    get:function(){return Jet.valid.__placeholder;},
+    set:function(val){
+      Jet.valid.__placeholder=val;
+      if(val===true){
+        _JT.attr(_valid)._JT_each(function(a) {
+          a._JT_attr("placeholder", _getValueText(a._JT_attr(_valid)))
+        })
+      }else if(val===false){
+        _JT.attr(_valid)._JT_each(function(a) {
+          a._JT_removeAttr("placeholder")
+        })
       }
-    }
-  }
-});
-Object.defineProperty(Jet.valid,'showInPlaceHolder',{
-  get:function(){return Jet.valid.__placeholder;},
-  set:function(val){
-    Jet.valid.__placeholder=val;
-    if(val===true){
-      _JT.attr(_valid)._JT_each(function(a) {
-        a._JT_attr("placeholder", _getValueText(a._JT_attr(_valid)))
-      })
-    }else if(val===false){
-      _JT.attr(_valid)._JT_each(function(a) {
-        a._JT_removeAttr("placeholder")
-      })
     }
   }
 });
@@ -3546,6 +3716,7 @@ Jet.For.prototype.refresh=function(key){
     this._tools._jets.push(new Jet.Bind(_opt));
   }
   _initOneForBindTool(this,item,i)
+  this.$makeChange();
 };Jet.For.prototype.refresh.prep=function(){
   if(this._switch){
     var _t=this._data[this.name]._JT_first()[this._type];
@@ -3637,6 +3808,7 @@ function _refreshIndex(start){
       }
     });
   }
+  this.$makeChange();
 }
 function _initForRule(ele){
   if(this.ele._JT_child(0)!=undefined&&this.ele._JT_child(0)._JT_hasAttr(_bind)&&this.ele._JT_child(0)._JT_attr(_bind)._JT_has('=')){//switch模式  $each.t=1
@@ -3789,11 +3961,14 @@ Jet.Text=function(opt){
 Jet.Text.prototype = new Super();
 Jet.Text.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func.call(this.jet,this.$get()):this.$get();
-    if(this.isHtml){
-      this.ele._JT_html(val);
-    }else{
-      this.ele._JT_txt(val);
+    var d=this.$get();
+    if(!_isUd(d)){
+      var val=(this.func)?this.func.call(this.jet,d):d;
+      if(this.isHtml){
+        this.ele._JT_html(val);
+      }else{
+        this.ele._JT_txt(val);
+      }
     }
   }
 };Jet.Text.prototype.$get=function(){//indexs
@@ -3857,13 +4032,16 @@ Jet.Input=function(opt){
 Jet.Input.prototype = new Super();
 Jet.Input.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func.call(this.jet,this.$get()):this.$get();
-    if(this.isContent){
-      if(val!==((this.isNum)?parseFloat(this.ele.innerHTML):this.ele.innerHTML))
-        this.ele._JT_html(val);
-    }else{
-      if(val!==((this.isNum)?parseFloat(this.ele.value):this.ele.value))
-        this.ele._JT_val(val);
+    var d=this.$get();
+    if(!_isUd(d)){
+      var val=(this.func)?this.func.call(this.jet,d):d;
+      if(this.isContent){
+        if(val!==((this.isNum)?parseFloat(this.ele.innerHTML):this.ele.innerHTML))
+          this.ele._JT_html(val);
+      }else{
+        if(val!==((this.isNum)?parseFloat(this.ele.value):this.ele.value))
+          this.ele._JT_val(val);
+      }
     }
   }
 };Jet.Input.prototype.$get=function(){
@@ -3959,19 +4137,21 @@ Jet.If.prototype.$get=function(){
     this.index==i;
   }
   var d=this.$get();
-  var opt={
-    ele:this.ele,
-    data:d,
-    jet:this,
-    root:this.jet
-  }
-  //if(this.exp.call(opt,d)===true){//弃用原因 不好做数据改变的检测
-  // if(this.exp.toString()._JT_has('"a"'))
-  // console.loconsole.log(this.exp)
-  if(this.exp(d,this.jet)===true){
-    this.func_true.call(this.jet,opt);
-  }else{
-    this.func_false.call(this.jet,opt);
+  if(!_isUd(d)){
+    var opt={
+      ele:this.ele,
+      data:d,
+      jet:this,
+      root:this.jet
+    }
+    //if(this.exp.call(opt,d)===true){//弃用原因 不好做数据改变的检测
+    // if(this.exp.toString()._JT_has('"a"'))
+    // console.loconsole.log(this.exp)
+    if(this.exp(d,this.jet)===true){
+      this.func_true.call(this.jet,opt);
+    }else{
+      this.func_false.call(this.jet,opt);
+    }
   }
 };
 function _registForWrapperVar(_this,content){
@@ -4365,8 +4545,10 @@ Jet.Attr.prototype.$get=function(){
   }
 };Jet.Attr.prototype.refresh=function(i){
   var d=this.$get();
-  for(var k in this.attrs){
-    this.setFunc.call(this.ele,k,this.attrs[k](d,this.jet))
+  if(!_isUd(d)){
+    for(var k in this.attrs){
+      this.setFunc.call(this.ele,k,this.attrs[k](d,this.jet))
+    }
   }
 };
 function _initAttr(opt){
@@ -4403,6 +4585,237 @@ function _initOneAttr(attr){
 // Jstyle="color:aa;font-size:aa"
 Jet.Style=Jet.Attr;
 Jet.Show=Jet.If;
+
+/*module*******************************************************************/
+var _currentModule='',_export='';
+var _modules=_createEmpty();//文件与模块名的映射
+var _m_call=_createEmpty();//模块名的回调函数，用于触发模块加载之后的回调函数
+var _addIntoModCall=function(name,f){
+  if(_m_call[name]===undefined){
+    _m_call[name]=[];
+  }
+  _m_call[name].push(f);
+}
+var _exeModCall=function(name,mod){
+  if(_m_call[name]!==undefined&&_m_call[name].length>0){
+    var n=_m_call[name].length;
+    var index=0;
+    _m_call[name].forEach(function(f){
+      f(mod);
+      index++;
+      if(index==n){
+        _m_call[name]=[];
+      }
+    });
+  }
+}
+//var __call=null;
+Jet.$module=_createEmpty();
+//Jet.prototype.$module=Jet.$module;
+//定义一个模块 需要import才能执行
+//rely是当前模块的依赖项，不是必须
+var _check_is_new=false;
+var _export_is_new=false;
+Jet.$define=function(name,rely,call){
+  if(_check_is_new||typeof Jet.$module[name]==='undefined'){
+    _currentModule=name;
+    _export=name;
+    var _isNew=_check_is_new;
+    if(arguments.length===3){//有依赖项
+      rely[rely.length]=function(mods){
+        //_currentModule=name;
+        _export=name;
+        _export_is_new=_isNew;
+        call.call(Jet,mods);
+      }
+      Jet.$import.apply(Jet,rely)
+    }else{//无依赖项
+      _export=name;
+      _export_is_new=_isNew;
+      rely.call(Jet);
+    }
+  }
+}
+//暴露接口 需要import才能执行
+Jet.$export=function(call,json){
+//Jet.$export=function(json){
+  if(arguments.length==2){
+    if(_export_is_new==false){
+      Jet.$module[_export]=json;
+    }
+    _exeModCall(_export,json);
+    call(json);
+  }else{
+    if(_export_is_new==false){
+      Jet.$module[_export]=call;
+    }
+    json=call;
+  }
+  if(json.$init!==undefined){
+    json.$init();
+    delete json.$init;
+  }
+  // if(json.__call!==undefined){
+  //   json.__call();
+  //   delete json.__call;
+  // }
+}
+//var mod=Jet.$use('name')
+Jet.$use=function(name){
+  if(arguments.length==1){
+    return Jet.$module[name];
+  }else{
+    var ms={};
+    for(var i=0;i<arguments.length;i++){
+      var json=_getKeyAndMod(arguments[i]);
+      ms[json.key]=Jet.$module[json.mod];
+    }
+    return ms;
+  }
+}
+Jet.prototype.$use=function(name){
+  return Jet.$use(name);
+}
+function _jsFile(file){
+  var src=_dealSrc(file);
+  if(!src._JT_has('.js')){
+    src=src+'.js'
+  }
+  return src;
+}
+function _loadOneModule(src,key,isNew,call){ 
+  _JT.load(Jet.router.conf.js+src,function(code){
+    code=('//# sourceURL='+src+'\r\n'+code);
+    _check_is_new=(isNew===false)?false:true;
+    if(call){
+      //为了让回掉函数在依赖执行完之后再执行
+      //code=code.replace('.$export({','.$export({__call:function(){__call(this)},');
+      code=code.replace('.$export(','.$export(__call,');
+      (new Function('__call',code))(function(obj){
+        call(obj,key)
+      });
+      //call(Jet.$module[_currentModule],key);
+    }else{
+      (new Function(code))();
+    }
+    if(typeof _modules[src]==='function'){
+      _modules[src](_currentModule);
+    }
+    _modules[src]=_currentModule;
+  })
+}
+//加载模块 参数是模块名字，可以使用 as 来起别名，引入之后全局可用
+//若是之前已经引入过对应模块，则会在 Jet.$module 中查找对应模块返回
+//最后一个参数是回调函数，可不填，回调参数是当前所有引入的模块的json对象
+Jet.$import=function(){
+  var n=arguments.length;
+  var index=0,callback=null,modules=_createEmpty();
+  if(typeof arguments[n-1]==='function'){
+    callback=arguments[n-1]
+    n--;
+  }
+  for(var i=0;i<n;i++){
+    var item=arguments[i];
+    var isNew=_checkIsNewMod(item);//是否新建一个模块
+    if(isNew!==false){
+      item=isNew;
+    }
+    var json=_getKeyAndMod(item);
+    var src=_jsFile(json.mod);
+    if(typeof _modules[src]!=='undefined'&&isNew===false){
+      if(callback!==null){
+        var _func=function(modName){
+          var mod=Jet.$use(modName);
+          var func=function(m){
+            index++;
+            modules[(item._JT_has(' as ')?json.key:modName)]=m;
+            if(index===n){
+              callback(modules);
+            }
+          }
+          if(mod!==undefined){
+            func(mod);
+          }else{
+            _addIntoModCall(modName,func)
+          }
+        }
+        if(_modules[src]==='__loading'){
+          _modules[src]=_func;
+        }else{
+          _func(_modules[src]);
+        }
+      }
+    }else{
+      _modules[src]='__loading';
+      _loadOneModule(src,json.key,isNew,function(mod,key){
+        if(callback!==null){
+          
+          index++;
+          modules[(item._JT_has(' as ')?key:_export)]=mod;
+          if(index===n){
+            callback(modules);
+          }
+        }
+      });
+    }
+  }
+  // if(callback!==null&&index===n){
+  //   callback(modules);
+  // }
+}
+function _checkIsNewMod(item){
+  if(!item._JT_has('new(')){
+    return false;
+  }
+  return item.substring(4,item.indexOf(")"))+item.substring(item.indexOf(")")+1)
+}
+//在Jet元素中可以使用 this.$import 来在当前元素中生成 一个模块，可以使用this.$module.name 来使用，参数与Jet.$import一致
+Jet.prototype.$import=function(name){
+  var _this=this;
+  if(typeof arguments[arguments.length-1]==='function'){
+    var func=arguments[arguments.length-1];
+    arguments[arguments.length-1]=function(mods){
+      func(mods);
+      _addModule(_this,mods)
+    }
+  }else{
+    arguments[arguments.length]=function(mods){
+      _addModule(_this,mods)
+    }
+    arguments.length++;
+  }
+  Jet.$import.apply(null,arguments);
+}
+var _addModule=function(_this,mods){
+  if(typeof _this.$module==='undefined'){
+    _this.$module=mods;
+  }else{
+    for(var k in mods){
+      _this.$module[k]=mods[k];
+    }
+  }
+}
+function _importBase(obj,key,mod){
+  if(typeof mod==='string'){
+    obj[key]=Jet.$use(mod);
+  }else{
+    obj[key]=mod
+  }
+}
+function _getKeyAndMod(name){
+  var arr=name.split(' as ');
+  if(arr.length===2){
+    return {
+      key:arr[1],
+      mod:arr[0]
+    }
+  }else{
+    return {
+      key:name,
+      mod:name
+    }
+  }
+}
 
 
 //})();

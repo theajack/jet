@@ -2545,11 +2545,6 @@ var _jui_change='jui-change';
 $J.ready(function(){
     JUI.init();
 });
-function _createEmpty(){
-  var a={};
-  a.__proto__=null;
-  return a;
-}
 window.JUI={
     _jui_mounted:[],
     init:function(item){
@@ -2564,7 +2559,6 @@ window.JUI={
         JUI.DIALOG.init(item);
         JUI.PAGE.init(item);
         JUI.TAB.init(item);
-        JUI.SCREEN_DRAG.init(item);
         JUI._jui_mounted.forEach(function(f){
             f();
         });
@@ -2601,10 +2595,9 @@ window.JUI={
                   }
                 }
             });
-            // $J.attr('disabled').on('click',null);
-            // $J.select('.j-color[disabled] .j-color-icon').on('click',null);
-            // $J.select('.j-date[disabled] .j-date-v').on('click',null).attr('disabled','true');
-            // $J.select('.j-select[disabled] .j-color-icon').on('click',null);
+            $J.attr('disabled').on('click',null);
+            $J.select('.j-color[disabled] .j-color-icon').on('click',null);
+            $J.select('.j-date[disabled] .j-date-v').on('click',null).attr('disabled','true');
             JUI._jui_mounted.remove(this);
           })
         }
@@ -2659,9 +2652,6 @@ function _useBindSingle(opt){
     }
     //jui[jattr]._jet=(_jet==jet)?_jet:d[attr]._jet
     //Object.defineProperty(_jet.get(),attr,opt);
-}
-function _isDisabled(ele){
-  return (ele.hasAttr('disabled')&&ele.attr('disabled')!=="false")
 }
 function _getCallbackForBind(jet,jui,func){
   if(func!==""){
@@ -2723,12 +2713,6 @@ JUI.msg.warn=function(txt,time){_msgDefault(txt,time,JUI.MESSAGE.warn);};
 JUI.msg.error=function(txt,time){_msgDefault(txt,time,JUI.MESSAGE.error);};
 JUI.msg.info=function(txt,time){_msgDefault(txt,time,JUI.MESSAGE.info);};
 JUI.msg.close=function(){if(JUI.MESSAGE.msgList.length>0)JUI.MESSAGE.msgList[0].close()};
-JUI.msg.isOpen=function(){return (JUI.MESSAGE.msgList.length>0)};
-JUI.msg.clear=function(){
-  JUI.MESSAGE.msgList.forEach(function(m){
-    m.close();
-  });
-};
 function _msgDefault(txt,time,type){
     if(typeof txt=='string')
         JUI.msg(txt,type,time);
@@ -2736,14 +2720,6 @@ function _msgDefault(txt,time,type){
         txt.type=type;
         JUI.msg(txt);
     }
-}
-JUI.confirm.isOpen=function(){
-  return (JUI.CONFIRM.confirmList.length>0)
-}
-JUI.confirm.clear=function(){
-  JUI.CONFIRM.confirmList.forEach(function(c){
-    c.close();
-  });
 }
 JUI.confirm.success=function(txt,call){_confirmDefault(txt,call,JUI.CONFIRM.success);};
 JUI.confirm.warn=function(txt,call){_confirmDefault(txt,call,JUI.CONFIRM.warn);};
@@ -2803,8 +2779,7 @@ JUI.SELECT=function(opt){
             _this.onchange.call(_this);
         }
     });
-};
-JUI.SELECT.prototype=_createEmpty();
+} 
 JUI.SELECT._name='j-select';
 JUI.SELECT.option_txt='j-option';
 JUI.SELECT.init=function(item){
@@ -2839,11 +2814,11 @@ JUI.SELECT.init=function(item){
                 if(_item.hasAttr('default')){
                     def=_item;
                 }
-                var val=getVoT(_item);
+                var val=getValueOrText(_item);
                 if(val==''){
                     _throw('SELECT:value值不能设置为空');
                 }
-                _jui.options[val]=getToH(_item);
+                _jui.options[val]=_item.txt().trim();
                 if(_item.hasAttr('disabled')){
                     _item.addClass('c-disabled').clk(function(){
                         _stopPro(event);
@@ -2854,30 +2829,23 @@ JUI.SELECT.init=function(item){
                     })
                 }
             });
-            _jui.value=getVoT(def);
+            _jui.value=getValueOrText(def);
             item.append([ow,vw]).clk(function(){
-              if(!_isDisabled(this)){
                 this.child(0).toggleClass('s-open');
                 this.child(1).child(1).toggleClass('s-open');
-              }
             },true);
             item.$jui=_jui;
           }
         }
     });
 };
-//获取value或者text或者Html
-var getVoT=function(o){
-  return ((o.hasAttr('value'))?o.attr('value'):getToH(o));
+
+var getValueOrText=function(o){
+    return ((o.hasAttr('value'))?o.attr('value'):o.txt().trim());
 }
-//visiable hidden的时候获取不到innerText
-//获取text或者Html
-var getToH=function(o){
-  return ((o.innerText==='')?o.html():o.txt()).trim();
-}
-/*MESSAGE**************************************** */
+
 JUI.MESSAGE=function(opt){
-    this.text=(opt.text===undefined)?'提示文字为空':opt.text;
+    this.txt=opt.text||'提示文字为空';
     this.type=opt.type||JUI.MESSAGE.info;
     this.time=opt.time||2300;
     this.hover=opt.hover||true;
@@ -2888,9 +2856,7 @@ JUI.MESSAGE=function(opt){
     if(this.autoClose!=false){
         this.start();
     }
-};
-JUI.MESSAGE.prototype=_createEmpty();
-JUI.MESSAGE.prototype.pause=function(){
+};JUI.MESSAGE.prototype.pause=function(){
   clearTimeout(this.timer);
 };JUI.MESSAGE.prototype.start=function(){
   var _this=this;
@@ -2905,7 +2871,7 @@ JUI.MESSAGE.prototype.pause=function(){
         _c.clk(function(){
             _this.close();
         });
-        var _t=$J.ct('div.j-msg-txt').txt(this.text);
+        var _t=$J.ct('div.j-msg-txt').txt(this.txt);
     this.ele.append([_i,_c,_t]);
     $J.body().append(this.ele);
     JUI.MESSAGE.msgList.push(this);
@@ -2956,18 +2922,15 @@ JUI.MESSAGE.res={
 //     autoClose:true,
 //     call:function(){console.log('close')},
 // })
-/*CONFIRM***************************************** */
 JUI.CONFIRM=function(opt){
     this.title=opt.title||'确认框'
-    this.text=opt.text||'是否确认该操作？';
+    this.txt=opt.text||'是否确认该操作？';
     this.type=opt.type||null;
     this.onconfirm=opt.onconfirm||null;
     this.oncancel=opt.oncancel||null;
     this.onclose=opt.onclose||null;
     this.init();
-};
-JUI.CONFIRM.prototype=_createEmpty();
-JUI.CONFIRM.prototype.init=function(){
+};JUI.CONFIRM.prototype.init=function(){
     var _this=this;
     this.ele=$J.ct('div.j-confirm');
         var _close=$J.ct('i.j-confirm-close.j-icon.icon-times');
@@ -2976,7 +2939,7 @@ JUI.CONFIRM.prototype.init=function(){
                 _t.addClass(this.type).append($J.ct('i.j-icon.icon-'+JUI.CONFIRM.res.icon[this.type]));
             }
         _t.append($J.ct('span').txt(this.title));
-        var _c=$J.ct('div.j-confirm-c').html(this.text);
+        var _c=$J.ct('div.j-confirm-c').html(this.txt);
         var _b=$J.ct('div.j-confirm-bw');
             var _ok=$J.ct('button.j-confirm-b.j-btn').txt('确定');
             var _cancel=$J.ct('button.j-confirm-b.j-btn.info').txt('取消');
@@ -2998,11 +2961,6 @@ JUI.CONFIRM.prototype.init=function(){
         _this.close();
     });
     $J.body().append(this.ele);
-    new JUI.SCREEN_DRAG({
-        ele:this.ele,
-        drag:this.ele,
-        type:'confirm'
-    });
     JUI.CONFIRM.confirmList.push(this);
 };JUI.CONFIRM.prototype.close=function(){
     this.ele.addClass('j-confirm-hide');
@@ -3059,7 +3017,6 @@ JUI.RADIO_GROUP=function(opt){
         }
     });
 };
-JUI.RADIO_GROUP.prototype=_createEmpty();
 JUI.RADIO_GROUP._name='j-radio-group';
 JUI.RADIO_GROUP.def_r_group=null;
 JUI.RADIO_GROUP.init=function(item){
@@ -3105,15 +3062,13 @@ function _initOneRadioGroup(item,isBody){
     }
 
     var arr=[];
-    if(item.hasClass('aaa'))
-    console.log('aa')
     item.findClass(JUI.RADIO._name).each(function(radio){
         if(!radio.$jui){
-            var value=getVoT(radio);
+            var value=getValueOrText(radio);
             if(arr.indexOf(value)!=-1)
                 _throw('同一组 radio 中不允许有相同的value值');
             arr.push(value);
-            var r_jui=new JUI.RADIO({ele:radio,text:getToH(radio),value:value,group:_jui});
+            var r_jui=new JUI.RADIO({ele:radio,text:radio.txt(),value:value,group:_jui});
             if(r_jui.checked){
                 _jui.value=r_jui.value;
             }
@@ -3133,10 +3088,9 @@ JUI.RADIO=function(opt){
     this.onchange=opt.onchange||function(){};
     this.text=opt.text||'';
     this.group=opt.group||null;
-    this.value=opt.value||getVoT(opt.ele);
+    this.value=opt.value||getValueOrText(opt.ele);
     var _this=this;
-    Object.defineProperties(_this,{
-      'checked':{
+    Object.defineProperty(_this,'checked',{
         configurable:true,
         get:function(){
             return _this._checked;
@@ -3151,8 +3105,8 @@ JUI.RADIO=function(opt){
                 }
             }
         }
-      },
-      '$checked':{
+    });
+    Object.defineProperty(_this,'$checked',{
         configurable:true,
         get:function(){
             return _this._checked;
@@ -3160,22 +3114,20 @@ JUI.RADIO=function(opt){
             _this._checked=v;
             _this.onchange.call(_this);
         }
-      }
     });
     this.init();
 };
-JUI.RADIO.prototype=_createEmpty();
 JUI.RADIO.prototype.init=function(){
-    //var _jui=new JUI.RADIO({ele:item,text:item.txt(),value:getVoT(item)});
+    //var _jui=new JUI.RADIO({ele:item,text:item.txt(),value:getValueOrText(item)});
     var _jui=this;
     var item=this.ele;
     item.html('<div class="j-radio-cw"><div class="j-radio-c"></div></div>'+
         '<span class="j-radio-t">'+_jui.text+'</span>');
-    item.clk(function(){
-      if(!_isDisabled(this)){
-        _jui.group.value=_jui.value;
-      }
-    },true);
+    if(!item.hasAttr('disabled')||item.attr('disabled')=="false"){
+        item.clk(function(){
+            _jui.group.value=_jui.value;
+        },true);
+    }
     _jui.onchange=function(){
         if(_jui.checked){
             _jui.ele.addClass('j-checked');
@@ -3232,7 +3184,6 @@ JUI.CHECKBOX_GROUP=function(opt){
 
     //需重新定义 没有jet框架时的属性
 };
-JUI.CHECKBOX_GROUP.prototype=_createEmpty();
 JUI.CHECKBOX_GROUP._name='j-checkbox-group';
 JUI.CHECKBOX_GROUP.def_c_group=null;
 JUI.CHECKBOX_GROUP.init=function(item){
@@ -3276,9 +3227,8 @@ function _initOneCheckGroup(item,isBody){
         }
     }
     item.findClass(JUI.CHECKBOX._name).each(function(check){
-        if(!check._hasInitJui){
-            check._hasInitJui=true;
-            var r_jui=new JUI.CHECKBOX({ele:check,text:getToH(check),group:_jui});
+        if(!check.$jui){
+            var r_jui=new JUI.CHECKBOX({ele:check,text:check.txt(),group:_jui});
             if(r_jui.checked){
                 _jui.value.push(r_jui.value);
             }
@@ -3295,29 +3245,29 @@ JUI.CHECKBOX=function(opt){
     this.onchange=opt.onchange||function(){};
     this.text=opt.text||'';
     this.group=opt.group||null;
-    this.value=getVoT(opt.ele);
+    this.value=getValueOrText(opt.ele);
     var _this=this;
-    Object.defineProperties(_this,{
-      'checked':{
-          configurable:true,
-          get:function(){
+    Object.defineProperty(_this,'checked',{
+        configurable:true,
+        get:function(){
             return _this._checked;
-          },set:function(v){
+        },set:function(v){
             if(typeof v!='boolean')_throw('checkbox.checked只支持布尔类型');
             if(_this._checked!=v){
-              _this._checked==v;
-              if(v){
-                if(!_this.group.value.has(_this.value)){
-                  _this.group.value.$push(_this.value)
+                _this._checked==v;
+                if(v){
+                    if(!_this.group.value.has(_this.value)){
+                        _this.group.value.$push(_this.value)
+                    }
+                }else{
+                    if(_this.group.value.has(_this.value)){
+                        _this.group.value.$remove(_this.group.value.indexOf(_this.value))
+                    }
                 }
-              }else{
-                if(_this.group.value.has(_this.value)){
-                  _this.group.value.$remove(_this.group.value.indexOf(_this.value))
-                }
-              }
             }
-          }
-      },'$checked':{
+        }
+    });
+    Object.defineProperty(_this,'$checked',{
         configurable:true,
         get:function(){
             return _this._checked;
@@ -3325,25 +3275,20 @@ JUI.CHECKBOX=function(opt){
             _this._checked=v;
             _this.onchange.call(_this);
         }
-      }
     });
     this.init();
 };
-JUI.CHECKBOX.prototype=_createEmpty();
 JUI.CHECKBOX.prototype.init=function(){
-    //var _jui=new JUI.CHECKBOX({ele:item,text:item.txt(),value:getVoT(item)});
+    //var _jui=new JUI.CHECKBOX({ele:item,text:item.txt(),value:getValueOrText(item)});
     var _jui=this;
     var item=this.ele;
     item.html('<div class="j-checkbox-cw"><i class="j-icon icon-check j-checkbox-c"></i></div>'+
         '<span class="j-checkbox-t">'+_jui.text+'</span>');
-        
     item.clk(function(){
-      if(!_isDisabled(this)){
         var arr=_jui.group._value.clone();
         if(arr.has(_jui.value))arr.remove(_jui.value);
         else arr.push(_jui.value);
         _jui.group.value=arr;
-      }
     },true);
     _jui.onchange=function(){
         if(_jui.checked){
@@ -3381,7 +3326,6 @@ JUI.CHECKBOX.init=function(opt){
   }
 };
 JUI.CHECKBOX._name='j-checkbox';
-/*SWITCH****************************************** */
 JUI.SWITCH=function(opt){
     this.ele=opt.ele||null;
     this._value=opt.value||false;
@@ -3402,9 +3346,8 @@ JUI.SWITCH=function(opt){
     });
     this.init();
 };
-JUI.SWITCH.prototype=_createEmpty();
 JUI.SWITCH.prototype.init=function(){
-    //var _jui=new JUI.SWITCH({ele:item,text:item.txt(),value:getVoT(item)});
+    //var _jui=new JUI.SWITCH({ele:item,text:item.txt(),value:getValueOrText(item)});
     var _jui=this;
     var item=this.ele;
     var child=item.child();
@@ -3412,16 +3355,16 @@ JUI.SWITCH.prototype.init=function(){
         if(child.length>2){
             _throw('switch 组件只能有两个元素');
         }
-        var v=getVoT(child[0]);
+        var v=getValueOrText(child[0]);
         if(v==='')v=true;
         this._valueList.push(v);
-        var _on_t=$J.ct('div.j-switch-t.j-st-on').txt(getToH(child[0])).attr('value',v);
-        v=getVoT(child[1]);
+        var _on_t=$J.ct('div.j-switch-t.j-st-on').txt(child[0].txt()).attr('value',v);
+        v=getValueOrText(child[1]);
         if(v==='')v=false;
         if(this._valueList[0]==v)_throw('switch 两个元素值不能相等');
         this._valueList.push(v);
         this._value=v;
-        var _off_t=$J.ct('div.j-switch-t.j-st-off').txt(getToH(child[1])).attr('value',v);
+        var _off_t=$J.ct('div.j-switch-t.j-st-off').txt(child[1].txt()).attr('value',v);
         if(child[0].hasAttr('checked')){
             item.addClass('j-s-on');
             child[0].removeAttr('checked')
@@ -3446,13 +3389,11 @@ JUI.SWITCH.prototype.init=function(){
     item.attr('value',this._value);
     item.append($J.ct('div.j-switch-c'));
     item.clk(function(){
-      if(!_isDisabled(item)){
         if(_jui._valueList.indexOf(_jui._value)==0){
             _jui.value=_jui._valueList[1]
         }else{
             _jui.value=_jui._valueList[0]
         }
-      }
     },true);
     _jui.onchange=function(){
         if(_jui._valueList.indexOf(_jui._value)==0){
@@ -3481,7 +3422,6 @@ JUI.SWITCH.init=function(item){
       }
     });
 };
-/*DATE*********************** */
 JUI.DATE=function(opt){
     this.ele=opt.ele||null;
     this._value=opt.value||'';
@@ -3505,9 +3445,8 @@ JUI.DATE=function(opt){
     });
     this.init();
 };
-JUI.DATE.prototype=_createEmpty();
 JUI.DATE.prototype.init=function(){
-    //var _jui=new JUI.DATE({ele:item,text:item.txt(),value:getVoT(item)});
+    //var _jui=new JUI.DATE({ele:item,text:item.txt(),value:getValueOrText(item)});
     var _jui=this;
     var item=this.ele;
     var _d=$J.ct('div.j-date-w');
@@ -3606,26 +3545,19 @@ JUI.DATE.prototype.init=function(){
         }
     }
     item.$jui=_jui;
-    if(_isDisabled(item)){
-      _dv.attr('readonly','true')
-    }
     _dv.clk(function(e){
-        if(!_isDisabled(item)){
-          _dv.removeAttr('readonly')
-          if(!item.hasClass('j-active')){
-              _d.css('display','block');
-              setTimeout(function(){item.addClass('j-active')},30);
-              if(!_dreg.test(_jui._value)){
-                  resetDayList(_jui,_sw,_jui._date.year,_jui._date.month,true,_d_year,_d_month);
-              }else{
-                  var _val_d=strToDate(_jui._value,_jui._date);
-                  resetDayList(_jui,_sw,_val_d.year,_val_d.month,
-                      (_val_d.year==_jui._date.year&&_val_d.month==_jui._date.month)
-                      ,_d_year,_d_month);
-              }
-          }
-        }else{
-          _dv.attr('readonly','true')
+        if(!item.hasClass('j-active')){
+            _d.css('display','block');
+            setTimeout(function(){item.addClass('j-active')},30);
+            if(!_dreg.test(_jui._value)){
+                resetDayList(_jui,_sw,_jui._date.year,_jui._date.month,true,_d_year,_d_month);
+            }else{
+                var _val_d=strToDate(_jui._value,_jui._date);
+                resetDayList(_jui,_sw,_val_d.year,_val_d.month,
+                    (_val_d.year==_jui._date.year&&_val_d.month==_jui._date.month)
+                    ,_d_year,_d_month);
+            }
+            _dv.css('cursor','text');
         }
     },true);
     _dv.oninput=function(){
@@ -3643,13 +3575,13 @@ JUI.DATE.prototype.init=function(){
     };
     _close.clk(function(){
         _jui.close();
+        _dv.css('cursor','pointer');
     });
 };JUI.DATE.prototype.close=function(){
     if(this.ele.hasClass('j-active')){
         var _this=this;
         this.ele.removeClass('j-active');
         setTimeout(function(){_this.ele.child(0).css('display','none');},300);
-        this.ele.child(1).css('cursor','pointer');
     }
 };
 JUI.DATE._name='j-date';
@@ -3731,7 +3663,6 @@ function getFirstDay(year,month){
 function getCurrentDay(){
     return new Date().getDate(); 
 }
-/*DRAG*********************************** */
 JUI.DRAG=function(opt){
     this.ele=opt.ele;
     this.par=opt.par||this.ele.parent();
@@ -3742,9 +3673,7 @@ JUI.DRAG=function(opt){
     this.mode=opt.mode||'xy';
     this.onchange=opt.onchange||function(){};
     this.init();
-};
-JUI.DRAG.prototype=_createEmpty();
-JUI.DRAG.prototype.init=function(){
+};JUI.DRAG.prototype.init=function(){
     var _this=this;
     this.setPosition();
     this.par.on('mousedown',function(ev){
@@ -3828,7 +3757,7 @@ JUI.DRAG.prototype.init=function(){
 }
 
 
-/*COLOR****************************************/
+
 JUI.COLOR=function(opt){
     this.ele=opt.ele||null;
     this._value=opt.value||'';
@@ -3865,7 +3794,7 @@ JUI.COLOR=function(opt){
         }
     }
 };
-JUI.COLOR.prototype=_createEmpty();
+
 JUI.COLOR.prototype.init=function(){
     var _jui=this;
     var item=this.ele;
@@ -3938,8 +3867,6 @@ JUI.COLOR.prototype.init=function(){
         close();
     });
     _icon.clk(function(){
-
-      if(!_isDisabled(item)){
         if(!item.hasClass('j-active')){
             _cw.css('display','block');
             setTimeout(function(){item.addClass('j-active')},30);
@@ -3948,7 +3875,6 @@ JUI.COLOR.prototype.init=function(){
             _jui.value=_v.val();
             close();
         }
-      }
     },true);
     var color_drag=new JUI.DRAG({
         ele:_ps,
@@ -4244,7 +4170,6 @@ function _jsonToRGB(v,a){
 
 //x:rgb -> r g-- b--
 //<div class='j-slider' min='0' max='100' value='0'></div>
-/*SLIDER**********************************************************/
 JUI.SLIDER=function(opt){
     this.ele=opt.ele||null;
     this._value=opt.value||false;
@@ -4267,7 +4192,6 @@ JUI.SLIDER=function(opt){
     });
     this.init();
 };
-JUI.SLIDER.prototype=_createEmpty();
 JUI.SLIDER.prototype.init=function(){
     var _jui=this;
     var item=this.ele;
@@ -4345,7 +4269,6 @@ JUI.SLIDER.init=function(item){
       }
     });
 };
-/*SCREEN_DRAG********************************** */
 JUI.SCREEN_DRAG=function(opt){
     this.ele=opt.ele;
     this.drag=opt.drag||opt.ele;
@@ -4355,11 +4278,8 @@ JUI.SCREEN_DRAG=function(opt){
     this.y=opt.y||-this._h;
     this.ondrag=opt.ondrag||function(){};
     this.ondrop=opt.ondrop||function(){};
-    this.init(opt);
-};
-JUI.SCREEN_DRAG.prototype=_createEmpty();
-JUI.SCREEN_DRAG._name='j-drag';
-JUI.SCREEN_DRAG.prototype.init=function(opt){
+    this.init();
+};JUI.SCREEN_DRAG.prototype.init=function(){
     var _this=this;
     this.setPosition();
     _this.drag.on('mousedown',function(ev){
@@ -4390,20 +4310,11 @@ JUI.SCREEN_DRAG.prototype.init=function(opt){
         if(_this.drag.onmouseup)
             _this.drag.onmouseup(e);
     },true);
-    var initPos=function(){
-      _this.ele.css({
-          left:(_this.ele.offsetLeft)+'px',
-          top:(_this.ele.offsetTop)+'px',
-          margin:'0'
-      });
-    }
-    if(opt.type==='confirm'){
-      setTimeout(function(){
-        initPos();
-      },700)
-    }else{
-      initPos();
-    }
+    this.ele.css({
+        left:(this.ele.offsetLeft)+'px',
+        top:(this.ele.offsetTop)+'px',
+        margin:'0'
+    });
 };JUI.SCREEN_DRAG.prototype.setPosition=function(x,y){
     this.x=x;
     this.y=y;
@@ -4413,31 +4324,6 @@ JUI.SCREEN_DRAG.prototype.init=function(opt){
     });
     this.ondrag();
 };
-JUI.SCREEN_DRAG._drag_area='j-drag-area';
-JUI.SCREEN_DRAG.init=function(item){
-  getEleList(item,this._name).each(function(item){
-    if(!item._hasInitJui){
-      item._hasInitJui=true;
-      var drag;
-      var dragEle=item.findClass(JUI.SCREEN_DRAG._drag_area);
-      if(dragEle.exist()){
-        drag=dragEle;
-      }else{
-        drag=item;
-        item.addClass(JUI.SCREEN_DRAG._drag_area);
-      }
-      new JUI.SCREEN_DRAG({
-        ele:item,
-        drag:drag
-      });
-    }
-  });
-};
-/* <div class='j-drag' style='background:#000;width:300px;height:300px;'>
-    <div class='j-drag-area' style='background:#aaa;width:300px;height:100px;'>
-        
-    </div>
-</div> */
 /*DIALOG*************************************************************/
 JUI.DIALOG=function(opt){
     this.ele=opt.ele||null;
@@ -4454,19 +4340,8 @@ JUI.DIALOG=function(opt){
             _this.onchange.call(_this);
         }
     });
-};
-JUI.DIALOG.prototype=_createEmpty();
+} 
 JUI.DIALOG._name='j-dialog';
-JUI.DIALOG._ds=[];
-JUI.dialog={
-  isOpen:function(){
-    return ($J.cls('j-dialog-open j-dialog').exist())
-  },clear:function(){
-    JUI.DIALOG._ds.forEach(function(ele){
-      ele.$jui.value=false
-    });
-  }
-};
 JUI.DIALOG.init=function(item){
     getEleList(item,this._name).each(function(item){
       if(!item._hasInitJui){
@@ -4485,20 +4360,12 @@ JUI.DIALOG.init=function(item){
                 _body.append(_item);
             });
         item.append([_head,_body]);
-        var itemHeight=item.hei();
-        var reinitTop=function(){
-          item.css({
-              'margin-top':'0',
-              'top':($J.height()-itemHeight)/2+'px'
-          });
-        }
-        reinitTop();
+        item.css({
+            'margin-top':'0',
+            'top':($J.height()-item.hei())/2+'px'
+        });
         _jui.onchange=function(){
             if(_jui._value){
-              if(item.hei()!==itemHeight){
-                itemHeight=item.hei();
-                reinitTop();
-              }
               _jui.ele.css('visibility','visible');
               _jui.ele.addClass('j-dialog-open').removeClass('j-dialog-close');
             }else{
@@ -4514,12 +4381,10 @@ JUI.DIALOG.init=function(item){
             ele:item,
             drag:_head
         });
-        JUI.DIALOG._ds.push(item);
-        document.body.append(item);
+        //document.body.append(item);
       }
     });
 };
-/*PAGE************************************* */
 JUI.PAGE=function(opt){
   this.total=opt.total||10;
   this._value=opt.current||1;
@@ -4540,7 +4405,6 @@ JUI.PAGE=function(opt){
   });
   this.init();
 };
-JUI.PAGE.prototype=_createEmpty();
 JUI.PAGE.prototype.checkValue=function(v){
   if(v<1){
     v=1;
@@ -4615,7 +4479,7 @@ JUI.PAGE.init=function(item){
     }
   });
 };
-/*TAB********************************************** */
+
 JUI.TAB=function(opt){
   this._value=opt.value||opt.ele.attr('value');
   this.ele=opt.ele||null;
@@ -4636,7 +4500,6 @@ JUI.TAB=function(opt){
   });
   this.init();
 };
-JUI.TAB.prototype=_createEmpty();
 JUI.TAB.prototype.checkValue=function(v){
   if(this.tabs.indexOf(v.toString())!=-1){
     return v.toString();

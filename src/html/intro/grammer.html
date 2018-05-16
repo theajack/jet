@@ -4,11 +4,11 @@
     本节将介绍以下Jet的总体语法，主要从以下四个方面介绍：
     <span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
     <div class="list">
-            <!-- html text class attr css  -->
         <div class='link' jump-to='base'>1.基本使用 <span class="light-text">(获取或者设置dom元素的innerHTML)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='part'>2.局部渲染 <span class="light-text">(获取dom元素的outerHTML)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='ondatachange'>3.ondatachange <span class="light-text">(获取或者设置dom元素的innerText)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='life'>4.生命周期 <span class="light-text">(获取或者设置[增加或删除]dom元素的属性)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='name'>3.name参数 <span class="light-text">(设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='ondatachange'>4.ondatachange <span class="light-text">(获取或者设置dom元素的innerText)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='life'>5.生命周期 <span class="light-text">(获取或者设置[增加或删除]dom元素的属性)</span><i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 <div class='title' jump-des='base'>1.基本使用</div>
@@ -22,7 +22,7 @@
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;div j='message'>
 &lt;/div>
-<!-- 会显示hello world -->
+&lt;!-- 会显示hello world --&gt;
 &lt;script>
     new Jet({
         data:{//数据
@@ -48,7 +48,7 @@
     </div>
 
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;div j='message'>$&lt;/div><!-- 不会被渲染 -->
+&lt;div j='message'>$&lt;/div>&lt;!-- 不会被渲染 --&gt;
 &lt;div jdom='test'>
     &lt;div j='message'>$&lt;/div>
 &lt;/div>
@@ -71,10 +71,37 @@
     </div>
 </div>
 
-<div class='title' jump-des='ondatachange'>3.ondatachange</div>
+<div class='title' jump-des='name'>3.name参数</div>
+<div class="sub">
+    <div class='text'>设置name参数后可以通过 Jet.name 获取到Jet元素。请看一个例子
+    </div>
+
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;button jon='alert(Jet.myJet.myMessage)'>获取myJet&lt;/button>
+&lt;script>
+    new Jet({
+        name:'myJet',
+        data:{//数据
+            myMessage:'myJet'
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>   
+            <button jon='alert(Jet.myJet.myMessage)'>获取myJet</button>
+        </div>
+    </div>
+</div>
+
+<div class='title' jump-des='ondatachange'>4.ondatachange</div>
 <div class="sub">
     <div class='text'>
         ondatachange 属性用于为Jet数据添加一个数据变化的监听事件，事件方法的 this 指代的是根Jet元素，方法有两个参数，第一个是改变之后的值，改变数据的键。请看下面一个例子：
+    </div>
+    <div class='title'>a.字符串形式</div>
+    <div class='text'>
+        使用字符串形式时 ondatachange 中的键值对都是字符串和函数类型，直接使用表达式来表示某一个变量，请看一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;div>输入以改变数据值&lt;/div>
@@ -94,10 +121,10 @@
             'string':function(value,key){
                 alert('string:'+key+"--"+value);
             },
-            'json.key':function(value,key){
+            'json.key':function(value,key){//直接使用 json.key 设置 json中key的监听
                 alert('json:'+key+"--"+value);
             },
-            'array[0]':function(value,key){
+            'array[0]':function(value,key){//直接使用 array[index] 设置 数组中某个元素的监听
                 alert('array:'+key+"--"+value);
             },
             'array[1]':function(value,key){
@@ -115,8 +142,135 @@
             <div j='array'>数组[<span j='$index'></span>]：<input type="text" j='$value'></div>
         </div>
     </div>
+    <div class='title'>a.json嵌套形式</div>
+    <div class='text'>
+        也可以像jet data一样设置ondatachange。对于json和数组类型，可以使用 $func 属性来监测自身的数据改变。
+        对于数组类型，必须使用 $each 属性来监测元素的数据改变。请看一个例子
+    </div>
+    <div class='text'>
+        当使用json嵌套形式时，所有的事件方法都有三个参数，第一个是值，第二个是键，第三个是一个索引数组，表示包含当前数据的数组的索引列表，多层数组嵌套时第一个元素是最外层的索引，最后一个元素是最内层的索引。
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div>输入以改变数据值&lt;/div>
+&lt;div j='json2'>json：
+    &lt;span j='key'>
+        &lt;input type="text" j='k'/>
+    &lt;/span>
+&lt;/div>
+&lt;div j='array2'>
+    数组[&lt;span j='$index'>&lt;/span>]：
+    &lt;span>
+        a1:&lt;input type="text" j='a1'/>
+        a2&lt;input type="text" j='a2'/>
+    &lt;/span>
+&lt;/div>
+数组嵌套：
+&lt;div j='array3'>
+    &lt;div j='$each'>
+        &lt;div j='$each'>
+            &lt;span j='$.$p.$index'>&lt;/span>-
+            &lt;span j='$index'>&lt;/span>:
+            &lt;input type="text" j='$value'/>
+        &lt;/div>
+    &lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            json2:{
+                key:{
+                    k:'value'
+                }
+            },
+            array2:[
+                {a1:'1',a2:2},
+                {a1:'1',a2:2}
+            ],
+            array3:[[11,12],[21,22]]
+        },
+        ondatachange:{
+            json2:{
+                $func:function(value,key){
+                    JUI.msg('json2:'+key+"--"+value);
+                },
+                key:{
+                    $func:function(value,key){
+                        JUI.msg('key:'+key+"--"+JSON.stringify(value));
+                    },
+                    k:function(value,key){
+                        JUI.msg('k:'+key+"--"+value);
+                    }
+                },
+            },
+            array2:{
+                $func:function(value,key){
+                    JUI.msg('array2:'+key+"--"+value);
+                },
+                $each:{
+                    $func:function(value,key){
+                        JUI.msg('each:'+key+"--"+value);
+                    },
+                    a1:function(value,key,index){
+                        //index 是元素索引的数组，多层数组嵌套时第一个元素是最外层的索引，最后一个元素是最内层的索引
+                        JUI.msg(index.toString()+':'+key+"--"+value);
+                    },
+                    a2:function(value,key,index){
+                        JUI.msg(index.toString()+':'+key+"--"+value);
+                    },
+                },
+            },
+            array3:{
+                $func:function(value,key){
+                    JUI.msg('array3:'+key+"--"+value);
+                },
+                $each:{
+                    $func:function(value,key,index){
+                        JUI.msg(index.toString()+':'+key+"--"+value);
+                    },
+                    $each:{
+                        $func:function(value,key,index){
+                            JUI.msg(index.toString()+':'+key+"--"+value);
+                        },
+                    }
+                    // 因为已经是嵌套最底层的一个，所以上面一个 $each 等价于下面写法
+                    // $each:function(value,key,index){
+                    //     JUI.msg(index.toString()+':'+key+"--"+value);
+                    // }
+                }
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>输入以改变数据值</div>
+            <div j='json2'>json：
+                <span j='key'>
+                    <input type="text" j='k'/>
+                </span>
+            </div>
+            <div j='array2'>
+                数组[<span j='$index'></span>]：
+                <span>
+                    a1:<input type="text" j='a1'/>
+                    a2<input type="text" j='a2'/>
+                </span>
+            </div>
+            数组嵌套：
+            <div j='array3'>
+                <div j='$each'>
+                    <div j='$each'>
+                        <span j='$.$p.$index'></span>-
+                        <span j='$index'></span>:
+                        <input type="text" j='$value'/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class='title' jump-des='life'>4.Jet生命周期函数</div>
+<div class='title' jump-des='life'>5.Jet生命周期函数</div>
 <div class="sub">
     <div class='text'>
         Jet 有以下7个生命周期函数，各自的执行先后顺序与其序号一致。
@@ -180,11 +334,7 @@
 &lt;/script>
     </div>
 </div>
-<!-- <div class='j-code' disabled buttons width='99%' height='auto'>
-function aa(){
 
-}
-</div> -->
 
 <script>
     Jet.global.setLink({
@@ -194,7 +344,8 @@ function aa(){
         nextUrl:'/intro/about',
     });
     
-    new Jet({
+
+    var a=new Jet({
         // onroute:function(){
         //   console.log('onroute');
         // },
@@ -217,26 +368,85 @@ function aa(){
         //   console.log('onrouted');
         // },
         data:{//数据
+            myMessage:'myJet',
             message:'hello word',
             string:'hello word',
             json:{
                 key:'value'
             },
-            array:[0,1]
+            array:[0,1],
+            json2:{
+                key:{
+                    k:'value'
+                }
+            },
+            array2:[{a1:'1',a2:2},{a1:'1',a2:2}],
+            array3:[[11,12],[21,22]]
         },
         ondatachange:{
             'string':function(value,key){
-                alert('string:'+key+"--"+value);
+                JUI.msg('string:'+key+"--"+value);
             },
             'json.key':function(value,key){
-                alert('json:'+key+"--"+value);
+                JUI.msg('json:'+key+"--"+value);
             },
             'array[0]':function(value,key){
-                alert('array:'+key+"--"+value);
+                JUI.msg('array:'+key+"--"+value);
             },
             'array[1]':function(value,key){
-                alert('array:'+key+"--"+value);
+                JUI.msg('array:'+key+"--"+value);
+            },
+            json2:{
+                $func:function(value,key){
+                    JUI.msg('json2:'+key+"--"+value);
+                },
+                key:{
+                    $func:function(value,key){
+                        JUI.msg('key:'+key+"--"+JSON.stringify(value));
+                    },
+                    k:function(value,key){
+                        JUI.msg('k:'+key+"--"+value);
+                    }
+                },
+            },
+            
+            array2:{
+                $func:function(value,key){
+                    JUI.msg('array2:'+key+"--"+value);
+                },
+                $each:{
+                    $func:function(value,key){
+                        JUI.msg('each:'+key+"--"+value);
+                    },
+                    a1:function(value,key,index){
+                        //index 是元素索引的数组，多层数组嵌套时第一个元素是最外层的索引，最后一个元素是最内层的索引
+                        JUI.msg(index.toString()+':'+key+"--"+value);
+                    },
+                    a2:function(value,key,index){
+                        JUI.msg(index.toString()+':'+key+"--"+value);
+                    },
+                },
+            },
+            array3:{
+                $func:function(value,key){
+                    JUI.msg('array3:'+key+"--"+value);
+                },
+                $each:{
+                    $func:function(value,key,index){
+                        JUI.msg(index.toString()+':'+key+"--"+value);
+                    },
+                    $each:{
+                        $func:function(value,key,index){
+                            JUI.msg(index.toString()+':'+key+"--"+value);
+                        },
+                    }
+                    // 或者使用
+                    // $each:function(value,key,index){
+                    //     JUI.msg(index.toString()+':'+key+"--"+value);
+                    // }
+                }
             }
+            
         },
         func:{
             //函数

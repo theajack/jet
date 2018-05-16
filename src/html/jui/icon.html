@@ -22,6 +22,19 @@
         transform: scale(1.5);
         z-index: 2;
     }
+    #iconsExample ul li.i-list{
+        width: 30px;
+        font-size: 16px;
+        text-align: center;
+        border: 1px solid #bbb;
+    }
+    #iconsExample ul li.i-list.i-big{
+        width: 75px;
+    }
+    #iconsExample ul li.i-list span{
+        display: none;
+    }
+    
     #iconShow{
         vertical-align: bottom;
         border-bottom: 2px solid #ddd;
@@ -46,10 +59,13 @@
         width:270px;
         font-size: 15px
     }
+    .list-change{
+        position: absolute;
+    }
 </style>
 <div class='title'>图标</div>
 <div class='text indent'>图标能在视觉上简洁有效的指引用户操作。特殊情况下，使用图标能够代替文本。JUI采用开源web图标字体
-    <a class='link' href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>，提供了344个图标。
+    <a class='link' target="view_window" href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>，提供了344个图标。
     使用<span class="red">&lt;i class="j-icon icon-name">&lt;/i></span>就可以在任意位置插入一个JUI图标。
 </div>
 <div id="iconsExample" class='text'>
@@ -61,355 +77,360 @@
             <i jattr='class:{{$.class}}+" icon-slarge"'></i>
         </span>
         <div>
-            <input type="text" class="j-input" j='value'>
+            <input type="text" readonly class="j-input" j='value'>
             <div class="j-btn code-copy" jon='copy'><i class="j-icon icon-copy"></i></div>
         </div>
+        <div>
+            <input type="text" class="j-input" jon='input:queryIcon'>
+            <div class="j-btn info code-copy"><i class="j-icon icon-search"></i></div>
+            <div class="j-btn code-copy list-change" title='切换模式' jon='changeList'><i jattr='class:"icon"+({{$.list}}?"-th":"-bars")+" j-icon"'class=" "></i></div>
+        </div>
     </div>
-    <ul class="clearfix">
-        <li><i class="j-icon icon-resize"></i> resize</li>
-        <li><i class="j-icon icon-expand-full"></i> expand-full</li>
-        <li><i class="j-icon icon-collapse-full"></i> collapse-full</li>
-        <li><i class="j-icon icon-yinyang"></i> yinyang</li>
-        <li><i class="j-icon icon-window"></i> window</li>
-        <li><i class="j-icon icon-window-alt"></i> window-alt</li>
-        <li><i class="j-icon icon-carousel"></i> carousel</li>
-        <li><i class="j-icon icon-spinner-snake"></i> spinner-snake</li>
-        <li><i class="j-icon icon-spinner-indicator"></i> spinner-indicator</li>
-        <li><i class="j-icon icon-check-board"></i> check-board</li>
-        <li><i class="j-icon icon-bar-chart"></i> bar-chart</li>
-        <li><i class="j-icon icon-github"></i> github</li>
-        <li><i class="j-icon icon-dot-circle"></i> dot-circle</li>
-        <li><i class="j-icon icon-cube-alt"></i> cube-alt</li>
-        <li><i class="j-icon icon-cubes"></i> cubes</li>
-        <li><i class="j-icon icon-file-pdf"></i> file-pdf</li>
-        <li><i class="j-icon icon-file-word"></i> file-word</li>
-        <li><i class="j-icon icon-file-excel"></i> file-excel</li>
-        <li><i class="j-icon icon-file-powerpoint"></i> file-powerpoint</li>
-        <li><i class="j-icon icon-file-image"></i> file-image</li>
-        <li><i class="j-icon icon-file-archive"></i> file-archive</li>
-        <li><i class="j-icon icon-file-audio"></i> file-audio</li>
-        <li><i class="j-icon icon-file-movie"></i> file-movie</li>
-        <li><i class="j-icon icon-file-code"></i> file-code</li>
-        <li><i class="j-icon icon-circle-o-notch"></i> circle-o-notch</li>
-        <li><i class="j-icon icon-qq"></i> qq</li>
-        <li><i class="j-icon icon-wechat"></i> wechat</li>
-        <li><i class="j-icon icon-history"></i> history</li>
-        <li><i class="j-icon icon-circle-thin"></i> circle-thin</li>
-        <li><i class="j-icon icon-sliders"></i> sliders</li>
-        <li><i class="j-icon icon-newspaper-o"></i> newspaper-o</li>
-        <li><i class="j-icon icon-calculator"></i> calculator</li>
-        <li><i class="j-icon icon-paint-brush"></i> paint-brush</li>
-        <li><i class="j-icon icon-area-chart"></i> area-chart</li>
-        <li><i class="j-icon icon-pie-chart"></i> pie-chart</li>
-        <li><i class="j-icon icon-line-chart"></i> line-chart</li>
-        <li><i class="j-icon icon-toggle-off"></i> toggle-off</li>
-        <li><i class="j-icon icon-toggle-on"></i> toggle-on</li>
-        <li><i class="j-icon icon-diamond"></i> diamond</li>
-        <li><i class="j-icon icon-venus"></i> venus</li>
-        <li><i class="j-icon icon-mars"></i> mars</li>
-        <li><i class="j-icon icon-server"></i> server</li>
-        <li><i class="j-icon icon-music"></i> music</li>
-        <li><i class="j-icon icon-search"></i> search</li>
-        <li><i class="j-icon icon-envelope"></i> envelope</li>
-        <li><i class="j-icon icon-heart"></i> heart</li>
-        <li><i class="j-icon icon-star"></i> star</li>
-        <li><i class="j-icon icon-star-empty"></i> star-empty</li>
-        <li><i class="j-icon icon-user"></i> user</li>
-        <li><i class="j-icon icon-film"></i> film</li>
-        <li><i class="j-icon icon-th-large"></i> th-large</li>
-        <li><i class="j-icon icon-th"></i> th</li>
-        <li><i class="j-icon icon-th-list"></i> th-list</li>
-        <li><i class="j-icon icon-check"></i> check</li>
-        <li><i class="j-icon icon-times"></i> times</li>
-        <li><i class="j-icon icon-zoom-in"></i> zoom-in</li>
-        <li><i class="j-icon icon-zoom-out"></i> zoom-out</li>
-        <li><i class="j-icon icon-off"></i> off</li>
-        <li><i class="j-icon icon-cog"></i> cog</li>
-        <li><i class="j-icon icon-trash"></i> trash</li>
-        <li><i class="j-icon icon-home"></i> home</li>
-        <li><i class="j-icon icon-file-o"></i> file-o</li>
-        <li><i class="j-icon icon-time"></i> time</li>
-        <li><i class="j-icon icon-download-alt"></i> download-alt</li>
-        <li><i class="j-icon icon-download"></i> download</li>
-        <li><i class="j-icon icon-upload"></i> upload</li>
-        <li><i class="j-icon icon-inbox"></i> inbox</li>
-        <li><i class="j-icon icon-play-circle"></i> play-circle</li>
-        <li><i class="j-icon icon-repeat"></i> repeat</li>
-        <li><i class="j-icon icon-refresh"></i> refresh</li>
-        <li><i class="j-icon icon-list-alt"></i> list-alt</li>
-        <li><i class="j-icon icon-lock"></i> lock</li>
-        <li><i class="j-icon icon-flag"></i> flag</li>
-        <li><i class="j-icon icon-headphones"></i> headphones</li>
-        <li><i class="j-icon icon-volume-off"></i> volume-off</li>
-        <li><i class="j-icon icon-volume-up"></i> volume-up</li>
-        <li><i class="j-icon icon-qrcode"></i> qrcode</li>
-        <li><i class="j-icon icon-barcode"></i> barcode</li>
-        <li><i class="j-icon icon-tag"></i> tag</li>
-        <li><i class="j-icon icon-tags"></i> tags</li>
-        <li><i class="j-icon icon-book"></i> book</li>
-        <li><i class="j-icon icon-bookmark"></i> bookmark</li>
-        <li><i class="j-icon icon-print"></i> print</li>
-        <li><i class="j-icon icon-camera"></i> camera</li>
-        <li><i class="j-icon icon-font"></i> font</li>
-        <li><i class="j-icon icon-bold"></i> bold</li>
-        <li><i class="j-icon icon-italic"></i> italic</li>
-        <li><i class="j-icon icon-header"></i> header</li>
-        <li><i class="j-icon icon-underline"></i> underline</li>
-        <li><i class="j-icon icon-strikethrough"></i> strikethrough</li>
-        <li><i class="j-icon icon-eraser"></i> eraser</li>
-        <li><i class="j-icon icon-align-justify"></i> align-justify</li>
-        <li><i class="j-icon icon-align-left"></i> align-left</li>
-        <li><i class="j-icon icon-list"></i> list</li>
-        <li><i class="j-icon icon-picture"></i> picture</li>
-        <li><i class="j-icon icon-pencil"></i> pencil</li>
-        <li><i class="j-icon icon-map-marker"></i> map-marker</li>
-        <li><i class="j-icon icon-adjust"></i> adjust</li>
-        <li><i class="j-icon icon-tint"></i> tint</li>
-        <li><i class="j-icon icon-edit"></i> edit</li>
-        <li><i class="j-icon icon-share"></i> share</li>
-        <li><i class="j-icon icon-checked"></i> checked</li>
-        <li><i class="j-icon icon-arrows"></i> arrows</li>
-        <li><i class="j-icon icon-step-backward"></i> step-backward</li>
-        <li><i class="j-icon icon-fast-backward"></i> fast-backward</li>
-        <li><i class="j-icon icon-backward"></i> backward</li>
-        <li><i class="j-icon icon-play"></i> play</li>
-        <li><i class="j-icon icon-pause"></i> pause</li>
-        <li><i class="j-icon icon-stop"></i> stop</li>
-        <li><i class="j-icon icon-forward"></i> forward</li>
-        <li><i class="j-icon icon-fast-forward"></i> fast-forward</li>
-        <li><i class="j-icon icon-step-forward"></i> step-forward</li>
-        <li><i class="j-icon icon-eject"></i> eject</li>
-        <li><i class="j-icon icon-chevron-left"></i> chevron-left</li>
-        <li><i class="j-icon icon-chevron-right"></i> chevron-right</li>
-        <li><i class="j-icon icon-plus-sign"></i> plus-sign</li>
-        <li><i class="j-icon icon-minus-sign"></i> minus-sign</li>
-        <li><i class="j-icon icon-remove-sign"></i> remove-sign</li>
-        <li><i class="j-icon icon-check-circle"></i> check-circle</li>
-        <li><i class="j-icon icon-question-sign"></i> question-sign</li>
-        <li><i class="j-icon icon-info-sign"></i> info-sign</li>
-        <li><i class="j-icon icon-remove-circle"></i> remove-circle</li>
-        <li><i class="j-icon icon-check-circle-o"></i> check-circle-o</li>
-        <li><i class="j-icon icon-ban-circle"></i> ban-circle</li>
-        <li><i class="j-icon icon-arrow-left"></i> arrow-left</li>
-        <li><i class="j-icon icon-arrow-right"></i> arrow-right</li>
-        <li><i class="j-icon icon-arrow-up"></i> arrow-up</li>
-        <li><i class="j-icon icon-arrow-down"></i> arrow-down</li>
-        <li><i class="j-icon icon-share-alt"></i> share-alt</li>
-        <li><i class="j-icon icon-resize-full"></i> resize-full</li>
-        <li><i class="j-icon icon-resize-small"></i> resize-small</li>
-        <li><i class="j-icon icon-plus"></i> plus</li>
-        <li><i class="j-icon icon-minus"></i> minus</li>
-        <li><i class="j-icon icon-asterisk"></i> asterisk</li>
-        <li><i class="j-icon icon-exclamation-sign"></i> exclamation-sign</li>
-        <li><i class="j-icon icon-gift"></i> gift</li>
-        <li><i class="j-icon icon-leaf"></i> leaf</li>
-        <li><i class="j-icon icon-eye-open"></i> eye-open</li>
-        <li><i class="j-icon icon-eye-close"></i> eye-close</li>
-        <li><i class="j-icon icon-warning-sign"></i> warning-sign</li>
-        <li><i class="j-icon icon-plane"></i> plane</li>
-        <li><i class="j-icon icon-calendar"></i> calendar</li>
-        <li><i class="j-icon icon-random"></i> random</li>
-        <li><i class="j-icon icon-comment"></i> comment</li>
-        <li><i class="j-icon icon-chevron-up"></i> chevron-up</li>
-        <li><i class="j-icon icon-chevron-down"></i> chevron-down</li>
-        <li><i class="j-icon icon-shopping-cart"></i> shopping-cart</li>
-        <li><i class="j-icon icon-folder-close"></i> folder-close</li>
-        <li><i class="j-icon icon-folder-open"></i> folder-open</li>
-        <li><i class="j-icon icon-resize-v"></i> resize-v</li>
-        <li><i class="j-icon icon-resize-h"></i> resize-h</li>
-        <li><i class="j-icon icon-bar-chart-alt"></i> bar-chart-alt</li>
-        <li><i class="j-icon icon-camera-retro"></i> camera-retro</li>
-        <li><i class="j-icon icon-key"></i> key</li>
-        <li><i class="j-icon icon-cogs"></i> cogs</li>
-        <li><i class="j-icon icon-comments"></i> comments</li>
-        <li><i class="j-icon icon-thumbs-o-up"></i> thumbs-o-up</li>
-        <li><i class="j-icon icon-thumbs-o-down"></i> thumbs-o-down</li>
-        <li><i class="j-icon icon-star-half"></i> star-half</li>
-        <li><i class="j-icon icon-heart-empty"></i> heart-empty</li>
-        <li><i class="j-icon icon-signout"></i> signout</li>
-        <li><i class="j-icon icon-pushpin"></i> pushpin</li>
-        <li><i class="j-icon icon-external-link"></i> external-link</li>
-        <li><i class="j-icon icon-signin"></i> signin</li>
-        <li><i class="j-icon icon-trophy"></i> trophy</li>
-        <li><i class="j-icon icon-upload-alt"></i> upload-alt</li>
-        <li><i class="j-icon icon-lemon"></i> lemon</li>
-        <li><i class="j-icon icon-phone"></i> phone</li>
-        <li><i class="j-icon icon-check-empty"></i> check-empty</li>
-        <li><i class="j-icon icon-bookmark-empty"></i> bookmark-empty</li>
-        <li><i class="j-icon icon-phone-sign"></i> phone-sign</li>
-        <li><i class="j-icon icon-credit"></i> credit</li>
-        <li><i class="j-icon icon-rss"></i> rss</li>
-        <li><i class="j-icon icon-hdd"></i> hdd</li>
-        <li><i class="j-icon icon-bullhorn"></i> bullhorn</li>
-        <li><i class="j-icon icon-bell"></i> bell</li>
-        <li><i class="j-icon icon-certificate"></i> certificate</li>
-        <li><i class="j-icon icon-hand-right"></i> hand-right</li>
-        <li><i class="j-icon icon-hand-left"></i> hand-left</li>
-        <li><i class="j-icon icon-hand-up"></i> hand-up</li>
-        <li><i class="j-icon icon-hand-down"></i> hand-down</li>
-        <li><i class="j-icon icon-circle-arrow-left"></i> circle-arrow-left</li>
-        <li><i class="j-icon icon-circle-arrow-right"></i> circle-arrow-right</li>
-        <li><i class="j-icon icon-circle-arrow-up"></i> circle-arrow-up</li>
-        <li><i class="j-icon icon-circle-arrow-down"></i> circle-arrow-down</li>
-        <li><i class="j-icon icon-globe"></i> globe</li>
-        <li><i class="j-icon icon-wrench"></i> wrench</li>
-        <li><i class="j-icon icon-tasks"></i> tasks</li>
-        <li><i class="j-icon icon-filter"></i> filter</li>
-        <li><i class="j-icon icon-group"></i> group</li>
-        <li><i class="j-icon icon-link"></i> link</li>
-        <li><i class="j-icon icon-cloud"></i> cloud</li>
-        <li><i class="j-icon icon-beaker"></i> beaker</li>
-        <li><i class="j-icon icon-cut"></i> cut</li>
-        <li><i class="j-icon icon-copy"></i> copy</li>
-        <li><i class="j-icon icon-paper-clip"></i> paper-clip</li>
-        <li><i class="j-icon icon-save"></i> save</li>
-        <li><i class="j-icon icon-sign-blank"></i> sign-blank</li>
-        <li><i class="j-icon icon-bars"></i> bars</li>
-        <li><i class="j-icon icon-list-ul"></i> list-ul</li>
-        <li><i class="j-icon icon-list-ol"></i> list-ol</li>
-        <li><i class="j-icon icon-table"></i> table</li>
-        <li><i class="j-icon icon-magic"></i> magic</li>
-        <li><i class="j-icon icon-caret-down"></i> caret-down</li>
-        <li><i class="j-icon icon-caret-up"></i> caret-up</li>
-        <li><i class="j-icon icon-caret-left"></i> caret-left</li>
-        <li><i class="j-icon icon-caret-right"></i> caret-right</li>
-        <li><i class="j-icon icon-columns"></i> columns</li>
-        <li><i class="j-icon icon-sort"></i> sort</li>
-        <li><i class="j-icon icon-sort-down"></i> sort-down</li>
-        <li><i class="j-icon icon-sort-up"></i> sort-up</li>
-        <li><i class="j-icon icon-envelope-alt"></i> envelope-alt</li>
-        <li><i class="j-icon icon-undo"></i> undo</li>
-        <li><i class="j-icon icon-dashboard"></i> dashboard</li>
-        <li><i class="j-icon icon-comment-alt"></i> comment-alt</li>
-        <li><i class="j-icon icon-comments-alt"></i> comments-alt</li>
-        <li><i class="j-icon icon-bolt"></i> bolt</li>
-        <li><i class="j-icon icon-sitemap"></i> sitemap</li>
-        <li><i class="j-icon icon-umbrella"></i> umbrella</li>
-        <li><i class="j-icon icon-paste"></i> paste</li>
-        <li><i class="j-icon icon-lightbulb"></i> lightbulb</li>
-        <li><i class="j-icon icon-exchange"></i> exchange</li>
-        <li><i class="j-icon icon-cloud-download"></i> cloud-download</li>
-        <li><i class="j-icon icon-cloud-upload"></i> cloud-upload</li>
-        <li><i class="j-icon icon-bell-alt"></i> bell-alt</li>
-        <li><i class="j-icon icon-coffee"></i> coffee</li>
-        <li><i class="j-icon icon-file-text-o"></i> file-text-o</li>
-        <li><i class="j-icon icon-building"></i> building</li>
-        <li><i class="j-icon icon-double-angle-left"></i> double-angle-left</li>
-        <li><i class="j-icon icon-double-angle-right"></i> double-angle-right</li>
-        <li><i class="j-icon icon-double-angle-up"></i> double-angle-up</li>
-        <li><i class="j-icon icon-double-angle-down"></i> double-angle-down</li>
-        <li><i class="j-icon icon-angle-left"></i> angle-left</li>
-        <li><i class="j-icon icon-angle-right"></i> angle-right</li>
-        <li><i class="j-icon icon-angle-up"></i> angle-up</li>
-        <li><i class="j-icon icon-angle-down"></i> angle-down</li>
-        <li><i class="j-icon icon-desktop"></i> desktop</li>
-        <li><i class="j-icon icon-laptop"></i> laptop</li>
-        <li><i class="j-icon icon-tablet"></i> tablet</li>
-        <li><i class="j-icon icon-mobile"></i> mobile</li>
-        <li><i class="j-icon icon-circle-blank"></i> circle-blank</li>
-        <li><i class="j-icon icon-quote-left"></i> quote-left</li>
-        <li><i class="j-icon icon-quote-right"></i> quote-right</li>
-        <li><i class="j-icon icon-spinner"></i> spinner</li>
-        <li><i class="j-icon icon-circle"></i> circle</li>
-        <li><i class="j-icon icon-reply"></i> reply</li>
-        <li><i class="j-icon icon-folder-close-alt"></i> folder-close-alt</li>
-        <li><i class="j-icon icon-folder-open-alt"></i> folder-open-alt</li>
-        <li><i class="j-icon icon-expand-alt"></i> expand-alt</li>
-        <li><i class="j-icon icon-collapse-alt"></i> collapse-alt</li>
-        <li><i class="j-icon icon-smile"></i> smile</li>
-        <li><i class="j-icon icon-frown"></i> frown</li>
-        <li><i class="j-icon icon-meh"></i> meh</li>
-        <li><i class="j-icon icon-gamepad"></i> gamepad</li>
-        <li><i class="j-icon icon-keyboard"></i> keyboard</li>
-        <li><i class="j-icon icon-flag-alt"></i> flag-alt</li>
-        <li><i class="j-icon icon-flag-checkered"></i> flag-checkered</li>
-        <li><i class="j-icon icon-terminal"></i> terminal</li>
-        <li><i class="j-icon icon-code"></i> code</li>
-        <li><i class="j-icon icon-reply-all"></i> reply-all</li>
-        <li><i class="j-icon icon-star-half-full"></i> star-half-full</li>
-        <li><i class="j-icon icon-location-arrow"></i> location-arrow</li>
-        <li><i class="j-icon icon-crop"></i> crop</li>
-        <li><i class="j-icon icon-code-fork"></i> code-fork</li>
-        <li><i class="j-icon icon-unlink"></i> unlink</li>
-        <li><i class="j-icon icon-question"></i> question</li>
-        <li><i class="j-icon icon-info"></i> info</li>
-        <li><i class="j-icon icon-shield"></i> shield</li>
-        <li><i class="j-icon icon-calendar-empty"></i> calendar-empty</li>
-        <li><i class="j-icon icon-rocket"></i> rocket</li>
-        <li><i class="j-icon icon-chevron-sign-left"></i> chevron-sign-left</li>
-        <li><i class="j-icon icon-chevron-sign-right"></i> chevron-sign-right</li>
-        <li><i class="j-icon icon-chevron-sign-up"></i> chevron-sign-up</li>
-        <li><i class="j-icon icon-chevron-sign-down"></i> chevron-sign-down</li>
-        <li><i class="j-icon icon-html5"></i> html5</li>
-        <li><i class="j-icon icon-anchor"></i> anchor</li>
-        <li><i class="j-icon icon-unlock-alt"></i> unlock-alt</li>
-        <li><i class="j-icon icon-bullseye"></i> bullseye</li>
-        <li><i class="j-icon icon-ellipsis-h"></i> ellipsis-h</li>
-        <li><i class="j-icon icon-ellipsis-v"></i> ellipsis-v</li>
-        <li><i class="j-icon icon-rss-sign"></i> rss-sign</li>
-        <li><i class="j-icon icon-play-sign"></i> play-sign</li>
-        <li><i class="j-icon icon-minus-sign-alt"></i> minus-sign-alt</li>
-        <li><i class="j-icon icon-plus-sign-alt"></i> plus-sign-alt</li>
-        <li><i class="j-icon icon-check-minus"></i> check-minus</li>
-        <li><i class="j-icon icon-check-plus"></i> check-plus</li>
-        <li><i class="j-icon icon-level-up"></i> level-up</li>
-        <li><i class="j-icon icon-level-down"></i> level-down</li>
-        <li><i class="j-icon icon-check-sign"></i> check-sign</li>
-        <li><i class="j-icon icon-edit-sign"></i> edit-sign</li>
-        <li><i class="j-icon icon-external-link-sign"></i> external-link-sign</li>
-        <li><i class="j-icon icon-share-sign"></i> share-sign</li>
-        <li><i class="j-icon icon-compass"></i> compass</li>
-        <li><i class="j-icon icon-collapse"></i> collapse</li>
-        <li><i class="j-icon icon-collapse-top"></i> collapse-top</li>
-        <li><i class="j-icon icon-expand"></i> expand</li>
-        <li><i class="j-icon icon-dollar"></i> dollar</li>
-        <li><i class="j-icon icon-yen"></i> yen</li>
-        <li><i class="j-icon icon-file"></i> file</li>
-        <li><i class="j-icon icon-file-text"></i> file-text</li>
-        <li><i class="j-icon icon-sort-by-alphabet"></i> sort-by-alphabet</li>
-        <li><i class="j-icon icon-sort-by-alphabet-alt"></i> sort-by-alphabet-alt</li>
-        <li><i class="j-icon icon-sort-by-attributes"></i> sort-by-attributes</li>
-        <li><i class="j-icon icon-sort-by-attributes-alt"></i> sort-by-attributes-alt</li>
-        <li><i class="j-icon icon-sort-by-order"></i> sort-by-order</li>
-        <li><i class="j-icon icon-sort-by-order-alt"></i> sort-by-order-alt</li>
-        <li><i class="j-icon icon-thumbs-up"></i> thumbs-up</li>
-        <li><i class="j-icon icon-thumbs-down"></i> thumbs-down</li>
-        <li><i class="j-icon icon-long-arrow-down"></i> long-arrow-down</li>
-        <li><i class="j-icon icon-long-arrow-up"></i> long-arrow-up</li>
-        <li><i class="j-icon icon-long-arrow-left"></i> long-arrow-left</li>
-        <li><i class="j-icon icon-long-arrow-right"></i> long-arrow-right</li>
-        <li><i class="j-icon icon-apple"></i> apple</li>
-        <li><i class="j-icon icon-windows"></i> windows</li>
-        <li><i class="j-icon icon-android"></i> android</li>
-        <li><i class="j-icon icon-linux"></i> linux</li>
-        <li><i class="j-icon icon-sun"></i> sun</li>
-        <li><i class="j-icon icon-moon"></i> moon</li>
-        <li><i class="j-icon icon-archive"></i> archive</li>
-        <li><i class="j-icon icon-bug"></i> bug</li>
-        <li><i class="j-icon icon-zhifubao"></i> zhifubao</li>
-        <li><i class="j-icon icon-zhifubao-square"></i> zhifubao-square</li>
-        <li><i class="j-icon icon-taobao"></i> taobao</li>
-        <li><i class="j-icon icon-weibo"></i> weibo</li>
-        <li><i class="j-icon icon-renren"></i> renren</li>
-        <li><i class="j-icon icon-chrome"></i> chrome</li>
-        <li><i class="j-icon icon-firefox"></i> firefox</li>
-        <li><i class="j-icon icon-ie"></i> ie</li>
-        <li><i class="j-icon icon-opera"></i> opera</li>
-        <li><i class="j-icon icon-safari"></i> safari</li>
-        <li><i class="j-icon icon-node"></i> node</li>
-        <li><i class="j-icon icon-layout"></i> layout</li>
-        <li><i class="j-icon icon-usecase"></i> usecase</li>
-        <li><i class="j-icon icon-stack"></i> stack</li>
-        <li><i class="j-icon icon-branch"></i> branch</li>
-        <li><i class="j-icon icon-chat"></i> chat</li>
-        <li><i class="j-icon icon-chat-line"></i> chat-line</li>
-        <li><i class="j-icon icon-chat-dot"></i> chat-dot</li>
-        <li><i class="j-icon icon-cube"></i> cube</li>
-        <li><i class="j-icon icon-database"></i> database</li>
-        <li><i class="j-icon icon-chanzhi"></i> chanzhi</li>
-        <li><i class="j-icon icon-chanzhi-pro"></i> chanzhi-pro</li>
-        <li><i class="j-icon icon-zsite"></i> zsite</li>
-        <li><i class="j-icon icon-zsite-pro"></i> zsite-pro</li>
+    <ul jdom='iconList' class="clearfix">
+        <li><i class="j-icon icon-resize"></i> <span>resize</span></li>
+        <li><i class="j-icon icon-expand-full"></i> <span>expand-full</span></li>
+        <li><i class="j-icon icon-collapse-full"></i> <span>collapse-full</span></li>
+        <li><i class="j-icon icon-yinyang"></i> <span>yinyang</span></li>
+        <li><i class="j-icon icon-window"></i> <span>window</span></li>
+        <li><i class="j-icon icon-window-alt"></i> <span>window-alt</span></li>
+        <li><i class="j-icon icon-carousel"></i> <span>carousel</span></li>
+        <li><i class="j-icon icon-spinner-snake"></i> <span>spinner-snake</span></li>
+        <li><i class="j-icon icon-spinner-indicator"></i> <span>spinner-indicator</span></li>
+        <li><i class="j-icon icon-check-board"></i> <span>check-board</span></li>
+        <li><i class="j-icon icon-bar-chart"></i> <span>bar-chart</span></li>
+        <li><i class="j-icon icon-github"></i> <span>github</span></li>
+        <li><i class="j-icon icon-dot-circle"></i> <span>dot-circle</span></li>
+        <li><i class="j-icon icon-cube-alt"></i> <span>cube-alt</span></li>
+        <li><i class="j-icon icon-cubes"></i> <span>cubes</span></li>
+        <li><i class="j-icon icon-file-pdf"></i> <span>file-pdf</span></li>
+        <li><i class="j-icon icon-file-word"></i> <span>file-word</span></li>
+        <li><i class="j-icon icon-file-excel"></i> <span>file-excel</span></li>
+        <li><i class="j-icon icon-file-powerpoint"></i> <span>file-powerpoint</span></li>
+        <li><i class="j-icon icon-file-image"></i> <span>file-image</span></li>
+        <li><i class="j-icon icon-file-archive"></i> <span>file-archive</span></li>
+        <li><i class="j-icon icon-file-audio"></i> <span>file-audio</span></li>
+        <li><i class="j-icon icon-file-movie"></i> <span>file-movie</span></li>
+        <li><i class="j-icon icon-file-code"></i> <span>file-code</span></li>
+        <li><i class="j-icon icon-circle-o-notch"></i> <span>circle-o-notch</span></li>
+        <li><i class="j-icon icon-qq"></i> <span>qq</span></li>
+        <li><i class="j-icon icon-wechat"></i> <span>wechat</span></li>
+        <li><i class="j-icon icon-history"></i> <span>history</span></li>
+        <li><i class="j-icon icon-circle-thin"></i> <span>circle-thin</span></li>
+        <li><i class="j-icon icon-sliders"></i> <span>sliders</span></li>
+        <li><i class="j-icon icon-newspaper-o"></i> <span>newspaper-o</span></li>
+        <li><i class="j-icon icon-calculator"></i> <span>calculator</span></li>
+        <li><i class="j-icon icon-paint-brush"></i> <span>paint-brush</span></li>
+        <li><i class="j-icon icon-area-chart"></i> <span>area-chart</span></li>
+        <li><i class="j-icon icon-pie-chart"></i> <span>pie-chart</span></li>
+        <li><i class="j-icon icon-line-chart"></i> <span>line-chart</span></li>
+        <li><i class="j-icon icon-toggle-off"></i> <span>toggle-off</span></li>
+        <li><i class="j-icon icon-toggle-on"></i> <span>toggle-on</span></li>
+        <li><i class="j-icon icon-diamond"></i> <span>diamond</span></li>
+        <li><i class="j-icon icon-venus"></i> <span>venus</span></li>
+        <li><i class="j-icon icon-mars"></i> <span>mars</span></li>
+        <li><i class="j-icon icon-server"></i> <span>server</span></li>
+        <li><i class="j-icon icon-music"></i> <span>music</span></li>
+        <li><i class="j-icon icon-search"></i> <span>search</span></li>
+        <li><i class="j-icon icon-envelope"></i> <span>envelope</span></li>
+        <li><i class="j-icon icon-heart"></i> <span>heart</span></li>
+        <li><i class="j-icon icon-star"></i> <span>star</span></li>
+        <li><i class="j-icon icon-star-empty"></i> <span>star-empty</span></li>
+        <li><i class="j-icon icon-user"></i> <span>user</span></li>
+        <li><i class="j-icon icon-film"></i> <span>film</span></li>
+        <li><i class="j-icon icon-th-large"></i> <span>th-large</span></li>
+        <li><i class="j-icon icon-th"></i> <span>th</span></li>
+        <li><i class="j-icon icon-th-list"></i> <span>th-list</span></li>
+        <li><i class="j-icon icon-check"></i> <span>check</span></li>
+        <li><i class="j-icon icon-times"></i> <span>times</span></li>
+        <li><i class="j-icon icon-zoom-in"></i> <span>zoom-in</span></li>
+        <li><i class="j-icon icon-zoom-out"></i> <span>zoom-out</span></li>
+        <li><i class="j-icon icon-off"></i> <span>off</span></li>
+        <li><i class="j-icon icon-cog"></i> <span>cog</span></li>
+        <li><i class="j-icon icon-trash"></i> <span>trash</span></li>
+        <li><i class="j-icon icon-home"></i> <span>home</span></li>
+        <li><i class="j-icon icon-file-o"></i> <span>file-o</span></li>
+        <li><i class="j-icon icon-time"></i> <span>time</span></li>
+        <li><i class="j-icon icon-download-alt"></i> <span>download-alt</span></li>
+        <li><i class="j-icon icon-download"></i> <span>download</span></li>
+        <li><i class="j-icon icon-upload"></i> <span>upload</span></li>
+        <li><i class="j-icon icon-inbox"></i> <span>inbox</span></li>
+        <li><i class="j-icon icon-play-circle"></i> <span>play-circle</span></li>
+        <li><i class="j-icon icon-repeat"></i> <span>repeat</span></li>
+        <li><i class="j-icon icon-refresh"></i> <span>refresh</span></li>
+        <li><i class="j-icon icon-list-alt"></i> <span>list-alt</span></li>
+        <li><i class="j-icon icon-lock"></i> <span>lock</span></li>
+        <li><i class="j-icon icon-flag"></i> <span>flag</span></li>
+        <li><i class="j-icon icon-headphones"></i> <span>headphones</span></li>
+        <li><i class="j-icon icon-volume-off"></i> <span>volume-off</span></li>
+        <li><i class="j-icon icon-volume-up"></i> <span>volume-up</span></li>
+        <li><i class="j-icon icon-qrcode"></i> <span>qrcode</span></li>
+        <li><i class="j-icon icon-barcode"></i> <span>barcode</span></li>
+        <li><i class="j-icon icon-tag"></i> <span>tag</span></li>
+        <li><i class="j-icon icon-tags"></i> <span>tags</span></li>
+        <li><i class="j-icon icon-book"></i> <span>book</span></li>
+        <li><i class="j-icon icon-bookmark"></i> <span>bookmark</span></li>
+        <li><i class="j-icon icon-print"></i> <span>print</span></li>
+        <li><i class="j-icon icon-camera"></i> <span>camera</span></li>
+        <li><i class="j-icon icon-font"></i> <span>font</span></li>
+        <li><i class="j-icon icon-bold"></i> <span>bold</span></li>
+        <li><i class="j-icon icon-italic"></i> <span>italic</span></li>
+        <li><i class="j-icon icon-header"></i> <span>header</span></li>
+        <li><i class="j-icon icon-underline"></i> <span>underline</span></li>
+        <li><i class="j-icon icon-strikethrough"></i> <span>strikethrough</span></li>
+        <li><i class="j-icon icon-eraser"></i> <span>eraser</span></li>
+        <li><i class="j-icon icon-align-justify"></i> <span>align-justify</span></li>
+        <li><i class="j-icon icon-align-left"></i> <span>align-left</span></li>
+        <li><i class="j-icon icon-list"></i> <span>list</span></li>
+        <li><i class="j-icon icon-picture"></i> <span>picture</span></li>
+        <li><i class="j-icon icon-pencil"></i> <span>pencil</span></li>
+        <li><i class="j-icon icon-map-marker"></i> <span>map-marker</span></li>
+        <li><i class="j-icon icon-adjust"></i> <span>adjust</span></li>
+        <li><i class="j-icon icon-tint"></i> <span>tint</span></li>
+        <li><i class="j-icon icon-edit"></i> <span>edit</span></li>
+        <li><i class="j-icon icon-share"></i> <span>share</span></li>
+        <li><i class="j-icon icon-checked"></i> <span>checked</span></li>
+        <li><i class="j-icon icon-arrows"></i> <span>arrows</span></li>
+        <li><i class="j-icon icon-step-backward"></i> <span>step-backward</span></li>
+        <li><i class="j-icon icon-fast-backward"></i> <span>fast-backward</span></li>
+        <li><i class="j-icon icon-backward"></i> <span>backward</span></li>
+        <li><i class="j-icon icon-play"></i> <span>play</span></li>
+        <li><i class="j-icon icon-pause"></i> <span>pause</span></li>
+        <li><i class="j-icon icon-stop"></i> <span>stop</span></li>
+        <li><i class="j-icon icon-forward"></i> <span>forward</span></li>
+        <li><i class="j-icon icon-fast-forward"></i> <span>fast-forward</span></li>
+        <li><i class="j-icon icon-step-forward"></i> <span>step-forward</span></li>
+        <li><i class="j-icon icon-eject"></i> <span>eject</span></li>
+        <li><i class="j-icon icon-chevron-left"></i> <span>chevron-left</span></li>
+        <li><i class="j-icon icon-chevron-right"></i> <span>chevron-right</span></li>
+        <li><i class="j-icon icon-plus-sign"></i> <span>plus-sign</span></li>
+        <li><i class="j-icon icon-minus-sign"></i> <span>minus-sign</span></li>
+        <li><i class="j-icon icon-remove-sign"></i> <span>remove-sign</span></li>
+        <li><i class="j-icon icon-check-circle"></i> <span>check-circle</span></li>
+        <li><i class="j-icon icon-question-sign"></i> <span>question-sign</span></li>
+        <li><i class="j-icon icon-info-sign"></i> <span>info-sign</span></li>
+        <li><i class="j-icon icon-remove-circle"></i> <span>remove-circle</span></li>
+        <li><i class="j-icon icon-check-circle-o"></i> <span>check-circle-o</span></li>
+        <li><i class="j-icon icon-ban-circle"></i> <span>ban-circle</span></li>
+        <li><i class="j-icon icon-arrow-left"></i> <span>arrow-left</span></li>
+        <li><i class="j-icon icon-arrow-right"></i> <span>arrow-right</span></li>
+        <li><i class="j-icon icon-arrow-up"></i> <span>arrow-up</span></li>
+        <li><i class="j-icon icon-arrow-down"></i> <span>arrow-down</span></li>
+        <li><i class="j-icon icon-share-alt"></i> <span>share-alt</span></li>
+        <li><i class="j-icon icon-resize-full"></i> <span>resize-full</span></li>
+        <li><i class="j-icon icon-resize-small"></i> <span>resize-small</span></li>
+        <li><i class="j-icon icon-plus"></i> <span>plus</span></li>
+        <li><i class="j-icon icon-minus"></i> <span>minus</span></li>
+        <li><i class="j-icon icon-asterisk"></i> <span>asterisk</span></li>
+        <li><i class="j-icon icon-exclamation-sign"></i> <span>exclamation-sign</span></li>
+        <li><i class="j-icon icon-gift"></i> <span>gift</span></li>
+        <li><i class="j-icon icon-leaf"></i> <span>leaf</span></li>
+        <li><i class="j-icon icon-eye-open"></i> <span>eye-open</span></li>
+        <li><i class="j-icon icon-eye-close"></i> <span>eye-close</span></li>
+        <li><i class="j-icon icon-warning-sign"></i> <span>warning-sign</span></li>
+        <li><i class="j-icon icon-plane"></i> <span>plane</span></li>
+        <li><i class="j-icon icon-calendar"></i> <span>calendar</span></li>
+        <li><i class="j-icon icon-random"></i> <span>random</span></li>
+        <li><i class="j-icon icon-comment"></i> <span>comment</span></li>
+        <li><i class="j-icon icon-chevron-up"></i> <span>chevron-up</span></li>
+        <li><i class="j-icon icon-chevron-down"></i> <span>chevron-down</span></li>
+        <li><i class="j-icon icon-shopping-cart"></i> <span>shopping-cart</span></li>
+        <li><i class="j-icon icon-folder-close"></i> <span>folder-close</span></li>
+        <li><i class="j-icon icon-folder-open"></i> <span>folder-open</span></li>
+        <li><i class="j-icon icon-resize-v"></i> <span>resize-v</span></li>
+        <li><i class="j-icon icon-resize-h"></i> <span>resize-h</span></li>
+        <li><i class="j-icon icon-bar-chart-alt"></i> <span>bar-chart-alt</span></li>
+        <li><i class="j-icon icon-camera-retro"></i> <span>camera-retro</span></li>
+        <li><i class="j-icon icon-key"></i> <span>key</span></li>
+        <li><i class="j-icon icon-cogs"></i> <span>cogs</span></li>
+        <li><i class="j-icon icon-comments"></i> <span>comments</span></li>
+        <li><i class="j-icon icon-thumbs-o-up"></i> <span>thumbs-o-up</span></li>
+        <li><i class="j-icon icon-thumbs-o-down"></i> <span>thumbs-o-down</span></li>
+        <li><i class="j-icon icon-star-half"></i> <span>star-half</span></li>
+        <li><i class="j-icon icon-heart-empty"></i> <span>heart-empty</span></li>
+        <li><i class="j-icon icon-signout"></i> <span>signout</span></li>
+        <li><i class="j-icon icon-pushpin"></i> <span>pushpin</span></li>
+        <li><i class="j-icon icon-external-link"></i> <span>external-link</span></li>
+        <li><i class="j-icon icon-signin"></i> <span>signin</span></li>
+        <li><i class="j-icon icon-trophy"></i> <span>trophy</span></li>
+        <li><i class="j-icon icon-upload-alt"></i> <span>upload-alt</span></li>
+        <li><i class="j-icon icon-lemon"></i> <span>lemon</span></li>
+        <li><i class="j-icon icon-phone"></i> <span>phone</span></li>
+        <li><i class="j-icon icon-check-empty"></i> <span>check-empty</span></li>
+        <li><i class="j-icon icon-bookmark-empty"></i> <span>bookmark-empty</span></li>
+        <li><i class="j-icon icon-phone-sign"></i> <span>phone-sign</span></li>
+        <li><i class="j-icon icon-credit"></i> <span>credit</span></li>
+        <li><i class="j-icon icon-rss"></i> <span>rss</span></li>
+        <li><i class="j-icon icon-hdd"></i> <span>hdd</span></li>
+        <li><i class="j-icon icon-bullhorn"></i> <span>bullhorn</span></li>
+        <li><i class="j-icon icon-bell"></i> <span>bell</span></li>
+        <li><i class="j-icon icon-certificate"></i> <span>certificate</span></li>
+        <li><i class="j-icon icon-hand-right"></i> <span>hand-right</span></li>
+        <li><i class="j-icon icon-hand-left"></i> <span>hand-left</span></li>
+        <li><i class="j-icon icon-hand-up"></i> <span>hand-up</span></li>
+        <li><i class="j-icon icon-hand-down"></i> <span>hand-down</span></li>
+        <li><i class="j-icon icon-circle-arrow-left"></i> <span>circle-arrow-left</span></li>
+        <li><i class="j-icon icon-circle-arrow-right"></i> <span>circle-arrow-right</span></li>
+        <li><i class="j-icon icon-circle-arrow-up"></i> <span>circle-arrow-up</span></li>
+        <li><i class="j-icon icon-circle-arrow-down"></i> <span>circle-arrow-down</span></li>
+        <li><i class="j-icon icon-globe"></i> <span>globe</span></li>
+        <li><i class="j-icon icon-wrench"></i> <span>wrench</span></li>
+        <li><i class="j-icon icon-tasks"></i> <span>tasks</span></li>
+        <li><i class="j-icon icon-filter"></i> <span>filter</span></li>
+        <li><i class="j-icon icon-group"></i> <span>group</span></li>
+        <li><i class="j-icon icon-link"></i> <span>link</span></li>
+        <li><i class="j-icon icon-cloud"></i> <span>cloud</span></li>
+        <li><i class="j-icon icon-beaker"></i> <span>beaker</span></li>
+        <li><i class="j-icon icon-cut"></i> <span>cut</span></li>
+        <li><i class="j-icon icon-copy"></i> <span>copy</span></li>
+        <li><i class="j-icon icon-paper-clip"></i> <span>paper-clip</span></li>
+        <li><i class="j-icon icon-save"></i> <span>save</span></li>
+        <li><i class="j-icon icon-sign-blank"></i> <span>sign-blank</span></li>
+        <li><i class="j-icon icon-bars"></i> <span>bars</span></li>
+        <li><i class="j-icon icon-list-ul"></i> <span>list-ul</span></li>
+        <li><i class="j-icon icon-list-ol"></i> <span>list-ol</span></li>
+        <li><i class="j-icon icon-table"></i> <span>table</span></li>
+        <li><i class="j-icon icon-magic"></i> <span>magic</span></li>
+        <li><i class="j-icon icon-caret-down"></i> <span>caret-down</span></li>
+        <li><i class="j-icon icon-caret-up"></i> <span>caret-up</span></li>
+        <li><i class="j-icon icon-caret-left"></i> <span>caret-left</span></li>
+        <li><i class="j-icon icon-caret-right"></i> <span>caret-right</span></li>
+        <li><i class="j-icon icon-columns"></i> <span>columns</span></li>
+        <li><i class="j-icon icon-sort"></i> <span>sort</span></li>
+        <li><i class="j-icon icon-sort-down"></i> <span>sort-down</span></li>
+        <li><i class="j-icon icon-sort-up"></i> <span>sort-up</span></li>
+        <li><i class="j-icon icon-envelope-alt"></i> <span>envelope-alt</span></li>
+        <li><i class="j-icon icon-undo"></i> <span>undo</span></li>
+        <li><i class="j-icon icon-dashboard"></i> <span>dashboard</span></li>
+        <li><i class="j-icon icon-comment-alt"></i> <span>comment-alt</span></li>
+        <li><i class="j-icon icon-comments-alt"></i> <span>comments-alt</span></li>
+        <li><i class="j-icon icon-bolt"></i> <span>bolt</span></li>
+        <li><i class="j-icon icon-sitemap"></i> <span>sitemap</span></li>
+        <li><i class="j-icon icon-umbrella"></i> <span>umbrella</span></li>
+        <li><i class="j-icon icon-paste"></i> <span>paste</span></li>
+        <li><i class="j-icon icon-lightbulb"></i> <span>lightbulb</span></li>
+        <li><i class="j-icon icon-exchange"></i> <span>exchange</span></li>
+        <li><i class="j-icon icon-cloud-download"></i> <span>cloud-download</span></li>
+        <li><i class="j-icon icon-cloud-upload"></i> <span>cloud-upload</span></li>
+        <li><i class="j-icon icon-bell-alt"></i> <span>bell-alt</span></li>
+        <li><i class="j-icon icon-coffee"></i> <span>coffee</span></li>
+        <li><i class="j-icon icon-file-text-o"></i> <span>file-text-o</span></li>
+        <li><i class="j-icon icon-building"></i> <span>building</span></li>
+        <li><i class="j-icon icon-double-angle-left"></i> <span>double-angle-left</span></li>
+        <li><i class="j-icon icon-double-angle-right"></i> <span>double-angle-right</span></li>
+        <li><i class="j-icon icon-double-angle-up"></i> <span>double-angle-up</span></li>
+        <li><i class="j-icon icon-double-angle-down"></i> <span>double-angle-down</span></li>
+        <li><i class="j-icon icon-angle-left"></i> <span>angle-left</span></li>
+        <li><i class="j-icon icon-angle-right"></i> <span>angle-right</span></li>
+        <li><i class="j-icon icon-angle-up"></i> <span>angle-up</span></li>
+        <li><i class="j-icon icon-angle-down"></i> <span>angle-down</span></li>
+        <li><i class="j-icon icon-desktop"></i> <span>desktop</span></li>
+        <li><i class="j-icon icon-laptop"></i> <span>laptop</span></li>
+        <li><i class="j-icon icon-tablet"></i> <span>tablet</span></li>
+        <li><i class="j-icon icon-mobile"></i> <span>mobile</span></li>
+        <li><i class="j-icon icon-circle-blank"></i> <span>circle-blank</span></li>
+        <li><i class="j-icon icon-quote-left"></i> <span>quote-left</span></li>
+        <li><i class="j-icon icon-quote-right"></i> <span>quote-right</span></li>
+        <li><i class="j-icon icon-spinner"></i> <span>spinner</span></li>
+        <li><i class="j-icon icon-circle"></i> <span>circle</span></li>
+        <li><i class="j-icon icon-reply"></i> <span>reply</span></li>
+        <li><i class="j-icon icon-folder-close-alt"></i> <span>folder-close-alt</span></li>
+        <li><i class="j-icon icon-folder-open-alt"></i> <span>folder-open-alt</span></li>
+        <li><i class="j-icon icon-expand-alt"></i> <span>expand-alt</span></li>
+        <li><i class="j-icon icon-collapse-alt"></i> <span>collapse-alt</span></li>
+        <li><i class="j-icon icon-smile"></i> <span>smile</span></li>
+        <li><i class="j-icon icon-frown"></i> <span>frown</span></li>
+        <li><i class="j-icon icon-meh"></i> <span>meh</span></li>
+        <li><i class="j-icon icon-gamepad"></i> <span>gamepad</span></li>
+        <li><i class="j-icon icon-keyboard"></i> <span>keyboard</span></li>
+        <li><i class="j-icon icon-flag-alt"></i> <span>flag-alt</span></li>
+        <li><i class="j-icon icon-flag-checkered"></i> <span>flag-checkered</span></li>
+        <li><i class="j-icon icon-terminal"></i> <span>terminal</span></li>
+        <li><i class="j-icon icon-code"></i> <span>code</span></li>
+        <li><i class="j-icon icon-reply-all"></i> <span>reply-all</span></li>
+        <li><i class="j-icon icon-star-half-full"></i> <span>star-half-full</span></li>
+        <li><i class="j-icon icon-location-arrow"></i> <span>location-arrow</span></li>
+        <li><i class="j-icon icon-crop"></i> <span>crop</span></li>
+        <li><i class="j-icon icon-code-fork"></i> <span>code-fork</span></li>
+        <li><i class="j-icon icon-unlink"></i> <span>unlink</span></li>
+        <li><i class="j-icon icon-question"></i> <span>question</span></li>
+        <li><i class="j-icon icon-info"></i> <span>info</span></li>
+        <li><i class="j-icon icon-shield"></i> <span>shield</span></li>
+        <li><i class="j-icon icon-calendar-empty"></i> <span>calendar-empty</span></li>
+        <li><i class="j-icon icon-rocket"></i> <span>rocket</span></li>
+        <li><i class="j-icon icon-chevron-sign-left"></i> <span>chevron-sign-left</span></li>
+        <li><i class="j-icon icon-chevron-sign-right"></i> <span>chevron-sign-right</span></li>
+        <li><i class="j-icon icon-chevron-sign-up"></i> <span>chevron-sign-up</span></li>
+        <li><i class="j-icon icon-chevron-sign-down"></i> <span>chevron-sign-down</span></li>
+        <li><i class="j-icon icon-html5"></i> <span>html5</span></li>
+        <li><i class="j-icon icon-anchor"></i> <span>anchor</span></li>
+        <li><i class="j-icon icon-unlock-alt"></i> <span>unlock-alt</span></li>
+        <li><i class="j-icon icon-bullseye"></i> <span>bullseye</span></li>
+        <li><i class="j-icon icon-ellipsis-h"></i> <span>ellipsis-h</span></li>
+        <li><i class="j-icon icon-ellipsis-v"></i> <span>ellipsis-v</span></li>
+        <li><i class="j-icon icon-rss-sign"></i> <span>rss-sign</span></li>
+        <li><i class="j-icon icon-play-sign"></i> <span>play-sign</span></li>
+        <li><i class="j-icon icon-minus-sign-alt"></i> <span>minus-sign-alt</span></li>
+        <li><i class="j-icon icon-plus-sign-alt"></i> <span>plus-sign-alt</span></li>
+        <li><i class="j-icon icon-check-minus"></i> <span>check-minus</span></li>
+        <li><i class="j-icon icon-check-plus"></i> <span>check-plus</span></li>
+        <li><i class="j-icon icon-level-up"></i> <span>level-up</span></li>
+        <li><i class="j-icon icon-level-down"></i> <span>level-down</span></li>
+        <li><i class="j-icon icon-check-sign"></i> <span>check-sign</span></li>
+        <li><i class="j-icon icon-edit-sign"></i> <span>edit-sign</span></li>
+        <li><i class="j-icon icon-external-link-sign"></i> <span>external-link-sign</span></li>
+        <li><i class="j-icon icon-share-sign"></i> <span>share-sign</span></li>
+        <li><i class="j-icon icon-compass"></i> <span>compass</span></li>
+        <li><i class="j-icon icon-collapse"></i> <span>collapse</span></li>
+        <li><i class="j-icon icon-collapse-top"></i> <span>collapse-top</span></li>
+        <li><i class="j-icon icon-expand"></i> <span>expand</span></li>
+        <li><i class="j-icon icon-dollar"></i> <span>dollar</span></li>
+        <li><i class="j-icon icon-yen"></i> <span>yen</span></li>
+        <li><i class="j-icon icon-file"></i> <span>file</span></li>
+        <li><i class="j-icon icon-file-text"></i> <span>file-text</span></li>
+        <li><i class="j-icon icon-sort-by-alphabet"></i> <span>sort-by-alphabet</span></li>
+        <li><i class="j-icon icon-sort-by-alphabet-alt"></i> <span>sort-by-alphabet-alt</span></li>
+        <li><i class="j-icon icon-sort-by-attributes"></i> <span>sort-by-attributes</span></li>
+        <li><i class="j-icon icon-sort-by-attributes-alt"></i> <span>sort-by-attributes-alt</span></li>
+        <li><i class="j-icon icon-sort-by-order"></i> <span>sort-by-order</span></li>
+        <li><i class="j-icon icon-sort-by-order-alt"></i> <span>sort-by-order-alt</span></li>
+        <li><i class="j-icon icon-thumbs-up"></i> <span>thumbs-up</span></li>
+        <li><i class="j-icon icon-thumbs-down"></i> <span>thumbs-down</span></li>
+        <li><i class="j-icon icon-long-arrow-down"></i> <span>long-arrow-down</span></li>
+        <li><i class="j-icon icon-long-arrow-up"></i> <span>long-arrow-up</span></li>
+        <li><i class="j-icon icon-long-arrow-left"></i> <span>long-arrow-left</span></li>
+        <li><i class="j-icon icon-long-arrow-right"></i> <span>long-arrow-right</span></li>
+        <li><i class="j-icon icon-apple"></i> <span>apple</span></li>
+        <li><i class="j-icon icon-windows"></i> <span>windows</span></li>
+        <li><i class="j-icon icon-android"></i> <span>android</span></li>
+        <li><i class="j-icon icon-linux"></i> <span>linux</span></li>
+        <li><i class="j-icon icon-sun"></i> <span>sun</span></li>
+        <li><i class="j-icon icon-moon"></i> <span>moon</span></li>
+        <li><i class="j-icon icon-archive"></i> <span>archive</span></li>
+        <li><i class="j-icon icon-bug"></i> <span>bug</span></li>
+        <li><i class="j-icon icon-zhifubao"></i> <span>zhifubao</span></li>
+        <li><i class="j-icon icon-zhifubao-square"></i> <span>zhifubao-square</span></li>
+        <li><i class="j-icon icon-taobao"></i> <span>taobao</span></li>
+        <li><i class="j-icon icon-weibo"></i> <span>weibo</span></li>
+        <li><i class="j-icon icon-renren"></i> <span>renren</span></li>
+        <li><i class="j-icon icon-chrome"></i> <span>chrome</span></li>
+        <li><i class="j-icon icon-firefox"></i> <span>firefox</span></li>
+        <li><i class="j-icon icon-ie"></i> <span>ie</span></li>
+        <li><i class="j-icon icon-opera"></i> <span>opera</span></li>
+        <li><i class="j-icon icon-safari"></i> <span>safari</span></li>
+        <li><i class="j-icon icon-node"></i> <span>node</span></li>
+        <li><i class="j-icon icon-layout"></i> <span>layout</span></li>
+        <li><i class="j-icon icon-usecase"></i> <span>usecase</span></li>
+        <li><i class="j-icon icon-stack"></i> <span>stack</span></li>
+        <li><i class="j-icon icon-branch"></i> <span>branch</span></li>
+        <li><i class="j-icon icon-chat"></i> <span>chat</span></li>
+        <li><i class="j-icon icon-chat-line"></i> <span>chat-line</span></li>
+        <li><i class="j-icon icon-chat-dot"></i> <span>chat-dot</span></li>
+        <li><i class="j-icon icon-cube"></i> <span>cube</span></li>
+        <li><i class="j-icon icon-database"></i> <span>database</span></li>
+        <li class='i-big'><i class="j-icon icon-chanzhi"></i> <span>chanzhi</span></li>
+        <li class='i-big'><i class="j-icon icon-chanzhi-pro"></i> <span>chanzhi-pro</span></li>
+        <li class='i-big'><i class="j-icon icon-zsite"></i> <span>zsite</span></li>
+        <li class='i-big'><i class="j-icon icon-zsite-pro"></i> <span>zsite-pro</span></li>
     </ul>
 </div>
 <div class='title'>图标旋转</div>
@@ -440,7 +461,8 @@
     new Jet({
         data:{
             class:'j-icon icon-resize',
-            value:'<i class="j-icon icon-resize></i>'
+            value:'<i class="j-icon icon-resize></i>',
+            list:false,
         },
         onmounted:function(){
             var _this=this;
@@ -448,12 +470,29 @@
                 _this.value=this.child(0).allHtml();
                 _this.class=this.child(0).className;
             });
-            
         },
         func:{
             copy:function(){
                 if($J.copy(this.value)){
                     JUI.msg.success('复制成功')
+                }
+            },queryIcon:function(opt){
+                this.$dom.iconList.ele.child().toArray().filter(function(item){
+                    return item.child(1).txt().indexOf(opt.ele.value)!==-1
+                }).forEach(function(item){
+                    item.removeClass('hide');
+                });
+                this.$dom.iconList.ele.child().toArray().filter(function(item){
+                    return item.child(1).txt().indexOf(opt.ele.value)===-1
+                }).forEach(function(item){
+                    item.addClass('hide');
+                });
+            },changeList:function(){
+                this.list=!this.list;
+                if(this.list){
+                    this.$dom.iconList.ele.child().addClass('i-list')
+                }else{
+                    this.$dom.iconList.ele.child().removeClass('i-list')
                 }
             }
         }

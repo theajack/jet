@@ -9,9 +9,10 @@
         <div class='link' jump-to='prepArray'>4.$prepArray <span class="light-text">(向数组尾部插入多个元素)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='insert'>5.$insert <span class="light-text">(向数组指定位置插入一个元素)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='insertArray'>6.$insertArray <span class="light-text">(向数组指定位置插入多个元素)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='remove'>7.$remove <span class="light-text">(删除数组中指定位置的一个或多个元素)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='clear'>8.$clear <span class="light-text">(清空数组)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='replace'>9.$replace <span class="light-text">(替换数组，可用于数组整体赋值)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='remove'>7.$remove <span class="light-text">(删除数组中的一个或多个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='removeByIndex'>8.$removeByIndex <span class="light-text">(删除数组中指定位置的一个或多个元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='clear'>9.$clear <span class="light-text">(清空数组)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='replace'>10.$replace <span class="light-text">(替换数组，可用于数组整体赋值)</span><i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 <div class='title' jump-des='push'>1.$push</div>
@@ -215,10 +216,11 @@
 <div class='title' jump-des='remove'>7.$remove</div>
 <div class="sub">
     <div class='text'>
-        使用 <span class="red">.$remove(index,n)</span> 删除数组中的一个或多个元素，其中参数index是删除的位置，n是需要删除的元素个数。请看一个例子：
+        使用 <span class="red">.$remove(ele1,ele2,...)</span> 删除数组中的一个或多个元素，其中参数index是删除的位置，n是需要删除的元素个数。请看一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;input type="button" jon='click:remove' value='删除元素'>
+&lt;input type="button" jon='click:remove2' value='删除多个元素'>
 &lt;div j='list_remove' jfor-inline>
     &lt;span j='$value'>&lt;/span>
 &lt;/div>
@@ -229,7 +231,10 @@
         },
         func:{
             remove:function(){
-                this.list_remove.$remove(0,1);
+                this.list_remove.$remove(1);
+            },
+            remove2:function(){
+                this.list_remove.$remove(3,4,5);
             }
         }
     });
@@ -239,13 +244,52 @@
         以下是输出的结果：
         <div class='out'>
             <input type="button" jon='click:remove' value='删除元素'>
+            <input type="button" jon='click:remove2' value='删除多个元素'>
             <div j='list_remove' jfor-inline>
                 <span j='$value'></span>
             </div>
         </div>
     </div>
 </div>
-<div class='title' jump-des='clear'>8.$clear</div>
+<div class='title' jump-des='removeByIndex'>8.$removeByIndex</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">.$removeByIndex(index,n)</span> 删除数组中的一个或多个元素，其中参数index是删除的位置，n是需要删除的元素个数，n是可选参数。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input type="button" jon='click:removeByIndex' value='删除元素'>
+&lt;input type="button" jon='click:removeByIndex2' value='删除两个元素'>
+&lt;div j='list_removeByIndex' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            list_removeByIndex:[1,2,3,4,5,6,7,8,9,10]
+        },
+        func:{
+            removeByIndex:function(){
+                this.list_removeByIndex.$removeByIndex(1);
+            },
+            removeByIndex2:function(){
+                this.list_removeByIndex.$removeByIndex(1,2);
+            },
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input type="button" jon='click:removeByIndex' value='删除元素'>
+            <input type="button" jon='click:removeByIndex2' value='删除两个元素'>
+            <div j='list_removeByIndex' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='clear'>9.$clear</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">.$clear()</span> 可以清空一个数组。请看一个例子：
@@ -278,7 +322,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='replace'>9.$replace</div>
+<div class='title' jump-des='replace'>10.$replace</div>
 <div class="sub">
     <div class='text'>
         使用 <span class="red">.$replace(arr)</span> 可以对当前数组赋一个新的值。请看一个例子：
@@ -320,6 +364,7 @@
         nextUrl:'/attr',
     });
     new Jet({
+        name:'array',
         data:{//数据
             list_push:[11,22],
             list_pushArray:[11,22],
@@ -328,6 +373,7 @@
             list_insert:[1,1],
             list_insertArray:[1,1],
             list_remove:[1,2,3,4,5,6],
+            list_removeByIndex:[1,2,3,4,5,6,7,8,9,10],
             list_clear:[1,2,3],
             list_replace:[1,2,3]
         },
@@ -352,6 +398,15 @@
             },
             remove:function(){
                 this.list_remove.$remove(0,1);
+            },
+            remove2:function(){
+                this.list_remove.$remove(3,4,5);
+            },
+            removeByIndex:function(){
+                this.list_removeByIndex.$removeByIndex(1);
+            },
+            removeByIndex2:function(){
+                this.list_removeByIndex.$removeByIndex(1,2);
             },
             clear:function(){
                 this.list_clear.$clear();

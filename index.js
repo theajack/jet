@@ -1,4 +1,54 @@
 Jet.lang.use(['cn','en']);
+// Jet.$import('a as a0',function(mods){
+//   //debugger
+//   console.log(mods)
+//   console.log(Jet.$module)
+//   console.log(_modules)
+// })
+// Jet.$import('module2','module1',function(mods){
+//   //debugger
+//   console.log('index1:',mods)
+//   console.log('index1:',Jet.$module)
+//   console.log('index1:',_modules)
+// })
+// Jet.$import('module2 as mm2','module1 as mm1',function(mods){
+//   //debugger
+//   console.log('index1:',mods)
+//   console.log('index1:',Jet.$module)
+//   console.log('index1:',_modules)
+// })
+
+// Jet.$import('module2 as mm2',function(mods){
+//   //debugger
+//   mods.mm2.addCount1()
+//   console.log('index2:',mods.mm2.allCount())
+//   console.log('index2:',mods)
+//   console.log('index2:',Jet.$module)
+//   console.log('index2:',_modules)
+// })
+// Jet.$import('module1 as mm1',function(mods){
+//   //debugger
+//   mods.mm1.addCount();
+//   mods.mm1.addCount();
+//   console.log('index1:',mods.mm1.getCount())
+//   console.log('index1:',mods)
+//   console.log('index1:',Jet.$module)
+//   console.log('index1:',_modules)
+// })
+// Jet.$import('module1 as mm2',function(mods){
+//   //debugger
+//   mods.mm2.addCount();
+//   console.log('index1:',mods.mm2.getCount())
+//   console.log('index2:',mods)
+//   console.log('index2:',Jet.$module)
+//   console.log('index2:',_modules)
+// })
+// Jet.$import('b as a1',function(mods){
+//   debugger
+//   console.log(mods)
+//   console.log(Jet.$module)
+//   console.log(_modules)
+// })
 Jet.global=new Jet({
   onload:function(){
     this.needUseRouted=true;
@@ -36,6 +86,7 @@ Jet.global=new Jet({
   onmounted:function(){
     var _this=this;
     var max;
+    this.$import('queryApi');
     window._checkScrol=function(){
       max=$J.id('menuScroll').hei()+40-$J.id('menu').hei();
       if(max<=0){
@@ -102,7 +153,7 @@ Jet.global=new Jet({
   },
   ondatachange:{
     queryString:function(v){
-      var arr=Query.query(v);
+      var arr=this.$use('Query')(v);
       this.queryList.$replace(arr);
       this.number=arr.length;
     }
@@ -246,6 +297,16 @@ Jet.router.use({
         '/prop':'/router/prop',
       }
     },
+    '/module':{
+      name:'/module/index',
+      children:{
+        '/define':'/module/define',
+        '/export':'/module/export',
+        '/import':'/module/import',
+        '/module':'/module/module',
+        '/use':'/module/use',
+      }
+    },
     '/css':{
       name:'/css/index',
       children:{
@@ -281,6 +342,7 @@ Jet.router.use({
         '/msg':'/jui/msg',
         '/confirm':'/jui/confirm',
         '/dialog':'/jui/dialog',
+        '/drag':'/jui/drag',
         '/page':'/jui/page',
         '/tab':'/jui/tab',
       }

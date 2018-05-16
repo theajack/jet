@@ -1,10 +1,5 @@
-var Query={
-    query:function(s){
-        return Query.map.filter(function(item){
-            return item.name.toLowerCase().has(s.toLowerCase());
-        })
-    },
-    map:[{
+Jet.$define('Query',function(){
+    var map=[{
         name:'Jet简介',
         url:'/intro',
         intro:'Jet是一个前端的轻量级的js框架，不依赖任何第三方库。Jet采用数据双向绑定，以数据驱动视图。',
@@ -30,6 +25,11 @@ var Query={
         intro:'src只需要指定图片的名称即可',
         des:'img'
     },{
+        name:'scoped',
+        url:'/intro/html',
+        intro:'css样式是否只在当前页面中生效',
+        des:'scoped'
+    },{
         name:'Jet语法',
         url:'/intro/grammer',
         intro:'Jet 使用 new Jet() 来创建一个Jet组件',
@@ -39,6 +39,11 @@ var Query={
         url:'/intro/grammer',
         intro:'通过给 new Jet() 参数增加一个 ele 属性（值是一个id值或者是一个dom元素）。可以局部渲染html元素',
         des:'part'
+    },{
+        name:'name参数',
+        url:'/intro/grammer',
+        intro:'设置name参数后可以通过 Jet.name 获取到Jet元素',
+        des:'name'
     },{
         name:'ondatachange',
         url:'/intro/grammer',
@@ -136,6 +141,11 @@ var Query={
         url:'/bind/array',
         intro:'使用 .$remove() 删除数组中的一个或多个元素',
         des:'remove'
+    },{
+        name:'$removeByIndex方法',
+        url:'/bind/array',
+        intro:'使用 .$removeByIndex() 删除数组中的一个或多个元素',
+        des:'removeByIndex'
     },{
         name:'$clear方法',
         url:'/bind/array',
@@ -281,6 +291,21 @@ var Query={
         url:'/valid/method',
         intro:'设置单个输入元素验证失败的回调函数',
         des:'onOneFail'
+    },{
+        name:'Jet.valid.addValid',
+        url:'/valid/method',
+        intro:'添加验证',
+        des:'addValid'
+    },{
+        name:'Jet.valid.resetValid',
+        url:'/valid/method',
+        intro:'重置验证样式',
+        des:'resetValid'
+    },{
+        name:'Jet.valid.clearValid',
+        url:'/valid/method',
+        intro:'清除验证',
+        des:'clearValid'
     },{
         name:'自定义验证样式',
         url:'/valid/custom',
@@ -464,6 +489,10 @@ var Query={
         url:'/jui/dialog',
         intro:'弹出一个对话框',
     },{
+        name:'拖拽drag',
+        url:'/jui/drag',
+        intro:'可拖拽组件',
+    },{
         name:'分页器page',
         url:'/jui/page',
         intro:'数据分页器',
@@ -475,5 +504,12 @@ var Query={
         name:'在线使用',
         url:'/code',
         intro:'在线使用和调试Jet',
-    }],
-}
+    }]
+    Jet.$export(
+        function(s){
+            return map.filter(function(item){
+                return item.name.toLowerCase().has(s.toString().toLowerCase());
+            })
+        }
+    )
+});

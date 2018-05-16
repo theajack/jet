@@ -6,11 +6,11 @@
 
 
 //暂不支持路由的嵌套
-//暂不支持动态添加元素的渲染
+//暂不支持动态添加元素的渲染 已通过init解决
 //暂不支持jrepeat 重复单个元素
 //jdom获取样式有待改进
 //jif jshow jattr jstyle 数组中不支持index
-//jimg 的想法
+//jimg 的想法 已通过js修改图片的src解决
 
 //2018
 //1-25 修复了一个for的bug 没有包裹each时，元素的孩子和文字顺序会混乱
@@ -20,7 +20,7 @@
 //2-6 jload 修复了子模版使用父模版元素的bug
 //2-6 可以越过作用域一级一级向上查找属性，不会直接报错
 //2-7 新增jhtml属性, text元素设置html值
-//2-7 新增makeChange方法，手动触发某值改变的回调函数
+//2-7 新增$makeChange方法，手动触发某值改变的回调函数
 //2-8 发现并修复空值不会渲染的bug
 //2-9 修复多层循环 使用 $.$par.$index 的bug
 
@@ -53,8 +53,16 @@
 */
 //3-30 jattr和jstyle添加 $r 的支持
 //3-31 新增Jet.valid.useOnInput
-//待修改： j-dialog提取到最外层，路由切换时删除；
-(function(){
+/*4-2 新增 Jet.prototype.$init 对动态添加的元素 初始化
+  新增 Jet.prototype.$cookie 操作cookie
+  新增 Jet.prototype.$storage 操作localStorage
+  修复了 input类型元素 绑定的是数字 后可能会导致的类型紊乱的错误
+  修复了 input类型元素输入焦点会到最后面的bug
+*/
+//4-4 修复了 数组元素的国际化 bug
+// 国际化现在可以包含一个json或者数组，而不只是一个值类型
+
+//(function(){
   var _JT = {
     cls: function(a) {
       return _checkSelect(document.getElementsByClassName(a))
@@ -80,7 +88,9 @@
     type:_type,
     ct: _create,
     ajax:_ajax,
+    cookie:_cookie,
     load:_load,
+    clone:_clone,
     html5:function(){
       if (window.applicationCache) {
         return true;
@@ -88,6 +98,89 @@
       return false;
     },
     urlParam: _getUrlParam
+  };
+  function _clone(obj){
+    if(obj==undefined){
+      return undefined;
+    }
+    var type=_type(obj);
+    if(type=="htmlelement"||type=="array"){
+      return obj._JT_clone();
+    }else if(type=="json"||type=="object"){
+      var a=new Object();
+      for(var attr in obj){
+        if(obj[attr]==null||obj[attr]==undefined){
+          a[attr]=obj[attr];
+        }else if(_type(obj[attr])=="array"){
+          a[attr]=obj[attr].clone();
+        }else if(_type(obj[attr])=="json"||_type(obj[attr])=="object"){
+          a[attr]=_clone(obj[attr]);
+        }else{
+          a[attr]=obj[attr];
+        }
+      }
+      return a;
+    }else if(type=="number"||type=="boolean"||type=="string"||type=="function"){
+      return obj;
+    }else{
+      return obj;
+    }
+  };
+  function _storage(a,b){
+    if(b===undefined){
+      var d=localStorage.getItem(a);
+      try{
+        return JSON.parse(d)
+      }catch(e){
+        if(d===parseFloat(d).toString()){
+          return parseFloat(d);
+        }
+        return d;
+      }
+    }else{
+      if(typeof b==='object'){
+        localStorage.setItem(a, JSON.stringify(b))
+      }else{
+        localStorage.setItem(a, b)
+      }
+      return b
+    }
+  }
+  function _cookie(a, b, d, e) {
+    if (arguments.length == 1) {
+      if (document.cookie.length > 0) {
+        var f = document.cookie.indexOf(a + "=");
+        if (f != -1) {
+          f = f + a.length + 1;
+          var g = document.cookie.indexOf(";", f);
+          if (g == -1) g = document.cookie.length;
+          return unescape(document.cookie.substring(f, g))
+        }
+      }
+      return ""
+    } else {
+      if (b == null) {
+        _cookie(a, "", -1)
+      } else {
+        var c = a + "=" + escape(b);
+        if (d != undefined) {
+          var h = new Date();
+          h.setDate(h.getDate() + d);
+          c += ";expires=" + h.toGMTString()
+        }
+        if (e != undefined) {
+          if (_type(e)=="boolean") {
+            if (e) {
+              c += (";path=/")
+            }
+          } else {
+            c += (";path=" + e)
+          }
+        }
+        document.cookie = c;
+        return a + "=" + b
+      }
+    }
   };
   function _ajax(a) {
     var b = {
@@ -103,10 +196,10 @@
     };
     b.beforeSend();
     var c;
-    if (window.ActiveXObject) {
-      c = ActiveXObject("Microsoft.XMLHTTP")
-    } else if (window.XMLHttpRequest) {
+    if (window.XMLHttpRequest) {
       c =new XMLHttpRequest()
+    } else if (window.ActiveXObject) {
+      c = ActiveXObject("Microsoft.XMLHTTP")
     }
     var _d=_convertData(b.data);
     if(b.type.toLowerCase()=='get'&&_d!==''){
@@ -123,9 +216,9 @@
     c.onreadystatechange = function() {
       if (c.readyState == 4) {
         if (c.status == 200) {
-          b.success(c.response)
+          b.success(c.response||c.responseText)
         } else {
-          b.error(c.response)//errInfo
+          b.error(c.response||c.responseText)//errInfo
         }
       }
     }
@@ -714,6 +807,13 @@
     }
     return this
   };
+  Array.prototype._JT_clone = function() {
+    var a=new Array();
+    this.forEach(function(item){
+      a.push(_clone(item));
+    });
+    return a;
+  };
   Array.prototype._JT_empty = function(b) {
     this.length = 0;
     return this;
@@ -801,7 +901,7 @@
             case Array:type="array";break;
             case HTMLCollection:type="htmlcollection";break;
             case NodeList:type="nodelist";break;
-            case FormData:type="formdata";break;
+            //case FormData:type="formdata";break;
             case Error:type="error";break;
             case Date:type="date";break;
             default:if(obj.nodeType===1&&typeof obj.nodeName === 'string'){
@@ -1099,9 +1199,111 @@ var _bind="J",
 function _throw(err){
   throw new Error(err);
 }
+
+// var opt={data:JL({
+//   en:{
+//     	a1:'a',
+//       a2:{a:1},
+//       a3:{a:1,b:[1,2,3]},
+//       a4:[1,2,3],
+//       a5:[{a:1},{a:2}],
+//       a0:[{a:[1,2,3]},{a:[3,2,1]}],
+//   },
+//   cn:{
+//     	a1:'啊',
+//       a2:{a:1},
+//       a3:{a:1,b:[1,2,3]},
+//       a4:[1,2,3],
+//       a5:[{a:1},{a:2}],
+//       a0:[{a:[1,2,3]},{a:[3,2,1]}],
+//   },
+// })};_checkDataForData(opt)
+function _checkDataForData(opt){
+  var d=opt.data;
+  if(_checkIn(d,'type',_lang)){
+    var newd={};
+    var path='';
+    var _d=_JT.clone(d.data[Jet.lang.list[0]]);
+    _addDataWrapper(_d,newd,path,d.data);
+    opt.data=newd;
+  }else{
+    _searchData(d);
+  }
+}
+function _searchData(d){
+  for(var k in d){
+    _searchDataBase(d,k)
+  }
+}
+function _searchDataArray(d){
+  for(var i=0;i<d.length;i++){
+    _searchDataBase(d,i)
+  }
+}
+function _searchDataBase(d,k){
+  var t=_JT.type(d[k]);
+  if(_checkIn(d[k],'type',_lang)){
+    var newd={};
+    var path='';
+    var _d=_JT.clone(d[k].data[Jet.lang.list[0]]);
+    if(typeof _d==='object'){
+      _addDataWrapper(_d,newd,path,d[k].data);
+      d[k]=newd;
+    }
+  }else if(t==='json'){
+    _searchData(d[k])
+  }else if(t==='array'){
+    _searchDataArray(d[k])
+  }
+}
+function _addDataWrapper(data,newd,path,base){
+  if(typeof data==='object'){
+    for(var k in data){
+      _addDataBase(data,newd,path,base,k)
+    }
+  }
+}
+function _addDataWrapperArray(data,newd,path,base){
+  for(var i=0;i<data.length;i++){
+    _addDataBase(data,newd,path,base,i)
+  }
+}
+function _addDataBase(data,newd,path,base,key){
+  var t=_JT.type(data[key]);
+  if(typeof key==='string'){
+    path+=('.'+key);
+  }else{
+    path+=('['+key+']');
+  }
+  if(t==='json'){
+    newd[key]={};
+    newd=newd[key];
+    data=data[key];
+    _addDataWrapper(data,newd,path,base);
+  }else if(t==='array'){
+    newd[key]=[];
+    newd=newd[key];
+    data=data[key];
+    _addDataWrapperArray(data,newd,path,base);
+  }else if(t==='string'||t==='number'||t==='boolean'){
+    newd[key]=_concatLangObj(base,path);
+    newd=newd[key];
+  }else{
+    _throw(t+'数据类型错误：'+data[key])
+  }
+}
+function _concatLangObj(base,path){
+  var obj={};
+  for(var k in base){
+    obj[k]=(new Function('d',"return d"+path))(base[k]);
+  }
+  return JL(obj);
+}
 window.Jet=function(opt){
   if(opt===undefined)opt={};
+  _checkDataForData(opt);
   opt.ele=(opt.ele)?_getJdomEle(opt.ele):document.documentElement;
+  opt.ele.__jet=this;
   if(opt.name){
     if(Jet[opt.name]&&Jet[opt.name].$DOM==undefined){//避免与Jet.Input等冲突
       _throw('Jet name 属性等于'+opt.name+'已存在，请重新命名');
@@ -1118,9 +1320,6 @@ window.Jet=function(opt){
   }
   this.$dom={};
   var _this=this;
-  this.$DOM=function(ele){//用于判断是否是Jet元素，不可轻易删除
-    return new Jet.DOM({ele:ele,jet:_this});
-  }
   _define(this,opt.data,this._tools._calls);
   if(opt.func){
     for(var key in opt.func){
@@ -1135,14 +1334,19 @@ window.Jet=function(opt){
   Jet.load.init(function(){
     _initJet.call(_this,opt,_this._tools._calls);
   })
-};Jet.prototype.get=function(){
+};Jet.prototype.$get=function(){
   return this;
-};Jet.prototype.makeChange=function(s){
+};Jet.prototype.$makeChange=function(s){
   var call=(new Function('call','return call.'+s+'._func'))(this._tools._calls);
   call.forEach(function(f){
     f();
   });
-};Jet.prototype.$ajax=function(opt){
+};
+Jet.prototype.$DOM=function(ele){//用于判断是否是Jet元素，不可轻易删除
+  return new Jet.DOM({ele:ele,jet:this});
+};Jet.prototype.$cookie=_cookie;
+Jet.prototype.$storage=_storage;
+Jet.prototype.$ajax=function(opt){
   if(opt.base!=false&&Jet.prototype.$ajax.base!==undefined){
     opt.url=Jet.prototype.$ajax.base+opt.url;
   }
@@ -1155,7 +1359,8 @@ window.Jet=function(opt){
     success:sc,
     error:fc
   });
-};Jet.prototype.$ajax.post=function(url,data,sc,fc){
+};
+Jet.prototype.$ajax.post=function(url,data,sc,fc){
   return Jet.prototype.$ajax({
     type:'post',
     data:data,
@@ -1171,6 +1376,16 @@ window.Jet=function(opt){
 };Jet.prototype.$jui=function(s){
   return _getJdomEle(s,this._tools._ele).$jui;
 };
+Jet.prototype.$init=function(ele){
+  _initJetEle.call(this,ele);
+};
+function _findParJet(ele){
+  var par=ele._JT_parent();
+  while(typeof par.__jet==='undefined'){
+    par=par._JT_parent();
+  }
+  return par.__jet;
+}
 Jet.prototype.$route=function(s,isOpen){
   Jet.router.route(s,isOpen);
 };
@@ -1181,7 +1396,7 @@ Jet.prototype.$route.forward=function(s){
   Jet.router.forward();
 };
 Jet.prototype.$=_JT;
-Jet.prototype.regist=function(name,call){
+Jet.prototype.$regist=function(name,call){
   var isDisable=false;
   if(arguments.length==2){
     if(name._JT_has('.')){
@@ -1229,101 +1444,110 @@ Jet.$=_JT;
     this.name=opt.ele._JT_attr(_dom);
     //this.ele._JT_removeAttr(_dom);
     var _this=this;
-    Object.defineProperty(this,'html',{
-      get:function(){
-        return _this.ele.innerHTML;
-      },set:function(v){
-        _this.ele.innerHTML=v;
-      }
-    });
-    Object.defineProperty(this,'text',{
-      get:function(){
-        return _this.ele.innerText;
-      },set:function(v){
-        _this.ele.innerText=v;
-      }
-    });
-    Object.defineProperty(this,'value',{
-      get:function(){
-        return _this.ele.value;
-      },set:function(v){
-        _this.ele.value=v;
-      }
-    });
-    Object.defineProperty(this,'class',{
-      get:function(){
-        return _this.ele._JT_attr('class');
-      },set:function(v){
-        if(v[0]!='+'&&v[0]!='-'){
-          _this.ele._JT_attr('class',v);
-        }else{
+    Object.defineProperties(this,{
+      'html':{
+        get:function(){
+          return _this.ele.innerHTML;
+        },set:function(v){
+          _this.ele.innerHTML=v;
+        }
+      },'text':{
+        get:function(){
+          return _this.ele.innerText;
+        },set:function(v){
+          _this.ele.innerText=v;
+        }
+      },'value':{
+        get:function(){
+          return _this.ele.value;
+        },set:function(v){
+          _this.ele.value=v;
+        }
+      },'class':{
+        get:function(){
+          return _this.ele._JT_attr('class');
+        },set:function(v){
+          if(v[0]!='+'&&v[0]!='-'){
+            _this.ele._JT_attr('class',v);
+          }else{
+            var a=v.split(';');
+            a.forEach(function(c){
+              if(c[0]!='+'&&c[0]!='-'){
+                _throw('添加或删除类 第一个字符必须是+或者-');
+              }
+              if(c[0]=='+'){
+                _this.ele._JT_addClass(c.substring(1));
+              }else{
+                _this.ele._JT_removeClass(c.substring(1));
+              }
+            });
+          }
+        }
+      },'outerHtml':{
+        get:function(){
+          return _this.ele.outerHTML;
+        },set:function(v){
+          console.error('outerHtml 不允许赋值');
+        }
+      },'attr':{
+        get:function(){
+          var a={};
+          for(var i=0;i<_this.ele.attributes.length;i++){
+            a[_this.ele.attributes[i].name]=_this.ele.attributes[i].textContent;
+          }
+          return a;
+        },set:function(v){
           var a=v.split(';');
           a.forEach(function(c){
-            if(c[0]!='+'&&c[0]!='-'){
-              _throw('添加或删除类 第一个字符必须是+或者-');
-            }
-            if(c[0]=='+'){
-              _this.ele._JT_addClass(c.substring(1));
+            if(c[0]=='-'){
+              _this.ele._JT_removeAttr(c.substring(1));
             }else{
-              _this.ele._JT_removeClass(c.substring(1));
+              var pair=c.split('=');
+              if(pair.length==0)pair[1]='';
+              if(pair[0]=='+'){
+                _this.ele._JT_attr(pair[0].substring(1),pair[1]);
+              }else{
+                _this.ele._JT_attr(pair[0],pair[1]);
+              }
             }
+          });
+        }
+      },'css':{
+        get:function(){
+          return _this.ele.style;
+        },set:function(v){
+          var a=v.split(';');
+          a.forEach(function(c){
+            var pair=c.split('=');
+            _this.ele._JT_css(pair[0],pair[1]);
           });
         }
       }
     });
-    Object.defineProperty(this,'outerHtml',{
-      get:function(){
-        return _this.ele.outerHTML;
-      },set:function(v){
-        console.error('outerHtml 不允许赋值');
-      }
-    });
-    Object.defineProperty(this,'attr',{
-      get:function(){
-        var a={};
-        for(var i=0;i<_this.ele.attributes.length;i++){
-          a[_this.ele.attributes[i].name]=_this.ele.attributes[i].textContent;
-        }
-        return a;
-      },set:function(v){
-        var a=v.split(';');
-        a.forEach(function(c){
-          if(c[0]=='-'){
-            _this.ele._JT_removeAttr(c.substring(1));
-          }else{
-            var pair=c.split('=');
-            if(pair.length==0)pair[1]='';
-            if(pair[0]=='+'){
-              _this.ele._JT_attr(pair[0].substring(1),pair[1]);
-            }else{
-              _this.ele._JT_attr(pair[0],pair[1]);
-            }
-          }
-        });
-      }
-    });
-    Object.defineProperty(this,'css',{
-      get:function(){
-        return _this.ele.style;
-      },set:function(v){
-        var a=v.split(';');
-        a.forEach(function(c){
-          var pair=c.split('=');
-          _this.ele._JT_css(pair[0],pair[1]);
-        });
-      }
-    });
   };
-  function _initJetDom(opt){
+  function _initJetDom(ele){
     var doms;
+    var type=_JT.type(ele);
+    if(type!=='undefined'){
+      if(type==='string'){
+        var s=ele;
+        ele=_JT.attr(_dom+'='+s);
+        if(!ele._JT_exist()){
+          ele=_JT.id(s);
+        }
+      }
+    }
     var _this=this;
-    if(opt.ele){
-      doms=opt.ele._JT_findAttr(_dom);
+    if(ele){
+      doms=ele._JT_findAttr(_dom);
     }else{
       doms=_JT.attr(_dom);
     }
     doms._JT_each(function(item){
-      _this.$dom[item._JT_attr(_dom)]=new Jet.DOM({ele:item,jet:_this});
+      if(item._hasDom!==true){
+        _this.$dom[item._JT_attr(_dom)]=new Jet.DOM({ele:item,jet:_this});
+        item._hasDom=true;
+      }
     });
   }
 function _initJet(opt,calls){
@@ -1333,7 +1557,7 @@ function _initJet(opt,calls){
   if(opt.beforeinit){
     opt.beforeinit.call(this);
   }
-  _initJetDom.call(this,opt)
+  _initJetDom.call(this,opt.ele)
   var _this=this;
   var bindList,ifList,showList,onList,runList,attrList,styleList;
   if(opt.ele){
@@ -1353,18 +1577,18 @@ function _initJet(opt,calls){
     attrList=_JT.attr(_attr);
     styleList=_JT.attr(_style);
   }
-  var temp=[];
-  var dom=document.createDocumentFragment();
-  bindList._JT_each(function(item,index){
-    temp.push({
-      par:item._JT_parent(),
-      index:item._JT_index(),
-      item:item
-    });
-  });
+  //var temp=[];
+  //var dom=document.createDocumentFragment();
+  // bindList._JT_each(function(item,index){
+  //   temp.push({
+  //     par:item._JT_parent(),
+  //     index:item._JT_index(),
+  //     item:item
+  //   });
+  // });
   bindList._JT_each(function(item,index){
     if(!item._hasBind){
-      dom.appendChild(item);
+      //dom.appendChild(item);
       var attr=item._JT_attr(_bind);
       if(opt.data==undefined||attr==''){
         var _opt=_jetOpt(_this,item,attr,{_func:[]});
@@ -1428,18 +1652,18 @@ function _initJet(opt,calls){
   if(opt.beforemount){
     opt.beforemount.call(this);
   }
-  temp._JT_each(function(json){
-    if(json.item.__isRoot==true&&json.item._hasRemove!=true){
-      json.par._JT_append(json.item,json.index);
-      Jet.valid.init(json.item);
-    }
-  });
+  // temp._JT_each(function(json){
+  //   if(json.item.__isRoot==true&&json.item._hasRemove!=true){
+  //     json.par._JT_append(json.item,json.index);
+  //     Jet.valid.init(json.item);
+  //   }
+  // });
   Jet.$.id('__preload_j')._JT_remove();
   
   if(opt.ondatachange){
     this.ondatachange=opt.ondatachange;
     for(var k in opt.ondatachange){
-      Jet.Base.prototype.regist.call(this,'.'+k,function(key,value){
+      Jet.Base.prototype.$regist.call(this,'.'+k,function(key,value){
         opt.ondatachange[k].call(_this,value,key)
       });
     }
@@ -1463,6 +1687,115 @@ function _initJet(opt,calls){
     JUI.useBind(this);
   }
 };
+
+
+function _getInitData(item,attr,_this){
+  var jet=_findParJet(item);
+  var isJet=(typeof jet.$DOM!=='undefined');
+  if(!isJet&&jet.type!==_bind){
+    _throw('只可在Jet元素或Bind元素作用于域下动态插入DOM元素初始化，当前插入作用域为'+jet.type);
+  }
+  var _data=(isJet)?jet._tools._data:jet._data[jet.name];
+  var _j_opt=(attr===undefined)?_jetOpt(jet,item):_jetOpt(jet,item,attr,jet._tools._calls[attr]);
+  var _opt=(isJet)?_j_opt:_bindOpt(jet,item,attr,jet._tools._calls[attr]);
+  return {
+    isRoot:isJet,
+    jet:jet,
+    data:_data,
+    opt:_opt
+  }
+}
+
+function _initJetEle(ele){
+  ele=ele||this._tools._ele;
+  if(typeof ele==='string'){
+    ele=_getJdomEle(ele);
+  }
+  _initJetDom.call(this,ele);
+  var _this=this;
+  var bindList=ele._JT_findAttr(_bind),
+    ifList=ele._JT_findAttr(_if),
+    showList=ele._JT_findAttr(_show),
+    onList=ele._JT_findAttr(_on),
+    runList=ele._JT_findAttr(_run),
+    attrList=ele._JT_findAttr(_attr),
+    styleList=ele._JT_findAttr(_style);
+  bindList._JT_each(function(item,index){
+    if(!item._hasBind){
+      //dom.appendChild(item);
+      var attr=item._JT_attr(_bind);
+      var opt=_getInitData(item,attr,_this);
+      if(opt.data==undefined||attr==''){
+        var _opt=_jetOpt(_this,item,attr,{_func:[]});
+        item.__isRoot=true;
+        opt._tools._jets.push(new Jet.Bind(_opt));
+      }else if(attr in opt.data){
+        var type=_JT.type(opt.data[attr]);
+        var _jet;
+        switch(type){
+          case 'json':_jet=new Jet.Bind(opt.opt);break;
+          case 'array':_jet=new Jet.For(opt.opt);break;
+          default:{
+            if(isInput(item)){
+              _jet=new Jet.Input(opt.opt);
+            }else{
+              _jet=new Jet.Text(opt.opt);
+            }
+          };break;
+        }
+        if(opt.isRoot)
+          item.__isRoot=true;//为了记录根元素的初始位置，忽略非根元素
+        opt.jet._tools._jets.push(_jet);
+      }else{
+        item.__isRoot=true;
+      }
+    }
+  });
+  ifList._JT_each(function(item){
+    if(!item._hasIf){//不需要加root判断 因为本来就是root
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.If(opt.opt));
+    }
+  });
+  showList._JT_each(function(item){
+    if(!item._hasShow){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Show(opt.opt,true));
+    }
+  });
+  onList._JT_each(function(item){
+    if(!item._hasOn){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.On(opt.opt));
+    }
+  });
+  runList._JT_each(function(item){
+    if(!item._hasRun){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Run(opt.opt));
+    }
+  });
+  attrList._JT_each(function(item){
+    if(!item._hasAttr){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Attr(opt.opt));
+    }
+  });
+  styleList._JT_each(function(item){
+    if(!item._hasStyle){
+      var opt=_getInitData(item,undefined,_this);
+      opt.jet._tools._jetTools.push(new Jet.Style(opt.opt,true));
+    }
+  });
+  if(typeof JUI!=='undefined'){
+    JUI.init(ele);
+    JUI.useBind(this);
+  }
+  Jet.valid.init(ele);
+  Jet.lang.init(ele);
+  Jet.load.init(ele);
+}
+
 var _domSatte={
   ready: (function() {
     var b = [];
@@ -1533,7 +1866,7 @@ function _jetOpt(_this,item,name,calls){
 }
 function isInput(obj){
   var tag=obj.tagName;
-  return (tag=="INPUT"||tag=="TEXTAREA"||tag=="SELECT"||(obj._JT_hasAttr('contenteditable')&&obj.attr('contenteditable')!='false'))
+  return (tag=="INPUT"||tag=="TEXTAREA"||tag=="SELECT"||(obj._JT_hasAttr('contenteditable')&&obj._JT_attr('contenteditable')!='false'))
 }
 Jet.Base=function(opt,type){
   this.jet=opt.jet;
@@ -1577,7 +1910,7 @@ Jet.Base=function(opt,type){
   if(this.type==_bind||this.type==_for||this.type==_text||this.type==_input){
       this.ele.__jet=this;
   }
-};Jet.Base.prototype.makeChange=function(s){
+};Jet.Base.prototype.$makeChange=function(s){
   var call;
   if(s==undefined){
     call=this._tools._calls._func
@@ -1606,7 +1939,7 @@ Jet.Base=function(opt,type){
     this.par._tools._jetTools._JT_remove(this)
   }
   this.ele.__jet=undefined;
-};Jet.Base.prototype.regist=function(name,call){
+};Jet.Base.prototype.$regist=function(name,call){
   var isDisable=false;
   if(arguments.length==2){
     // if(name._JT_has(_each)){
@@ -1778,7 +2111,7 @@ Array.prototype.$push=function(d){
 };Array.prototype.$replace=function(arr){
   this.$clear();
   this.$pushArray(arr);
-  if(typeof this._jet!=='undefined')this._jet.makeChange();
+  if(typeof this._jet!=='undefined')this._jet.$makeChange();
 };
 
 //on 和 run 由自身处理，其余由父jet处理
@@ -2230,9 +2563,9 @@ function _loadCommonCssCall(commonCss,length){
           _JT.id(_commonStyle)._JT_html(commonCss.join(''))
         }
       }else if(_JT.id(_routeStyle)._JT_exist()){
-        document.head.insertBefore(_JT.ct('style')._JT_attr('id',_commonStyle).html(commonCss.join('')),_JT.id(_routeStyle));
+        document.head.insertBefore(_JT.ct('style')._JT_attr('id',_commonStyle)._JT_html(commonCss.join('')),_JT.id(_routeStyle));
       }else{
-        document.head.appendChild(_JT.ct('style')._JT_attr('id',_commonStyle).html(commonCss.join('')));
+        document.head.appendChild(_JT.ct('style')._JT_attr('id',_commonStyle)._JT_html(commonCss.join('')));
       }
     }else{
       _JT.id(_commonStyle)._JT_exist(function(item){
@@ -2438,10 +2771,14 @@ function _dealSrc(s){
 function _getJdomEle(b,ele){
   if('undefined'==typeof b)return b;
   if(typeof b=='string'){
+    var s=b;
     if(ele){
-      b=ele._JT_findAttr(_dom+'='+b);
+      b=ele._JT_findAttr(_dom+'='+s);
     }else{
-      b=_JT.attr(_dom+'='+b);
+      b=_JT.attr(_dom+'='+s);
+    }
+    if(!b._JT_exist()){
+      b=_JT.id(s);
     }
   }else if(_JT.type(b)!='htmlelement'){
     b=b.ele;
@@ -2561,70 +2898,68 @@ Jet.valid={
     _onOneFail=_checkFunction(c);
   }
 }
-Object.defineProperty(Jet.valid,'language',{
-  get:function(){return Jet.valid.__lang;},
-  set:function(val){
-    Jet.valid.__lang=val.toUpperCase()
-  }
-});
-Object.defineProperty(Jet.valid,'useJUI',{
-  get:function(){return Jet.valid.__useJUI;},
-  set:function(val){
-    if(typeof JUI!=='undefined'){
-      Jet.valid.__useJUI=val
+Object.defineProperties(Jet.valid,{
+  'language':{
+    get:function(){return Jet.valid.__lang;},
+    set:function(val){
+      Jet.valid.__lang=val.toUpperCase()
     }
-  }
-});
-Object.defineProperty(Jet.valid,'useDefaultStyle',{
-  get:function(){return Jet.valid.__default;},
-  set:function(val){
-    if(Jet.valid.__default!==val){
-      if(Jet.valid.__useOnInput===true&&val===true){
-        console.warn('useOnInput 模式下不可使用默认样式');
-      }else{
-        Jet.valid.__default=val;
-        Jet.valid.__lastUseDef=val;
+  },'useJUI':{
+    get:function(){return Jet.valid.__useJUI;},
+    set:function(val){
+      if(typeof JUI!=='undefined'){
+        Jet.valid.__useJUI=val
+      }
+    }
+  },'useDefaultStyle':{
+    get:function(){return Jet.valid.__default;},
+    set:function(val){
+      if(Jet.valid.__default!==val){
+        if(Jet.valid.__useOnInput===true&&val===true){
+          console.warn('useOnInput 模式下不可使用默认样式');
+        }else{
+          Jet.valid.__default=val;
+          Jet.valid.__lastUseDef=val;
+          if(val===false){
+            _JT.cls("jet-unpass")._JT_each(function(a) {
+              _checkIsPw(a);
+              a._JT_removeClass("jet-unpass")._JT_val(a._JT_validValue);
+              a._JT_validValue=undefined;
+            })
+          }
+        }
+      }
+    }
+  },'useOnInput':{
+    get:function(){return Jet.valid.__useOnInput;},
+    set:function(val){
+      if(Jet.valid.__useOnInput!==val){
+        Jet.valid.__useOnInput=val;
         if(val===false){
-          _JT.cls("jet-unpass")._JT_each(function(a) {
-            _checkIsPw(a);
-            a.removeClass("jet-unpass")._JT_val(a._JT_validValue);
-            a._JT_validValue=undefined;
-          })
+          if(Jet.valid.__default!==Jet.valid.__lastUseDef){
+            Jet.valid.useDefaultStyle=Jet.valid.__lastUseDef
+          }
+        }else{
+          if(Jet.valid.useDefaultStyle){
+            Jet.valid.useDefaultStyle=false;
+            Jet.valid.__lastUseDef=true;
+          }
         }
       }
     }
-  }
-});
-Object.defineProperty(Jet.valid,'useOnInput',{
-  get:function(){return Jet.valid.__useOnInput;},
-  set:function(val){
-    if(Jet.valid.__useOnInput!==val){
-      Jet.valid.__useOnInput=val;
-      if(val===false){
-        if(Jet.valid.__default!==Jet.valid.__lastUseDef){
-          Jet.valid.useDefaultStyle=Jet.valid.__lastUseDef
-        }
-      }else{
-        if(Jet.valid.useDefaultStyle){
-          Jet.valid.useDefaultStyle=false;
-          Jet.valid.__lastUseDef=true;
-        }
+  },'showInPlaceHolder':{
+    get:function(){return Jet.valid.__placeholder;},
+    set:function(val){
+      Jet.valid.__placeholder=val;
+      if(val===true){
+        _JT.attr(_valid)._JT_each(function(a) {
+          a._JT_attr("placeholder", _getValueText(a._JT_attr(_valid)))
+        })
+      }else if(val===false){
+        _JT.attr(_valid)._JT_each(function(a) {
+          a._JT_removeAttr("placeholder")
+        })
       }
-    }
-  }
-});
-Object.defineProperty(Jet.valid,'showInPlaceHolder',{
-  get:function(){return Jet.valid.__placeholder;},
-  set:function(val){
-    Jet.valid.__placeholder=val;
-    if(val===true){
-      _JT.attr(_valid).each(function(a) {
-        a._JT_attr("placeholder", _getValueText(a._JT_attr(_valid)))
-      })
-    }else if(val===false){
-      _JT.attr(_valid).each(function(a) {
-        a._JT_removeAttr("placeholder")
-      })
     }
   }
 });
@@ -2941,15 +3276,19 @@ Jet.lang.init=function(obj){
     list=_getJdomEle(obj)._JT_findAttr(_lang)
   }
   list._JT_each(function(item){
-    item._jet_langs={};
-    item._JT_findAttr(_name)._JT_each(function(_item){
-      var attr=_item._JT_attr(_name);
-      item._jet_langs[attr]=_item._JT_html();
-    });
-    item._JT_html(item._jet_langs[Jet.lang.type]);
-    Jet.valid.init(item);
+      if(typeof item._jet_langs==='undefined'){
+        item._jet_langs={};
+        item._JT_findAttr(_name)._JT_each(function(_item){
+          var attr=_item._JT_attr(_name);
+          item._jet_langs[attr]=_item._JT_html();
+        });
+        item._JT_html(item._jet_langs[Jet.lang.type]);
+        Jet.valid.init(item);
+      }
   });
-  Jet.$.id('__preload_jl')._JT_remove();
+  Jet.$.id('__preload_jl')._JT_exist(function(item){
+      item._JT_remove();
+  })
 };
 Object.defineProperty(Jet.lang, 'type', {
   configurable:true,
@@ -2958,8 +3297,10 @@ Object.defineProperty(Jet.lang, 'type', {
     return _jl_name;
   },
   set: function (val) {
-    _jl_name = val;
-    _refreshLang();
+    if(val!==_jl_name&&Jet.lang.list.indexOf(val)!==-1){
+      _jl_name = val;
+      _refreshLang();
+    }
   }
 });
 function _refreshLang(){
@@ -2974,7 +3315,8 @@ function _refreshLang(){
   }
 }
 function _checkLangJet(opt){
-  if(_JT.type(opt._data)=='json'&&opt.name in opt._data){
+  var t=_JT.type(opt._data)
+  if((t==='json'&&opt.name in opt._data)||(t==='array'&&typeof opt._data[opt.name]!=='undefined')){
       if(_checkIn(opt._data[opt.name],'type',_lang)){
           Jet.lang.jets.push(this);
       }
@@ -2999,7 +3341,7 @@ Jet.Bind.prototype.refresh=function(key){
       item.refresh(key);
     });
   //}
-};Jet.Bind.prototype.get=function(){
+};Jet.Bind.prototype.$get=function(){
   return this.data[this.name];
 };
 function _initBind(opt){
@@ -3125,7 +3467,7 @@ function _initBind(opt){
   });
   _checkJetTools.call(this,opt);
   
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
 };
@@ -3167,7 +3509,7 @@ Jet.For.prototype.refresh=function(key){
       item.refresh(key);
     });
   }
-};Jet.For.prototype.get=function(){
+};Jet.For.prototype.$get=function(){
   return this.data[this.name];
 };Jet.For.prototype.refreshParIndex=function(){
   this._tools._jets._JT_each(function(item){
@@ -3291,7 +3633,7 @@ function _refreshIndex(start){
   }
 }
 function _initForRule(ele){
-  if(this.ele._JT_child(0)._JT_hasAttr(_bind)&&this.ele._JT_child(0)._JT_attr(_bind)._JT_has('=')){//switch模式  $each.t=1
+  if(this.ele._JT_child(0)!=undefined&&this.ele._JT_child(0)._JT_hasAttr(_bind)&&this.ele._JT_child(0)._JT_attr(_bind)._JT_has('=')){//switch模式  $each.t=1
     this._switch=true;
     this._html={};
     this._type=null;
@@ -3375,7 +3717,7 @@ function _initFor(opt){
     }
   });
   _checkJetTools.call(this,opt);
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
 };
@@ -3441,14 +3783,14 @@ Jet.Text=function(opt){
 Jet.Text.prototype = new Super();
 Jet.Text.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
+    var val=(this.func)?this.func.call(this.jet,this.$get()):this.$get();
     if(this.isHtml){
       this.ele._JT_html(val);
     }else{
       this.ele._JT_txt(val);
     }
   }
-};Jet.Text.prototype.get=function(){//indexs
+};Jet.Text.prototype.$get=function(){//indexs
   if(this._parIndex){
     return _getParIndex(this,this._parIndex)
     //return this.indexs[this.indexs.length-1-this._parIndex];
@@ -3494,7 +3836,7 @@ function _initText(opt){
     this.func=new Function("$",'return '+this.ele._JT_html());
   }
   _checkJetTools.call(this,opt);
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
   this.refresh();
@@ -3509,14 +3851,16 @@ Jet.Input=function(opt){
 Jet.Input.prototype = new Super();
 Jet.Input.prototype.refresh=function(key){
   if(!key||key==this.name){
-    var val=(this.func)?this.func.call(this.jet,this.get()):this.get();
+    var val=(this.func)?this.func.call(this.jet,this.$get()):this.$get();
     if(this.isContent){
-      this.ele._JT_html(val);
+      if(val!==((this.isNum)?parseFloat(this.ele.innerHTML):this.ele.innerHTML))
+        this.ele._JT_html(val);
     }else{
-      this.ele._JT_val(val);
+      if(val!==((this.isNum)?parseFloat(this.ele.value):this.ele.value))
+        this.ele._JT_val(val);
     }
   }
-};Jet.Input.prototype.get=function(){
+};Jet.Input.prototype.$get=function(){
   return this.data[this.name];
 };
 function _initInput(opt){
@@ -3532,10 +3876,10 @@ function _initInput(opt){
   if(this.ele._attrVal==_index){
     _throw('输入框不能绑定数组的索引');
   }
-  this.regist(function(key,val){
+  this.$regist(function(key,val){
     _this.refresh();
   });
-  this.isNum=(_JT.type(this.get())=='number');
+  this.isNum=(_JT.type(this.$get())=='number');
   if(this.ele.tagName=='SELECT'||(this.ele.tagName=='INPUT'&&this.ele._JT_attr('type').toLowerCase()!='text')){
     this.ele._JT_on("change",function(){
       _dealOnInputOn.call(this,_this);
@@ -3560,11 +3904,15 @@ function _initInput(opt){
 }
 function _dealOnInputOn(_this){
   var val=(_this.isContent)?this._JT_html():this._JT_val();
-  if(_this.isNum){
+  //if(_this.isNum){
     var _v=parseFloat(val);
-    if(val==_v.toString())
+    if(val==_v.toString()){
+      _this.isNum=true;
       val=_v;
-  }
+    }else{
+      _this.isNum=false;
+    }
+  //}
   _this.data[_this.name]=val;
 }
 /*if*********************************************************************************/
@@ -3581,7 +3929,7 @@ Jet.If=function(opt,isShow){
   }
 };
 Jet.If.prototype = new Super();
-Jet.If.prototype.get=function(){
+Jet.If.prototype.$get=function(){
   if(this.name==_index){
     if(this.needParData){
       //会refresh 不需要修改
@@ -3604,7 +3952,7 @@ Jet.If.prototype.get=function(){
   if(this.index!=undefined&&i!=undefined&&this.index!=i){
     this.index==i;
   }
-  var d=this.get();
+  var d=this.$get();
   var opt={
     ele:this.ele,
     data:d,
@@ -3612,7 +3960,7 @@ Jet.If.prototype.get=function(){
     root:this.jet
   }
   //if(this.exp.call(opt,d)===true){//弃用原因 不好做数据改变的检测
-  // if(this.exp.toString().has('"a"'))
+  // if(this.exp.toString()._JT_has('"a"'))
   // console.loconsole.log(this.exp)
   if(this.exp(d,this.jet)===true){
     this.func_true.call(this.jet,opt);
@@ -3623,10 +3971,10 @@ Jet.If.prototype.get=function(){
 function _registForWrapperVar(_this,content){
   var m=content.match(_reg);
   if(m==null){
-      if(!(content in _this._data)&&!content.has("$.")){
+      if(!(content in _this._data)&&!content._JT_has("$.")){
           //_throw(_this.type+':['+content+']若值是表达式，请使用{{}}将表达式里的变量包裹起来');
       }
-      _this.regist(content,function(key,val){
+      _this.$regist(content,function(key,val){
           _this.refresh();
       });
   }else{
@@ -3635,7 +3983,7 @@ function _registForWrapperVar(_this,content){
           if(arr.indexOf(_ele)==-1){
               arr.push(_ele);
               if(_ele=="{{$}}"){
-                  _this.regist(function(key,val){
+                  _this.$regist(function(key,val){
                       _this.refresh();
                   });
               }else{
@@ -3643,7 +3991,7 @@ function _registForWrapperVar(_this,content){
                 if(_ele._JT_has('$r.')){
                   obj=_this.jet;
                 }
-                obj.regist(_ele.substring(2,_ele.length-2),function(key,val){
+                obj.$regist(_ele.substring(2,_ele.length-2),function(key,val){
                   _this.refresh();
                 })
               }
@@ -3665,9 +4013,9 @@ function _initIf(){
       if(!(ifAttr in this._data)){
 
         // if(ifAttr._JT_has(_each)){
-        //   ifAttr=ifAttr._JT_replaceAll("\\"+_each,"d."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]").replaceAll("{{",'').replaceAll("}}",'');
+        //   ifAttr=ifAttr._JT_replaceAll("\\"+_each,"d."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
         // }else{
-          ifAttr=ifAttr._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
+          ifAttr=ifAttr._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
         //}
       }else{
         ifAttr='d.'+ifAttr;
@@ -3677,10 +4025,10 @@ function _initIf(){
       var temp=ifAttr.substring(0,ifAttr.indexOf(":"));
       _registForWrapperVar(this,temp);
       if(typeof this._data!=='object'){
-        temp=temp._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
+        temp=temp._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
       }else{
         if(!(temp in this._data)){
-          temp=temp._JT_replaceAll("\\$","d").replaceAll("{{",'').replaceAll("}}",'');
+          temp=temp._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
         }else{
           temp='d.'+temp;
         }
@@ -3830,7 +4178,7 @@ Jet.On=function(opt){
   }
 };
 Jet.On.prototype = new Super();
-Jet.On.prototype.get=function(){
+Jet.On.prototype.$get=function(){
   if(this.index!=undefined){
     return this.index;
   }
@@ -3912,7 +4260,7 @@ function _initOn(){
     _this.ele._JT_on(e0,function(event){
       var opt={
         ele:this,
-        data:_this.get(),
+        data:_this.$get(),
         event:event,
         jet:_this
       };
@@ -3943,7 +4291,7 @@ Jet.Run=function(opt){
   _initRun.call(this,opt);
 };
 Jet.Run.prototype = new Super();
-Jet.Run.prototype.get=function(){
+Jet.Run.prototype.$get=function(){
   if(this.index!=undefined){
     return this.index;
   }
@@ -3963,7 +4311,7 @@ Jet.Run.prototype.get=function(){
   var _this=this;
   var opt={
     ele:_this.ele,
-    data:_this.get(),
+    data:_this.$get(),
     jet:_this
   };
   this.runs._JT_each(function(name){
@@ -3995,7 +4343,7 @@ Jet.Attr=function(opt,isStyle){
   }
 };
 Jet.Attr.prototype = new Super();
-Jet.Attr.prototype.get=function(){
+Jet.Attr.prototype.$get=function(){
   if(this.index!=undefined){
     return this.index;
   }
@@ -4010,7 +4358,7 @@ Jet.Attr.prototype.get=function(){
     return this.data[this.name];
   }
 };Jet.Attr.prototype.refresh=function(i){
-  var d=this.get();
+  var d=this.$get();
   for(var k in this.attrs){
     this.setFunc.call(this.ele,k,this.attrs[k](d,this.jet))
   }
@@ -4051,7 +4399,7 @@ Jet.Style=Jet.Attr;
 Jet.Show=Jet.If;
 
 
-})();
+//})();
 
 
 

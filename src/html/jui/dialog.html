@@ -11,14 +11,18 @@
 <div class="sub">
 <div class='text'>
     <div class="out">
-        <button jon='click:this.dshow=!this.dshow'>弹出对话框</button>
+        <button jon='this.dshow=!this.dshow'>弹出对话框</button>
+        <button jon='isOpen'>是否有打开的对话框</button>
+        <button jon='clear'>关闭所有对话框</button>
         <div class='j-dialog' dialog-title='对话框' jui-bind='dshow'>
             <input class='j-input' type="text">
             <button class="j-btn">确认</button>
         </div> 
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;button jon='click:this.dshow=!this.dshow'>弹出对话框&lt;/button>
+&lt;button jon='this.dshow=!this.dshow'>弹出对话框&lt;/button>
+&lt;button jon='isOpen'>是否有打开的对话框&lt;/button>
+&lt;button jon='clear'>关闭所有对话框&lt;/button>
 &lt;div class='j-dialog' dialog-title='对话框' jui-bind='dshow'>
     &lt;input class='j-input' type="text">
     &lt;button class="j-btn">确认&lt;/button>
@@ -27,6 +31,12 @@
     new Jet({
         data:{
             dshow:false
+        },func:{
+            isOpen:function(){
+                JUI.msg(JUI.dialog.isOpen());
+            },clear:function(){
+                JUI.dialog.clear();
+            }
         }
     });
 &lt;/script>
@@ -37,12 +47,18 @@
     Jet.global.setLink({
         last:'确认框',
         lastUrl:'/jui/confirm',
-        next:'分页器',
-        nextUrl:'/jui/page'
+        next:'可拖拽元素',
+        nextUrl:'/jui/drag'
     });
     new Jet({
         data:{
             dshow:false
+        },func:{
+            isOpen:function(){
+                JUI.msg(JUI.dialog.isOpen());
+            },clear:function(){
+                JUI.dialog.clear();
+            }
         }
     });
 </script>

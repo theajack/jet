@@ -1,6 +1,14 @@
 //解决加载时不应该出现的元素会闪现的问题
 //对于新增的css.conf的支持
 (function(){
+  // var o=document.createElement("style");
+  // o.setAttribute("type","text/css");
+  // var preload=document.getElementById('jet-preload');
+  // var src=preload.getAttribute('src');
+  // window.__base=src.substring(0,src.indexOf('/assets/js'));
+  // var pre_style=o.cloneNode();
+  // pre_style.innerHTML='body{opacity:0!important}';
+  // document.head.appendChild(pre_style);
   var _load=function(url,call){
     var c;
     if (window.XMLHttpRequest) {
@@ -65,18 +73,25 @@
   e.setAttribute("id","__preload_jl");
   document.head.appendChild(e);
   e.innerHTML="[Jlang]{visibility:hidden}";
-  //var t=e.cloneNode();
+  var t=e.cloneNode();
   var common=document.getElementById('commonCss');
   var url=common.href;
+  //这里的url不能使用 /src/css，因为如果Jet router 设置了trueBase 则 /src 前面还有路径，所以这里让用户自己填写在link标签里
   window.__css_conf_xhr=_load(url.replace('common.css','css.conf'),function(res){
     eval('window.jet_css_conf='+res);
     _load(url,function(res2){
       window.__preload_css(res2,function(d){
         var comStyle=o.cloneNode();
         comStyle.innerHTML=d.replace(/[\r\n]/g,"");//去掉回车换行;
-        document.head.insertBefore(comStyle,common);
+        document.head.appendChild(comStyle);
+        //document.head.removeChild(pre_style);
         document.head.removeChild(common);
       })
     });
   });
+  //add global css
+  var gs=o.cloneNode();
+  gs.setAttribute("id","JglobalStyle");
+  gs._styles=[];
+  document.head.appendChild(gs);
 })()

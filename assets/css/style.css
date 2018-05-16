@@ -43,17 +43,21 @@ body{
 }
 .hide{display:none!important;}
 .show{display:block!important;}
+.unvisible{visibility: hidden!important;}
 .f-left{float: left!important}
 .f-right{float: right!important}
 .t-left{text-align: left}
 .t-center{text-align: center}
 .t-right{text-align: right}
 .m-center{margin: 0 auto}
+.v-top{vertical-align: top!important;}
+.v-middle{vertical-align: middle!important;}
+.v-bottom{vertical-align: bottom!important;}
 .bold{font-weight: bold}
 .relative{position: relative}
 .absolute{position: absolute}
 .fixed{position: fixed}
-.w-full{width:100%}
+.w-full{width:100%!important;}
 .c-pointer{cursor: pointer;}
 .c-disabled{cursor: no-drop;}
 .txs{font-size: 10px;line-height: 10px;}

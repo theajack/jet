@@ -271,3 +271,17 @@ __dynamic.js:31 onrouted
 //4-4 修复了 数组元素的国际化 bug
 // 国际化现在可以包含一个json或者数组，而不只是一个值类型
 
+//4-19 JUI 新增 j-drag
+//4-23 修复：数组的方法不会触发数组的监听回掉，现在使用数组的长度的绑定会被正确刷新
+//4-24 新增 $define，$export，$use，$import，$module，as ， new 关键字
+//4-24 新增css scope 属性，默认值为true; JUI.clearDialog 不同组件之间切换时使用，路由切换已经写进源码
+//     新增 JUI.dialog.isOpen clear ; 新增JUI.confirm.isOpen clear 
+//     数组removeByIndex
+//     新增 new Jet()的name 参数
+//5-14 完善js模块规范
+//5-15 修复css scoped的bug
+//  需要新增 index.html 文件中加载资源的介绍 目录的介绍 在路由设置tureBase=true的时候
+//5-16：修复了 JUI 组件关于disabled属性的bug
+//     现在ondatachange可以使用json和数组 嵌套，
+//     并修复了$regist 多层数组嵌套时的bug ,(a[0][0]时用出错)
+
