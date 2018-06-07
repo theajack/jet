@@ -1,4 +1,4 @@
-Jet.lang.use(['cn','en']);
+
 // Jet.$import('a as a0',function(mods){
 //   //debugger
 //   console.log(mods)
@@ -49,6 +49,7 @@ Jet.lang.use(['cn','en']);
 //   console.log(Jet.$module)
 //   console.log(_modules)
 // })
+Jet.lang.use(['cn','en']);
 Jet.global=new Jet({
   onload:function(){
     this.needUseRouted=true;
@@ -153,7 +154,7 @@ Jet.global=new Jet({
   },
   ondatachange:{
     queryString:function(v){
-      var arr=this.$use('Query')(v);
+      var arr=this.$use('Query').search(v);
       this.queryList.$replace(arr);
       this.number=arr.length;
     }
@@ -166,6 +167,9 @@ Jet.global=new Jet({
       } else if (window.event) {
           window.event.cancelBubble = true;
       }
+    },
+    searchFocus:function(){
+      this.showResult=true;
     },
     testOnLine:function(item){
       Jet.global._top=$J.body().scrollTop;
@@ -207,15 +211,21 @@ Jet.global=new Jet({
       var _this=this;
       this.showResult=false;
       this.needUseRouted=true;
-      Jet.router.route(opt.data.url,null,function(){
+      this.jumpTo(opt.data.url,opt.data.des,function(){
+        _this.needUseRouted=false;
+      })
+    },jumpTo:function(url,des,call){
+      Jet.router.route(url,null,function(){
         setTimeout(function(){
           var top=0;
-          if(opt.data.des!=''){
-            top=$J.attr('jump-des='+opt.data.des).offsetTop-55;
+          if(des!=''){
+            top=$J.attr('jump-des='+des).offsetTop-55;
           }
           document.documentElement.scrollTop=top;
           $J.body().scrollTop=top;
-          _this.needUseRouted=false;
+          if(call){
+            call();
+          }
         },0);
       });
     },shapeQueryName:function(s){
@@ -225,3 +235,4 @@ Jet.global=new Jet({
     }
   }
 })
+      

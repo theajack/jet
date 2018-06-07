@@ -285,3 +285,22 @@ __dynamic.js:31 onrouted
 //     现在ondatachange可以使用json和数组 嵌套，
 //     并修复了$regist 多层数组嵌套时的bug ,(a[0][0]时用出错)
 
+//5-24 修复存在多个 jload 元素，JUI加载不正常的bug， 修复 j-dialog 不同页面之间切换不会移除的 bug
+//     JUI.dialog.removeAll 不同组件之间切换时使用，路由切换已经写进源码
+//     修复了添加或刪除数组元素时 $index不能正确改变 的bug，修复了使用JUI时for元素添加新元素时不会被渲染
+//     新增 Jet 的 par 属性，用于指定父元素，父元素会有一个 $child 属性
+//5-25 修复了for元素中使用radio或checkbox时添加新元素是，group不会被正确绑定的bug
+//5-26 jui dialog 新增尺寸 xs s l xl full
+//    新增 jpar 属性，用于指定 jload元素中的Jet 元素的父Jet元素。（这是用于当一个jload可能会对应多个父元素时的情况）
+//    修复了 checkbox和radio checked的bug，
+//    新增 checkbox group的selectAll 方法，用于全选；
+//    新增 checkbox group的clear方法，用于清空所有选择
+//    新增 radio group的clear方法，用于清空选中
+//    新增 checkbox group 和 radio group的removeAll方法，用于删除所有checkbox|radio子元素
+//    新增 checkbox group 和 radio group的remove方法
+//5-27 新增 jui-type 属性，用于指定jui绑定数据的类型，可选值有 bool number string，默认值为string
+//5-28 **新增 if,show,style,attr中绑定的 $.$par(index) 方法，可用于获取父元素数据，index 默认值为1,若是参数小于0，会用1计算，超过父元素级数会返回最上层父元素，也就是jet元素
+//     bind元素不需要父元素，因为如果子元素中没有对应的属性，会自动向上查找父元素
+//     在执行语句中，可以使用 Jet元素的 $parData(index) 方法获取或设置父元素的数据
+//5-30 对于display none的元素 禁用了_validInput
+//6-6 修复了因为修改jload.init引入的bug:jload 子组件无法引用父组件的数据

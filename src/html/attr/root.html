@@ -50,10 +50,10 @@
 </div>
 <div class='title' jump-des='r'>$r</div>
 <div class="sub">
-        <div class='text indent'>
-            对于使用了<span class="red">Jattr，Jstyle，Jif，Jshow</span>且没有使用Jroot属性或是已经使用了当前作用域数据的元素，可以在属性值中使用 <span class="red">$r</span> 关键字来使用Jet数据。（在其他元素中不许需要，因为其他元素可以直接使用this来使用Jet数据）请看一个例子：
-        </div>
-        <div class='j-code' disabled width='99%' height='auto'>
+    <div class='text indent'>
+        对于使用了<span class="red">Jattr，Jstyle，Jif，Jshow</span>且没有使用Jroot属性或是已经使用了当前作用域数据的元素，可以在属性值中使用 <span class="red">$r</span> 关键字来使用Jet数据。（在其他元素中不许需要，因为其他元素可以直接使用this来使用Jet数据）请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
 &lt;div j='user'>
     &lt;div j='name' jdom='$r'>
         &lt;div j='value' jif='{{$r.message}}=="message root":class[c1|c2]'>$+1&lt;/div>
@@ -82,22 +82,22 @@
         }
     });
 &lt;/script>
-        </div>
-        <div class='text'>
-            以下是输出的结果：
-            <div class='out'>
-                <div j='user'>
-                    <div j='name' jdom='$r'>
-                        <div j='value' jif='{{$r.message}}=="message root":class[c1|c2]'>$+1</div>
-                        <div j='value' jshow='{{$r.message}}=="message name"'>$+2</div>
-                        <div j='value' jattr='attr:{{$r.message}}'>$+3</div>
-                        <div j='value' jstyle='color:{{$r.color}}'>$+4</div>
-                    </div>
-                    <div j='html'></div>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div j='user'>
+                <div j='name' jdom='$r'>
+                    <div j='value' jif='{{$r.message}}=="message root":class[c1|c2]'>$+1</div>
+                    <div j='value' jshow='{{$r.message}}=="message name"'>$+2</div>
+                    <div j='value' jattr='attr:{{$r.message}}'>$+3</div>
+                    <div j='value' jstyle='color:{{$r.color}}'>$+4</div>
                 </div>
+                <div j='html'></div>
             </div>
         </div>
     </div>
+</div>
 <script>
     Jet.global.setLink({
         last:'Jload',

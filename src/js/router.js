@@ -13,6 +13,7 @@ Jet.router.use({
             '/contents':'/intro/contents',
             '/html':'/intro/html',
             '/grammer':'/intro/grammer',
+            '/api':'/intro/api',
             '/about':'/intro/about',
         }
         },

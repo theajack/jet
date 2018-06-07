@@ -342,6 +342,7 @@ textarea.j-input{
     margin: 3px;
     height: 18px;
     line-height: 18px;
+    word-break: break-all;
 }
 .j-radio-cw,.j-checkbox-cw{
     display: inline-block;
@@ -1108,6 +1109,7 @@ cd_note,cd_note * {color: #019d00!important}
 	padding: 15px;
     z-index: 20;
     border: 2px solid #ccc;
+    cursor: move;
 
 	opacity: 1!important;
 	animation: j-confirm-show .5s ease;
@@ -1382,6 +1384,30 @@ cd_note,cd_note * {color: #019d00!important}
 	-webkit-transform: scale(0);
 	-o-transform: scale(0);
 }
+.j-dialog.xs{
+    width:180px;
+    margin-left:-90px;
+}
+.j-dialog.s{
+    width:320px;
+    margin-left:-160px;
+}
+.j-dialog.l{
+    width:900px;
+    margin-left:-450px;
+}
+.j-dialog.xl{
+    width:1200px;
+    margin-left:-600px;
+}
+.j-dialog.full{
+    width:100%;
+    height:100%;
+    margin-left:0;
+    margin-top:0;
+    left:0;
+    top:0;
+}
 .j-dialog.j-dialog-open{
     
     top:50%;
@@ -1435,6 +1461,27 @@ cd_note,cd_note * {color: #019d00!important}
     min-height:300px;
     overflow:auto;
     padding: 10px;
+    width:100%;
+}
+.j-dialog.xs .j-dialog-body{
+    max-height:120px;
+    min-height:100px;
+}
+.j-dialog.s .j-dialog-body{
+    max-height:300px;
+    min-height:210px;
+}
+.j-dialog.l .j-dialog-body{
+    max-height:750px;
+    min-height:390px;
+}
+.j-dialog.xl .j-dialog-body{
+    max-height:800px;
+    min-height:500px;
+}
+.j-dialog.full .j-dialog-body{
+    height: 100%;
+    max-height: none;
 }
 
 .j-drag{

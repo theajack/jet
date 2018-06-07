@@ -45,6 +45,11 @@ Jet.$define('Query',function(){
         intro:'设置name参数后可以通过 Jet.name 获取到Jet元素',
         des:'name'
     },{
+        name:'par参数',
+        url:'/intro/grammer',
+        intro:'用于父组件与子组件的状态共享',
+        des:'par'
+    },{
         name:'ondatachange',
         url:'/intro/grammer',
         intro:'ondatachange 属性用于为Jet数据添加一个数据变化的监听事件',
@@ -54,6 +59,10 @@ Jet.$define('Query',function(){
         url:'/intro/grammer',
         intro:'Jet 有7个生命周期函数',
         des:'life'
+    },{
+        name:'api目录',
+        url:'/intro/about',
+        intro:'api汇总',
     },{
         name:'关于',
         url:'/intro/about',
@@ -161,6 +170,16 @@ Jet.$define('Query',function(){
         url:'/attr',
         intro:'本章中将介绍Jet中的属性，样式和事件的绑定',
     },{
+        name:'$.$par()',
+        url:'/attr',
+        intro:'使用父元素的数据',
+        des:'par'
+    },{
+        name:'$parData()',
+        url:'/attr',
+        intro:'使用父元素的数据',
+        des:'parData'
+    },{
         name:'jif',
         url:'/attr/if',
         intro:'可以根据给定的布尔值或布尔表达式的结果对元素进行两种不同的操作',
@@ -188,6 +207,11 @@ Jet.$define('Query',function(){
         name:'Jload',
         url:'/attr/load',
         intro:'可以在某个元素之内加载其他的html模板',
+    },{
+        name:'Jpar',
+        url:'/attr/load',
+        intro:'设置子组件中Jet元素的父元素',
+        des:'jpar'
     },{
         name:'Jroot',
         url:'/attr/root',
@@ -363,6 +387,30 @@ Jet.$define('Query',function(){
         url:'/router/prop',
         intro:'许多与路由相关的属性',
     },{
+        name:'js模块规范',
+        url:'/module',
+        intro:'js异步模块加载规范',
+    },{
+        name:'$define',
+        url:'/module/define',
+        intro:'定义模块',
+    },{
+        name:'$export',
+        url:'/module/export',
+        intro:'输出模块',
+    },{
+        name:'$import',
+        url:'/module/import',
+        intro:'引入模块',
+    },{
+        name:'$module',
+        url:'/module/module',
+        intro:'已引入的模块集合',
+    },{
+        name:'$use',
+        url:'/module/use',
+        intro:'使用模块',
+    },{
         name:'css配置文件',
         url:'/css/',
         intro:'名为css.conf的配置文件',
@@ -423,6 +471,11 @@ Jet.$define('Query',function(){
         url:'/jui/',
         intro:'获取JUI对象',
         des:'jui'
+    },{
+        name:'jui-type',
+        url:'/jui/',
+        intro:'指定绑定数据的JUI元素最终使用数据类型',
+        des:'jui-type'
     },{
         name:'基础样式类',
         url:'/jui/base',
@@ -505,11 +558,13 @@ Jet.$define('Query',function(){
         url:'/code',
         intro:'在线使用和调试Jet',
     }]
-    Jet.$export(
-        function(s){
+    Jet.$export({
+        search:function(s){
             return map.filter(function(item){
                 return item.name.toLowerCase().has(s.toString().toLowerCase());
             })
+        },getData:function(){
+            return map;
         }
-    )
+    })
 });

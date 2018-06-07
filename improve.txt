@@ -1,22 +1,70 @@
-
+﻿
 有待改进：
     //SELECT 动态绑定是列表不会改表 **
     //checkbox group 有bug
-    //date 没设置初始值会有bug
+    //date 没设置初始值会有bug  
     //date color 通过value设置初始值没反应
     //color :第一次选择颜色时 左上角不是fff
     //confirm dialog
     jcode需要重写
     栅格使用flex布局
+//待修改： j-dialog提取到最外层，路由切换时删除；
 
 
 待修改：
     1.路由的重定向
-    2.路由根目录可以共用，可以使用默认的html文件（与路由同名）
-    3.css，js需支持文件夹（可能已经支持）
-    4.Jet的生命周期 mounted ready...
-    5.对于数组，若是没有绑定元素，则无法使用$push等方法
+    2.路由根目录可以共用，可以使用默认的html文件（与路由同名）  done
+    3.css，js需支持文件夹（可能已经支持）  done
+    4.Jet的生命周期 mounted ready...  done
+    5.对于数组，若是没有绑定元素，则无法使用$push等方法  done
     6.对于数组，直接对数组赋值，ui不会改变
     7.jui checkbox 由于以上两点bug 很难完成
     8.jui select 对绑定的选项进行$push 或其他操作，ui不变
     9.暂不支持路由的嵌套
+
+1.switch 没有加元素时时无法返回，默认值设置为true false
+
+
+1.npm包 方式发布
+2.开源协议
+3.虚拟dom
+4.浏览器兼容性
+
+
+//jcode.js index.js index.html .juijs jetjs index.html
+
+
+ondatachange:{
+    string:{
+        $func:function(value,key){
+
+        }
+    },
+    string:function(value,key){
+        
+    },
+    json:{
+        $func:function(value,key){
+            
+        },
+        key:function(){
+            $func:function(value,key){
+            
+            },
+        }
+    },
+    array:{
+        $func:function(item,i){
+            
+        },object:{
+            $func:function(item,i){
+            
+            },
+            key:function(){
+                $func:function(value,key){
+                
+                },
+            }
+        }
+    }
+}

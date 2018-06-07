@@ -15,11 +15,174 @@
         <div>10.jhtml <span class="light-text">(将绑定元素的innerHTML设置为绑定的数据)</span></div>
     </div>
 </div>
+<div class='title'>$r</div>
+<div class='text'>
+    对于使用了<span class="red">Jattr，Jstyle，Jif，Jshow</span>的元素，可以在属性值中使用 <span class="red">$r</span> 关键字来使用Jet数据。详情<span class="link" jon='Jet.global.jumpTo("/attr/root","r")'>点击这里</span>
+</div>
+
+<div class='title' jump-des='par'>$.$par()</div>
+<div class='text'>
+    对于使用了<span class="red">Jattr，Jstyle，Jif，Jshow</span>的元素，可以在属性值中使用 <span class="red">$.$par(i)</span> 方法来使用上一级或上多级Jet数据。
+    该方法接受一个可选参数，缺省值是1，表示直接父Jet数据，也就是默认的数据作用域，依次类推，如果设置的值超出了总的级数，则选取最外层的数据作用域。请看一个例子：
+</div>
+<div class='j-code' disabled width='99%' height='auto'>
+&lt;div j="p4">
+    &lt;div j="p3">
+        &lt;div j="p2">
+            &lt;div j="p1" jdom='p1'>
+                &lt;div j="self">&lt;/div>
+                &lt;div j='self' jif='{{$.$par(1).message}}=="message p1":class[c1|c2]'>$+1&lt;/div>
+                &lt;div j='self' jshow='{{$.$par(2).message}}!=="message p2"'>$+2&lt;/div>
+                &lt;div j='self' jattr='attr:{{$.$par(3).message}}'>$+3&lt;/div>
+                &lt;div j='self' jstyle='color:{{$.$par(4).color}}'>$+4&lt;/div>
+                &lt;div j='self' jstyle='color:{{$.$par(5).color}}'>$+5&lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>
+&lt;/div>
+&lt;div j='html'>&lt;/div>
+&lt;script>
+new Jet({
+    onmounted:function(){
+        this.html=this.$dom.p1.html;
+    },
+    data:{
+        html:'',
+        p4:{
+            p3:{
+                p2:{
+                    p1:{
+                        self:'self',
+                        message:'message p1'
+                    },
+                    message:'message p2'
+                },
+                message:'message p3'
+            },
+            message:'message p4',
+            color:'#f44'
+        },
+        message:'message root',
+        color:'#4f4'
+    }
+});
+&lt;/script>
+</div>
+<div class='text'>
+    以下是输出的结果：
+    <div class='out'>
+        <div j="p4">
+            <div j="p3">
+                <div j="p2">
+                    <div j="p1" jdom='p1'>
+                        <div j="self"></div>
+                        <div j='self' jif='{{$.$par(1).message}}=="message p1":class[c1|c2]'>$+1</div>
+                        <div j='self' jshow='{{$.$par(2).message}}!=="message p2"'>$+2</div>
+                        <div j='self' jattr='attr:{{$.$par(3).message}}'>$+3</div>
+                        <div j='self' jstyle='color:{{$.$par(4).color}}'>$+4</div>
+                        <div j='self' jstyle='color:{{$.$par(5).color}}'>$+5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div j='html'></div>
+    </div>
+</div>
+
+<div class='title' jump-des='parData'>$parData()</div>
+<div class='text'>
+    对于其他类型的Jet元素（jrun,jon），可以使用 $parData(i) 方法来获取父元素数据，请看一个例子：
+</div>
+<div class='j-code' disabled width='99%' height='auto'>
+&lt;div j="p4">
+    &lt;div j="p3">
+        &lt;div j="p2">
+            &lt;div j="p1">
+                &lt;div j="self">&lt;/div>
+                &lt;button j='self' jon='alert(opt.jet.$parData(1).message)'>$+1&lt;/button>
+                &lt;button j='self' jon='alert(opt.jet.$parData(2).message)'>$+2&lt;/button>
+                &lt;button j='self' jon='alert(opt.jet.$parData(3).message)'>$+3&lt;/button>
+                &lt;button j='self' jon='alert(opt.jet.$parData(4).message)'>$+4&lt;/button>
+                &lt;button j='self' jon='alert(opt.jet.$parData(5).message)'>$+5&lt;/button>
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>
+&lt;/div>
+&lt;script>
+new Jet({
+    onmounted:function(){
+        this.html=this.$dom.p1.html;
+    },
+    data:{
+        html:'',
+        p4:{
+            p3:{
+                p2:{
+                    p1:{
+                        self:'self',
+                        message:'message p1'
+                    },
+                    message:'message p2'
+                },
+                message:'message p3'
+            },
+            message:'message p4'
+        },
+        message:'message root'
+    }
+});
+&lt;/script>
+</div>
+<div class='text'>
+    以下是输出的结果：
+    <div class='out'>
+        <div j="p4">
+            <div j="p3">
+                <div j="p2">
+                    <div j="p1">
+                        <div j="self"></div>
+                        <button j='self' jon='alert(opt.jet.$parData(1).message)'>$+1</button>
+                        <button j='self' jon='alert(opt.jet.$parData(2).message)'>$+2</button>
+                        <button j='self' jon='alert(opt.jet.$parData(3).message)'>$+3</button>
+                        <button j='self' jon='alert(opt.jet.$parData(4).message)'>$+4</button>
+                        <button j='self' jon='alert(opt.jet.$parData(5).message)'>$+5</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 Jet.global.setLink({
     last:'数组方法',
     lastUrl:'/bind/array',
     next:'Jif',
     nextUrl:'/attr/if',
+});
+
+new Jet({
+    onmounted:function(){
+        this.html=this.$dom.p1.html;
+    },
+    data:{
+        html:'',
+        p4:{
+            p3:{
+                p2:{
+                    p1:{
+                        self:'self',
+                        message:'message p1'
+                    },
+                    message:'message p2'
+                },
+                message:'message p3'
+            },
+            message:'message p4',
+            color:'#f44'
+        },
+        message:'message root',
+        color:'#4f4'
+    }
 });
 </script>

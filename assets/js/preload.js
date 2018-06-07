@@ -83,7 +83,8 @@
       window.__preload_css(res2,function(d){
         var comStyle=o.cloneNode();
         comStyle.innerHTML=d.replace(/[\r\n]/g,"");//去掉回车换行;
-        document.head.appendChild(comStyle);
+        document.head.insertBefore(comStyle,common)
+        //document.head.appendChild(comStyle);
         //document.head.removeChild(pre_style);
         document.head.removeChild(common);
       })

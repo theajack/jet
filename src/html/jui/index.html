@@ -25,6 +25,10 @@
     对于使用了数据绑定的JUI元素，JUI会生成一个JUI对象，使用<span class="red">Jet.prototype.$jui()</span>方法可以获取到这个对象，
     并且可以设置这个对象的属性可以改变组件的状态、更新源数据。该方法的参数是jdom值，jdom元素或者dom元素。
 </div>
+<div class='title' jump-des='jui-type'>jui-type</div>
+<div class='text indent'>
+    使用<span class="red">jui-type</span>属性可以用于指定绑定数据的元素最终使用的数据类型，可选值有number,bool和string。目前可用的元素仅有 radio,checkbox和switch。
+</div>
 <script>
     Jet.global.setLink({
         last:'prototype扩展',

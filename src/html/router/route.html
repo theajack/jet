@@ -1,7 +1,10 @@
 <div class='title'>route()</div>
 <div class="sub">
     <div class='text'>
-        <span class='red'>Jet.router.route()</span>方法可供开发者使用代码进行路由跳转，该方法仅接收一个字符串参数，
+        <span class='red'>Jet.router.route()</span>方法可供开发者使用代码进行路由跳转。
+    </div>
+    <div class='text'>
+        当要跳转到当前项目的路由地址时，该方法仅接收一个字符串参数，
         该参数应是Jet.router.use() 方法设置的一个存在的路由地址，否则无效。请看一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
@@ -14,6 +17,12 @@ new Jet();
         <div class='out'>
             <button jon='Jet.router.route("/intro")'>点击跳转到介绍页</button>
         </div>
+    </div>
+    <div class='text'>
+        当要跳转到一个http地址时，该方法接受两个参数，第二个参数是，是否设置为新打开一个页面。
+    </div>
+    <div class='text'>
+        此外，还可以使用 Jet.router.back() 和 Jet.router.forward() 来进行后退和前进操作。
     </div>
     <div class='title'>1.Jet.prototype.$route()</div>
     <div class='text'>

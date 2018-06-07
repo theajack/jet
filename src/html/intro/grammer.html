@@ -7,8 +7,9 @@
         <div class='link' jump-to='base'>1.基本使用 <span class="light-text">(获取或者设置dom元素的innerHTML)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='part'>2.局部渲染 <span class="light-text">(获取dom元素的outerHTML)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='name'>3.name参数 <span class="light-text">(设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='ondatachange'>4.ondatachange <span class="light-text">(获取或者设置dom元素的innerText)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='life'>5.生命周期 <span class="light-text">(获取或者设置[增加或删除]dom元素的属性)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='par'>4.par参数 <span class="light-text">(用于父组件与子组件的状态共享)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='ondatachange'>5.ondatachange <span class="light-text">(获取或者设置dom元素的innerText)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='life'>6.生命周期 <span class="light-text">(获取或者设置[增加或删除]dom元素的属性)</span><i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 <div class='title' jump-des='base'>1.基本使用</div>
@@ -94,7 +95,39 @@
     </div>
 </div>
 
-<div class='title' jump-des='ondatachange'>4.ondatachange</div>
+<div class='title' jump-des='par'>4.par参数</div>
+<div class="sub">
+    <div class='text indent'>par参数用于设置当前Jet元素的父Jet元素，设置以后可以在Jet元素中通过 <span class="red">this.$par</span> 获取到父元素，一般用于jload组件或者路由组件与父组件之间的状态共享
+        一个父元素可以有多个子元素，但是一个子元素只能有一个父元素。父元素可以通过 <span class="red">this.$child</span> 获取其子元素，子元素是一个json，键对应的是Jet的name参数。请看一个例子
+    </div>
+
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;script>
+    //父元素
+    new Jet({
+        name:'parent',
+        data:{
+            info:'parent'
+        }
+    });
+
+    //子元素
+    new Jet({
+        name:'children',
+        par:'parent',
+        data:{
+        }
+    });
+    //执行上面代码之后 Jet.children.$par==Jet.parent
+    // Jet.parent.$child=={children:Jet.children}
+&lt;/script>
+    </div>
+    <div class='text'>
+        除了直接使用par属性，在jload元素中，还可以设置jload html元素的 <span class="link" jon='Jet.global.jumpTo("/attr/load","jpar")'>jpar属性</span> 来动态的设置 父Jet元素。
+    </div>
+</div>
+
+<div class='title' jump-des='ondatachange'>5.ondatachange</div>
 <div class="sub">
     <div class='text'>
         ondatachange 属性用于为Jet数据添加一个数据变化的监听事件，事件方法的 this 指代的是根Jet元素，方法有两个参数，第一个是改变之后的值，改变数据的键。请看下面一个例子：
@@ -270,7 +303,7 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des='life'>5.Jet生命周期函数</div>
+<div class='title' jump-des='life'>6.Jet生命周期函数</div>
 <div class="sub">
     <div class='text'>
         Jet 有以下7个生命周期函数，各自的执行先后顺序与其序号一致。
@@ -340,12 +373,11 @@
     Jet.global.setLink({
         last:'html模板',
         lastUrl:'/intro/html',
-        next:'关于',
-        nextUrl:'/intro/about',
+        next:'api目录',
+        nextUrl:'/intro/api',
     });
-    
-
-    var a=new Jet({
+    new Jet({
+        name:'myJet',
         // onroute:function(){
         //   console.log('onroute');
         // },

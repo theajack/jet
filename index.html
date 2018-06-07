@@ -10,10 +10,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta content="telephone=no" name="format-detection">
-    <!-- <script type="text/javascript" id='jet-preload' src='/assets/js/preload.js'></script> -->
+    <!-- <script type="text/javascript" id='jet-preload' src='/jet/assets/js/preload.js'></script> -->
     <link rel="icon" href="/jet/src/image/icon.ico" type="image/x-icon"/> 
     <title>Jet--前端轻量级JS框架</title>
-    <!-- <link rel="stylesheet" href="/assets/css/jui.min.css"> -->
+    <!-- <link rel="stylesheet" href="/jet/assets/css/jui.min.css"> -->
     <link rel="stylesheet" id='commonCss' href="/jet/src/css/common.css">
     <link rel="stylesheet" href="/jet/assets/css/icon.css">
     <link rel="stylesheet" href="/jet/assets/css/style.css">
@@ -46,6 +46,10 @@
               <div class="menu-s-item" Jrouter='/intro/grammer' >
                 <div class="menu-s-bar"></div>
                 <div class='relative'>Jet语法</div>
+              </div>
+              <div class="menu-s-item" Jrouter='/intro/api' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>api目录</div>
               </div>
               <div class="menu-s-item" Jrouter='/intro/about' >
                 <div class="menu-s-bar"></div>
@@ -392,7 +396,7 @@
           <i class="j-icon icon-arrow-up h-icon f-right" jon='click:$J.scrollTo(0)'></i>
           <div id="searchWrapper" class='f-right'>
               <i class="j-icon" jif='showResult:class[icon-times|icon-search]' jon='click:if(this.showResult)this.showResult=false'></i>
-              <input type="text" class='j-input' jon='focus:this.showResult=true' j='queryString' placeholder="搜索api">
+              <input type="text" class='j-input' jon='focus:searchFocus' j='queryString' placeholder="搜索api">
               <div j='queryList' jshow='{{$.queryList}}.length>0&&{{$.showResult}}' id='queryResult'>
                 <div j='$each'>
                   <div class='q-item' jon='click:toQueryResult'>
@@ -402,7 +406,7 @@
                 </div>
               </div>
           </div>
-          <span j='number' class='f-right' jshow='{{$.showResult}}' id='number'>$+'条记录'</span>
+          <span j='number' jshow='{{$.showResult}}' class='f-right' id='number'>$+'条记录'</span>
         </div>
         <div Jout id='routerOut' jdom='out'></div>
         <div id='footer'>
@@ -418,7 +422,6 @@
         </div>
       </div>
       <div jattr='class:({{$.showMenu}})?"menu-bar-cover open":"menu-bar-cover"' jon='click:this.showMenu=false'></div>
-
 
     <!-- <script type="text/javascript" src="/jet/assets/js/jet.min.js"></script> 
     <script type="text/javascript" src="/jet/assets/js/jui.min.js"></script> -->
