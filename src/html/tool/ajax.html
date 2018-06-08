@@ -18,7 +18,7 @@ func:{
             beforeSend: a.beforeSend ||function() {},
             success: a.success ||function() {},
             error: a.error ||function() {},
-            base: a.base||true
+            base: a.base|| Jet.prototype.base
         });
     }
 }
@@ -60,11 +60,11 @@ new Jet({
     </div>
 
     <div class='text indent'>
-        双竖线后的是各属性的默认值，base属性 在Jet.$.ajax 中不存在，该属性表示是否采用设置的根地址，根地址使用 Jet.prototype.$ajax.base 或 this.$ajax.base 来设置。
+        双竖线后的是各属性的默认值，base属性只在Jet.prototype.$ajax中可以使用，在 Jet.$.ajax() 方法中不存在。该属性表示是否采用设置的根地址，根地址使用 Jet.prototype.$ajax.base 或 this.$ajax.base 来设置。
     </div>
     <div class='title'>1.$ajax.base</div>
     <div class='text indent'>
-        $ajax.base属性用于设置一个发送请求的根地址，该属性所有的Jet对象共用一个。
+        $ajax.base属性用于设置一个发送请求的默认的根地址，该属性所有的Jet对象共用一个。
     </div>
     <div class='title'>2.$ajax.xhr</div>
     <div class='text indent'>
