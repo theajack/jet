@@ -304,3 +304,29 @@ __dynamic.js:31 onrouted
 //     在执行语句中，可以使用 Jet元素的 $parData(index) 方法获取或设置父元素的数据
 //5-30 对于display none的元素 禁用了_validInput
 //6-6 修复了因为修改jload.init引入的bug:jload 子组件无法引用父组件的数据
+//6-20 ajax 新增header  新增支持数据为数组
+//  jui msg text 支持 数字类型
+//  增加_hasDisabled 属性 以修复 当数组为空时 其中的Jet元素可能会报错的bug
+//  修复了 当输入框类型为password时 启用了 onchange 事件的bug
+//6-24 j-select 组件支持 数据绑定 j-option，
+//  当j-option过多时，支持上下滚动显示
+//  修复了 j=‘’ 绑定数据且其数据处于上级作用域的元素，其子元素不会使用于其相同的作用域的bug 
+//  （*重要）现在可以对绑定数据的数组 使用 = 号直接赋值 ，不必使用 $replace; 也对json进行了优化，现在都可以使用 = 直接赋值
+//  6-26
+//    修复数组插入数据 ，for中的input输入会错乱的bug 
+//    修改了Jetterjs 的 insertArray(使用原生splice) removeByIndex(支持第二个参数选择删除个数)
+//    （*重要）修改了原生数组操作方法(push,pop,splice,shift,unshift,reverse,sort)，现在可以使用原生数组操作来操作Jet的绑定数组
+//    新增delay 和 interval 用于解决由于异步加载导致的依赖项未加载完成的情况，设置一个延迟或循环 获取依赖项
+// 6-27 text 元素中func 可以使用opt参数
+//    dialog.reinitPos
+//    修改了 jet数据的 defineJson 的方法 现在json使用等于直接赋值可以触发绑定。（目前设定的是Jet数据中没有属性，不会被赋值到Jet数据中）
+//    JUI message 和 confirm 新增 html 属性
+//    （*重要）JUI date 新增 jui-date-time=true 支持选择24进制的时间
+//    （*重要）JUI date 新增 jui-date-detail=true hover可以显示农历和节日节气等信息
+//    JUI date 新增 jui-date-max 和 jui-date-min
+//6-30    JUI dialog noclose nodrag 属性
+//    Jet run现在会在渲染数据完成之后触发 ；jload onload属性
+//7-3     修复了当input没有type属性时 绑定无效的bug; 修复了Date日期选择器当日期或月份是个位数时导致日期紊乱的bug
+//    jstyle等元素来使用函数 $r.func({{$.score}})，text元素可以使用立即执行函数或this.func来使用函数
+//  jui-date 添加选择今日按钮
+//  现在jload不一定非要设置jpar属性，会将其所在的页面的Jet元素作为其父元素

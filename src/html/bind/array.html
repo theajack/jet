@@ -1,6 +1,20 @@
-<div class='title'>数组方法</div>
-<div class='text'>
-    循环类型的for元素的绑定值是一个数组，Jet 对for元素的数组定义了一些操作方法，来代替原生js的数组操作方法。一共有以下九种：
+<div class='title' jump-des='o-array'>1.原生数组方法</div>
+<div class='text indent'>
+    Jet对原生的数组方法进行了重写，使其可以支持Jet的双向数据绑定。在Jet中也可以使用 = 操作符直接对数组（或者是json格式的数据）进行赋值。双向绑定都会被触发。Jet重写了以下八个数组的原生操作方法，并没有改变其原生的用法：
+    <div class="list">
+        <div>1.= (直接赋值)</div>
+        <div>2.push</div>
+        <div>3.pop</div>
+        <div>4.splice</div>
+        <div>5.shift</div>
+        <div>6.unshift</div>
+        <div>7.reverse</div>
+        <div>8.sort</div>
+    </div>
+</div>
+<div class='title' jump-des='jet-array'>2.Jet数组方法</div>
+<div class='text indent'>
+    循环类型的for元素的绑定值是一个数组。除了原生的数组操作方法，Jet 对for元素的数组还定义了一些新的操作方法，来代替或弥补原生js的数组操作方法。一共有以下九种：
     <span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
     <div class="list">
         <div class='link' jump-to='push'>1.$push <span class="light-text">(向数组尾部插入一个元素)</span><i class="icon icon-double-angle-right"></i></div>

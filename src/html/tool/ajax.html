@@ -7,18 +7,19 @@
     <div class='j-code not-test' disabled width='99%' height='auto'>
 new Jet({
 func:{
-    useAjax:function(){//可选参数，后面的是默认参数
+    useAjax:function(a){//可选参数，后面的是默认参数
         this.$ajax({
             type: a.type || "get",
             url: a.url || "",
             async: a.async || "true",
             data: a.data || null,
             dataType: a.dataType || "text",
-            contentType: a.contentType || "application/x-www-form-urlencoded",
+            contentType: a.contentType || "application/x-www-form-urlencoded",//设置为null表示不设置 Content-Type
             beforeSend: a.beforeSend ||function() {},
             success: a.success ||function() {},
             error: a.error ||function() {},
-            base: a.base|| Jet.prototype.base
+            base: a.base|| Jet.prototype.base,
+            header:a.header|| {}
         });
     }
 }

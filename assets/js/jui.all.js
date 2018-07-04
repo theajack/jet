@@ -1,7 +1,506 @@
 
 //18-3-20:
 // message 增加30ms延迟 增加hover属性
+// jetterjs
+//    insertArray(使用原生splice) removeByIndex(支持第二个参数选择删除个数)
+//    ajax 请求和 convertData
+
 (function(){
+  //*********calendar-converter.js****************
+
+  ///////////////////////////////////////////////////
+  //
+  // lunarInfo
+  //
+  ///////////////////////////////////////////////////
+
+  // base data about chinese year informace
+  // 保存公历农历之间的转换信息:以任意一年作为起点，
+  // 把从这一年起若干年(依需要而定)的农历信息保存起来。 要保存一年的信息，只要两个信息就够了: 1)农历每个月的大小;2)今年是否有闰月，闰几月以及闰月的大小。 用一个整数来保存这些信息就足够了。 具体的方法是:用一位来表示一个月的大小，大月记为1，小月记为0，
+  // 这样就用掉12位(无闰月)或13位(有闰月)，再用高四位来表示闰月的月份，没有闰月记为0。 ※-----例----: 2000年的信息数据是0xc96，化成二进制就是110010010110B，
+  // 表示的含义是:1、2、5、8、10、11月大，其余月份小。 2001年的农历信息数据是0x1a95(因为闰月，所以有13位)，
+  // 具体的就是1、2、4、5、8、10、12月大， 其余月份小(0x1a95=1101010010101B)，
+  // 4月的后面那一个0表示的是闰4月小，接着的那个1表示5月大。 这样就可以用一个数组来保存这些信息。在这里用数组lunarInfo[]来保存这些信息
+  var lunarInfo=new Array(
+  0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,
+  0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
+  0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,
+  0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
+  0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,
+  0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
+  0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,
+  0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
+  0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,
+  0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
+  0x06ca0,0x0b550,0x15355,0x04da0,0x0a5d0,
+  0x14573,0x052d0,0x0a9a8,0x0e950,0x06aa0,
+  0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,
+  0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
+  0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,
+  0x0d250,0x0d558,0x0b540,0x0b5a0,0x195a6,
+  0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,
+  0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
+  0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,
+  0x06b58,0x055c0,0x0ab60,0x096d5,0x092e0,
+  0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,
+  0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
+  0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,
+  0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
+  0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,
+  0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
+  0x05aa0,0x076a3,0x096d0,0x04bd7,0x04ad0,
+  0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
+  0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,
+  0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0);
+
+  var Gan=new Array("甲","乙","丙","丁","戊","己","庚","辛","壬","癸");
+  var Zhi=new Array("子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥");
+  var Animals=new Array("鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪");
+  // TODO is it need to do
+  var sTermInfo = new Array(0,21208,42467,63836,85337,107014,128867,150921,173149,195551,218072,240693,263343,285989,308563,331033,353350,375494,397447,419210,440795,462224,483532,504758);
+  var nStr1 = new Array('日','一','二','三','四','五','六','七','八','九','十');
+  var nStr2 = new Array('初','十','廿','卅','□');
+  // var monthName = new Array("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC");
+  var cmonthName = new Array('正','二','三','四','五','六','七','八','九','十','十一','腊');
+
+  //公历节日 *表示放假日
+  var sFtv = new Array(
+  "0101*元旦",
+  "0214 情人节",
+  "0308 妇女节",
+  "0312 植树节",
+  "0401 愚人节",
+  "0422 地球日",
+  "0501 劳动节",
+  "0504 青年节",
+  "0531 无烟日",
+  "0601 儿童节",
+  "0606 爱眼日",
+  "0701 建党日",
+  "0707 抗战纪念日",
+  "0801 建军节",
+  "0910 教师节",
+  "0918 九·一八事变纪念日",
+  "1001*国庆节",
+  "1031 万圣节",
+  "1111 光棍节",
+  "1201 艾滋病日",
+  "1213 南京大屠杀纪念日",
+  "1224 平安夜",
+  "1225 圣诞节");
+
+  //某月的第几个星期几。 5,6,7,8 表示到数第 1,2,3,4 个星期几
+  var wFtv = new Array(
+  //一月的最后一个星期日（月倒数第一个星期日）
+  "0520 母亲节",
+  "0630 父亲节",
+  "1144 感恩节");
+
+  //农历节日
+  var lFtv = new Array(
+  "0101*春节",
+  "0115 元宵节",
+  "0202 龙抬头",
+  "0505 端午节",
+  "0707 七夕",
+  "0715 中元节",
+  "0815 中秋节",
+  "0909 重阳节",
+  "1208 腊八节",
+  "1223 小年",
+  "0100*除夕");
+
+  //====================================== 返回农历 y年的总天数
+  function lYearDays(y) {
+    var i, sum = 348
+    for(i=0x8000; i>0x8; i>>=1) sum += (lunarInfo[y-1900] & i)? 1: 0
+    return(sum+leapDays(y))
+  }
+
+  //====================================== 返回农历 y年的闰月的天数
+  function leapDays(y) {
+    if(leapMonth(y)) return((lunarInfo[y-1900] & 0x10000)? 30: 29)
+    else return(0)
+  }
+
+  //====================================== 返回农历 y年闰哪个月 1-12，没闰返回 0
+  function leapMonth(y) {
+    return(lunarInfo[y-1900] & 0xf)
+  }
+
+  //====================================== 返回农历 y年m月的总天数
+  function monthDays(y,m) {
+    return( (lunarInfo[y-1900] & (0x10000>>m))? 30: 29 )
+  }
+
+  //====================================== 算出农历，传入日期对象，返回农历日期日期对象
+  // 该对象属性有 .year .month .day .isLeap .yearCyl .dayCyl .monCyl
+  function Lunar(date) {
+    var objDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    var i, leap=0, temp=0
+    var baseDate = new Date(1900,0,31)
+    // Mac和linux平台的firefox在此处会产生浮点数错误
+    var offset = Math.round((objDate - baseDate)/86400000)
+
+    this.dayCyl = offset + 40
+    this.monCyl = 14
+
+    for(i=1900; i<2050 && offset>0; i++) {
+      temp = lYearDays(i)
+      offset -= temp
+      this.monCyl += 12
+    }
+
+    if(offset<0) {
+      offset += temp;
+      i--;
+      this.monCyl -= 12
+    }
+
+    this.year = i
+    this.yearCyl = i-1864
+
+    leap = leapMonth(i) //闰哪个月
+    this.isLeap = false
+
+    for(i=1; i<13 && offset>0; i++) {
+    //闰月
+      if(leap>0 && i==(leap+1) && this.isLeap==false)
+      { --i; this.isLeap = true; temp = leapDays(this.year); }
+      else
+      { temp = monthDays(this.year, i); }
+
+      //解除闰月
+      if(this.isLeap==true && i==(leap+1)) this.isLeap = false
+
+      offset -= temp
+      if(this.isLeap == false) this.monCyl ++
+    }
+
+    if(offset==0 && leap>0 && i==leap+1)
+    if(this.isLeap)
+    { this.isLeap = false; }
+    else
+    { this.isLeap = true; --i; --this.monCyl;}
+
+    if(offset<0){ offset += temp; --i; --this.monCyl; }
+
+    this.month = i
+    this.day = offset + 1
+  }
+
+  ///////////////////////////////////////////////////////////
+  //
+  // lunar 2 solar
+  //
+  ///////////////////////////////////////////////////////////
+  // year .month .day .isLeap .yearCyl .dayCyl .monCyl
+  function Solar(date, isLeapMonth) {
+    var lyear = date.getFullYear(),
+      lmonth = date.getMonth() + 1,
+      lday = date.getDate(),
+      offset = 0,
+      leap = isLeap(lyear);
+
+    // increment year
+    for(var i = 1900; i < lyear; i++) {
+      offset += lYearDays(i);
+    }
+
+    // increment month
+    // add days in all months up to the current month
+    for (var i = 1; i < lmonth; i++) {
+      // add extra days for leap month
+      if (i == leapMonth(lyear)) {
+        offset += leapDays(lyear);
+      }
+      offset += monthDays(lyear, i);
+    }
+    // if current month is leap month, add days in normal month
+    if (leap && isLeapMonth) {
+      offset += monthDays(lyear, i);
+    }
+
+    // increment
+    offset += parseInt(lday) - 1;
+
+    var baseDate = new Date(1900,0,31);
+    var solarDate = new Date(baseDate.valueOf() + offset * 86400000);
+
+    this.year = solarDate.getFullYear();
+    this.month = solarDate.getMonth();
+    this.day = solarDate.getDate();
+    this.isLeap = leap;
+  }
+
+  function isLeap(year) {
+      return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+  }
+
+  function getAnimalYear(year) {
+    return Animals[((year - 1900)%12)];
+  }
+
+
+  //============================== 传入 offset 返回干支, 0=甲子
+  function cyclical(num) {
+    return(Gan[num%10]+Zhi[num%12]);
+  }
+  //======================================= 返回该年的复活节(春分后第一次满月周后的第一主日)
+  function easter(y) {
+
+    var term2=sTerm(y,5); //取得春分日期
+    var dayTerm2 = new Date(Date.UTC(y,2,term2,0,0,0,0)); //取得春分的公历日期控件(春分一定出现在3月)
+    var lDayTerm2 = new Lunar(dayTerm2); //取得取得春分农历
+
+    if(lDayTerm2.day<15) //取得下个月圆的相差天数
+       var lMlen= 15-lDayTerm2.day;
+    else
+       var lMlen= (lDayTerm2.isLeap? leapDays(y): monthDays(y,lDayTerm2.month)) - lDayTerm2.day + 15;
+
+    //一天等于 1000*60*60*24 = 86400000 毫秒
+    var l15 = new Date(dayTerm2.getTime() + 86400000*lMlen ); //求出第一次月圆为公历几日
+    var dayEaster = new Date(l15.getTime() + 86400000*( 7-l15.getUTCDay() ) ); //求出下个周日
+
+    this.m = dayEaster.getUTCMonth();
+    this.d = dayEaster.getUTCDate();
+
+  }
+
+  //====================== 中文日期
+  function getCDay(d){
+    var s;
+
+    switch (d) {
+       case 10:
+          s = '初十'; break;
+       case 20:
+          s = '二十'; break;
+          break;
+       case 30:
+          s = '三十'; break;
+          break;
+       default :
+          s = nStr2[Math.floor(d/10)];
+          s += nStr1[d%10];
+    }
+    return(s);
+  }
+
+  ////////////////////////////////////////////////////////////////
+  //
+  // 24 节气
+  //
+  ///////////////////////////////////////////////////////////////
+  var solarTerm = new Array("小寒","大寒","立春","雨水","惊蛰","春分","清明",
+  "谷雨","立夏","小满","芒种","夏至","小暑","大暑","立秋","处暑","白露","秋分",
+  "寒露","霜降","立冬","小雪","大雪","冬至");
+
+  var solarTermBase = new Array(4,19,3,18,4,19,4,19,4,20,4,20,6,22,6,22,6,22,7,22,6,21,6,21);
+  var solarTermIdx = '0123415341536789:;<9:=<>:=1>?012@015@015@015AB78CDE8CD=1FD01GH01GH01IH01IJ0KLMN;LMBEOPDQRST0RUH0RVH0RWH0RWM0XYMNZ[MB\\]PT^_ST`_WH`_WH`_WM`_WM`aYMbc[Mde]Sfe]gfh_gih_Wih_WjhaWjka[jkl[jmn]ope]qph_qrh_sth_W';
+  var solarTermOS = '211122112122112121222211221122122222212222222221222122222232222222222222222233223232223232222222322222112122112121222211222122222222222222222222322222112122112121222111211122122222212221222221221122122222222222222222222223222232222232222222222222112122112121122111211122122122212221222221221122122222222222222221211122112122212221222211222122222232222232222222222222112122112121111111222222112121112121111111222222111121112121111111211122112122112121122111222212111121111121111111111122112122112121122111211122112122212221222221222211111121111121111111222111111121111111111111111122112121112121111111222111111111111111111111111122111121112121111111221122122222212221222221222111011111111111111111111122111121111121111111211122112122112121122211221111011111101111111111111112111121111121111111211122112122112221222211221111011111101111111110111111111121111111111111111122112121112121122111111011111121111111111111111011111111112111111111111011111111111111111111221111011111101110111110111011011111111111111111221111011011101110111110111011011111101111111111211111001011101110111110110011011111101111111111211111001011001010111110110011011111101111111110211111001011001010111100110011011011101110111110211111001011001010011100110011001011101110111110211111001010001010011000100011001011001010111110111111001010001010011000111111111111111111111111100011001011001010111100111111001010001010000000111111000010000010000000100011001011001010011100110011001011001110111110100011001010001010011000110011001011001010111110111100000010000000000000000011001010001010011000111100000000000000000000000011001010001010000000111000000000000000000000000011001010000010000000';
+
+  // 形式如function sTerm(year, n)，用来计算某年的第n个节气（从0小寒算起）为几号，这也基本被认可为节气计算的基本形式。由于没个月份有两个节气，计算时需要调用两次（n和n+1）
+  //===== 某年的第n个节气为几日（从0小寒起算）
+  function sTerm(y,n) {
+    return(solarTermBase[n] +  Math.floor( solarTermOS.charAt( ( Math.floor(solarTermIdx.charCodeAt(y-1900)) - 48) * 24 + n  ) ) );
+  }
+  /////////////////////////////////////////////////////////////////
+  //
+  //  calElement model
+  //
+  /////////////////////////////////////////////////////////////////
+
+  //============================== 阴历属性
+  function calElement(sYear,sMonth,sDay,week,lYear,lMonth,lDay,isLeap,cYear,cMonth,cDay) {
+    //瓣句
+    this.sYear      = sYear;   //公元年4位数字
+    this.sMonth     = sMonth;  //公元月数字
+    this.sDay       = sDay;    //公元日数字
+    this.week       = week;    //星期, 1个中文
+    //农历
+    this.lYear      = lYear;   //公元年4位数字
+    this.lMonth     = lMonth;  //农历月数字
+    this.lDay       = lDay;    //农历日数字
+    this.isLeap     = isLeap;  //是否为农历闰月?
+    //八字
+    this.cYear      = cYear;   //年柱, 2个中文
+    this.cMonth     = cMonth;  //月柱, 2个中文
+    this.cDay       = cDay;    //日柱, 2个中文
+
+    this.lunarDay      = getCDay(lDay);
+    this.lunarMonth    = cmonthName[lMonth - 1];
+    this.lunarYear     = getAnimalYear(lYear);
+
+    // this.color      = '';
+
+    this.lunarFestival = ''; //农历节日
+    this.solarFestival = ''; //公历节日
+    this.solarTerms    = ''; //节气
+  }
+  ///////////////////////////////////////////////////////////////
+  //
+  //  main
+  //
+  ///////////////////////////////////////////////////////////////
+  // date's month should be --, example: 2012-5-21 -> new Date(2012, 4, 21)
+  // no matter solar or lunar
+  function CalendarConverter() {
+    this.solar2lunar = function(date) {
+      var sYear = date.getFullYear(),
+        sMonth = date.getMonth(),
+        sDay = date.getDate(),
+        weekDay = nStr1[date.getDay()],
+        lunar = new Lunar(date),
+        lunarYear = lunar.year,
+        lunarMonth = lunar.month,
+        lunarDay = lunar.day,
+        isLeap = lunar.isLeap;
+
+      return addFstv(sYear, sMonth, sDay, weekDay, lunarYear, lunarMonth, lunarDay, isLeap);
+    }
+
+    this.lunar2solar = function(date, isLeapMonth) {
+      var lunarYear = date.getFullYear(),
+        lunarMonth = date.getMonth() + 1,
+        lunarDay = date.getDate(),
+        solar = new Solar(date, isLeapMonth),
+        sYear = solar.year,
+        sMonth = solar.month,
+        sDay = solar.day,
+        weekDay = nStr1[new Date(sYear, sMonth, sDay).getDay()],
+        isLeap = solar.isLeap,
+        cYear, cMonth, cDay, that = {};
+
+      return addFstv(sYear, sMonth, sDay, weekDay, lunarYear, lunarMonth, lunarDay, isLeap);
+    }
+
+  }
+  function addFstv(sYear, sMonth, sDay, weekDay, lunarYear, lunarMonth, lunarDay, isLeap) {
+    var cYear, cMonth, cDay, that = {};
+    ////////年柱 1900年立春后为庚子年(60进制36)
+    if(sMonth < 2 ) {
+      cYear=cyclical(sYear-1900+36-1);
+    } else {
+      cYear=cyclical(sYear-1900+36);
+    }
+    var term2=sTerm(sYear,2); //立春日期
+
+    ////////月柱 1900年1月小寒以前为 丙子月(60进制12)
+    var firstNode = sTerm(sYear, sMonth*2) //返回当月「节」为几日开始
+    cMonth = cyclical((sYear - 1900) * 12 + sMonth + 12);
+
+    //依节气调整二月分的年柱, 以立春为界
+    if(sMonth == 1 && sDay >= term2) cYear = cyclical(sYear - 1900+36);
+    //依节气月柱, 以「节」为界
+    if(sDay >= firstNode) cMonth = cyclical((sYear - 1900) * 12 + sMonth + 13);
+    //当月一日与 1900/1/1 相差天数
+    //1900/1/1与 1970/1/1 相差25567日, 1900/1/1 日柱为甲戌日(60进制10)
+    var dayCyclical = Date.UTC(sYear, sMonth, 1, 0, 0, 0, 0)/86400000 + 25567 + 10;
+    //日柱
+    cDay = cyclical(dayCyclical + sDay - 1);
+
+    //sYear,sMonth,sDay,weekDay,
+    //lYear,lMonth,lDay,isLeap,
+    //cYear,cMonth,cDay
+    that = new calElement(sYear, sMonth + 1, sDay, weekDay, lunarYear, lunarMonth, lunarDay, isLeap, cYear, cMonth, cDay);
+
+    // 节气
+    var tmp1=sTerm(sYear, sMonth * 2) - 1;
+    var tmp2=sTerm(sYear, sMonth * 2 + 1) - 1;
+    if (tmp1 == (sDay - 1)) {
+      that.solarTerms = solarTerm[sMonth * 2];
+    }
+    if (tmp2 == (sDay - 1)) {
+      that.solarTerms = solarTerm[sMonth * 2 + 1];
+    }
+
+    //公历节日
+    for (var i = 0, item; item = sFtv[i]; i++) {
+      if(item.match(/^(\d{2})(\d{2})([\s\*])(.+)$/)) {
+        if(Number(RegExp.$1)==(sMonth+1)) {
+            if (Number(RegExp.$2) == sDay) {
+                that.solarFestival += RegExp.$4 + ' ';
+            }
+        }
+      }
+    }
+
+    //月周节日
+    for (i = 0, item; item = wFtv[i]; i++) {
+      if (item.match(/^(\d{2})(\d)(\d)([\s\*])(.+)$/)) {
+        if (Number(RegExp.$1) == (sMonth + 1)) {
+          tmp1 = Number(RegExp.$2);
+          tmp2 = Number(RegExp.$3);
+          if (tmp1 < 5) {
+            var wFtvDate = (tmp2 == 0 ? 7 : 0) + (tmp1 - 1)*7 + tmp2;
+            if (wFtvDate == sDay) {
+              that.solarFestival += RegExp.$5 + ' ';
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // 农历节日
+    for (i = 0, item; item = lFtv[i]; i++) {
+      if (item.match(/^(\d{2})(.{2})([\s\*])(.+)$/)) {
+        tmp1 = Number(RegExp.$1);
+        tmp2 = Number(RegExp.$2);
+        var lMonLen = monthDays(lunarYear, lunarMonth);
+        // 月份是12月，且为最后一天，则设置为春节
+        if ((tmp1 == lunarMonth && tmp2 == lunarDay) || (tmp2 == '00' && lunarMonth == 12 && lMonLen == lunarDay)) {
+          that.lunarFestival += RegExp.$4 + ' ';
+          break;
+        }
+      }
+    }
+
+    return that;
+  }
+
+  /*
+   * example:
+   * var cc  =new CalendarConverter;
+   *
+   * cc.lunar2solar(new Date(2011, 0, 3)); ---> 2010,11,29
+   * cc.solar2lunar(new Date(2010, 10, 29)); ----> 2011, 1, 3
+   *
+   * 农历转公历时，如果那一月是那一年的闰月，则需额外传一个参数，才能得到正确的公历日期
+   * cc.solar2lunar(new Date(2012, 4, 27)); ---> 2012年4月初7, 其中 isLeap为true，表示为闰四月
+   * cc.lunar2solar(new Date(2012, 3, 7)) ---> 得到错误时间：2012, 4, 27
+   * cc.lunar2solar(new Date(2012, 3, 7), true) --> 正确: 2012, 5, 27
+   *
+   *result:
+   *  {
+   *    cDay: "戊戌"
+        , cMonth: "丁未"
+        , cYear: "壬辰"
+        , isLeap: false             // 该月是否为闰月
+        , lDay: 18
+        , lMonth: 6
+        , lYear: 2012
+        , lunarDay: "十八"
+        , lunarFestival: ""
+        , lunarMonth: "六"
+        , lunarYear: "龙"
+        , sDay: 5
+        , sMonth: 8
+        , sYear: 2012
+        , solarFestival: ""         // 节日
+        , solarTerms: ""            // 节气
+        , week: "日"                // 周几
+      }
+   *
+   */
+  window.CalendarConverter = CalendarConverter;
+  if ('undefined' !== typeof module && module.exports) {
+    module.exports = CalendarConverter;
+  }
+
+
+//**********JUI start********************
   window.$J = {
       ready: (function() {
         var b = [];
@@ -177,13 +676,14 @@
       var b = {
         type: a.type || "get",
         url: a.url || "",
-        async: a.async || "true",
+        async: a.async || true,
         data: a.data || null,
         dataType: a.dataType || "text",
         contentType: a.contentType || "application/x-www-form-urlencoded",
         beforeSend: a.beforeSend ||function() {},
         success: a.success ||function() {},
-        error: a.error ||function() {}
+        error: a.error ||function() {},
+        header:a.header||{}
       };
       b.beforeSend();
       var c;
@@ -193,12 +693,19 @@
         c = ActiveXObject("Microsoft.XMLHTTP")
       }
       var _d=_convertData(b.data);
-      if(b.type.toLowerCase()=='get'&&_d!==''){
+      var _t=b.type.toLowerCase();
+      //||_t=='delete'
+      if((_t=='get')&&_d!==''){
         b.url=b.url+'?'+_d;
       }
       c.open(b.type, b.url, b.async);
       c.responseType = b.dataType;
-      c.setRequestHeader("Content-Type", b.contentType);
+      if(a.contentType!==null){
+        c.setRequestHeader("Content-Type", b.contentType);
+      }
+      for(var k in b.header){
+        c.setRequestHeader(k, b.header[k]);
+      }
       if(b.type.toLowerCase()=='get'){
         c.send();
       }else{
@@ -365,24 +872,31 @@
       if(a==undefined){
         return "";
       }
-      if ($J.type(a)=="json") {
+      var t=$J.type(a);
+      if (t=="json") {
         var b = "";
         for (var c in a) {
-          b += c + "=" + a[c] + "&"
+          if(typeof a[c]==='object'){
+            b += (c + "=" + encodeURIComponent(JSON.stringify(a[c])) + "&")
+          }else{
+            b += (c + "=" + encodeURIComponent(a[c]) + "&")
+          }
         }
         b = b.substring(0, b.length - 1);
         return b
-      } /*else if($J.type(a)=="formdata"){
-        if(a.entries!=undefined){
-          var b = "";
-          for (var i of a.entries()) {
-            b += i[0] + "=" + i[1] + "&"
-          }
-          b = b.substring(0, b.length - 1);
-          return b
-        }
+      }else if(t=='array'){
+        return JSON.stringify(a);
+      }else if($J.type(a)=="formdata"){
+        // if(a.entries!=undefined){
+        //   var b = "";
+        //   for (var i of a.entries()) {
+        //     b += i[0] + "=" + i[1] + "&"
+        //   }
+        //   b = b.substring(0, b.length - 1);
+        //   return b
+        // }
         return a;
-      }*/else{
+      }else{
         return a;
       }
     }
@@ -1964,8 +2478,8 @@
       }
       return this
     };
-    Array.prototype.removeByIndex = function(b) {
-      this.splice(b,1);
+    Array.prototype.removeByIndex = function(b,n) {
+      this.splice(b,n||1);
       return this
     };
     Array.prototype.insert = function(b, i) {
@@ -1973,14 +2487,18 @@
       return this
     };
     Array.prototype.insertArray = function(arr,i) {
-      var index=i;
-      var n=arr.length;
-      for (var a = this.length - 1; a >= index; a--) {
-        this[a + n] = this[a]
-      }
-      for(var j=0;j<n;j++){
-        this[index+j] = arr[j];
-      }
+      //var _arr=arr._JT_clone();//深拷贝
+      var _arr=arr.slice(0);//浅拷贝
+      _arr.splice(0,0,i,0);
+      Array.prototype.splice.apply(this,_arr)
+      // var index=i;
+      // var n=arr.length;
+      // for (var a = this.length - 1; a >= index; a--) {
+      //   this[a + n] = this[a]
+      // }
+      // for(var j=0;j<n;j++){
+      //   this[index+j] = arr[j];
+      // }
       return this
     };
     Array.prototype.append = function() {
@@ -2295,16 +2813,16 @@
         throw new Error("不支持的类型");
       }
     };
-    Array.prototype.reverse = function() {
-      var t;
-      var n = Math.floor(this.length / 2);
-      for (var i = 0; i < n; i++) {
-        t = this[i];
-        this[i] = this[this.length - 1 - i];
-        this[this.length - 1 - i] = t
-      };
-      return this
-    };
+    // Array.prototype.reverse = function() {
+    //   var t;
+    //   var n = Math.floor(this.length / 2);
+    //   for (var i = 0; i < n; i++) {
+    //     t = this[i];
+    //     this[i] = this[this.length - 1 - i];
+    //     this[this.length - 1 - i] = t
+    //   };
+    //   return this
+    // };
     Array.prototype.has = function(a) {
       if(_checkEmptyArray(this,false)){
         var type=$J.type(this[0]);
@@ -2643,10 +3161,11 @@ function _useBindSingle(opt){
     }
     var jattr=getValueTxt(item);
     if(d[attr]!==undefined&&jui['_'+jattr]!==d[attr]){
-        jui[jattr]=d[attr];
+      jui[jattr]=d[attr];
     }
     _jet._tools._calls[attr]._func.push(function(k,v){
         if(jui['_'+jattr]!==v&&v!==undefined){
+        //if(v!==undefined){
             jui['_'+jattr]=v;
             jui.onchange.call(jui);
         }
@@ -2680,28 +3199,30 @@ if(func!==""){
 }
 }
 function _checkExtraBind(item,_jet,jui,cd,d,jet){
-if(item.hasAttr('jui-page-total')){
-  var attr=item.attr('jui-page-total');
-  var jattr='total';
-  if(d[attr]!=undefined&&jui['_'+jattr]!=d[attr]){
-    jui[jattr]=d[attr];
-    jui.onchangetotal.call(jui);
+  if(item.hasAttr('jui-page-total')){
+    var attr=item.attr('jui-page-total');
+    var jattr='total';
+    if(d[attr]!=undefined&&jui['_'+jattr]!=d[attr]){
+      jui[jattr]=d[attr];
+      jui.onchangetotal.call(jui);
+    }
+    _jet._tools._calls[attr]._func.push(function(k,v){
+        if(jui['_'+jattr]!=v&&v!=undefined){
+            jui['_'+jattr]=v;
+            jui.onchangetotal.call(jui);
+        }
+    });
+    _defindJuiBind(_jet,jui,jattr,cd,d,attr);
   }
-  _jet._tools._calls[attr]._func.push(function(k,v){
-      if(jui['_'+jattr]!=v&&v!=undefined){
-          jui['_'+jattr]=v;
-          jui.onchangetotal.call(jui);
-      }
-  });
-  _defindJuiBind(_jet,jui,jattr,cd,d,attr);
-}
-if(item.hasAttr('jui-onclose')){
-  jui._onclose=_getCallbackForBind(jet,jui,item.attr('jui-onclose'));
-}
+  if(item.hasAttr('jui-onclose')&&item.attr('jui-onclose')!==''){
+    jui._onclose=_getCallbackForBind(jet,jui,item.attr('jui-onclose'));
+  }
 }
 function _defindJuiBind(_jet,jui,jattr,cd,d,attr){
 Object.defineProperty(jui,jattr,{
-  get:function(){return d[attr]},
+  get:function(){
+    return d[attr]
+  },
   set:function(v){
     if(typeof d[attr]=='object'){
         cd[attr].$replace(v);
@@ -2734,7 +3255,7 @@ JUI.MESSAGE.msgList.forEach(function(m){
 });
 };
 function _msgDefault(txt,time,type){
-  if(typeof txt=='string')
+  if(typeof txt=='string'||typeof txt=='number')
       JUI.msg(txt,type,time);
   else{
       txt.type=type;
@@ -2817,7 +3338,7 @@ JUI.SELECT.init=function(item){
       item._hasInitJui=true;
       var _jui=new JUI.SELECT({ele:item});
       var list=item.child();
-      if(list.length>0){
+      //if(list.length>0){
           var def=list[0];
           var ow=$J.ct('div.j-option-w');
           var vw=$J.ct('div.j-select-vw');
@@ -2839,26 +3360,43 @@ JUI.SELECT.init=function(item){
           };
           list.each(function(_item){
               ow.append(_item);
-              _item.css('visibility','visible');
+              //_item.css('visibility','visible');
               if(_item.hasAttr('default')){
                   def=_item;
+              }
+              if(_item.hasAttr('disabled')){
+                  _item.addClass('c-disabled');
               }
               var val=getVoT(_item);
               if(val==''){
                   _throw('SELECT:value值不能设置为空');
               }
               _jui.options[val]=getToH(_item);
-              if(_item.hasAttr('disabled')){
-                  _item.addClass('c-disabled').clk(function(){
-                      _stopPro(event);
-                  })
-              }else{
-                  _item.clk(function(){
-                      _jui.value=val;
-                  })
-              }
+              // var val=getVoT(_item);
+              // if(val==''){
+              //     _throw('SELECT:value值不能设置为空');
+              // }
+              // _jui.options[val]=getToH(_item);
+              // if(_item.hasAttr('disabled')){
+              //     _item.addClass('c-disabled').clk(function(){
+              //         _stopPro(event);
+              //     })
+              // }else{
+              //     _item.clk(function(){
+              //         _jui.value=val;
+              //     })
+              // }
           });
-          _jui.value=getVoT(def);
+          ow.clk(function(e){
+            var obj=e.target;
+            if(!obj.hasClass('j-option')){obj=obj.parent()}
+            if(obj.hasClass('j-option')&&!obj.hasClass('c-disabled')){
+              _jui.value=getVoT(obj);
+            }
+          })
+          if(def){
+            _jui.value=getVoT(def);
+          }
           item.append([ow,vw]).clk(function(){
             if(!_isDisabled(this)){
               this.child(0).toggleClass('s-open');
@@ -2866,6 +3404,31 @@ JUI.SELECT.init=function(item){
             }
           },true);
           item.$jui=_jui;
+        // }else{////绑定数据为[] 的select做特殊处理
+
+        // }
+        
+        if(item.__jet!==undefined&&item.__jet.type==='Jfor'){//绑定数据的select做特殊处理
+          item.__jet.originEle=item;
+          item.__jet.ele=item.children[0];
+          item.__jet.__addSelectOption=function(obj,isRemove){
+            var val=getVoT(obj);
+            if(isRemove===true){
+              if(_jui.options[val]===undefined){
+                delete _jui.options[val];
+              }
+              if(_jui._value===val){
+                _jui.value='';
+              }
+            }else{
+              if(_jui.options[val]===undefined){
+                _jui.options[val]=getToH(obj);
+              }
+              if(ow.child().length===1){
+                _jui.value=val;
+              }
+            }
+          }
         }
       }
   });
@@ -2877,7 +3440,10 @@ return ((o.hasAttr('value'))?o.attr('value'):getToH(o));
 //visiable hidden的时候获取不到innerText
 //获取text或者Html
 var getToH=function(o){
-return ((o.innerText==='')?o.html():o.txt()).trim();
+  if(o.hasAttr('jhtml')){
+    return o.html().trim();
+  }
+  return ((o.innerText==='')?o.html():o.txt()).trim();
 }
 /*MESSAGE**************************************** */
 JUI.MESSAGE=function(opt){
@@ -2887,6 +3453,7 @@ JUI.MESSAGE=function(opt){
   this.hover=opt.hover||true;
   this.autoClose=opt.autoClose;
   this.call=opt.call||null;
+  this.html=opt.html||false;
   this.init();
   this.timer=null;
   if(this.autoClose!=false){
@@ -2909,7 +3476,12 @@ this.timer=setTimeout(function(){
       _c.clk(function(){
           _this.close();
       });
-      var _t=$J.ct('div.j-msg-txt').txt(this.text);
+      var _t=$J.ct('div.j-msg-txt');
+      if(_this.html===true){
+        _t.html(this.text);
+      }else{
+        _t.txt(this.text);
+      }
   this.ele.append([_i,_c,_t]);
   $J.body().append(this.ele);
   JUI.MESSAGE.msgList.push(this);
@@ -2968,6 +3540,7 @@ JUI.CONFIRM=function(opt){
   this.onconfirm=opt.onconfirm||null;
   this.oncancel=opt.oncancel||null;
   this.onclose=opt.onclose||null;
+  this.html=opt.html||false;
   this.init();
 };
 JUI.CONFIRM.prototype=_createEmpty();
@@ -2980,7 +3553,12 @@ JUI.CONFIRM.prototype.init=function(){
               _t.addClass(this.type).append($J.ct('i.j-icon.icon-'+JUI.CONFIRM.res.icon[this.type]));
           }
       _t.append($J.ct('span').txt(this.title));
-      var _c=$J.ct('div.j-confirm-c').html(this.text);
+      var _c=$J.ct('div.j-confirm-c');
+      if(_this.html===true){
+        _c.html(this.text);
+      }else{
+        _c.txt(this.text);
+      }
       var _b=$J.ct('div.j-confirm-bw');
           var _ok=$J.ct('button.j-confirm-b.j-btn').txt('确定');
           var _cancel=$J.ct('button.j-confirm-b.j-btn.info').txt('取消');
@@ -3581,17 +4159,42 @@ JUI.SWITCH.init=function(item){
 };
 /*DATE*********************** */
 JUI.DATE=function(opt){
+  var d=new Date();
+  this.today=d;
   this.ele=opt.ele||null;
+  this.needTime=false;
+  this.detail=(this.ele.attr('jui-date-detail')==='true');//是否显示农历以及节日信息
+  this._time={h:0,m:0,s:0};
+  if(opt.ele.attr('jui-date-time')==='true'){
+    this.needTime=true;
+  }
+  if(!opt.value){
+    var value=this.ele.attr('value');
+    if(value===null){
+      opt.value=_dateToStr(d);
+      if(this.needTime){
+        opt.value+=' 00:00:00';
+      }
+    }else{
+      opt.value=value;
+    }
+  }
   this._value=opt.value||'';
   this.onchange=opt.onchange||function(){};
-  this.value=opt.value||'';
-  var d=new Date();
-  this._date={
-      year:d.getFullYear(),
-      month:d.getMonth()+1,
-      day:d.getDate()
-  };
+  this._date=_dateToJson(d);
   var _this=this;
+  this.max=this.ele.attr('jui-date-max');
+  this.min=this.ele.attr('jui-date-min');
+  if(this.max==='today'){
+    this.max=strToDateJson(_dateToStr(d));
+  }else if(typeof this.max==='string'){
+    this.max=strToDateJson(this.max);
+  }
+  if(this.min==='today'){
+    this.min=strToDateJson(_dateToStr(d));
+  }else if(typeof this.min==='string'){
+    this.min=strToDateJson(this.min);
+  }
   Object.defineProperty(_this,'value',{
       configurable:true,
       get:function(){
@@ -3608,8 +4211,9 @@ JUI.DATE.prototype.init=function(){
   //var _jui=new JUI.DATE({ele:item,text:item.txt(),value:getVoT(item)});
   var _jui=this;
   var item=this.ele;
+  var _w=$J.ct('div.j-date-allw');
+  var _close=$J.ct('i.j-icon.icon-times.j-date-close');
   var _d=$J.ct('div.j-date-w');
-      var _close=$J.ct('i.j-icon.icon-times.j-date-close');
       var _dt=$J.ct('div.j-date-t.j-clearfix');
           var _dty=$J.ct('div.j-date-ty');
               var _dtyil=$J.ct('i.j-icon.icon-angle-left.j-date-icon');
@@ -3624,6 +4228,7 @@ JUI.DATE.prototype.init=function(){
           _dtyil.clk(function(){
               var year=parseInt(_d_year.val())-1,month=parseInt(_d_month.val());
               _dtyil.next().val(year);
+
               resetDayList(_jui,_sw,year,month,
                   (year==_jui._date.year&&month==_jui._date.month)
                   ,_d_year,_d_month,true);
@@ -3676,25 +4281,176 @@ JUI.DATE.prototype.init=function(){
           _dw.append($J.ct('div.j-date-di').txt(name));
       });
       var _sw=$J.ct('div.j-date-sw.j-clearfix');
+      var _d_today=$J.ct('div.j-date-today').txt('今:'+_dateToStr(_jui.today));
+      _d_today.on({
+          click:function(){
+              if(_isInRange(_jui,_jui.today)===true){
+                  _chooseAdate(_dateToJson(_jui.today),_jui,this.prev());
+              }else{
+                  JUI.msg.warn('选择的日期超过了限制的范围');
+              }
+          },
+          mouseenter:function(){
+              var d=_dateToJson(_jui.today)
+              _jui.showDetail(d.day,d.year,d.month);
+          },mouseleave:function(){
+              _jui.hideDetail();
+          }
+      });
       //resetDayList(_jui,_sw,this._date.year,this._date.month,true,_d_year,_d_month);
+  _d.append([_dt,_dw,_sw,_d_today]);
+  if(this.detail===true){
+    var _detail=$J.ct('div.j-date-detail');
+    var _converter=new CalendarConverter();
 
-  _d.append([_dt,_dw,_sw,_close]);
+    _jui.showDetail=function(day,year,month){
+      _detail.empty();
+      year=year||_d_year.val();
+      month=parseInt(month||_d_month.val());
+      var d=_converter.solar2lunar(new Date(year,month-1,day));
+      var txt=[];
+      txt.push('<div>'+year+'年'+month+'月'+day+'日 周'+d.week+'</div>');
+      var fes='';
+      if(d.solarFestival!==''){
+        fes+=d.solarFestival+' ';
+      }
+      if(d.lunarFestival!==''){
+        fes+=d.lunarFestival;
+      }
+      if(fes!==''){
+        txt.push('<div><span>节日: </span>'+fes+'</div>');
+      }
+      txt.push('<div class="j-date-no-b"><span>农历:</span><br>'+d.lYear+'('+d.lunarYear+')年'+d.lunarMonth+'月'+d.lunarDay+'</div>');
+      txt.push('<div></div>');
+      txt.push('<div>['+d.cYear+'年'+d.cMonth+'月'+d.cDay+'日]</div>');
+      if(d.solarTerms!==''){
+        txt.push('<div><span>节气: </span>'+d.solarTerms+'</div>');
+      }
+      _detail.html(txt.join(''));
+      _detail.show();
+    }
+    _jui.hideDetail=function(){
+      _detail.hide();
+    }
+    _d.append(_detail);
+  }
+  
+  _w.append([_d,_close]);
+  var _time_dreg=/^((0[0-9])|(1[0-9])|(2[0-3])):([0-5][0-9]):([0-5][0-9])$/;
+  if(this.needTime){
+    var _t=$J.ct('div.j-time-w');
+    var _t_tw=$J.ct('div.j-tt-w');
+      var _t_t_info=$J.ct('div.j-tt-info.j-clearfix');
+      _t_t_info.append([$J.ct('div').txt('时'),$J.ct('div').txt('分'),$J.ct('div').txt('秒')])
+    _t_tw.append([$J.ct('div').txt('选择时间'),_t_t_info])
+    var _t_cw=$J.ct('div.j-tc-w.j-clearfix');
+      var _hour=$J.ct('div.j-ti-w');
+        for(var i=0;i<24;i++){
+          _hour.append($J.ct('div').txt(fixNum(i)));
+        }
+      var _min=$J.ct('div.j-ti-w');
+        for(var i=0;i<60;i++){
+          _min.append($J.ct('div').txt(fixNum(i)));
+        }
+      var _sec=$J.ct('div.j-ti-w');
+        for(var i=0;i<60;i++){
+          _sec.append($J.ct('div').txt(fixNum(i)));
+        }
+    _t_cw.append([_hour,_min,_sec]);
+    _t_cw.child().clk(function(e){
+      var time=e.target.txt();
+      this.attr('value',time);
+      this.findClass('j-active').removeClass('j-active');
+      e.target.addClass('j-active');
+      switch(this.index()){
+        case 0:_jui._time.h=parseInt(time);break;
+        case 1:_jui._time.m=parseInt(time);break;
+        case 2:_jui._time.s=parseInt(time);break;
+      }
+      _jui.value=_jui._value.split(' ')[0]+" "+fixNum(_jui._time.h)+":"+fixNum(_jui._time.m)+":"+fixNum(_jui._time.s);
+    });
+    var _t_bw=$J.ct('div.j-tb-w');
+      var _t_back=$J.ct('button.j-btn.info.xs').txt('返回日期');
+      _t_back.clk(function(){
+        resetDayList(_jui,_sw,_jui._date.year,_jui._date.month,true,_d_year,_d_month);
+        _t.hide();
+        _d.show();
+      })
+      var _t_now=$J.ct('button.j-btn.xs').txt('现在');
+      _t_now.clk(function(){
+        var d=new Date();
+        _jui._date=_dateToJson(d);
+        _jui._time={
+          h:d.getHours(),
+          m:d.getMinutes(),
+          s:d.getSeconds()
+        }
+        _jui._value=_dateToStr(_jui._date);
+        _jui.setTime(fixNum(_jui._time.h)+':'+fixNum(_jui._time.m)+':'+fixNum(_jui._time.s));
+      });
+      var _t_confirm=$J.ct('button.success.j-btn.xs').txt('确定');
+      _t_confirm.clk(function(){
+        _jui.close();
+      });
+    _t_bw.append([_t_back,_t_now,_t_confirm]);
+    _t.append([_t_tw,_t_cw,_t_bw]);
+    _w.append(_t);
+    _jui.setTime=function(v){
+      if(!_time_dreg.test(v)){
+        return
+      }
+      var arr=v.split(':');
+      _jui._time={h:parseInt(arr[0]),m:parseInt(arr[1]),s:parseInt(arr[2])};
+      _jui.value=_jui._value.split(' ')[0]+" "+v;
+      _t_cw.findClass('j-active').removeClass('j-active');
+      _hour.attr('value',arr[0]).child(_jui._time.h).addClass('j-active');
+      _hour.scrollTop=_jui._time.h*22;
+      _min.attr('value',arr[1]).child(_jui._time.m).addClass('j-active');
+      _min.scrollTop=_jui._time.m*22;
+      _sec.attr('value',arr[2]).child(_jui._time.s).addClass('j-active');
+      _sec.scrollTop=_jui._time.s*22;
+    };
+    _jui.showTime=function(){
+      _t.show();
+      _d.hide();
+      _jui.setTime(_jui._value.split(' ')[1]);
+    }
+  }
   var _dv=$J.ct('input.j-date-v[type=text]')//[readonly=true]
-  item.append([_d,_dv]);
+  item.append([_w,_dv]);
   var _dreg=/^(([12]\d{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|3(0|1))))$/;
   _jui.onchange=function(){
-      if(_dreg.test(_jui._value)){
-          if(!_jui.isFromInput){
-              _dv.val(_jui._value);
+      var value=_jui._value;
+      var d=new Date();
+      if(d.getDate()!==_jui.today.getDate()){
+        _jui.today=d;
+        _d_today.txt('今:'+_dateToStr(d));
+      }
+      var r=_isInRange(_jui,strToDateJson(_jui._value));
+      if(r!==true){
+        if(r==='1'){
+          _jui._value=_dateToStr(_jui.max);
+        }else if(r==='-1'){
+          _jui._value=_dateToStr(_jui.min);
+        }
+        if(_jui.needTime){
+          _jui._value+=(' '+value.split(' ')[1]);
+        }
+        value=_jui._value;
+        _jui.value=_jui._value;
+      }
+      if(_dreg.test(_getDate(value))&&_time_dreg.test(_getTime(value))){
+          if(_jui.isFromInput!==true){
+              _dv.val(value);
           }else{
-              _jui.isFromInput=false;
+            _jui.isFromInput=false;
           }
-          item.attr('value',_jui._value);
+          item.attr('value',value);
           if(_jui._onchange){
               var __t=_jui.jet||_jui;
               _jui._onchange.call(__t,{
                   ele:item,
-                  value:_jui._value,
+                  value:value,
                   jui:_jui
               })
           }
@@ -3711,12 +4467,16 @@ JUI.DATE.prototype.init=function(){
       if(!_isDisabled(item)){
         _dv.removeAttr('readonly')
         if(!item.hasClass('j-active')){
-            _d.css('display','block');
+            _w.css('display','block');
+            if(_d.css('display')==='none'){
+              _d.show();
+              _t.hide();
+            }
             setTimeout(function(){item.addClass('j-active')},30);
-            if(!_dreg.test(_jui._value)){
+            if(!_dreg.test(_getDate(_jui._value))){
                 resetDayList(_jui,_sw,_jui._date.year,_jui._date.month,true,_d_year,_d_month);
             }else{
-                var _val_d=strToDate(_jui._value,_jui._date);
+                var _val_d=strToDateJson(_jui._value);
                 resetDayList(_jui,_sw,_val_d.year,_val_d.month,
                     (_val_d.year==_jui._date.year&&_val_d.month==_jui._date.month)
                     ,_d_year,_d_month);
@@ -3727,14 +4487,20 @@ JUI.DATE.prototype.init=function(){
       }
   },true);
   _dv.oninput=function(){
-      if(_dreg.test(this.val())){
+      if(_dreg.test(_getDate(this.val()))&&_time_dreg.test(_getTime(this.val()))){
           this.css('color','#222');
-          //_jui.isFromInput=true;
+          if((_isInRange(_jui,strToDateJson(this.val()))===true)){
+            _jui.isFromInput=true;
+          }
           _jui.value=this.val();
-          var _val_d=strToDate(_jui._value,_jui._date);
-          resetDayList(_jui,_sw,_val_d.year,_val_d.month,
-                  (_val_d.year==_jui._date.year&&_val_d.month==_jui._date.month)
-                  ,_d_year,_d_month);
+          if(_jui.needTime&&_d.css('display')==='none'){
+            _jui.setTime(_getTime(_jui._value));
+          }else{
+            var _val_d=strToDateJson(_jui._value);
+            resetDayList(_jui,_sw,_val_d.year,_val_d.month,
+                    (_val_d.year==_jui._date.year&&_val_d.month==_jui._date.month)
+                    ,_d_year,_d_month);
+          }
       }else{
           this.css('color','#d44');
       }
@@ -3742,6 +4508,7 @@ JUI.DATE.prototype.init=function(){
   _close.clk(function(){
       _jui.close();
   });
+  this.value=this._value;
 };JUI.DATE.prototype.close=function(){
   if(this.ele.hasClass('j-active')){
       var _this=this;
@@ -3759,9 +4526,30 @@ JUI.DATE.init=function(item){
     }
   });
 };
-function strToDate(v,d){
+function _getDate(v){
+  return (v.has(' '))?v.split(' ')[0]:v;
+}
+function _getTime(v){
+  return (v.has(' '))?v.split(' ')[1]:'00:00:00';
+}
+function _dateToStr(date){
+  var d=date||new Date();
+  if(d.getFullYear){
+    return d.getFullYear()+'-'+fixNum(d.getMonth()+1)+'-'+fixNum(d.getDate());
+  }else{
+    return d.year+'-'+fixNum(d.month)+'-'+fixNum(d.day)
+  }
+}
+function _dateToJson(date){
+  return {
+      year:date.getFullYear(),
+      month:date.getMonth()+1,
+      day:date.getDate()
+  };
+}
+function strToDateJson(v){
   var _dreg=/^(([12]\d{3}-((0[1-9])|(1[0-2]))-((0[1-9])|([1-2]\d)|3(0|1))))$/;
-  if(_dreg.test(v)){
+  if(_dreg.test(_getDate(v))){
       var arr=v.split('-');
       return {
           year:parseInt(arr[0]),
@@ -3772,33 +4560,85 @@ function strToDate(v,d){
   return {};
 }
 function fixNum(d){return (d<10)?'0'+d:d};
+function _isInRange(jui,year,month,day){
+  var d;
+  if(typeof year==='object'){
+      if(year.getFullYear){
+          d=year;
+      }else{
+          d=new Date(year.year,year.month-1,year.day);
+      }
+  }else{
+      d=new Date(year,month-1,day);
+  }
+  if(jui.max===null&&jui.min===null){
+    return true;
+  }
+  if(jui.max!==null&&new Date(jui.max.year,jui.max.month-1,jui.max.day)<d){
+    return '1';
+  }
+  if(jui.min!==null&&new Date(jui.min.year,jui.min.month-1,jui.min.day)>d){
+      return '-1';
+  }
+  return true;
+}
 function resetDayList(_jui,ele,year,month,isCur,_d_year,_d_month,bool){
   var isCurM=false;
   ele.empty();
-  var d=strToDate(_jui._value,_jui._date);
+  var d=strToDateJson(_jui._value);
   getAllDaysList(year,month).forEach(function(day){
       if(day==1&&!isCurM){
           isCurM=true;
       }else if(day==1&&isCurM){
           isCurM=false;
       }
-      if(isCurM){
-          ele.append($J.ct('div.j-date-si'+
-              ((isCur&&day==_jui._date.day)?'.j-date-current':'')+
+      var range=(_isInRange(_jui,year,month,day)===true);
+      var item;
+      if(isCurM&&range){
+          item=$J.ct('div.j-date-si'+
+              ((isCur&&day==_jui.today.getDate())?'.j-date-current':'')+
               ((d.year==year&&d.month==month&&d.day==day)?'.j-active':'')).txt(day).clk(function(){
-              this.parent().findClass('j-active').removeClass('j-active');
-              //this.addClass('j-active');
-              _jui.value=_d_year.val()+'-'+_d_month.val()+'-'+fixNum(day);
-              _jui.close();
-          }));
+                _chooseAdate({
+                  year:parseInt(_d_year.val()),
+                  month:parseInt(_d_month.val()),
+                  day:day
+                },_jui,this.parent());
+            });
       }else{
           if(!bool){
               _d_year.val(d.year);
               _d_month.val(fixNum(d.month));
           }
-          ele.append($J.ct('div.j-date-si.j-disabled').txt(day));
+          item=$J.ct('div.j-date-si.j-disabled').txt(day);
+          if(!range&&isCurM){
+            item.addClass('j-date-overflow').clk(function(){
+              JUI.msg.warn('选择的日期超过了限制的范围')
+            })
+          }
       }
+      if(isCurM&&_jui.detail===true){
+        item.on({
+          mouseenter:function(){
+            _jui.showDetail(day);
+          },mouseleave:function(){
+            _jui.hideDetail();
+          }
+        });
+      }
+      ele.append(item);
   });
+}
+function _chooseAdate(d,_jui,sw){
+  _jui._date=d;
+  var date=_dateToStr(_jui._date);
+  sw.findClass('j-active').removeClass('j-active');
+  if(_jui.needTime){
+    _jui.showTime();
+    _jui.value=date+" "+_jui._value.split(' ')[1];
+  }else{
+    _jui.value=date;
+    _jui.close();
+  }
 }
 function getAllDaysList(year,month){
   var list=[];
@@ -3829,6 +4669,8 @@ function getFirstDay(year,month){
 function getCurrentDay(){
   return new Date().getDate(); 
 }
+
+
 /*DRAG*********************************** */
 JUI.DRAG=function(opt){
   this.ele=opt.ele;
@@ -4036,7 +4878,6 @@ JUI.COLOR.prototype.init=function(){
       close();
   });
   _icon.clk(function(){
-
     if(!_isDisabled(item)){
       if(!item.hasClass('j-active')){
           _cw.css('display','block');
@@ -4053,7 +4894,8 @@ JUI.COLOR.prototype.init=function(){
       par:_pca,
       onchange:function(d){
           d.x=1-d.x;
-          _jui._rate.x=d.x;_jui._rate.y=d.y;//记录上一次的位置
+          _jui._rate.x=d.x;//记录上一次的位置
+          _jui._rate.y=d.y;
           _jui._showColor.r=parseInt(_jui._rangeColor.r+d.x*_jui._rangeColor.dr);
           _jui._showColor.g=parseInt(_jui._rangeColor.g+d.x*_jui._rangeColor.dg);
           _jui._showColor.b=parseInt(_jui._rangeColor.b+d.x*_jui._rangeColor.db);
@@ -4185,6 +5027,25 @@ function colorToRangeColor(sc){
           }
       }
   }
+  // debugger;
+  // var d={};
+  // var max=Math.max(sc.r,sc.g,sc.b);
+  // var min=Math.min(sc.r,sc.g,sc.b);
+  // var y=max/255;
+  // var x=min/max;
+  // var rc={};
+  // for(var k in sc){
+  //   rc[k]=parseInt( ((sc[k]/(1-y)) - 255*x)/(1-x) );
+  //   rc['d'+k]=255-rc[k];
+  // }
+  // return {
+  //   rangeColor:rc,
+  //   rate:{
+  //     x:x,y:y
+  //   }
+  // };
+
+
   var d={};
   var max=Math.max(sc.r,sc.g,sc.b);
   var rate=255/max;
@@ -4226,18 +5087,20 @@ function countRangeRate(c){
           rate=1-c.r/255;
       }
   }else{//2345
-      if(c.b!=255){//2
+      if(c.b!=255){//25
+        if(c.g==255){//2
           index=2;
           rate=c.b/255;
-      }else if(c.r==0){
-          index=3;
-          rate=1-c.g/255;
-      }else if(c.r==255){
+        }else{
           index=5;
           rate=1-c.b/255;
+        }
+      }else if(c.r==0){
+        index=3;
+        rate=1-c.g/255;
       }else{
-          index=4;
-          rate=c.r/255;
+        index=4;
+        rate=c.r/255;
       }
   }
   return _split*(rate+index);
@@ -4540,6 +5403,8 @@ getEleList(item,this._name).each(function(item){
 JUI.DIALOG=function(opt){
   this.ele=opt.ele||null;
   this.title=(opt.ele.hasAttr('dialog-title'))?opt.ele.attr('dialog-title'):'';
+  this._nodrag=(opt.ele.attr('dialog-drag')==='false');
+  this._noclose=(opt.ele.attr('dialog-close')==='false');
   this.onchange=opt.onchange||function(){};
   this._value=opt.value||false;
   var _this=this;
@@ -4581,12 +5446,15 @@ JUI.DIALOG.init=function(item){
       var _jui=new JUI.DIALOG({ele:item});
       var childs=item.childNodes;
       var _head=$J.ct('div.j-dialog-head');
-          var _i=$J.ct('i.j-icon.icon-times');
-          _i.clk(function(){
-              _jui.value=false;
-          });
           var _t=$J.ct('div.j-dialog-title').txt(_jui.title);
-      _head.append([_t,_i]);
+      _head.append(_t);
+      if(!_jui._noclose){
+        var _i=$J.ct('i.j-icon.icon-times');
+        _i.clk(function(){
+            _jui.value=false;
+        });
+        _head.append(_i);
+      }
       var _body=$J.ct('div.j-dialog-body');
           childs.each(function(_item){
               _body.append(_item);
@@ -4605,14 +5473,17 @@ JUI.DIALOG.init=function(item){
             'left':($J.width()-itemWidth)/2+'px'
         });
       }
+      _jui.reinitPos=function(){
+        if(item.hei()!==itemHeight){
+          itemHeight=item.hei();
+          itemWidth=item.wid();
+          reinitTop();
+        }
+      }
       reinitTop();
       _jui.onchange=function(){
           if(_jui._value){
-            if(item.hei()!==itemHeight){
-              itemHeight=item.hei();
-              itemWidth=item.wid();
-              reinitTop();
-            }
+            _jui.reinitPos();
             _jui.ele.css('visibility','visible');
             _jui.ele.addClass('j-dialog-open').removeClass('j-dialog-close');
           }else{
@@ -4624,10 +5495,14 @@ JUI.DIALOG.init=function(item){
           }
       };
       item.$jui=_jui;
-      new JUI.SCREEN_DRAG({
-          ele:item,
-          drag:_head
-      });
+      if(!_jui._nodrag){
+        new JUI.SCREEN_DRAG({
+            ele:item,
+            drag:_head
+        });
+      }else{
+        _head.css('cursor','default');
+      }
       JUI.DIALOG._ds.push(item);
       // setTimeout(function(){
       //   document.body.append(item);

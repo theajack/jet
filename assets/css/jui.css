@@ -2,8 +2,9 @@
 .j-btn,.j-input,.j-select,.j-radio,.j-checkbox,.j-switch,.j-date,.j-color,.j-slider{
     margin: 3px;
     display: inline-block;
+    vertical-align: middle;
 }
-.j-option{visibility:hidden}
+/* .j-option{visibility:hidden} */
 /*ROW AND COL********************************************************************/
 
 .j-row:after{
@@ -263,7 +264,9 @@ textarea.j-input{
 .j-option-w.s-open{
     top: 30px;
     opacity: 1;
-    height:auto;
+    height:auto;    
+    max-height: 276px;
+    overflow-y: auto;
 }
 .j-option-w .j-option{
     border-bottom: 1px solid #ccc;
@@ -302,7 +305,7 @@ textarea.j-input{
     -o-transition: all .3s ease;
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
-    z-index:20;
+    z-index:30;
 }
 .j-msg-w.warn{
     background-color: #dfa02b;
@@ -364,6 +367,9 @@ textarea.j-input{
     width: 18px;
     height: 18px;
 }
+.j-checkbox-cw .j-icon{
+    font-size:16px;
+}
 .j-radio-c{
     width: 0px;
     height: 0px;
@@ -385,6 +391,7 @@ textarea.j-input{
     color: transparent;
     position: relative;
     top: -1px;
+    left:-1px;
     background-color: transparent;
     transition: all .3s ease;
     -webkit-transition: all .3s ease;
@@ -543,23 +550,38 @@ textarea.j-input{
     padding-top: 2px;
     line-height: 22px;
 }
+.j-date[jui-date-time=true]{
+    width: 165px;
+}
 .j-date.xs{
     height: 23px;
     width: 100px;
     padding-top: 0;
+}
+.j-date.xs[jui-date-time=true]{
+    width: 130px;
 }
 .j-date.s{
     height: 26px;
     width: 120px;
     padding-top: 0;
 }
+.j-date.s[jui-date-time=true]{
+    width: 150px;
+}
 .j-date.l{
     height: 35px;
     width: 170px;
 }
+.j-date.l[jui-date-time=true]{
+    width: 180px;
+}
 .j-date.xl{
     height: 40px;
     width: 200px;
+}
+.j-date.xl[jui-date-time=true]{
+    width: 220px;
 }
 .j-date-v{
     width: 100%;
@@ -573,7 +595,7 @@ textarea.j-input{
     font-size: 16px;    
     background-color: transparent;
 }
-.j-date-w{
+.j-date-allw{
     z-index: 1;
     display: none;
     position: absolute;
@@ -590,48 +612,67 @@ textarea.j-input{
     -moz-transition:all .3s ease;
     -ms-transition:all .3s ease;
 }
+.j-date-today{
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    height: 18px;
+    line-height: 16px;
+    background-color: #eee;
+    border-top: 1px solid #ccc;
+    transition:background-color .3s ease;
+    -webkit-transition:background-color .3s ease;
+    -o-transition:background-color .3s ease;
+    -moz-transition:background-color .3s ease;
+    -ms-transition:background-color .3s ease;
+}
+.j-date-today:hover{
+    background-color: #ddd;
+}
+.j-date-w{
+}
 .j-date.xs .j-date-v{
     font-size: 12px;    
     top: -3px;
 }
-.j-date.xs .j-date-w{
+.j-date.xs .j-date-allw{
     width: 150px;
     left:-25px;
 }
 .j-date.s .j-date-v{
     font-size: 14px;
 }
-.j-date.s .j-date-w{
+.j-date.s .j-date-allw{
     width: 150px;
     left:-15px;
 }
 .j-date.l .j-date-v{
     font-size: 18px;
 }
-.j-date.l .j-date-w{
+.j-date.l .j-date-allw{
     
 }
 .j-date.xl .j-date-v{
     font-size: 22px;
     
 }
-.j-date.xl .j-date-w{
+.j-date.xl .j-date-allw{
     
 }
-.j-date.j-active .j-date-w{
+.j-date.j-active .j-date-allw{
     top: 35px;
     opacity: 1;
 }
-.j-date.xs.j-active .j-date-w{
+.j-date.xs.j-active .j-date-allw{
     top: 28px;
 }
-.j-date.s.j-active .j-date-w{
+.j-date.s.j-active .j-date-allw{
     top: 31px;
 }
-.j-date.l.j-active .j-date-w{
+.j-date.l.j-active .j-date-allw{
     top: 40px;
 }
-.j-date.xl.j-active .j-date-w{
+.j-date.xl.j-active .j-date-allw{
     top: 45px;
 }
 .j-date-t{
@@ -745,6 +786,83 @@ textarea.j-input{
 }
 .j-date[disabled] .j-date-v{
     cursor: no-drop!important;
+}
+.j-time-w{
+    display: none;
+}
+.j-tt-w{
+    font-size: 14px;
+    text-align: center;
+}
+.j-tt-info div{
+    width:33.33333%;
+    float: left;
+}
+
+.j-ti-w{
+    height:100px;
+    width:33.33333%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    float: left;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-left: none;
+}
+.j-ti-w:last-child{
+    border-right: none;
+}
+.j-ti-w:hover{
+    overflow-y: scroll;
+}
+.j-ti-w div{
+    background-color: transparent;
+    transition:all .3s ease;
+    -webkit-transition:all .3s ease;
+    -o-transition:all .3s ease;
+    -moz-transition:all .3s ease;
+    -ms-transition:all .3s ease;
+    font-size: 13px;
+}
+.j-ti-w div:hover{
+    background-color: #b7e1ff;
+}
+.j-ti-w div.j-active{
+    background-color: #1da1ff;
+    color: #fff;
+}
+.j-tb-w{
+    text-align: right;
+}
+.j-date-overflow{
+    background-color: #ddd!important;
+    color: #888!important;
+    border-radius: 0;
+}
+.j-date-detail{
+    height: auto;
+    min-height:50px;
+    width: 150px;
+    position: absolute;
+    background-color: #fff;
+    top: -1px;
+    right: -152px;
+    border: 1px solid #aaa;
+    font-size: 14px;
+    padding: 4px;
+    display: none;
+    z-index:1;
+    text-align: left;
+}
+.j-date-detail div{
+    border-bottom: 1px solid #ccc;
+}
+.j-date-detail span{
+    font-weight: bold;
+}
+.j-date-detail div:last-child,.j-date-detail div.j-date-no-b{
+    border-bottom: none;
 }
 /*DATE END************************************************************************************/
 /*COLOR************************************************************************************/
@@ -1107,7 +1225,7 @@ cd_note,cd_note * {color: #019d00!important}
 	border-radius: 5px;
 	box-shadow: #ddd 1px 1px 10px 2px;
 	padding: 15px;
-    z-index: 20;
+    z-index: 30;
     border: 2px solid #ccc;
     cursor: move;
 
@@ -1462,6 +1580,7 @@ cd_note,cd_note * {color: #019d00!important}
     overflow:auto;
     padding: 10px;
     width:100%;
+    height: 100%;
 }
 .j-dialog.xs .j-dialog-body{
     max-height:120px;

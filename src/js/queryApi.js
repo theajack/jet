@@ -111,10 +111,15 @@ Jet.$define('Query',function(){
         intro:'当绑定的数据是boolean，number，string类型（值类型）时，并且对应的html元素是输入元素',
         des:'input'
     },{
-        name:'数组方法',
+        name:'原生数组方法',
+        url:'/bind/array',
+        intro:'对原生的数组方法进行了重写，使支持双向数据绑定。',
+        des:'o-array'
+    },{
+        name:'Jet数组方法',
         url:'/bind/array',
         intro:'循环类型的for元素的绑定值是一个数组，Jet 对for元素的数组定义了一些操作方法，来代替原生js的数组操作方法。',
-        des:''
+        des:'jet-array'
     },{
         name:'$push方法',
         url:'/bind/array',

@@ -53,6 +53,7 @@ body{
 .v-middle{vertical-align: middle!important;}
 .v-bottom{vertical-align: bottom!important;}
 .bold{font-weight: bold}
+.no-bold{font-weight: normal}
 .relative{position: relative}
 .absolute{position: absolute}
 .fixed{position: fixed}
@@ -69,6 +70,8 @@ body{
   display: flex;
   align-items: center;
 }
+.w-auto{width:auto!important;}
+.h-full{height:100%!important;}
 
 
 
@@ -127,6 +130,12 @@ body{
 .pn-r{padding-right: 0!important;}
 .pn-b{padding-bottom: 0!important;}
 .pn-l{padding-left: 0!important;}
+
+.mxs{margin: 3px!important;}
+.mxs-t{margin-top: 3px!important;}
+.mxs-r{margin-right: 3px!important;}
+.mxs-b{margin-bottom: 3px!important;}
+.mxs-l{margin-left: 3px!important;}
 
 .ms{margin: 5px!important;}
 .ms-t{margin-top: 5px!important;}
