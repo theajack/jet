@@ -1155,9 +1155,59 @@ textarea.j-input{
     -webkit-appearance: none;
     word-break: break-all;
     word-wrap: normal;
-    margin: 0
+    margin: 0;
+
+    padding-left:35px;
 }
 
+.j-code[jui-code-line=false] .code_editor,.j-code[jui-code-line=false] .code_editor_view{
+    padding-left: 10px!important;
+}
+.code_line_w{
+    position: absolute;
+    left: 0;
+    top: 0px;
+    padding-top:12px;
+    height: 100%;
+    text-align: center;
+    width: 30px;
+    color: #ddd;
+    font-size: 14px;
+    line-height: 22px;
+    border-right: 1px solid #666;
+    background-color: #444;
+}
+.j-code[buttons] .code_line_w{
+    top: 30px;
+}
+.code_line_w div{
+    position: relative;
+    left: 0px;
+    color: #ddd;
+    font-weight: normal;
+    transition: all .2s ease;
+    -webkit-transition: all .2s ease;
+}
+.code_line_w div.j-active{
+    left: -3px;
+    color: #fff;
+    font-weight: bold;
+}
+.code_active_line{
+    width: 100%;
+    height: 22px;
+    position: absolute;
+    background-color: #444;
+    top: 11px;
+    opacity:0;
+    transform: translate(0,0);
+    -webkit-transform: translate(0,0);
+    transition: all .2s ease;
+    -webkit-transition: all .2s ease;
+}
+.j-code[buttons] .code_active_line{
+    top: 41px;
+}
 .code_set_w {
     background-color: rgba(100,100,100,.6);
     width: 100%;

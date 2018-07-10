@@ -482,6 +482,11 @@ Jet.$define('Query',function(){
         intro:'指定绑定数据的JUI元素最终使用数据类型',
         des:'jui-type'
     },{
+        name:'jui-onload',
+        url:'/jui/',
+        intro:'在JUI组件绑定完成时触发一个事件',
+        des:'jui-onload'
+    },{
         name:'基础样式类',
         url:'/jui/base',
         intro:'一套基础样式类',
@@ -530,6 +535,10 @@ Jet.$define('Query',function(){
         name:'颜色选择器color',
         url:'/jui/color',
         intro:'颜色选择器',
+    },{
+        name:'代码编辑器code',
+        url:'/jui/code',
+        intro:'代码编辑器',
     },{
         name:'滑动选择器slider',
         url:'/jui/slider',

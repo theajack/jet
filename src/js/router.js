@@ -4,6 +4,11 @@ Jet.router.use({
     base:"/jet",
     index:'/',
     trueBase:true,
+    oninit:function(){
+      Jet.$import('common',function(mod){
+        Jet.prototype.com=mod.com
+      });
+    },
     router:{
         '/':'/intro/index',
         '/intro':{
@@ -113,6 +118,7 @@ Jet.router.use({
             '/switch':'/jui/switch',
             '/date':'/jui/date',
             '/color':'/jui/color',
+            '/code':'/jui/code',
             '/slider':'/jui/slider',
             '/msg':'/jui/msg',
             '/confirm':'/jui/confirm',

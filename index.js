@@ -1,57 +1,9 @@
 
-// Jet.$import('a as a0',function(mods){
-//   //debugger
-//   console.log(mods)
-//   console.log(Jet.$module)
-//   console.log(_modules)
-// })
-// Jet.$import('module2','module1',function(mods){
-//   //debugger
-//   console.log('index1:',mods)
-//   console.log('index1:',Jet.$module)
-//   console.log('index1:',_modules)
-// })
-// Jet.$import('module2 as mm2','module1 as mm1',function(mods){
-//   //debugger
-//   console.log('index1:',mods)
-//   console.log('index1:',Jet.$module)
-//   console.log('index1:',_modules)
-// })
 
-// Jet.$import('module2 as mm2',function(mods){
-//   //debugger
-//   mods.mm2.addCount1()
-//   console.log('index2:',mods.mm2.allCount())
-//   console.log('index2:',mods)
-//   console.log('index2:',Jet.$module)
-//   console.log('index2:',_modules)
-// })
-// Jet.$import('module1 as mm1',function(mods){
-//   //debugger
-//   mods.mm1.addCount();
-//   mods.mm1.addCount();
-//   console.log('index1:',mods.mm1.getCount())
-//   console.log('index1:',mods)
-//   console.log('index1:',Jet.$module)
-//   console.log('index1:',_modules)
-// })
-// Jet.$import('module1 as mm2',function(mods){
-//   //debugger
-//   mods.mm2.addCount();
-//   console.log('index1:',mods.mm2.getCount())
-//   console.log('index2:',mods)
-//   console.log('index2:',Jet.$module)
-//   console.log('index2:',_modules)
-// })
-// Jet.$import('b as a1',function(mods){
-//   debugger
-//   console.log(mods)
-//   console.log(Jet.$module)
-//   console.log(_modules)
-// })
 Jet.lang.use(['cn','en']);
 Jet.global=new Jet({
   onload:function(){
+    JUI.CODE.tab='    ';
     this.needUseRouted=true;
     this.routeFunc();
   },
@@ -70,7 +22,7 @@ Jet.global=new Jet({
             });
         });
     });
-    Jcode.init();
+    //Jcode.init();
     if(Jet.router.lastTrueHash!=="#/code"){
       $J.cls('j-code').each(function(item){
         if(!item.hasClass('not-test')){
@@ -87,7 +39,7 @@ Jet.global=new Jet({
   onmounted:function(){
     var _this=this;
     var max;
-    this.$import('queryApi');
+    //this.$import('queryApi');
     window._checkScrol=function(){
       max=$J.id('menuScroll').hei()+40-$J.id('menu').hei();
       if(max<=0){
@@ -173,7 +125,7 @@ Jet.global=new Jet({
     },
     testOnLine:function(item){
       Jet.global._top=$J.body().scrollTop;
-      Jet.global._code=Jcode.txt(item.next());
+      Jet.global._code=item.next().$jui.txt();
       this.$route('/code');
     },
     routeFunc:function(){

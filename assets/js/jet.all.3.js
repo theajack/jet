@@ -121,8 +121,10 @@
 //    jstyle等元素来使用函数 $r.func({{$.score}})，text元素可以使用立即执行函数或this.func来使用函数
 //  jui-date 添加选择今日按钮
 //  现在jload不一定非要设置jpar属性，会将其所在的页面的Jet元素作为其父元素
-
-(function(){
+//7-10 重要：将jcode融入了JUI ,新增了索引和点击某行高亮；jui-code-line 用于是否显示索引默认为true
+//  新增了jui-onload属性
+//7-5:路由新增use参数新增oninit 用于在路由化之后调用，一般可以用来加载模块  
+//(function(){
   var _JT = { 
     cls: function(a) {
       return _checkSelect(document.getElementsByClassName(a))
@@ -855,6 +857,7 @@
     return this
   };
   HTMLElement.prototype._JT_remove = function() {
+    if(this.parentNode===null)return;
     this.parentNode.removeChild(this)
   };
   HTMLCollection.prototype._JT_remove = NodeList.prototype._JT_remove = function(a) {
@@ -2290,9 +2293,9 @@ Array.prototype.push=function(){
     return __push.apply(this,arguments);
   }else{
     if(arguments.length===1){
-      this.$push(arguments[1]);
+      this.$push(arguments[0]);
     }else if(arguments.length>1){
-      this.$pushArray(arguments);
+      this.$pushArray(_argsToArray(arguments));
     }
   }
 }
@@ -2312,12 +2315,12 @@ Array.prototype.splice=function(){
     return __splice.apply(this,arguments);
   }else{
     if(arguments.length===1){
-      this.$removeByIndex(arguments[1],this.length-1);
+      this.$removeByIndex(arguments[0],this.length-1);
     }else if(arguments.length===2){
-      this.$removeByIndex(arguments[1],arguments[2]);
+      this.$removeByIndex(arguments[0],arguments[1]);
     }else if(arguments.length>2){
-      this.$removeByIndex(arguments[1],arguments[2]);
-      this.$insertArray(_argsToArray(arguments,2),arguments[1]);
+      this.$removeByIndex(arguments[0],arguments[1]);
+      this.$insertArray(_argsToArray(arguments,2),arguments[0]);
     }
   }
 }
@@ -2337,9 +2340,9 @@ Array.prototype.unshift=function(){
     return __unshift.apply(this,arguments);
   }else{
     if(arguments.length===1){
-      this.$prep(arguments[1]);
+      this.$prep(arguments[0]);
     }else if(arguments.length>1){
-      this.$prepArray(arguments);
+      this.$prepArray(_argsToArray(arguments));
     }
   }
 }
@@ -2616,6 +2619,7 @@ Jet.router={
       }
     }
     Jet.router.init();
+    if(opt.oninit&&typeof opt.oninit=='function'){opt.oninit();}
     Jet.router.route(url);
   },
   conf:{
@@ -5205,7 +5209,7 @@ function _getKeyAndMod(name){
 }
 
 
-})();
+//})();
 
 
 

@@ -61,7 +61,6 @@ body{
 .c-pointer{cursor: pointer;}
 .c-disabled{cursor: no-drop;}
 
-/*新增*/
 .unvisible{visibility: hidden!important;}
 .underline{text-decoration: underline}
 .italic{font-style: italic;}
@@ -72,6 +71,9 @@ body{
 }
 .w-auto{width:auto!important;}
 .h-full{height:100%!important;}
+.h-auto{height:auto!important;}
+
+/*新增*/
 
 
 

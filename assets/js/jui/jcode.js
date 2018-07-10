@@ -427,6 +427,9 @@
     }
     //_geneViewCode();
   }
+  function _geneLine(obj){
+    debugger
+  }
   function _geneViewCode(obj){
     //moveCursor();.replaceAll("<","&lt;").replaceAll(">","&gt;")
     var html=obj.val().replaceAll("<","&lt;").replaceAll(">","&gt;")+" ";//为了不让最后一个字符是换行
@@ -443,6 +446,7 @@
     var htmlSign=_geneSign(obj.val().replaceAll("<","&lt;").replaceAll(">","&gt;")+" ");
     _getView(obj,0).html(htmlSign); 
     _checkSizeAuto(obj);
+    _geneLine(obj);
   }
   function _checkSizeAuto(obj){
     _checkSizeAutoPart(obj,"height");

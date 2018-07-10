@@ -13,12 +13,12 @@
     <link rel="icon" href="/jet/src/image/icon.ico" type="image/x-icon"/> 
     <title>Jet--前端轻量级JS框架</title>
     <link rel="stylesheet" id='commonCss' href="/jet/src/css/common.css">
-    <!-- <link rel="stylesheet" href="/jet/assets/css/icon.css">
+    <link rel="stylesheet" href="/jet/assets/css/icon.css">
     <link rel="stylesheet" href="/jet/assets/css/style.css">
-    <link rel="stylesheet" href="/jet/assets/css/jui.css"> -->
-    <link rel="stylesheet" href="/jet/assets/css/jui.min.css">
-    <!-- <script type="text/javascript" src='/jet/assets/js/preload.js'></script> -->
-    <script type="text/javascript" src='/jet/assets/js/preload.min.js'></script>
+    <link rel="stylesheet" href="/jet/assets/css/jui.css">
+    <!-- <link rel="stylesheet" href="/jet/assets/css/jui.min.css"> -->
+    <script type="text/javascript" src='/jet/assets/js/preload.js'></script>
+    <!-- <script type="text/javascript" src='/jet/assets/js/preload.min.js'></script> -->
   </head>
   <body class="common" jstyle="overflow-y:{{$.bodyFix}}?'hidden':'auto'">
       <div id="menu" jattr='class:({{$.showMenu}})?"open":""'>
@@ -347,6 +347,10 @@
                 <div class="menu-s-bar"></div>
                 <div class='relative'>颜色选择器</div>
               </div>
+              <div class="menu-s-item" Jrouter='/jui/code' >
+                <div class="menu-s-bar"></div>
+                <div class='relative'>代码编辑器</div>
+              </div>
               <div class="menu-s-item" Jrouter='/jui/slider' >
                 <div class="menu-s-bar"></div>
                 <div class='relative'>滑动选择器</div>
@@ -422,32 +426,17 @@
       </div>
       <div jattr='class:({{$.showMenu}})?"menu-bar-cover open":"menu-bar-cover"' jon='click:this.showMenu=false'></div>
 
-    <script type="text/javascript" src="/jet/assets/js/jet.min.js"></script> 
-    <script type="text/javascript" src="/jet/assets/js/jui.min.js"></script>
-    <!-- <script type="text/javascript" src="/jet/assets/js/jet.all.3.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui.all.js"></script> -->
+    <!-- <script type="text/javascript" src="/jet/assets/js/jet.min.js"></script> 
+    <script type="text/javascript" src="/jet/assets/js/jui.min.js"></script> -->
+    <script type="text/javascript" src="/jet/assets/js/jet.all.3.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jui.all.js"></script>
 
-    <!-- <script type="text/javascript" src="/jet/assets/js/jet/jet.all.3.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jetter-lite.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/main.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/select.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/message.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/confirm.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/radio.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/checkbox.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/switch.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/date.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/drag.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/color.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/slider.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/screenDrag.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui/dialog.js"></script> -->
 
-    <script type="text/javascript" src="/jet/assets/js/jui/jcode.js"></script>
+    <!-- <script type="text/javascript" src="/jet/assets/js/jui/jcode.js"></script> -->
     <!-- <script type="text/javascript" src="/jet/src/js/common.js"></script> -->
     <!-- <script type="text/javascript" src="/jet/src/js/history.js"></script> -->
-    <script type="text/javascript" src="/jet/src/js/router.js"></script>
     <script type="text/javascript" src="/jet/index.js"></script>
+    <script type="text/javascript" src="/jet/src/js/router.js"></script>
     <!-- <script type="text/javascript" src="/jet/src/js/queryApi.js"></script> -->
   </body>
 </html>

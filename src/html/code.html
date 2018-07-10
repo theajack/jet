@@ -27,52 +27,27 @@
     <button class='j-btn f-left' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i> 返回</button>
     <div class='switch-w'>
         <span class='code-text'>编辑</span>
-        <div class="j-switch" jui-bind='code' jui-change='changeMode'>
+        <div class="j-switch" jui-bind='codeBool' jui-change='changeMode'>
             <div></div>
             <div></div>
         </div>
         <span class='code-text'>运行</span>
     </div>
 </div>
-<div jshow='{{!$.code}}'>
+<div jshow='{{!$.codeBool}}'>
     <div class='text'>
-        <div class='j-code' jdom='code' width='99%' onload='loadCode' height='auto' buttons min-height='500px'>
-&lt;div j='message'>&lt;/div>&lt;br>
-&lt;div j='user'>
-&lt;div j=name>'姓名:'+$&lt;/div>
-&lt;div>年龄:&lt;input j="age" type='text' class='j-input' jon='input:console.log(this.user.age)'/>&lt;/div>
-&lt;div jif='{{$.age}}<18:text[未成年|成年人]'>&lt;/div>
-&lt;/div>
-&lt;script>
-new Jet({
-    data:{
-        message:'Hello Jet',
-        user:{
-            name:'theajack',
-            age:24
-        }
-    },
-    func:{
-    }
-})
-&lt;/script>
+        <div class='j-code' jdom='code' jui-code-line='true' id='codeOnLine' jui-bind='code' width='99%' jui-onload='loadCode' height='auto' buttons min-height='500px'>
+
         </div>
     </div>
 </div>
-<div jshow='code'>
+<div jshow='codeBool'>
     <div jdom='result' class='text result tm '>
 
     </div>
 </div>
-
 <script>
-function loadCode(ele){
-    if(typeof Jet.global._code!=='undefined'){
-        Jcode.txt(ele,Jet.global._code);
-        Jet.global._code=undefined;
-        test.back=true;
-    }
-}
+    
 Jet.global.setLink({
     last:'tab',
     lastUrl:'/jui/tab'
@@ -82,13 +57,33 @@ var test=new Jet({
     onrouted:function(){
     },
     onmounted:function(){
+        //this.code=aa.html();
     },
     data:{
-        code:false,
+        codeBool:false,
         back:false,
+        code:"<div j='message'></div><br>\n\
+    <div j='user'>\n\
+    <div j=name>'姓名:'+$</div>\n\
+    <div>年龄:<input j='age' type='text' class='j-input' jon='input:console.log(this.user.age)'/></div>\n\
+    <div jif='{{$.age}}<18:text[未成年|成年人]'></div>\n\
+</div>\n\
+<script>\n\
+    new Jet({\n\
+        data:{\n\
+            message:'Hello Jet',\n\
+            user:{\n\
+                name:'theajack',\n\
+                age:24\n\
+            }\n\
+        },\n\
+        func:{\n\
+        }\n\
+    })\n"+
+"<"+"/script>"
     },func:{
         changeMode:function() {
-            this.$dom.result.html=Jcode.txt(this.$dom.code.ele);
+            this.$dom.result.html=this.$jui('code').txt();
             var txt=['//# sourceURL=__code_online.js\r\n'];
             this.$dom.result.ele.findTag('script').each(function(item){
                 txt.push(item.txt());
@@ -110,6 +105,13 @@ var test=new Jet({
             // }
             JUI.init();
             this.$init();
+        },loadCode:function(){
+            if(typeof Jet.global._code!=='undefined'){
+                this.code=Jet.global._code
+                //this.$jui('code').txt(Jet.global._code)
+                Jet.global._code=undefined;
+                this.back=true;
+            }
         }
     }
 });
