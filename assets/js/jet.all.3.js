@@ -124,7 +124,7 @@
 //7-10 重要：将jcode融入了JUI ,新增了索引和点击某行高亮；jui-code-line 用于是否显示索引默认为true
 //  新增了jui-onload属性
 //7-5:路由新增use参数新增oninit 用于在路由化之后调用，一般可以用来加载模块  
-//(function(){
+(function(){
   var _JT = { 
     cls: function(a) {
       return _checkSelect(document.getElementsByClassName(a))
@@ -972,23 +972,6 @@
     }else{
       return this._JT_insertArray(_argsToArray(arguments), 0)
     }
-  };
-  function _each(obj,fun,arg){
-    var type=_JT.type(obj);
-    if(type=="json"||type=="object"){
-      var k=0;
-      for (var a in obj) {
-        if(_JT.type(obj[a])!="function"){
-          fun(obj[a], a,k,obj)
-        }
-        k++;
-      }
-    }else if(type=="number"||type=="boolean"||type=="string"||type=="function"){
-      fun(obj, 0,arg);
-    }else{
-      obj._JT_each(fun,arg);
-    }
-    return obj;
   };
   function _type(obj){
     if(arguments.length==0){
@@ -5209,7 +5192,7 @@ function _getKeyAndMod(name){
 }
 
 
-//})();
+})();
 
 
 
