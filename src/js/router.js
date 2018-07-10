@@ -5,9 +5,7 @@ Jet.router.use({
     index:'/',
     trueBase:true,
     oninit:function(){
-      Jet.$import('common',function(mod){
-        Jet.prototype.com=mod.com
-      });
+      Jet.$import('queryApi');
     },
     router:{
         '/':'/intro/index',
