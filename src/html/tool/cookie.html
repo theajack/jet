@@ -9,15 +9,18 @@
 值：&lt;input type='text' j='value'/>
 &lt;button jon='setCookie'>设置cookie&lt;/button>
 &lt;button jon='getCookie'>获取cookie&lt;/button>
+&lt;div jdom='cookie'>&lt;/div>
 &lt;script>
     new Jet({
         data:{
-            message:'Hello World'
-        },
-        func:{
-            addEle:function(opt){
-                this.$dom.test_init.html="&lt;span jon='alert(opt.data)' j='message' >&lt;/span>";
-                this.$init()
+            key:"",
+            value:""
+        },func:{
+            setCookie:function(){
+                this.$dom.cookie.html=this.$cookie(this.key,this.value);
+            },
+            getCookie:function(){
+                this.$dom.cookie.html=this.$cookie(this.key);
             }
         }
     });
