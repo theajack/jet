@@ -59,20 +59,25 @@ function hello(){
             <div>2.height,width:控制编辑器的尺寸，默认值为200px,300px。可以使用的单位有px,%,em。还可以使用auto来使其根据内容自适应。</div>
             <div>3.buttons:功能按钮，不设置该属性，默认不启用按钮。设置该属性但不设置值时，默认全部启用。可选值为fontSizeUp,fontSizeDown,fullScreen,fix,clearColor,clearCode,resetCode,copy,submit，设置时使用分号间隔</div>
             <div>4.jui-code-line:是否显示行数索引，默认值为true</div>
-            <div>5.callback:设置一个回调函数，可以是一段js代码或者Jet函数(使用Jet函数需要设置了jui-bind属性)。该回调函数会在submit函数被调用或点击submit按钮时调用，回调参数有两个，第一个是jui对象，第二个是内容。</div>
+            <div>5.jui-code-trim:是否喊出首尾的换行和尾部的空格，默认值为true</div>
+            <div>6.callback:设置一个回调函数，可以是一段js代码或者Jet函数(使用Jet函数需要设置了jui-bind属性)。该回调函数会在submit函数被调用或点击submit按钮时调用，回调参数有两个，第一个是jui对象，第二个是内容。</div>
         </div>
         请看一个例子：
     </div>
     <div class='text'>
         <div class='j-code' disabled width='99%' height='auto'>
-&lt;div class='j-code not-test' disabled='false' width='auto' height='auto' buttons='fullScreen;copy' jui-code-line='false'>
-    function hello(){
-        console.log('hello world')
-    }
+&lt;div class='j-code not-test' disabled='false' width='auto' height='auto' buttons='fullScreen;copy;submit' jui-code-line='false' callback='alert("callback")' jui-code-trim='false'>
+    buttons='fullScreen;copy;submit' 
+    jui-code-line='false' 
+    callback='alert("callback")' 
+    jui-code-trim='false'>
+function hello(){
+    console.log('hello world')
+}
 &lt;/div>
         </div>
         <div class='text'> 结果如下：</div>
-        <div class='j-code not-test' disabled='false' width='auto' height='auto' buttons='fullScreen;copy;submit' jui-code-line='false' callback='alert("callback")'>
+        <div class='j-code not-test' disabled='false' width='auto' height='auto' buttons='fullScreen;copy;submit' jui-code-line='false' callback='alert("callback")' jui-code-trim='false'>
 function hello(){
     console.log('hello world')
 }

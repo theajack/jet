@@ -1974,7 +1974,7 @@ function _initJetEle(ele,isJload){
         switch(type){
           case 'json':_jet=new Jet.Bind(opt.opt);break;
           case 'array':_jet=new Jet.For(opt.opt);break;
-          default:_jet=(isInput(item))?new Jet.Input(_opt.opt):new Jet.Text(_opt.opt);break;
+          default:_jet=(isInput(item))?new Jet.Input(opt.opt):new Jet.Text(opt.opt);break;
         }
         if(opt.isRoot)
           item.__isRoot=true;//为了记录根元素的初始位置，忽略非根元素
@@ -4364,6 +4364,9 @@ Jet.Input.prototype.refresh=function(key){
 function _initInput(opt){
   _checkLangJet.call(this,opt);
   var _this=this;
+  if(this.ele._JT_attr('j-type')==='number'||this.ele._JT_attr('type')==='number'){
+    _this.forceNum=true;
+  }
   if(this.ele._JT_hasAttr('contenteditable')){
     this.isContent=true;
     if(this.ele._JT_html().trim()!='')
@@ -4405,13 +4408,20 @@ function _initInput(opt){
 }
 function _dealOnInputOn(_this){
   var val=(_this.isContent)?this._JT_html():this._JT_val();
-  if(_this.isNum){
-    var _v=parseFloat(val);
-    if(val==_v.toString()){
-      _this.isNum=true;
-      val=_v;
-    }else{
-      _this.isNum=false;
+  if(_this.forceNum){
+    val=parseFloat(val);
+    if(val.toString()==='NaN'){
+      val='';
+    }
+  }else{
+    if(_this.isNum){
+      var _v=parseFloat(val);
+      if(val==_v.toString()){
+        _this.isNum=true;
+        val=_v;
+      }else{
+        _this.isNum=false;
+      }
     }
   }
   _this.data[_this.name]=val;

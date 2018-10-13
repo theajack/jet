@@ -3264,6 +3264,7 @@ JUI.MESSAGE.msgList.forEach(function(m){
 });
 };
 function _msgDefault(txt,time,type){
+  if(txt===undefined)txt=type;
   if(typeof txt=='string'||typeof txt=='number')
       JUI.msg(txt,type,time);
   else{
@@ -5831,7 +5832,13 @@ function _initCodeMain(item,_jui){
 }
 function _initFrame(item,jui){
   if(item.findClass("code_editor").length==0){//防止两次初始化
-    var cont=item.html().trim();
+    var cont=item.html()//.trim();
+    if(!item.hasAttr('jui-code-trim')||item.attr('jui-code-trim')!=='false'){
+      while(cont[0]=='\n'){
+        cont=cont.substr(1);
+      }
+      cont=cont.replace(/(\s*$)/g,'')
+    }
     var num=/^\d+$/;
     var w=item.hasAttr("width")?item.attr("width"):_def_w+"px";
     if(num.test(w)){
@@ -5937,8 +5944,8 @@ function _initFrame(item,jui){
         var top=index*jui.lineHeight;
         activeLine.css('transform','translate(0,'+top+'px)');
         activeLine.css('-webkit-transform','-webkit-translate(0,'+top+'px)');
-        if(line){
-          line.findClass('j-active').removeClass('j-active')
+        if(line&&line.children.length>0){
+          line.findClass('j-active').removeClass('j-active');
           line.child(index).addClass('j-active');
         }
       }
