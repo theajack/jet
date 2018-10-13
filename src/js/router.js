@@ -3,7 +3,7 @@ Jet.router.use({
     history:false,
     base:"/jet",
     index:'/',
-    trueBase:false,
+    trueBase:true,
     oninit:function(){
       Jet.$import('queryApi');
     },
