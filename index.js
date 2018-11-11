@@ -1,94 +1,37 @@
 
 
 Jet.lang.use(['cn','en']);
-Jet.global=new Jet({
-  onload:function(){
-    JUI.CODE.tab='    ';
-    this.needUseRouted=true;
-    this.routeFunc();
+Jet.res.define({
+  image:{
+    wechat:'wechat.png',
+    alipay:'alipay',
+    wechatpay:'wechatpay'
   },
+  html:{
+    forLoad:'/attr/for_load',
+    pageInstall:'intro/install',
+    routerMenu:'comp/router-menu'
+  },
+  js:{
+    con:'contents'
+  }
+})
+new Jet({
+  beforeinitawait:function(next){
+    JUI.CODE.tab='    ';
+    Jet.$import('@con','queryApi','scroll',function(){
+      next();
+    })
+  },
+  // beforeinit:function(){
+  //   Jet.$import('contents','queryApi','scroll')
+  // },
   onroute:function(){
     this.$dom.out.html='<div class="loading"><i class="j-icon icon-spin icon-spinner-snake"></i><div class="loading-text"> 加载中...</div></div>';
   },
-  onrouted:function(){
-    this.needUseRouted=true;
-    this.routeFunc();
-    document.documentElement.scrollTop=0;
-    $J.body().scrollTop=0;
-    $J.attr('jump-to').each(function(item){
-        $J.attr('jump-des="'+item.attr('jump-to')+'"').exist(function(ele){
-            item.clk(function(){
-                $J.scrollTo(ele.offsetTop-60);
-            });
-        });
-    });
-    //Jcode.init();
-    if(Jet.router.lastTrueHash!=="#/code"){
-      $J.cls('j-code').each(function(item){
-        if(!item.hasClass('not-test')){
-          item.before('<button class="j-btn test-online" onclick="Jet.global.testOnLine(this)"><i class="j-icon icon-edit"></i> 在线使用</button>')
-        }
-      });
-      
-      if(typeof Jet.global._top!=='undefined'){
-        $J.body().scrollTop=Jet.global._top;
-        Jet.global._top=undefined;
-      }
-    }
-  },
-  onmounted:function(){
-    var _this=this;
-    var max;
-    //this.$import('queryApi');
-    window._checkScrol=function(){
-      max=$J.id('menuScroll').hei()+40-$J.id('menu').hei();
-      if(max<=0){
-        menuScroll=0;
-        $J.id('menuScroll').css('top','0px')
-      }else if(menuScroll<=-max){
-        menuScroll=-max;
-        $J.id('menuScroll').css('top',menuScroll+'px')
-      }
-    };
-    var isLock=false;
-    $J.cls('menu-main-item').on('click',function(e){
-      if(!isLock){
-        isLock=true;
-        this.next().slideToggle(function(){
-          _checkScrol();
-          isLock=false;
-        },200,"ease");
-        this.child(1).toggleClass('active');
-      }
-    },true);
-    if($J.isMobile()){
-      var _setHeight=function(){
-        $J.id('menuScroll').css('height',($J.height()-40)+'px')
-      }
-      $J.id('menuScroll').css('overflow-y','auto');
-      _setHeight();
-      window.onresize=_setHeight;
-    }else{
-      var menuScroll=0;
-      $J.id('menu').onmousewheel=function(e){
-        //stopPro(e);
-        if(!_this.bodyFix)_this.bodyFix=true;
-        if(max>0){
-          var _top=menuScroll+$J.sign(e.wheelDelta)*80;
-          if(e.wheelDelta<0){
-            if(_top<-max){_top=-max;}
-          }else{
-            if(_top>0){_top=0;}
-          }
-          menuScroll=_top;
-          $J.id('menuScroll').css('top',_top+'px')
-        }
-      };
-      $J.id('routerOut').onmousewheel=function(){
-        if(_this.bodyFix)_this.bodyFix=false;
-      }
-      window.onresize=_checkScrol;
-    }
+  onrouted:function(isFresh){
+    if(!isFresh)
+    Jet.$module.Scroll.routed();
   },
   data:{
     dshow:false,
@@ -106,7 +49,7 @@ Jet.global=new Jet({
   },
   ondatachange:{
     queryString:function(v){
-      var arr=this.$use('Query').search(v);
+      var arr=this.$get('Query').search(v);
       this.queryList.$replace(arr);
       this.number=arr.length;
     }
@@ -124,23 +67,9 @@ Jet.global=new Jet({
       this.showResult=true;
     },
     testOnLine:function(item){
-      Jet.global._top=$J.body().scrollTop;
-      Jet.global._code=item.next().$jui.txt();
+      Jet.$root._top=$J.body().scrollTop;
+      Jet.$root._code=item.next().$jui.txt();
       this.$route('/code');
-    },
-    routeFunc:function(){
-      if(this.needUseRouted){
-        $J.attr('jrouter-active').exist(function(item){
-          if(item.hasClass('menu-s-item')){
-            var _i=item.parent().prev();
-            _i.next().slideDown(function(){
-              window._checkScrol();
-            },200,"ease");
-            _i.child(1).addClass('active');
-          }
-        });
-        this.needUseRouted=false
-      }
     },
     nextApi:function(){
       var _this=this;
@@ -167,11 +96,12 @@ Jet.global=new Jet({
         _this.needUseRouted=false;
       })
     },jumpTo:function(url,des,call){
-      Jet.router.route(url,null,function(){
+      Jet.router.route(url,function(){
         setTimeout(function(){
           var top=0;
           if(des!=''){
-            top=$J.attr('jump-des='+des).offsetTop-55;
+            top=$J.attr('jump-des="'+des+'"').offsetTop-55;
+            Jet.$root.__des=des;
           }
           document.documentElement.scrollTop=top;
           $J.body().scrollTop=top;
@@ -184,6 +114,9 @@ Jet.global=new Jet({
       var si=s.toLowerCase().indexOf(this.queryString.toLowerCase());
       var ei=si+this.queryString.length;
       return s.substring(0,si)+'<span class="__red">'+s.substring(si,ei)+'</span>'+s.substring(ei);
+    },onmenuload:function(){
+      Jet.router.activeRouter()
+      Jet.$module.Scroll.routed();
     }
   }
 })

@@ -1,7 +1,7 @@
 <div class='title'>模块规范</div>
 <div class='text indent'>
     Jet提供了自己的异步模块加载方式，不遵循AMD规范。值得注意的是，因为需要使用ajax请求加载模块，所以Jet的js模块化完整功能只有在http服务器中才可以使用。
-    如果您不是在http服务器环境中使用模块化，也可以使用script标签加载所有模块，然后就可以使用 $import 和 $use 方法使用模块。
+    如果您不是在http服务器环境中使用模块化，也可以使用script标签加载所有模块，然后就可以使用 $import 和 $get 方法使用模块。
 </div>
 <div class="sub">
     <div class='title'>/src/js目录</div>
@@ -25,9 +25,9 @@
         <span class='link' Jrouter='/module/module'>Jet.$module</span> 存储了所有已经引用过的模块。再次引用相同模块时会从该集合中直接返回对应模块。
         在Jet元素中， this.$module 存储了在当前Jet元素中引入过的模块。
     </div>
-    <div class='title'>$use</div>
+    <div class='title'>$get</div>
     <div class='text'>
-        使用 <span class='link' Jrouter='/module/use'>Jet.$use()</span> 或者在Jet元素中使用 this.$use()  可以直接获取已经引入过的模块。
+        使用 <span class='link' Jrouter='/module/get'>Jet.$get()</span> 或者在Jet元素中使用 this.$get()  可以直接获取已经引入过的模块。
     </div>
     <div class='title'>as关键字</div>
     <div class='text'>
@@ -40,11 +40,3 @@
         详细用法请参考后续教程。
     </div>
 </div>
-<script>
-    Jet.global.setLink({
-        last:'属性',
-        lastUrl:'/router/prop',
-        next:'$define:定义',
-        nextUrl:'/module/define',
-    });
-</script>

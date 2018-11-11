@@ -38,6 +38,14 @@
 .space{
     letter-spacing: 5px;
 }
+pre{
+  font-family: Microsoft Yahei;
+  color: #fff;
+  background-color: #444;
+  padding: 5px;
+  padding-left: 10px;
+  font-size: 15px;
+}
 #header,#footer{
     position: fixed;
     left: 0;
@@ -391,6 +399,21 @@
   margin: 5px 0;
 }
 @media screen and (max-width: 600px) {
+  .text{
+    font-size: 15px;
+  }
+  .title{
+    font-size: 20px;
+  }
+  pre{
+    font-size: 13px;
+  }
+  .sub{
+    padding-left: 15px;
+  }
+  .list{
+    margin-left: 20px;
+  }
   .logo-text{
     left:-220px;
     transition: left .3s ease;

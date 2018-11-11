@@ -11,7 +11,7 @@
 </style>
 <div class='title'>栅格</div>
 <div class='text indent'>
-    JUI 提供了一套栅格系统，开发者可以最多将一行分为24列。它们支持嵌套使用。
+    JUI 提供了一套栅格系统，开发者可以最多将一行分为24列。它们支持嵌套使用。考虑到兼容性，栅格未使用flex布局。
     使用 j-row 和 j-col 类定义行和列，使用 c1至c24 类来定义某栅格占的列数。使用 j-row-m 可以是栅格之间有一个0.5%的margin。请看几个例子：
 </div>
 <div class="sub">
@@ -113,12 +113,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    Jet.global.setLink({
-        last:'图标',
-        lastUrl:'/jui/icon',
-        next:'按钮',
-        nextUrl:'/jui/btn',
-    });
-</script>

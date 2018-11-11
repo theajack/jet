@@ -88,6 +88,9 @@
     -moz-transition: background-color .2s ease;
     -ms-transition: background-color .2s ease;
 }
+.j-btn .j-icon{
+	margin-right:3px;
+}
 .j-btn.xs{
     height: 23px;
     padding: 0 5px;
@@ -96,6 +99,7 @@
 }
 .j-btn.xs .j-icon{
     font-size: 12px;
+	margin-right:1px;
 }
 .j-btn.s{
     height: 26px;
@@ -105,6 +109,7 @@
 }
 .j-btn.s .j-icon{
     font-size: 14px;
+	margin-right:2px;
 }
 .j-btn.l{
     height: 35px;
@@ -114,6 +119,7 @@
 }
 .j-btn.l .j-icon{
     font-size: 18px;
+	margin-right:4px;
 }
 .j-btn.xl{
     height: 40px;
@@ -123,7 +129,12 @@
 }
 .j-btn.xl .j-icon{
     font-size: 22px;
+	margin-right:5px;
 }
+.j-btn.icon-mn .j-icon,.j-icon.icon-mn{
+	margin-right:0;
+}
+
 .j-btn:hover{background-color: #5fbcff}
 .j-btn:active{background-color: #70c4ff}
 .j-btn.success{background-color: #2ac32f}
@@ -1066,15 +1077,15 @@ textarea.j-input{
 /*COLOR END************************************************************************************/
 
 /*SLIDER*********************************************************************/
-.j-slider{
+.j-slider,.j-progress{
     height:6px;
-    border-radius: 5px;
+    border-radius: 3px;
     width:150px;
     position: relative;
     background-color: #ddd;
     cursor: pointer;
 }
-.j-slider-bar{
+.j-slider-bar,.j-progress-bar{
     width:0%;
     height:100%;
     border-radius: 15px;
@@ -1083,19 +1094,21 @@ textarea.j-input{
 }
 .j-slider-c{
     position: absolute;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #1da1ff;
+    /* transition:all .3s linear;
+    -webkit-transition:all .3s linear;
+    -o-transition:all .3s linear;
+    -moz-transition:all .3s linear;
+    -ms-transition:all .3s linear; */
+    cursor: pointer;
+}
+.j-slider-c,.j-slider[disabled] .j-slider-c:hover{
     right:-7px;
     top:-4px;
     height:14px;
     width:14px;
-    border-radius: 50%;
-    background-color: #fff;
-    border: 2px solid #1da1ff;
-    transition:all .3s linear;
-    -webkit-transition:all .3s linear;
-    -o-transition:all .3s linear;
-    -moz-transition:all .3s linear;
-    -ms-transition:all .3s linear;
-    cursor: pointer;
 }
 .j-slider-c:hover{
     width:16px;
@@ -1106,7 +1119,109 @@ textarea.j-input{
 .j-slider-t{
 
 }
+.j-slider.success .j-slider-bar,.j-progress.success .j-progress-bar{background-color: #2ac32f}
+.j-slider.success .j-slider-c{border-color: #2ac32f}
+.j-slider.info .j-slider-bar,.j-progress.info .j-progress-bar{background-color: #9e9e9e}
+.j-slider.info .j-slider-c{border-color: #9e9e9e}
+.j-slider.warn .j-slider-bar,.j-progress.warn .j-progress-bar{background-color: #dfa02b}
+.j-slider.warn .j-slider-c{border-color: #dfa02b}
+.j-slider.danger .j-slider-bar,.j-progress.danger .j-progress-bar{background-color: #dc5454}
+.j-slider.danger .j-slider-c{border-color: #dc5454}
+    /*PROGRESS*********************************************************************/
+.j-progress-bar{
+    transition:width .3s linear;
+    -webkit-transition:width .3s linear;
+    -o-transition:width .3s linear;
+    -moz-transition:width .3s linear;
+    -ms-transition:width .3s linear;
+}
+.j-progress{
+    cursor: default;
+    width:100%;
+}
+    /*PROGRESS END*********************************************************************/
+
+.j-slider.xs,.j-progress.xs{
+    height:2px;
+    border-radius: 1px;
+}
+.j-slider.xs .j-slider-c,.j-slider[disabled].xs .j-slider-c:hover{
+    right:-4px;
+    top:-3px;
+    height:8px;
+    width:8px;
+    border-width: 1px;
+}
+.j-slider.xs .j-slider-c:hover{
+    width:10px;
+    height:10px;
+    right:-5px;
+    top:-4px;
+}
+.j-slider.s,.j-progress.s{
+    height:4px;
+    border-radius: 2px;
+}
+.j-slider.s .j-slider-c,.j-slider[disabled].s .j-slider-c:hover{
+    right:-6px;
+    top:-4px;
+    height:12px;
+    width:12px;
+}
+.j-slider.s .j-slider-c:hover{
+    width:14px;
+    height:14px;
+    right:-7px;
+    top:-5px;
+}
+.j-slider.l,.j-progress.l{
+    height:10px;
+    border-radius: 5px;
+}
+.j-slider.l .j-slider-c,.j-slider[disabled].l .j-slider-c:hover{
+    right:-9px;
+    top:-5px;
+    height:18px;
+    width:18px;
+}
+.j-slider.l .j-slider-c:hover{
+    width:20px;
+    height:20px;
+    right:-10px;
+    top:-6px;
+}
+.j-slider.xl,.j-progress.xl{
+    height:14px;
+    border-radius: 7px;
+}
+.j-slider.xl .j-slider-c,.j-slider[disabled].xl .j-slider-c:hover{
+    right:-12px;
+    top:-6px;
+    width:24px;
+    height:24px;
+    border-width: 3px;
+}
+.j-slider.xl .j-slider-c:hover{
+    width:26px;
+    height:26px;
+    right:-13px;
+    top:-7px;
+}
+.j-slider[disabled]{
+    cursor: no-drop;
+    background-color: #ddd;
+}
+.j-slider[disabled] .j-slider-bar{
+    background-color: #aaa;
+}
+.j-slider[disabled] .j-slider-c{
+    cursor: no-drop;
+    border-color: #aaa;
+}
 /*SLIDER END*********************************************************************/
+
+
+
 
 /*CODE*/
 .j-code {

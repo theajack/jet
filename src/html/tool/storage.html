@@ -3,7 +3,20 @@
 <div class="sub">
     <div class='text indent'>
         Jet中封装了操作localStorage方法，在Jet方法中，可以直接使用 this.$storage() 调用。该方法接受两个个参数，当只使用一个参数时，表示从localStorage从获取该键对应的值，当时用两个参数时，表示设置localStorage值。
-        支持任何类型的值。请看一个例子：
+        支持任何类型的值。<br>
+        * 具体使用如下<br>
+        * this.$storage()：获取所有值<br>
+        * this.$storage(null)：清空所有值<br>
+        * this.$storage('a',1) :存储一个值<br>
+        * this.$storage('a') :获取一个值<br>
+        * this.$storage('a',null) :清除一个值<br>
+        * this.$storage({<br>
+        *   a:1,<br>
+        *   b:{b1:11}<br>
+        * }) :以json格式存储值<br>
+        * <br>
+        * 可以存储任何类型的值，除了null和undefined<br>
+        请看一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 键：&lt;input type='text' j='key'/>
@@ -45,12 +58,6 @@
 </div>    
 
 <script>
-    Jet.global.setLink({
-        last:'$cookie',
-        lastUrl:'/tool/cookie',
-        next:'Jet.$',
-        nextUrl:'/tool/tool',
-    });
     new Jet({
         data:{
             key:"",

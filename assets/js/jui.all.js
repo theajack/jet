@@ -5,7 +5,7 @@
 //    insertArray(使用原生splice) removeByIndex(支持第二个参数选择删除个数)
 //    ajax 请求和 convertData
 
-//(function(){
+(function(){
   //*********calendar-converter.js****************
 
   ///////////////////////////////////////////////////
@@ -494,66 +494,45 @@
       }
    *
    */
-  window.CalendarConverter = CalendarConverter;
-  if ('undefined' !== typeof module && module.exports) {
-    module.exports = CalendarConverter;
-  }
 
+/*tool start**********************************************************************************/
+  var _onReady=(function() {
+    var b = [];
+    var d = false;
 
-//**********JUI start********************
+    function c(g) {
+      if (d) {
+        return
+      }
+      if (g.type === "onreadystatechange" && document.readyState !== "complete") {
+        return
+      }
+      for (var f = 0; f < b.length; f++) {
+        b[f].call(document)
+      }
+      d = true;
+      b = null
+    }
+    if (document.addEventListener) {
+      document.addEventListener("DOMContentLoaded", c, false);
+      document.addEventListener("readystatechange", c, false);
+      window.addEventListener("load", c, false)
+    } else {
+      if (document.attachEvent) {
+        document.attachEvent("onreadystatechange", c);
+        window.attachEvent("onload", c)
+      }
+    }
+    return function a(e) {
+      if (d) {
+        e.call(document)
+      } else {
+        b.push(e)
+      }
+    }
+  })();
   window.$J = {
-      ready: (function() {
-        var b = [];
-        var d = false;
-  
-        function c(g) {
-          if (d) {
-            return
-          }
-          if (g.type === "onreadystatechange" && document.readyState !== "complete") {
-            return
-          }
-          for (var f = 0; f < b.length; f++) {
-            b[f].call(document)
-          }
-          d = true;
-          b = null
-        }
-        if (document.addEventListener) {
-          document.addEventListener("DOMContentLoaded", c, false);
-          document.addEventListener("readystatechange", c, false);
-          window.addEventListener("load", c, false)
-        } else {
-          if (document.attachEvent) {
-            document.attachEvent("onreadystatechange", c);
-            window.attachEvent("onload", c)
-          }
-        }
-        return function a(e) {
-          if (d) {
-            e.call(document)
-          } else {
-            b.push(e)
-          }
-        }
-      })(),
-      onload: function(a) {
-        if (document.addEventListener) {
-          document.addEventListener("DOMContentLoaded", function() {
-            document.removeEventListener("DOMContentLoaded", arguments, false);
-            a()
-          }, false)
-        } else {
-          if (document.attachEvent) {
-            document.attachEvent("onreadystatechange", function() {
-              if (document.readyState == "complete") {
-                document.detachEvent("onreadystatechange", arguments);
-                a()
-              }
-            })
-          }
-        }
-      },
+      ready:_onReady,
       height: function() {
         return document.documentElement.clientHeight
         //return document.body.offsetHeight
@@ -562,54 +541,17 @@
         return document.documentElement.clientWidth
         //return document.body.offsetWidth
       },
-      cls: function(a) {
-        return _checkSelect(document.getElementsByClassName(a))
-      },
-      id: function(a) {
-        return _checkSelect(document.getElementById(a))
-      },
-      tag: function(a) {
-        return _checkSelect(document.getElementsByTagName(a))
-      },
-      attr: function(a) {
-        return _checkSelect(document.querySelectorAll("[" + a + "]"))
-      },
-      name: function(a) {
-        return _checkSelect(document.getElementsByName(a))
-      },
-      select: function(a) {
-        return _checkSelect(document.querySelectorAll(a))
-      },
-      body: function() {
-        return document.body
-      },
       copy: _copy,
-      clone:_clone,
       each:_each,
       even:_even,
       toString:_toString,
-      type:_type,
-      ct: _create,
       scroll:_scroll,
       scrollTo:_scrollTo,
-      ajax:_ajax,
-      load:_load,
-      jsonp:_jsonp,
-      cookie:_cookie,
-      storage:_storage,
       initTip:function(){
         $J.attr("jet-tip").each(function(item){
           item.tip(item.attr("jet-tip"));
         });
       },
-      html5:function(){
-        if (window.applicationCache) {
-          return true;
-        }
-        return false;
-      },
-      language: "CHINESE",
-      lang: function(l) {this.language = l.toUpperCase()},
       checkArg: _checkArg,
       toFunc:_checkFunction,
       jump: _jump,
@@ -619,26 +561,14 @@
       reload:function(force){
         location.reload(force);
       },
-      urlParam: _getUrlParam,
       sign: _sign,
       random: _getRandomNum,
       isMobile: _isMobile,
-      
-      delay:function(call,time){
-        return setTimeout(call,time);
-      },
-      clearDelay:function(t){
-        return setTimeout(t);
-      },
-      repeat:function(call,time){
-        return setInterval(call,time);
-      },
-      clearRepeat:function(t){
-        return clearInterval(t);
-      }
-      
     };
-    Jet.prototype.$=$J;
+    for(var k in Jet.$){
+      $J[k]=Jet.$[k]
+    }
+    $J.ct=_create;
     Jet.$=$J;
     function _scrollTo(y, a, b) {
       document.body.scrollTo(y, null, b);
@@ -672,159 +602,7 @@
         }
       }
     };
-    function _ajax(a) {
-      var b = {
-        type: a.type || "get",
-        url: a.url || "",
-        async: a.async || true,
-        data: a.data || null,
-        dataType: a.dataType || "text",
-        contentType: a.contentType || "application/x-www-form-urlencoded",
-        beforeSend: a.beforeSend ||function() {},
-        success: a.success ||function() {},
-        error: a.error ||function() {},
-        header:a.header||{}
-      };
-      b.beforeSend();
-      var c;
-      if (window.XMLHttpRequest) {
-        c =new XMLHttpRequest()
-      } else if (window.ActiveXObject) {
-        c = ActiveXObject("Microsoft.XMLHTTP")
-      }
-      var _d=_convertData(b.data);
-      var _t=b.type.toLowerCase();
-      //||_t=='delete'
-      if((_t=='get')&&_d!==''){
-        b.url=b.url+'?'+_d;
-      }
-      c.open(b.type, b.url, b.async);
-      c.responseType = b.dataType;
-      if(a.contentType!==null){
-        c.setRequestHeader("Content-Type", b.contentType);
-      }
-      for(var k in b.header){
-        c.setRequestHeader(k, b.header[k]);
-      }
-      if(b.type.toLowerCase()=='get'){
-        c.send();
-      }else{
-        c.send(_d);
-      }
-      c.onreadystatechange = function() {
-        if (c.readyState == 4) {
-          if (c.status == 200) {
-            b.success(c.response||c.responseText)
-          } else {
-            b.error(c.response||c.responseText)//errInfo
-          }
-        }
-      }
-      return c;
-    };
-    function _load(name,call,ecall){
-      return $J.ajax({ 
-        url : name, 
-        async:true,
-        success : function(result){ 
-          call(result);
-        },
-        error : function(err){ 
-          if(ecall!=undefined)
-            ecall(err);
-          console.warn("加载失败:"+name);
-        },
-      })
-    };
-    function _jsonp(options) {
-      if (!options.url) {
-        throw new Error("Parameter error");
-      }else{
-        var callbackName = ('_jsonp' + Math.random()).replace(".", "").substring(0, 15);
-        var head = $J.tag("head");
-        options.data[_checkArg(options.callback, "callback")] = callbackName;
-        var script = $J.ct('script');
-        head.append(script);
-        window[callbackName] = function(a) {
-          head.removeChild(script);
-          clearTimeout(script.timer);
-          window[callbackName] = null;
-          if($J.type(a)=="string"){
-            a=JSON.parse(a);
-          }
-          options.success && options.success(a);
-        };
-        if (options.dataType != undefined && options.dataType.toUpperCase() == "JSON") {
-          script.attr("src", options.url + '?json=' + encodeURIComponent(JSON.stringify(options.data)))
-        } else {
-          script.attr("src", options.url + '?' + _formatParams(options.data))
-        }
-        options.time = _checkArg(options.time, 5000);
-        script.timer = setTimeout(function() {
-          window[callbackName] = null;
-          head.removeChild(script);
-          options.timeout && options.timeout({
-            message:( (!options.message)?"timeout":options.message)
-          })
-        }, options.time)
-      }
-    };
-    function _cookie(a, b, d, e) {
-      if (arguments.length == 1) {
-        if (document.cookie.length > 0) {
-          var f = document.cookie.indexOf(a + "=");
-          if (f != -1) {
-            f = f + a.length + 1;
-            var g = document.cookie.indexOf(";", f);
-            if (g == -1) g = document.cookie.length;
-            return unescape(document.cookie.substring(f, g))
-          }
-        }
-        return ""
-      } else {
-        if (b == null) {
-          $J.cookie(a, "", -1)
-        } else {
-          var c = a + "=" + escape(b);
-          if (d != undefined) {
-            var h = new Date();
-            h.setDate(h.getDate() + d);
-            c += ";expires=" + h.toGMTString()
-          }
-          if (e != undefined) {
-            if ($J.type(e)=="boolean") {
-              if (e) {
-                c += (";path=/")
-              }
-            } else {
-              c += (";path=" + e)
-            }
-          }
-          document.cookie = c;
-          return a + "=" + b
-        }
-      }
-    };
-    function _storage(a,b){
-      if(b===undefined){
-        var d=localStorage.getItem(a);
-        try{
-          return JSON.parse(d)
-        }catch(e){
-          if(d===parseFloat(d).toString()){
-            return parseFloat(d);
-          }
-          return d;
-        }
-      }else{
-        if(typeof b==='object'){
-          localStorage.setItem(a, JSON.stringify(b))
-        }else{
-          localStorage.setItem(a, b)
-        }
-        return b
-      }
-    }
+    
     function _create(a) {
       if (a.has("#") || a.has(".") || a.has("[")) {
         var b = a.split('#');
@@ -868,38 +646,6 @@
         return document.createElement(a)
       }
     };
-    function _convertData(a) {
-      if(a==undefined){
-        return "";
-      }
-      var t=$J.type(a);
-      if (t=="json") {
-        var b = "";
-        for (var c in a) {
-          if(typeof a[c]==='object'){
-            b += (c + "=" + encodeURIComponent(JSON.stringify(a[c])) + "&")
-          }else{
-            b += (c + "=" + encodeURIComponent(a[c]) + "&")
-          }
-        }
-        b = b.substring(0, b.length - 1);
-        return b
-      }else if(t=='array'){
-        return JSON.stringify(a);
-      }else if($J.type(a)=="formdata"){
-        // if(a.entries!=undefined){
-        //   var b = "";
-        //   for (var i of a.entries()) {
-        //     b += i[0] + "=" + i[1] + "&"
-        //   }
-        //   b = b.substring(0, b.length - 1);
-        //   return b
-        // }
-        return a;
-      }else{
-        return a;
-      }
-    }
     function _checkFunction(a){
       if(a==undefined){
         return function(){};
@@ -913,13 +659,6 @@
           return function(){};
         }
       }
-    }
-    function _formatParams(a) {
-      var b = [];
-      for (var c in a) {
-        b.push(encodeURIComponent(c) + "=" + encodeURIComponent(a[c]))
-      }
-      return b.join("&")
     }
     $J.ready(function() {
       $J.tag("head").append($J.ct("style").txt("#jCopyInput{height:0px;position:fixed;top:-100px;}.j-for-slide-height{opacity:0!important;position:absolute!important;display:block!important}.j-none{visibility:hidden!important;position:absolute!important;display:block!important}.j-animation{transition:all .5s linear!important;-moz-transition:all .5s linear!important;-webkit-transition:all .5s linear!important;-o-transition:all .5s linear!important}.j-slide{overflow:hidden!important;height:0!important;padding-top:0!important;padding-bottom:0!important}.j-fade{opacity:0!important}.j-display-none{display:none!important}@keyframes j-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}@-moz-keyframes j-spin{from{-moz-transform:rotate(0)}to{-moz-transform:rotate(360deg)}}@-webkit-keyframes j-spin{from{-webkit-transform:rotate(0)}to{-webkit-transform:rotate(360deg)}}@-o-keyframes j-spin{from{-o-transform:rotate(0)}to{-o-transform:rotate(360deg)}}@keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-moz-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-webkit-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-o-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}.j-over-hidden{overflow:hidden!important}#jetTip{box-shadow:2px 2px 5px 0 #666;top:-100px;position:absolute;border:1px solid#222;background-color:rgba(255,255,255,.8);color:#222;font-size:10px;padding:3px;transition:opacity .2s;-moz-transition:opacity .2s linear;-webkit-transition:opacity .2s linear;-o-transition:opacity .2s linear;opacity:0;z-index:10000}#jetTip.j_active{opacity:1}"));
@@ -941,30 +680,13 @@
       }
       return b
     };
-    HTMLElement.prototype.css = function(d, a) {
-      if (a == undefined) {
-        if ($J.type(d)=="json") {
-          for (var b in d) {
-            if (d[b].has("!important")) {
-              this.style.setProperty(b, _checkCssValue(this, b, d[b].substring(0, d[b].indexOf("!important"))), "important")
-            } else {
-              this.style.setProperty(b, _checkCssValue(this, b, d[b]))
-            }
-          }
-          return this
-        } else {
-          return getComputedStyle(this)[d]
-        }
-      } else {
-        if (a.has("!important")) {
-          this.style.setProperty(d, _checkCssValue(this, d, a.substring(0, a.indexOf("!important"))), "important")
-        } else {
-          this.style.setProperty(d, _checkCssValue(this, d, a))
-        }
-        return this
-      }
-    };
-    HTMLCollection.prototype.css = NodeList.prototype.css = function(d, c) {
+    var EleProto=HTMLElement.prototype;
+    var CollProto=HTMLCollection.prototype;
+    var NodeProto=NodeList.prototype;
+    var ArrProto=Array.prototype;
+    var StrProto=String.prototype;
+    EleProto.css = EleProto._JT_css
+    CollProto.css = NodeProto.css = function(d, c) {
       if (c == undefined && $J.type(d)!="json") {
         var a = [];
         this.each(function(b) {
@@ -978,10 +700,10 @@
         return this
       }
     };
-    HTMLElement.prototype.hasData = function(d, b) {
+    EleProto.hasData = function(d, b) {
       return (d in this.j_data)
     }
-    HTMLElement.prototype.data = function(d, b) {
+    EleProto.data = function(d, b) {
       if (arguments.length == 0) {
         if (this.j_data!=undefined) {
           return this.j_data
@@ -1038,7 +760,7 @@
         }
       }
     };
-    HTMLCollection.prototype.data = NodeList.prototype.data = function(d, c) {
+    CollProto.data = NodeProto.data = function(d, c) {
       if (c == undefined && $J.type(d)!="json" && d != undefined) {
         var a = [];
         this.each(function(b) {
@@ -1059,107 +781,13 @@
       }
     };
   
-    function _checkCssValue(a, c, d) {
-      if (d.has("-=")||d.has("+=")) {
-        var e = _getCssNumberValue(d.substring(d.indexOf("=") + 1));
-        if (d.has("-=")) {
-          e[0] = -e[0]
-        }
-        var b;
-        if (d.has("%")) {
-          b = _getCssNumberValue(a.style[c])
-        } else {
-          b = _getCssNumberValue(getComputedStyle(a)[c])
-        }
-        return (e[0] + b[0]) + e[1]
-      }
-      return d
-    };
-  
-    function _getCssNumberValue(a, b) {
-      if (a == "" || a == undefined) {
-        a = "0%"
-      }
-      if (b == undefined) {
-        if (a.has("px")) {
-          b = "px"
-        } else if (a.has("%")) {
-          b = "%"
-        } else if (a.has("em")) {
-          b = "em"
-        } else {
-          return [parseFloat(a), "px"]
-        }
-      }
-      return [parseFloat(a.substring(0, a.indexOf(b))), b]
-    };
-  
-    function _checkStyleName(b) {
-      var a = b.split("-");
-      if (a.length <= 1) {
-        return b
-      } else {
-        var c = a[0];
-        for (var i = 1; i < a.length; i++) {
-          c += (a[i].charAt(0).toUpperCase() + a[i].substring(1))
-        }
-        return c
-      }
-    };
-    HTMLElement.prototype.attr = function(c, b) {
-      if (b == undefined) {
-        if ($J.type(c)=="json") {
-          for (var a in c) {
-            this.setAttribute(a, c[a])
-          }
-          return this
-        } else {
-          return this.getAttribute(c)
-        }
-      } else {
-        this.setAttribute(c, b);
-        return this
-      }
-    };
-    HTMLCollection.prototype.attr = NodeList.prototype.attr = function(d, c) {
-      if (c == undefined && $J.type(d)!="json") {
-        var a = [];
-        this.each(function(b) {
-          a.append(b.attr(d))
-        });
-        return a
-      } else {
-        this.each(function(a) {
-          a.attr(d, c)
-        });
-        return this
-      }
-    };
-    HTMLElement.prototype.hasAttr = function(a) {
-      return this.hasAttribute(a)
-    };
-    HTMLElement.prototype.removeAttr = function(b) {
-      var c = b.split(" ");
-      if (c.length > 1) {
-        var d = this;
-        c.each(function(a) {
-          d.removeAttribute(a)
-        })
-      } else {
-        this.removeAttribute(b)
-      }
-      return this
-    };
-    HTMLCollection.prototype.removeAttr = NodeList.prototype.removeAttr = function(b) {
-      this.each(function(a) {
-        a.removeAttr(b)
-      });
-      return this
-    };
-    HTMLElement.prototype.findClass = function(a) {
-      return _checkSelect(this.getElementsByClassName(a))
-    };
-    HTMLCollection.prototype.findClass = NodeList.prototype.findClass =  Array.prototype.findClass = function(a) {
+    EleProto.attr = EleProto._JT_attr
+    CollProto.attr = NodeProto.attr = CollProto._JT_attr
+    EleProto.hasAttr = EleProto._JT_hasAttr
+    EleProto.removeAttr = EleProto._JT_removeAttr
+    CollProto.removeAttr = NodeProto.removeAttr = CollProto._JT_removeAttr
+    EleProto.findClass = EleProto._JT_findClass
+    CollProto.findClass = NodeProto.findClass =  ArrProto.findClass = function(a) {
       var arr=[];
       this.each(function(item){
         if(item.hasClass(a)){
@@ -1170,10 +798,10 @@
         return arr[0];
       return arr
     };
-    HTMLElement.prototype.findId = function(a) {
+    EleProto.findId = function(a) {
       return $J.id(a)
     };
-    HTMLCollection.prototype.findId = NodeList.prototype.findId =  Array.prototype.findId = function(a) {
+    CollProto.findId = NodeProto.findId =  ArrProto.findId = function(a) {
       var arr=[];
       this.each(function(item){
         if(item.attr("id")==a){
@@ -1184,10 +812,8 @@
         return arr[0];
       return arr
     };
-    HTMLElement.prototype.findTag = function(a) {
-      return _checkSelect(this.getElementsByTagName(a))
-    };
-    HTMLCollection.prototype.findTag = NodeList.prototype.findTag =  Array.prototype.findTag = function(a) {
+    EleProto.findTag = EleProto._JT_findTag
+    CollProto.findTag = NodeProto.findTag =  ArrProto.findTag = function(a) {
       var arr=[];
       this.each(function(item){
         if(item.tagName.toLowerCase()==a){
@@ -1198,10 +824,8 @@
         return arr[0];
       return arr
     };
-    HTMLElement.prototype.findAttr = function(a) {
-      return _checkSelect(this.querySelectorAll("[" + a + "]"))
-    };
-    HTMLCollection.prototype.findAttr = NodeList.prototype.findAttr =  Array.prototype.findAttr = function(a) {
+    EleProto.findAttr = EleProto._JT_findAttr
+    CollProto.findAttr = NodeProto.findAttr =  ArrProto.findAttr = function(a) {
       var arr=[];
       var a=a.split("=");
       if(a.length==1){
@@ -1221,10 +845,10 @@
         return arr[0];
       return arr
     };
-    HTMLElement.prototype.findName = function(a) {
+    EleProto.findName = function(a) {
       return _checkSelect(this.querySelectorAll("[name=" + a + "]"))
     };
-    HTMLCollection.prototype.findName = NodeList.prototype.findName =  Array.prototype.findName = function(a) {
+    CollProto.findName = NodeProto.findName =  ArrProto.findName = function(a) {
       var arr=[];
       this.each(function(item){
         if(item.attr("name")==a){
@@ -1235,10 +859,8 @@
         return arr[0];
       return arr
     };
-    HTMLElement.prototype.select = function(a) {
-      return _checkSelect(this.querySelectorAll(a))
-    };
-    HTMLCollection.prototype.select = NodeList.prototype.select =  Array.prototype.select = function(a) {
+    EleProto.select = EleProto._JT_select
+    CollProto.select = NodeProto.select =  ArrProto.select = function(a) {
       var arr=[];
       this.each(function(item){
         var list = item.parent().select(a);
@@ -1253,72 +875,23 @@
         return arr[0];
       return arr
     };
-    HTMLElement.prototype.addClass = function(a) {
-      if(a.has(" ")){
-        var b = a.split(" ");
-        var c = this;
-        b.each(function(i) {
-          c.addClass(i)
-        });
-      }else if(a.trim()!==""){
-        if($J.html5()){
-          this.classList.add(a)
-        }else{
-          if (!this.hasClass(a)) {
-            this.className += " " + a
-          }
-        }
-      }
-      return this
-    };
-    HTMLCollection.prototype.addClass = NodeList.prototype.addClass = function(a) {
-      this.each(function(b) {
-        b.addClass(a)
-      });
-      return this
-    };
-    HTMLElement.prototype.replaceClass = function(a, b) {
+    EleProto.addClass = EleProto._JT_addClass
+    CollProto.addClass = NodeProto.addClass = CollProto._JT_addClass
+    EleProto.replaceClass = function(a, b) {
       if (this.hasClass(a)) {
         this.addClass(b).removeClass(a)
       }
       return this
     };
-    HTMLCollection.prototype.replaceClass = NodeList.prototype.replaceClass = function(a, b) {
+    CollProto.replaceClass = NodeProto.replaceClass = function(a, b) {
       this.each(function(c) {
         c.replaceClass(a, b)
       });
       return this
     };
-    HTMLElement.prototype.removeClass = function(a) {
-      if (a == undefined) {
-        this.className = ""
-      } else {
-        if(a.has(" ")){
-          var c = a.split(" ");
-          var d = this;
-          c.each(function(i) {
-            d.removeClass(i)
-          })
-        }else if(a.trim()!==""){
-          if($J.html5()){
-            this.classList.remove(a)
-          }else{
-            if (this.hasClass(a)) {
-              var b = new RegExp("(\\s|^)" + a + "(\\s|$)");
-              this.className = this.className.replace(b, " ").trim()
-            }
-          }
-        }
-      }
-      return this
-    };
-    HTMLCollection.prototype.removeClass = NodeList.prototype.removeClass = function(a) {
-      this.each(function(b) {
-        b.removeClass(a)
-      });
-      return this
-    };
-    HTMLElement.prototype.toggleClass = function(a) {
+    EleProto.removeClass = EleProto._JT_removeClass
+    CollProto.removeClass = NodeProto.removeClass = CollProto._JT_removeClass
+    EleProto.toggleClass = function(a) {
       if(a.has(" ")){
         var b = a.split(" ");
         var c = this;
@@ -1338,13 +911,13 @@
       }
       return this
     };
-    HTMLCollection.prototype.toggleClass = NodeList.prototype.toggleClass = function(v) {
+    CollProto.toggleClass = NodeProto.toggleClass = function(v) {
       this.each(function(b) {
         b.toggleClass(v)
       });
       return this
     };
-    HTMLCollection.prototype.indexOf = NodeList.prototype.indexOf = function(ele) {
+    CollProto.indexOf = NodeProto.indexOf = function(ele) {
       for(var i=0;i<this.length;i++){
         if(this[i]==ele){
           return i;
@@ -1352,53 +925,11 @@
       }
       return -1;
     };
-    HTMLElement.prototype.val = function(a) {
-      if (a == undefined && arguments.length == 0) {
-        return this.value
-      } else {
-        if (this.tagName == "INPUT" || this.tagName == "TEXTAREA"||this.tagName == "SELECT") {
-          this.value = _checkArg(a, "")
-        }
-        return this
-      }
-    };
-    HTMLCollection.prototype.val = NodeList.prototype.val = function(v) {
-      if (v == undefined) {
-        var a = [];
-        this.each(function(b) {
-          a.append(b.val())
-        });
-        return a
-      } else {
-        this.each(function(b) {
-          b.val(v)
-        });
-        return this
-      }
-    };
-    HTMLElement.prototype.txt = function(a) {
-      if (a == undefined && arguments.length == 0) {
-        return this.innerText
-      } else {
-        this.innerText = _checkArg(a, "");
-        return this
-      }
-    };
-    HTMLCollection.prototype.txt = NodeList.prototype.txt = function(v) {
-      if (v == undefined && arguments.length == 0) {
-        var a = [];
-        this.each(function(b) {
-          a.append(b.txt())
-        });
-        return a
-      } else {
-        this.each(function(b) {
-          b.txt(v)
-        });
-        return this
-      }
-    };
-    HTMLElement.prototype.content = function(a) {
+    EleProto.val = EleProto._JT_val
+    CollProto.val = NodeProto.val = CollProto._JT_val
+    EleProto.txt = EleProto._JT_txt
+    CollProto.txt = NodeProto.txt = CollProto._JT_txt
+    EleProto.content = function(a) {
       if (this.tagName == "INPUT" || this.tagName == "TEXTAREA"|| this.tagName == "SELECT") {
         if (a == undefined && arguments.length == 0) {
           return this.value
@@ -1418,7 +949,7 @@
       }
       return this
     };
-    HTMLCollection.prototype.content = NodeList.prototype.content = function(v) {
+    CollProto.content = NodeProto.content = function(v) {
       if (v == undefined) {
         var a = [];
         this.each(function(b) {
@@ -1432,7 +963,7 @@
         return this
       }
     };
-    HTMLElement.prototype.copy = function() {
+    EleProto.copy = function() {
       return _copy(this.content())
     };
   
@@ -1453,72 +984,17 @@
         return false
       }
     };
-    HTMLElement.prototype.copyHtml = function() {
+    EleProto.copyHtml = function() {
       return _copy(this.html())
     };
-    HTMLElement.prototype.html = function(a) {
-      if (a == undefined) {
-        return this.innerHTML
-      } else {
-        this.innerHTML = a;
-        return this
-      }
-    };
-    HTMLCollection.prototype.html = NodeList.prototype.html = function(v) {
-      if (v == undefined) {
-        var a = [];
-        this.each(function(b) {
-          a.append(b.html())
-        });
-        return a
-      } else {
-        this.each(function(b) {
-          b.html(v)
-        });
-        return this
-      }
-    };
-    HTMLElement.prototype.allHtml = function(a) {
-      if (a == undefined) {
-        return $J.ct("div").append(this.clone()).html();
-      } else {
-        var index=this.index();
-        var par=this.parent().append(a,index);
-        this.remove();
-        return par.child(index);
-      }
-    };
-    HTMLCollection.prototype.allHtml = NodeList.prototype.allHtml = function(v) {
-      var a = [];
-      this.each(function(b) {
-        a.append(b.allHtml(v))
-      });
-      return a
-    };
-    HTMLElement.prototype.hasClass = function(a) {
-      if(a.trim()===""){
-        return true;
-      }
-      if($J.html5()){
-        return this.classList.contains(a);
-      }
-      return new RegExp("(\\s|^)" + a + "(\\s|$)").test(this.className)
-    };
-    HTMLElement.prototype.next = function(i) {
-      if (i != undefined) {
-        return this.parent().child(this.index() + i)
-      } else {
-        return this.parent().child(this.index() + 1)
-      }
-    };
-    HTMLElement.prototype.prev = function(i) {
-      if (i != undefined) {
-        return this.parent().child(this.index() - i)
-      } else {
-        return this.parent().child(this.index() - 1)
-      }
-    };
-    HTMLElement.prototype.offset = function() {
+    EleProto.html = EleProto._JT_html
+    CollProto.html = NodeProto.html = CollProto._JT_html
+    EleProto.allHtml = EleProto._JT_allHtml
+    CollProto.allHtml = NodeProto.allHtml = CollProto._JT_allHtml
+    EleProto.hasClass = EleProto._JT_hasClass
+    EleProto.next = EleProto._JT_next
+    EleProto.prev = EleProto._JT_prev
+    EleProto.offset = function() {
       return {
         left: this.offsetLeft,
         top: this.offsetTop,
@@ -1526,13 +1002,13 @@
         width: this.offsetWidth
       }
     };
-    HTMLElement.prototype.left = function() {
+    EleProto.left = function() {
       return this.offsetLeft
     };
-    HTMLElement.prototype.top = function() {
+    EleProto.top = function() {
       return this.offsetTop
     };
-    HTMLElement.prototype.scrollTo = function(a, b, c) {
+    EleProto.scrollTo = function(a, b, c) {
       var n = 0;
       var e = this;
       c = _checkArg(c, 400);
@@ -1551,26 +1027,26 @@
       }, 10);
       return this
     };
-    HTMLCollection.prototype.scrollTo = NodeList.prototype.scrollTo = function(i, b, c) {
+    CollProto.scrollTo = NodeProto.scrollTo = function(i, b, c) {
       this.each(function(a) {
         a.scrollTo(i, b, c)
       });
       return this
     };
-    HTMLElement.prototype.scroll = function(i, a, b) {
+    EleProto.scroll = function(i, a, b) {
       if (arguments.length == 0) {
         return this.scrollTop
       } else {
         return this.scrollTo(this.scrollTop + i, a, b)
       }
     };
-    HTMLCollection.prototype.scroll = NodeList.prototype.scroll = function(i, b, c) {
+    CollProto.scroll = NodeProto.scroll = function(i, b, c) {
       this.each(function(a) {
         a.scroll(i, b, c)
       });
       return this
     };
-    HTMLElement.prototype.animate = function(a, b, c, d) {
+    EleProto.animate = function(a, b, c, d) {
       var e = JSON.stringify(a);
       if (e.has("left") || e.has("top")) {
         if (this.css("position") == "static") {
@@ -1606,13 +1082,13 @@
       }, 50);
       return this
     };
-    HTMLCollection.prototype.animate = NodeList.prototype.animate = function(b, c, d, e) {
+    CollProto.animate = NodeProto.animate = function(b, c, d, e) {
       this.each(function(a) {
         a.animate(b, c, d, e)
       });
       return this
     };
-    HTMLElement.prototype.rotate = function(a, b, c, d, e) {
+    EleProto.rotate = function(a, b, c, d, e) {
       var f = this;
       f.addClass("j-animation");
       setTimeout(function() {
@@ -1632,13 +1108,13 @@
       }, 50);
       return this
     };
-    HTMLElement.prototype.scale = function(a, b, c, d) {
+    EleProto.scale = function(a, b, c, d) {
       return _scaleBase(this, a, a, b, c, d)
     };
-    HTMLElement.prototype.scaleX = function(a, b, c, d) {
+    EleProto.scaleX = function(a, b, c, d) {
       return _scaleBase(this, a, 1, b, c, d)
     };
-    HTMLElement.prototype.scaleY = function(a, b, c, d) {
+    EleProto.scaleY = function(a, b, c, d) {
       return _scaleBase(this, 1, a, b, c, d)
     };
   
@@ -1647,19 +1123,19 @@
         _checkFunction(a)(b)
       }
     };
-    HTMLCollection.prototype.scale = NodeList.prototype.scale = function(b, c, d, e) {
+    CollProto.scale = NodeProto.scale = function(b, c, d, e) {
       this.each(function(a) {
         a.scale(b, c, d, e)
       });
       return this
     };
-    HTMLCollection.prototype.scaleX = NodeList.prototype.scaleX = function(b, c, d, e) {
+    CollProto.scaleX = NodeProto.scaleX = function(b, c, d, e) {
       this.each(function(a) {
         a.scaleX(b, c, d, e)
       });
       return this
     };
-    HTMLCollection.prototype.scaleY = NodeList.prototype.scaleY = function(b, c, d, e) {
+    CollProto.scaleY = NodeProto.scaleY = function(b, c, d, e) {
       this.each(function(a) {
         a.scaleY(b, c, d, e)
       });
@@ -1697,13 +1173,13 @@
         "-moz-transform-origin": o
       })
     };
-    HTMLCollection.prototype.rotate = NodeList.prototype.rotate = function(b, c, d, e, f) {
+    CollProto.rotate = NodeProto.rotate = function(b, c, d, e, f) {
       this.each(function(a) {
         a.rotate(b, c, d, e, f)
       });
       return this
     };
-    HTMLElement.prototype.spin = function(a, b, c, d, e) {
+    EleProto.spin = function(a, b, c, d, e) {
       e = _checkArg(e, "linear");
       b = _checkArg(b, "infinite");
       if (a != undefined) {
@@ -1739,7 +1215,7 @@
       }
     };
   
-    HTMLElement.prototype.twinkle = function(a, b, d, e) {//speed times call linear
+    EleProto.twinkle = function(a, b, d, e) {//speed times call linear
       e = _checkArg(e, "linear");
       b = _checkArg(b, "infinite");
       if (a != undefined) {
@@ -1773,13 +1249,13 @@
         }
       }
     };
-    HTMLCollection.prototype.twinkle = NodeList.prototype.twinkle = function(b, c, d, e) {
+    CollProto.twinkle = NodeProto.twinkle = function(b, c, d, e) {
       this.each(function(a) {
         a.twinkle(b, c, d, e)
       });
       return this
     };
-    HTMLCollection.prototype.spin = NodeList.prototype.spin = function(b, c, d, e) {
+    CollProto.spin = NodeProto.spin = function(b, c, d, e) {
       this.each(function(a) {
         a.spin(b, c, d, e)
       });
@@ -1812,7 +1288,7 @@
         return a / 1000
       }
     };
-    HTMLElement.prototype.stopTwinkle = function(bool) {
+    EleProto.stopTwinkle = function(bool) {
       var a = (bool==true)?"1":this.css("opacity");
       this.css({
         "animation": "none",
@@ -1823,7 +1299,7 @@
       });
       return this
     };
-    HTMLElement.prototype.stopSpin = function(bool) {
+    EleProto.stopSpin = function(bool) {
       var a = (bool==true)?"rotate(0)":this.css("transform");
       this.css({
         "animation": "none",
@@ -1837,20 +1313,20 @@
       });
       return this
     };
-    HTMLCollection.prototype.stopTwinkle = NodeList.prototype.stopTwinkle = function() {
+    CollProto.stopTwinkle = NodeProto.stopTwinkle = function() {
       this.each(function(a) {
         a.stopTwinkle()
       });
       return this
     };
-    HTMLCollection.prototype.stopSpin = NodeList.prototype.stopSpin = function() {
+    CollProto.stopSpin = NodeProto.stopSpin = function() {
       this.each(function(a) {
         a.stopSpin()
       });
       return this
     };
   
-    HTMLElement.prototype.tip = function(text) {
+    EleProto.tip = function(text) {
       if(!$J.id("jetTip").exist()){
         $J.body().append($J.ct("span#jetTip").clk('this.removeClass("j_active").css("top","-100px")'));
       }
@@ -1871,7 +1347,7 @@
       },true);
       return this
     };
-    HTMLCollection.prototype.tip = NodeList.prototype.tip = function(text) {
+    CollProto.tip = NodeProto.tip = function(text) {
       if($J.type(text)=="array"){
         this.each(function(a,i) {
           a.tip(text[i])
@@ -1898,13 +1374,13 @@
       }
       return true;
     };
-    HTMLElement.prototype.slideUp = function(a, b, c) {
+    EleProto.slideUp = function(a, b, c) {
       if(_checkDisplay(this)){
         return _checkSlideHeight(this, a, b, c,false)
       }
       return this;
     };
-    HTMLElement.prototype.slideDown = function(a, b, c) {
+    EleProto.slideDown = function(a, b, c) {
       if(!_checkDisplay(this)){
         if (this.hasClass("j-fade")) {
           this.removeClass("j-fade").addClass("j-slide")
@@ -1913,7 +1389,7 @@
       }
       return this;
     };
-    HTMLElement.prototype.slideToggle = function(a, b, c) {
+    EleProto.slideToggle = function(a, b, c) {
       if(this.css("display")=="none"&&!this.hasClass("j-slide")){//第一次
         this.addClass("j-for-slide-height");
         this.css("height",this.hei()+"px");
@@ -1942,13 +1418,13 @@
       }
       return obj;
     };
-    HTMLElement.prototype.fadeOut = function(a, b, c) {
+    EleProto.fadeOut = function(a, b, c) {
       if(_checkDisplay(this)){
         return _animateBase(this, "j-fade", a, b, c, false)
       }
       return this;
     };
-    HTMLElement.prototype.fadeIn = function(a, b, c) {
+    EleProto.fadeIn = function(a, b, c) {
       if(!_checkDisplay(this)){
         if (this.hasClass("j-slide")) {
           this.removeClass("j-slide").addClass("j-fade")
@@ -1958,7 +1434,7 @@
         return this;
       }
     };
-    HTMLElement.prototype.fadeToggle = function(a, b, c) {
+    EleProto.fadeToggle = function(a, b, c) {
       if(this.css("display")=="none"&&!this.hasClass("j-fade")){
         this.css("display","initial").addClass("j-fade").hide();
       }
@@ -1967,14 +1443,14 @@
       }
       return _animateBase(this, "j-fade", a, b, c)
     };
-    HTMLElement.prototype.hide = function() {
+    EleProto.hide = function() {
       if (!this.hasAttr("j-display")) {
         this.attr("j-display", this.css("display"));
         return this.css("display", "none!important")
       };
       return this
     };
-    HTMLElement.prototype.show = function(a) {
+    EleProto.show = function(a) {
       if (this.css("display") == "none") {
         this.css("display", "block!important");/*for initial is not supported*/
         //this.css("display", "initial!important");
@@ -1987,7 +1463,7 @@
       };
       return this
     };
-    HTMLElement.prototype.showToggle = function() {
+    EleProto.showToggle = function() {
       if (this.hasAttr("j-display")) {
         this.show()
       } else {
@@ -2069,55 +1545,55 @@
       });
       return b * 1000
     };
-    HTMLCollection.prototype.slideUp = NodeList.prototype.slideUp = function(b, c, d) {
+    CollProto.slideUp = NodeProto.slideUp = function(b, c, d) {
       this.each(function(a) {
         a.slideUp(b, c, d)
       });
       return this
     };
-    HTMLCollection.prototype.slideDown = NodeList.prototype.slideDown = function(b, c, d) {
+    CollProto.slideDown = NodeProto.slideDown = function(b, c, d) {
       this.each(function(a) {
         a.slideDown(b, c, d)
       });
       return this
     };
-    HTMLCollection.prototype.slideToggle = NodeList.prototype.slideToggle = function(b, c, d) {
+    CollProto.slideToggle = NodeProto.slideToggle = function(b, c, d) {
       this.each(function(a) {
         a.slideToggle(b, c, d)
       });
       return this
     };
-    HTMLCollection.prototype.fadeIn = NodeList.prototype.fadeIn = function(b, c, d) {
+    CollProto.fadeIn = NodeProto.fadeIn = function(b, c, d) {
       this.each(function(a) {
         a.fadeIn(b, c, d)
       });
       return this
     };
-    HTMLCollection.prototype.fadeOut = NodeList.prototype.fadeOut = function(b, c, d) {
+    CollProto.fadeOut = NodeProto.fadeOut = function(b, c, d) {
       this.each(function(a) {
         a.fadeOut(b, c, d)
       });
       return this
     };
-    HTMLCollection.prototype.fadeToggle = NodeList.prototype.fadeToggle = function(b, c, d) {
+    CollProto.fadeToggle = NodeProto.fadeToggle = function(b, c, d) {
       this.each(function(a) {
         a.fadeToggle(b, c, d)
       });
       return this
     };
-    HTMLCollection.prototype.hide = NodeList.prototype.hide = function() {
+    CollProto.hide = NodeProto.hide = function() {
       this.each(function(a) {
         a.hide()
       });
       return this
     };
-    HTMLCollection.prototype.show = NodeList.prototype.show = function() {
+    CollProto.show = NodeProto.show = function() {
       this.each(function(a) {
         a.show()
       });
       return this
     };
-    HTMLCollection.prototype.showToggle = NodeList.prototype.showToggle = function() {
+    CollProto.showToggle = NodeProto.showToggle = function() {
       this.each(function(a) {
         a.showToggle()
       });
@@ -2152,7 +1628,7 @@
     function _checkArg(a, b) {
       return (a == undefined) ? b : a
     };
-    HTMLElement.prototype.scrollXTo = function(a, b, c) {
+    EleProto.scrollXTo = function(a, b, c) {
       var n = 0;
       var e = this;
       c = _checkArg(c, 400);
@@ -2171,113 +1647,56 @@
       }, 10);
       return this
     };
-    HTMLCollection.prototype.scrollXTo = NodeList.prototype.scrollXTo = function(i, b, c) {
+    CollProto.scrollXTo = NodeProto.scrollXTo = function(i, b, c) {
       this.each(function(a) {
         a.scrollXTo(i, b, c)
       });
       return this
     };
-    HTMLElement.prototype.scrollX = function(i, a, b) {
+    EleProto.scrollX = function(i, a, b) {
       if (arguments.length == 0) {
         return this.scrollLeft
       } else {
         return this.scrollXTo(this.scrollLeft + i, a, b)
       }
     };
-    HTMLCollection.prototype.scrollX = NodeList.prototype.scrollX = function(i, b, c) {
+    CollProto.scrollX = NodeProto.scrollX = function(i, b, c) {
       this.each(function(a) {
         a.scrollX(i, b, c)
       });
       return this
     };
-    HTMLElement.prototype.hei = function() {
+    EleProto.hei = function() {
       return this.offsetHeight
     };
-    HTMLElement.prototype.wid = function() {
+    EleProto.wid = function() {
       return this.offsetWidth
     };
-    HTMLElement.prototype.child = function(i) {
-      if (i == undefined) {
-        return this.children
-      } else {
-        return this.children[i]
-      }
-    };
-    HTMLElement.prototype.hasChild = function(a) {
+    EleProto.child = EleProto._JT_child
+    EleProto.hasChild = function(a) {
       if(a==undefined){
         return (this.children.length>0)?true:false; 
       }else{
         return (this.select(a).length==0)?false:true; 
       }
     };
-    HTMLElement.prototype.clone = function() {
-      return this.cloneNode().html(this.html());
-    };
-    HTMLElement.prototype.parent = function(i) {
-      if (i == undefined) {
-        return this.parentElement
-      } else {
-        var p = this;
-        for (var j = 0; j < i; j++) {
-          p = p.parentElement
-        }
-        return p
-      }
-    };
-    HTMLElement.prototype.bro = function(i) {
+    EleProto.clone = EleProto._JT_clone
+    EleProto.parent = EleProto._JT_parent
+    EleProto.bro = function(i) {
       if (i == undefined) {
         return this.parent().child()
       } else {
         return this.parent().child(i)
       }
     };
-    HTMLElement.prototype.prepend = function(a) {
-      var t=$J.type(a);
-      if (t=="array"||t=="htmlcollection"||t=="nodelist") {
-        var b = this;
-        a.each(function(item) {
-          b.insertBefore(_checkHtmle(item), b.children[0])
-        })
-      } else if(t=="string"){
-        this.insertBefore(_checkHtmle(a),this.children[0])
-      }else{
-        this.insertBefore(_checkHtmle(a), this.children[0])
-      }
-      return this
-    };
-    HTMLCollection.prototype.prepend = NodeList.prototype.prepend = function(a) {
-      this.each(function(c) {
-        c.prepend(a)
-      });
-      return this
-    };
-    HTMLElement.prototype.append = function(b, a) {
-      if (a == undefined) {
-        var type=$J.type(b);
-        if (type=="array"||type=="htmlcollection"||type=="nodelist") {
-          for(var i=0;i<b.length;i++){
-            this.append(b[i]);
-          }
-        } else if(type=="string"){
-          this.append(_checkHtmle(b))
-        }else{
-          this.appendChild(_checkHtmle(b))
-        }
-      } else {
-        this.insertBefore(_checkHtmle(b), this.children[a])
-      }
-      return this
-    };
-    HTMLElement.prototype.toArray=function(){
+    EleProto.prepend = EleProto._JT_prepend
+    CollProto.prepend = NodeProto.prepend = CollProto._JT_prepend
+    EleProto.append = EleProto._JT_append
+    CollProto.append = NodeProto.append = CollProto._JT_append
+    EleProto.toArray=function(){
       return [this];
     };
-    HTMLCollection.prototype.toArray = NodeList.prototype.toArray = function() {
-      var a=[];
-      for(var i=0;i<this.length;i++){
-        a.push(this[i])
-      }
-      return a
-    };
+    CollProto.toArray = NodeProto.toArray = CollProto._JT_toArray
     function _checkHtmle(a){
       if($J.type(a)=="string"){
         var e=$J.ct("div").html(a);
@@ -2289,7 +1708,7 @@
       }
       return a;
     };
-    HTMLElement.prototype.after = function(b) {
+    EleProto.after = function(b) {
       var type=$J.type(b);
       if (type=="array"||type=="htmlcollection"||type=="nodelist") {
         var c = this;
@@ -2302,13 +1721,13 @@
       }
       return this
     };
-    HTMLCollection.prototype.after = NodeList.prototype.after = function(b) {
+    CollProto.after = NodeProto.after = function(b) {
       this.each(function(c) {
         c.after(b)
       });
       return this
     };
-    HTMLElement.prototype.before = function(b) {
+    EleProto.before = function(b) {
       var type=$J.type(b);
       if (type=="array"||type=="htmlcollection"||type=="nodelist") {
         var c = this;
@@ -2320,207 +1739,49 @@
       }
       return this
     };
-    HTMLCollection.prototype.before = NodeList.prototype.before = function(b) {
+    CollProto.before = NodeProto.before = function(b) {
       this.each(function(c) {
         c.before(b)
       });
       return this
     };
-    HTMLCollection.prototype.append = NodeList.prototype.append = function(b, a) {
-      this.each(function(c) {
-        c.append(b, a)
-      });
-      return this
-    };
-    HTMLElement.prototype.index = function() {
-      var a = this.parent().child();
-      for (var i = 0; i < a.length; i++) {
-        if (a[i] == this) {
-          return i
-        }
-      }
-      return -1
-    };
-    HTMLElement.prototype.on = function(a, b,d) {
-      if($J.type(a)=="string"){
-        return this.event("on"+a,b,d);
-      }else{
-        for (var c in a) {
-          a["on"+c]=a[c];
-          delete a[c];
-        }
-        return this.event(a,b);
-      }
-    };
-    HTMLCollection.prototype.on = NodeList.prototype.on = function(a, c,d) {
-      this.each(function(b) {
-        b.on($J.clone(a), c,d)
-      });
-      return this
-    };
-    HTMLElement.prototype.clk = function(b,d) {
-      return this.event("onclick",b,d);
-    };
-    HTMLCollection.prototype.clk = NodeList.prototype.clk = function(a, c) {
-      this.each(function(b) {
-        b.clk(a, c)
-      });
-      return this
-    };
-    
-    HTMLElement.prototype.event = function(a, b,d) {
-      if($J.type(a)=="string"){
-        if(d==true){
-          _attachEvent(this,a,b);
-        }else{
-          this[a]=_checkFunction(b);
-        }
-      }else{
-        for (var c in a) {
-          if (a[c] != undefined) {
-            if(b==true){
-              _attachEvent(this,c,a[c]);
-            }else{
-              this[c]=_checkFunction(a[c]);
-            }
-          }
-        }
-      }
-      return this
-    };
-    function _attachEvent(obj,event,fun){
-      if (document.addEventListener) {
-        obj.addEventListener(event.substring(2), _checkFunction(fun), false);
-      } else if (document.attachEvent) {
-        obj.attachEvent(event,  _checkFunction(fun));
-      }
-    };
-    HTMLCollection.prototype.event = NodeList.prototype.event = function(a, c,d) {
-      this.each(function(b) {
-        b.event(a, c,d)
-      });
-      return this
-    };
-    HTMLElement.prototype.empty = function() {
-      return this.html("")
-    };
-    HTMLCollection.prototype.empty = NodeList.prototype.empty = function() {
-      this.each(function(a) {
-        a.empty()
-      });
-      return this
-    };
-    HTMLElement.prototype.remove = function() {
-      if(this.parentNode===null)return;
-      this.parentNode.removeChild(this)
-    };
-    HTMLCollection.prototype.remove = NodeList.prototype.remove = function(a) {
-      if (a == undefined) {
-        for (var i = 0; i < this.length;) {
-          this[i].remove()
-        }
-      } else {
-        if ($J.type(a)=="number") {
-          for (var i = 0; i < this.length; i++) {
-            if (i == a) {
-              this[i].remove();
-              return this
-            }
-          }
-        } else {
-          for (var i = 0; i < this.length; i++) {
-            if (this[i] == a) {
-              this[i].remove();
-              return this
-            }
-          }
-        }
-      }
-    };
-    HTMLElement.prototype.each = function(b,d) {
-      b(this, 0,d);
-      return this
-    };
-    HTMLCollection.prototype.each = NodeList.prototype.each = function(b,d) {
-      var arr=this.toArray();//removeClass 情况下
-      for (var a = 0; a < arr.length; a++) {
-        b(arr[a], a,d)
-      }
-      return this
-    };
-    Array.prototype.each = function(b,d) {
-      for (var a = 0; a < this.length; a++) {
-        b(this[a], a,d)
-      }
-      return this
-    };
-    Array.prototype.empty = function(b) {
+    EleProto.index = EleProto._JT_index
+    EleProto.on = EleProto._JT_on
+    CollProto.on = NodeProto.on = CollProto._JT_on
+    EleProto.clk = EleProto._JT_clk
+    CollProto.clk = NodeProto.clk = CollProto._JT_clk
+    EleProto.event = EleProto._JT_event
+    CollProto.event = NodeProto.event = CollProto._JT_event
+    EleProto.empty = EleProto._JT_empty
+    CollProto.empty = NodeProto.empty = CollProto._JT_empty
+    EleProto.remove = EleProto._JT_remove
+    CollProto.remove = NodeProto.remove = CollProto._JT_remove
+    EleProto.each = EleProto._JT_each
+    CollProto.each = NodeProto.each = CollProto._JT_each
+    ArrProto.each = ArrProto._JT_each
+    ArrProto.clone = ArrProto._JT_clone
+    ArrProto.empty = function(b) {
       this.length = 0;
       return this;
     };
-    HTMLElement.prototype.last =function(){
-      return this.child().last();
-    };
-    HTMLElement.prototype.first =function(){
-      return this.child().first();
-    };
-    HTMLCollection.prototype.last = NodeList.prototype.last =Array.prototype.last = function(b) {
-      return this[this.length-1];
-    };
-    HTMLCollection.prototype.first = NodeList.prototype.first =Array.prototype.first = function(b) {
-      return this[0];
-    };
-    Array.prototype.remove = function(b,order) {
-      var index=this.indexOf(b)
-      if(order==false){
-        this[a]=this[this.length--];
-      }else{
-        this.removeByIndex(index);
-      }
+    EleProto.last =EleProto._JT_last
+    EleProto.first =EleProto._JT_first
+    CollProto.last = NodeProto.last =ArrProto.last = CollProto._JT_last
+    CollProto.first = NodeProto.first =ArrProto.first = CollProto._JT_first
+    ArrProto.remove = ArrProto._JT_remove
+    ArrProto.removeByIndex = ArrProto._JT_removeByIndex
+    ArrProto.insert = ArrProto._JT_insert
+    ArrProto.insertArray = ArrProto._JT_insertArray
+    ArrProto.append = ArrProto._JT_append
+    ArrProto.appendArray = function(arr) {
+      ArrProto.push.apply(this,arr)
       return this
     };
-    Array.prototype.removeByIndex = function(b,n) {
-      this.splice(b,n||1);
-      return this
-    };
-    Array.prototype.insert = function(b, i) {
-      this.splice(i,0,b);
-      return this
-    };
-    Array.prototype.insertArray = function(arr,i) {
-      //var _arr=arr._JT_clone();//深拷贝
-      var _arr=arr.slice(0);//浅拷贝
-      _arr.splice(0,0,i,0);
-      Array.prototype.splice.apply(this,_arr)
-      // var index=i;
-      // var n=arr.length;
-      // for (var a = this.length - 1; a >= index; a--) {
-      //   this[a + n] = this[a]
-      // }
-      // for(var j=0;j<n;j++){
-      //   this[index+j] = arr[j];
-      // }
-      return this
-    };
-    Array.prototype.append = function() {
-      Array.prototype.push.apply(this,arguments)
-      return this
-    };
-    Array.prototype.appendArray = function(arr) {
-      Array.prototype.push.apply(this,arr)
-      return this
-    };
-    Array.prototype.prepend = function(b) {
-      if(arguments.length==1){
-        return this.insert(b, 0)
-      }else{
-        return this.insertArray(arguments, 0)
-      }
-    };
-    Array.prototype.prependArray = function(b) {
+    ArrProto.prepend = ArrProto._JT_prepend
+    ArrProto.prependArray = function(b) {
       return this.insertArray(b, 0)
     };
-    Array.prototype.sort = function(a) {
+    ArrProto.sort = function(a) {
       var b = this.length;
       var c, current;
       for (var i = 1; i < b; i++) {
@@ -2537,7 +1798,7 @@
       }
       return this
     };
-    Array.prototype.sortByAttr = function(a,type, b) {
+    ArrProto.sortByAttr = function(a,type, b) {
       var c = this.length;
       var d, current;
       for (var i = 1; i < c; i++) {
@@ -2603,62 +1864,6 @@
       }
       return obj;
     };
-    function _type(obj){
-      if(arguments.length==0){
-        _throw("This function need a argument");
-      }else{
-        var type=typeof obj;
-        if(type=="object"){
-          if(obj===null){
-            return "null";
-          }else{
-            var con = obj.constructor;
-            switch(con){
-              case Object:type="json";break;
-              case Array:type="array";break;
-              case HTMLCollection:type="htmlcollection";break;
-              case NodeList:type="nodelist";break;
-              //case FormData:type="formdata";break;
-              case Error:type="error";break;
-              case Date:type="date";break;
-              default:if(obj.nodeType===1&&typeof obj.nodeName === 'string'){
-                        type="htmlelement";
-                      }else{
-                        type="object";
-                      };break;
-            }
-          }
-        }
-        return type;
-      }
-    };
-    function _clone(obj){
-      if(obj==undefined){
-        return null;
-      }
-      var type=$J.type(obj);
-      if(type=="htmlelement"||type=="array"){
-        return obj.clone();
-      }else if(type=="json"||type=="object"){
-        var a=new Object();
-        for(var attr in obj){
-          if(obj[attr]==null||obj[attr]==undefined){
-            a[attr]=obj[attr];
-          }else if($J.type(obj[attr])=="array"){
-            a[attr]=obj[attr].clone();
-          }else if($J.type(obj[attr])=="json"||$J.type(obj[attr])=="object"){
-            a[attr]=_clone(obj[attr]);
-          }else{
-            a[attr]=obj[attr];
-          }
-        }
-        return a;
-      }else if(type=="number"||type=="boolean"||type=="string"||type=="function"){
-        return obj;
-      }else{
-        return obj;
-      }
-    };
     function _even(a,b){
       if(a==undefined||b==undefined){
         return (a==b);
@@ -2713,13 +1918,13 @@
         }
       }
     };
-    Array.prototype.even = function(a) {
+    ArrProto.even = function(a) {
       return _even(this,a);
     };
-    Array.prototype.clone = function() {
+    ArrProto.clone = function() {
       var a=new Array();
       this.each(function(item){
-        a.append(_clone(item));
+        a.append($J.clone(item));
       });
       return a;
     };
@@ -2733,7 +1938,7 @@
         return true;
       }
     };
-    Array.prototype.sum = function(a,b) {
+    ArrProto.sum = function(a,b) {
       if(_checkEmptyArray(this)){
         if(a!=undefined){
           return this.slice(a,b).sum();
@@ -2766,7 +1971,7 @@
         return 0;
       }
     };
-    Array.prototype.avg = function() {
+    ArrProto.avg = function() {
       if(_checkEmptyArray(this)){
         var con=$J.type(this[0]);
         if(con=="number"||con=="string"){
@@ -2776,7 +1981,7 @@
         }
       }
     };
-    Array.prototype.max = function(attr,type) {
+    ArrProto.max = function(attr,type) {
       if(_checkEmptyArray(this)){
         var type=$J.type(this[0]);
         if(type=="number"){
@@ -2795,7 +2000,7 @@
         throw new Error("不支持的类型");
       }
     };
-    Array.prototype.min = function() {
+    ArrProto.min = function() {
       if(_checkEmptyArray(this)){
         var type=$J.type(this[0]);
         if(type=="number"){
@@ -2814,17 +2019,8 @@
         throw new Error("不支持的类型");
       }
     };
-    // Array.prototype.reverse = function() {
-    //   var t;
-    //   var n = Math.floor(this.length / 2);
-    //   for (var i = 0; i < n; i++) {
-    //     t = this[i];
-    //     this[i] = this[this.length - 1 - i];
-    //     this[this.length - 1 - i] = t
-    //   };
-    //   return this
-    // };
-    Array.prototype.has = function(a) {
+
+    ArrProto.has = function(a) {
       if(_checkEmptyArray(this,false)){
         var type=$J.type(this[0]);
         if(type=="number"||type=="string"){
@@ -2841,7 +2037,7 @@
         return false;
       }
     };
-    Array.prototype.indexsOf =function(a){
+    ArrProto.indexsOf =function(a){
       var indexs=[];
       if(_checkEmptyArray(this,false)){
         for(var i=0;i<this.length;i++){
@@ -2852,7 +2048,7 @@
       }
       return indexs;
     };
-    Array.prototype.timeOf =function(a){
+    ArrProto.timeOf =function(a){
       var sum=0;
       this.each(function(item){
         if(item==a){
@@ -2861,7 +2057,7 @@
       });
       return sum;
     };
-    Array.prototype.group=function(n){
+    ArrProto.group=function(n){
       var a=[];
       var x=Math.ceil(this.length/n);
       for(var i=0;i<x;i++){
@@ -2877,29 +2073,15 @@
       }
       return a;
     };
-    String.prototype.reverse = function() {
+    StrProto.reverse = function() {
       var s="";
       for(var i=this.length-1;i>=0;i--){
         s+=this[i];
       }
       return s;
     };
-    String.prototype.has = function(s) {
-      if ($J.type(s)=="string") {
-        if (this.includes == undefined) {
-          return (this.indexOf(s) != -1)
-        } else {
-          return this.includes(s)
-        }
-      } else {
-        if (this.match(s) == null) {
-          return false
-        } else {
-          return true
-        }
-      }
-    };
-    String.prototype.timeOf = function(s) {
+    StrProto.has = StrProto._JT_has
+    StrProto.timeOf = function(s) {
       if ($J.type(s)=="string") {
         return this.split(s).length - 1
       } else {
@@ -2911,41 +2093,8 @@
         }
       }
     };
-    String.prototype.replaceAll = function(a, b) {
-      if ($J.type(b)=="array") {
-        if ($J.type(a)=="string") {
-          var s = this.split(a);
-          var d = s[0];
-          s.each(function(a, i) {
-            if (i > 0) {
-              d += (b[i - 1] + a)
-            }
-          });
-          return d
-        } else {
-          var e = "";
-          var f = this;
-          var g = this.match(a);
-          if (g != null) {
-            g.each(function(a, i) {
-              var c = f.split(a);
-              e += (f.substring(0, f.indexOf(a)) + b[i]);
-              f = f.substring(f.indexOf(a) + a.length)
-            });
-            e += f;
-            return e
-          }
-          return this
-        }
-      } else {
-        if ($J.type(a)=="string") {
-          return this.replace(new RegExp(a, "g"), b)
-        } else {
-          return this.replace(a, b)
-        }
-      }
-    };
-    String.prototype.indexsOf = function(a, i) {
+    StrProto.replaceAll = StrProto._JT_replaceAll
+    StrProto.indexsOf = function(a, i) {
       var b = this.split(a);
       var c = null;
       if ($J.type(a)!="string") {
@@ -2980,50 +2129,14 @@
         }
       }
     };
-    String.prototype.insert = function(a, i) {
+    StrProto.insert = function(a, i) {
       return this.substring(0, i) + a + this.substring(i)
     };
   
   
-    HTMLElement.prototype.exist = function(call,callf){
-      if(call!=undefined){
-        _checkFunction(call)(this);
-      }
-      return true;
-    };
-    HTMLCollection.prototype.exist = NodeList.prototype.exist= function(call,callf){
-      if(this.length>0){
-        if(this.length==1){
-          _checkFunction(call)(this[0]);
-        }else{
-          _checkFunction(call)(this);
-        }
-        return true;
-      }
-      _checkFunction(callf)();
-      return false;
-    };
+    EleProto.exist = EleProto._JT_exist
+    CollProto.exist = NodeProto.exist=ArrProto.exist= CollProto._JT_exist
     
-    function _getUrlParam() {
-      var search='';
-      if(location.search!=''){
-        search=location.search.substring(1)
-      }else if(location.hash.has('?')){
-        search=location.hash.substring(location.hash.indexOf("?")+1);
-      }
-      if (search=='') {
-        return null
-      } else {
-        var d = decodeURI(search).split("&");
-        var a = {};
-        for (var c = 0; c < d.length; c++) {
-          var b = d[c].split("=");
-          a[b[0]] = b[1]
-        }
-        return a
-      }
-    };
-  
     function _jump(a) {
       try{
         window.location.href = (encodeURI(a))
@@ -3052,7 +2165,10 @@
         return false
       }
     };
-    var _jui_bind='jui-bind';
+/*tool end**********************************************************************************/
+
+/*JUI start**********************************************************************************/
+var _jui_bind='jui-bind';
 var _jui_change='jui-change';
 //SELECT 动态绑定是列表不会改表 **
 //checkbox group 有bug
@@ -3065,9 +2181,9 @@ $J.ready(function(){
   JUI.init();
 });
 function _createEmpty(){
-var a={};
-a.__proto__=null;
-return a;
+  var a={};
+  a.__proto__=null;
+  return a;
 }
 window.JUI={
   _jui_mounted:[],
@@ -3085,6 +2201,8 @@ window.JUI={
       JUI.TAB.init(item);
       JUI.SCREEN_DRAG.init(item);
       JUI.CODE.init(item);
+      JUI.BTN.init(item);
+      JUI.PROGRESS.init(item);
       JUI._jui_mounted.forEach(function(f){
           f();
       });
@@ -3163,10 +2281,23 @@ function _useBindSingle(opt){
     }
     var jattr=getValueTxt(item);
     if(d[attr]!==undefined&&jui['_'+jattr]!==d[attr]){
+      if(jui.checkValue){
+        var cv=jui.checkValue(d[attr]);
+        if(cv!==d[attr]){
+          cd[attr]=cv
+        }
+      }
       jui[jattr]=d[attr];
     }
     _jet._tools._calls[attr]._func.push(function(k,v){
         if(jui['_'+jattr]!==v&&v!==undefined){
+            if(jui.checkValue){
+              var cv=jui.checkValue(v);
+              if(cv!==v){
+                cd[k]=cv;
+                return;
+              }
+            }
         //if(v!==undefined){
             jui['_'+jattr]=v;
             jui.onchange.call(jui);
@@ -3228,22 +2359,22 @@ function _checkExtraBind(item,_jet,jui,cd,d,jet){
   }
 }
 function _defindJuiBind(_jet,jui,jattr,cd,d,attr){
-Object.defineProperty(jui,jattr,{
-  get:function(){
-    return d[attr]
-  },
-  set:function(v){
-    if(typeof d[attr]=='object'){
-        cd[attr].$replace(v);
-    }else{
-        if(jui.checkValue){v=jui.checkValue(v);}
-        d[attr]=v;
-    }
-    _jet._tools._calls[attr]._func.forEach(function(f){
-        f(attr,v);
-    });
-  },
-});
+  Object.defineProperty(jui,jattr,{
+    get:function(){
+      return d[attr]
+    },
+    set:function(v){
+      if(typeof d[attr]=='object'){
+          cd[attr].$replace(v);
+      }else{
+          if(jui.checkValue){v=jui.checkValue(v);}
+          d[attr]=v;
+      }
+      _jet._tools._calls[attr]._func.forEach(function(f){
+          f(attr,v);
+      });
+    },
+  });
 }
 function getValueTxt(item){
   if(item.hasClass(JUI.RADIO._name)){
@@ -5230,33 +4361,31 @@ JUI.SLIDER=function(opt){
       get:function(){
           return _this._value;
       },set:function(v){
-          _this._value=v;
-          if(_this._value<_this.min)_this._value=_this.min;
-          if(_this._value>_this.max)_this._value=_this.max;
+          _this._value=_this.checkValue(v);
           _this.onchange();
       }
   });
   this.init();
 };
 JUI.SLIDER.prototype=_createEmpty();
+JUI.SLIDER.prototype.checkValue=function(v){
+  if(v<this.min)v=this.min;
+  if(v>this.max)v=this.max;
+  return v;
+}
 JUI.SLIDER.prototype.init=function(){
   var _jui=this;
   var item=this.ele;
   if(item.hasAttr('min'))_jui.min=parseFloat(item.attr('min'));
   if(item.hasAttr('max'))_jui.max=parseFloat(item.attr('max'));
-  
-  if(item.hasAttr('width')){
-      var w=item.attr('width');
-      if(!w.has('%')&&!w.has('px')){
-          w=w+'px';
-      }
-      item.css('width',w);
-  }
+  _formatWidthAttr(item);
   var pw=item.wid();
   var bar=$J.ct('div.j-slider-bar');
   var c=$J.ct('div.j-slider-c');
   item.append(bar.append(c));
   var func=function(e){
+      if(_isDisabled(item))
+        return
       var o=item.getBoundingClientRect();
       var w=e.clientX-o.left;
       if(w>pw){w=pw;}
@@ -5279,8 +4408,7 @@ JUI.SLIDER.prototype.init=function(){
       }
   }
   if(item.hasAttr('value'))_jui._value=parseFloat(item.attr('value'));
-  if(_jui._value<_jui.min)_jui._value=_jui.min;
-  if(_jui._value>_jui.max)_jui._value=_jui.max;
+  _jui._value=_jui.checkValue(_jui._value);
   _jui.onchange();
   item.onclick=func;
   c.onmousedown=function(){
@@ -5316,6 +4444,15 @@ JUI.SLIDER.init=function(item){
     }
   });
 };
+function _formatWidthAttr(item){
+  if(item.hasAttr('width')){
+    var w=item.attr('width');
+    if(parseFloat(w).toString()==w){
+        w=w+'px';
+    }
+    item.css('width',w);
+  }
+}
 /*SCREEN_DRAG********************************** */
 JUI.SCREEN_DRAG=function(opt){
   this.ele=opt.ele;
@@ -6355,4 +5492,76 @@ function _getButton(a,jui){
     return html;
   }
 
-//})()
+  JUI.BTN={
+    _name:'j-btn',
+    init:function(item){
+      getEleList(item,JUI.BTN._name).each(function(item){
+        if(item.hasAttr('icon')){
+          item.html('<i class="j-icon icon-'+item.attr('icon')+'"></i>'+item.html());
+          item.removeAttr('icon')
+        }
+      });
+    }
+  }
+  
+/*PROGRESS**********************************************************/
+JUI.PROGRESS=function(opt){
+  this.ele=opt.ele||null;
+  this._value=opt.value||false;
+  this.onchange=opt.onchange||function(){};
+  this.value=opt.value||'';
+  var _this=this;
+  Object.defineProperty(_this,'value',{
+      configurable:true,
+      get:function(){
+          return _this._value;
+      },set:function(v){
+          _this._value=v;
+          if(_this._value<0)_this._value=0;
+          if(_this._value>100)_this._value=100;
+          _this.onchange();
+      }
+  });
+  this.init();
+};
+JUI.PROGRESS.prototype=_createEmpty();
+JUI.PROGRESS.prototype.init=function(){
+  var _jui=this;
+  var item=this.ele;
+  _formatWidthAttr(item);
+  var pw=item.wid();
+  var bar=$J.ct('div.j-progress-bar');
+  item.append(bar);
+  _jui.onchange=function(){
+      _jui.rate=(_jui.value)/(100);
+      bar.css('width',(_jui.rate*100)+'%');
+      item.attr('value',_jui._value);
+      if(_jui._onchange){
+          var __t=_jui.jet||_jui;
+          _jui._onchange.call(__t,{
+              ele:item,
+              value:_jui._value,
+              jui:_jui
+          })
+      }
+  }
+  if(item.hasAttr('value'))_jui._value=parseFloat(item.attr('value'));
+  _jui._value=_jui.checkValue(_jui._value);
+  _jui.onchange();
+  item.attr('value',this._value);
+  item.$jui=_jui;
+};JUI.PROGRESS.prototype.checkValue=function(v){
+  if(v<0)v=0;
+  if(v>100)v=100;
+  return v;
+}
+JUI.PROGRESS._name='j-progress';
+JUI.PROGRESS.init=function(item){
+  getEleList(item,this._name).each(function(item){
+    if(!item._hasInitJui){
+      item._hasInitJui=true;
+      new JUI.PROGRESS({ele:item});
+    }
+  });
+};
+})()

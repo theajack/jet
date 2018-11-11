@@ -330,3 +330,65 @@ __dynamic.js:31 onrouted
 //    jstyle等元素来使用函数 $r.func({{$.score}})，text元素可以使用立即执行函数或this.func来使用函数
 //  jui-date 添加选择今日按钮
 //  现在jload不一定非要设置jpar属性，会将其所在的页面的Jet元素作为其父元素
+
+7-10 （*重要）将jcode融入了JUI ,新增了索引和点击某行高亮；jui-code-line 用于是否显示索引默认为true
+ 新增了jui-onload属性
+7-5:路由新增use参数新增oninit 用于在路由化之后调用，一般可以用来加载模块  
+
+//---表示与开发者无关
+10-30
+ 修复表达式中出现 小于大于号时会出错的bug
+ 增加JUI中button 的 icon 属性
+ ---现在，就算没有声明Jet的name参数，也会为Jet对象默认指定一个name
+10-31
+ 整理删除JUI中的冗余代码
+11-1
+ 子组件添加name属性，用于指定 子组件中的 name参数
+
+ 
+ * 11-3
+ * (*重要) 新增 jet tool(attr style if show) 中支持 $index 和 $index() 获取 索引
+ * 使用 $index() 来替换 $.$p().$index
+ * (*重要) 新增父子组件通信 传值  三种方式  
+ *      :name='' 可以是父元素中的data或是一个js表达式 
+ *      ::name='' 同上 不同的是会将数据做一个深拷贝而不是直接引用
+ *      @func='' 可以是父元素中的func或是一个js表达式 
+        当时js表达式时，需要使用 {} 包裹起来，否则会当成一个字符串处理 
+        在js表达式中 this指代父元素，有两个参数 $和opt ，$指代作用域内的数据，opt指代如下
+ *      opt={
+          data:指代作用域内的数据,
+          ele:指代当前dom元素,
+          jet:指代父Jet元素,
+          root:指代根Jet元素
+        }
+        在子元素中使用 this.$props对象就可以获取到父元素给子元素传递的数据。
+        也可以使用 属性J 绑定 $props 中的数据
+        由于属性不支持大写，所以以 - 来代替大写，比如 user-info 会被Jet翻译成 userInfo
+    _JT_replaceAll 支持数组传参
+    新增 media 目录
+    新增 Jet.router.url 属性
+    新增资源管理 Jet.res.define   Jet.res.getSrc  @
+    ---Jet.load.__loadStore   
+    ---在load.init 回调中 init router
+    ---现在 Jet组件都会有严格的父子组件关系、对应的ele 和 name（如没有定义就按照Jet规则默认命名）
+    ---只存在一个默认绑定HTML标签的根root组件
+  11-4
+  新增生命周期 beforeInitWait
+  新增 Jet.router.activeRouter 重新激活active router link，用于一些后加载的组件中的router-link的激活
+  新增 新增 Jet.prototype.$module
+
+  api jrouter&jout 新增jrouter-active说明
+
+  11-6 
+  router onroute onrouted 新增一个bool参数，表示是初始化加载还是 页面无刷新的路由跳转
+  route() 增加第二个参数 ，为路由跳转完成的回调函数
+  11-7 jui 新增 progress，并且slider和progress都支持了颜色、大小，slider支持了disabled
+
+
+
+
+  
+  需修改 css scope 属性
+  需新增 组件销毁的生命周期
+  需拆分 Jet，使用Jet.$use() 按需加载 ['router','lang','module','css-config','jui','valid'] 
+*/

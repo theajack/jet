@@ -59,12 +59,6 @@
         </div>
     </div>
     <script>
-        Jet.global.setLink({
-            last:'Jet语法',
-            lastUrl:'/intro/grammer',
-            next:'关于',
-            nextUrl:'/intro/about',
-        });
         new Jet({
             name:'api',
             onmounted:function(){
@@ -103,7 +97,7 @@
             },
             func:{
                 jump:function(opt){
-                    Jet.global.toQueryResult(opt)
+                    Jet.$root.toQueryResult(opt)
                 }
             }
         })

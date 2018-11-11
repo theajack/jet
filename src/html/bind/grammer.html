@@ -173,15 +173,15 @@
         $index 指的是数组元素的索引，从0到n。a.概述中的例子中已经可以体现出，这里就不再另举例
     </div>
     <div class='text'>
-        这里说一下多层嵌套的时候如何获取父元素或者父元素的父元素的索引，Jet使用 <span class='red'>$.$p(n).$index</span> 来获取父元素的索引。
-        这里的(n)是第几层父元素，可以不要，不要就是直系的第一个父元素。$.$p.$index等价于$.$p(1).$index，$.$p.$p.$index等价于$.$p(2).$index等等。请看一个例子：
+        这里说一下多层嵌套的时候如何获取父元素或者父元素的父元素的索引，Jet使用 <span class='red'>$index(n)</span> 来获取父元素的索引。
+        这里的(n)是第几层父元素，可以不要，不要参数默认 n=1，表示直系的第一个父元素。请看一个例子：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;div j='arrays'>
     &lt;div j='$each' class='a1'>
         &lt;div j='$each' class='a2'>
             &lt;div j='$each' class='a3'>
-                &lt;span j='$.$p(2).$index'>&lt;/span>-&lt;span j='$.$p.$index'>&lt;/span>-&lt;span j='$index'>&lt;/span>:
+                &lt;span j='$index(2)'>&lt;/span>-&lt;span j='$index()'>&lt;/span>-&lt;span j='$index'>&lt;/span>:
                 &lt;span j='$value'>&lt;/span>
             &lt;/div>
         &lt;/div>
@@ -211,7 +211,7 @@
                 <div j='$each' class='a1'>
                     <div j='$each' class='a2'>
                         <div j='$each' class='a3'>
-                            <span j='$.$p(2).$index'></span>-<span j='$.$p.$index'></span>-<span j='$index'></span>:
+                            <span j='$index(2)'></span>-<span j='$index()'></span>-<span j='$index'></span>:
                             <span j='$value'></span>
                         </div>
                     </div>
@@ -245,9 +245,19 @@
             </div>
         </div> -->
     </div>
+    
+    <div class='text'>
+        在jtool元素中（jif，jshow，jattr，jstyle）中也可以使用$index，使用方法如下：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;div j='array'>
+    &lt;div jattr='name:{{$index}}'>&lt;/div>
+&lt;/div>
+    </div>
+
     <div class='title' jump-des='for-$value'>d.$value</div>
     <div class='text'>
-        $value 的使用场景当 for 数组中的元素是指类型。因为值类型没有键可供属性j来使用。举一个例子
+        $value 的使用场景当 for 数组中的元素是值类型。因为值类型没有键可供属性j来使用。举一个例子
     </div>
 
     <div class='j-code' disabled width='99%' height='auto'>
@@ -272,7 +282,7 @@
     </div>
     <div class='title' jump-des='for-inline'>e.属性 jfor-inline</div>
     <div class='text'>
-        因为会对 for 元素的所有孩子默认加上一个 each 包裹，所以可能会产生一个开发者不希望看到的块状元素，但是使用 jfor-inline 可以是 each 为一个行内元素。
+        因为会对 for 元素的所有孩子默认加上一个 each 包裹，所以可能会产生一个开发者不希望看到的块状元素，但是使用 jfor-inline 可以使 each 为一个行内元素。
         这种效果也可以通过主动使用 一个 行内元素的 each来实现。请看一个例子：
     </div>
     <!--  buttons='fontsizeup;fontsizedown;fullscreen;fix' -->
@@ -410,12 +420,6 @@
     </div>
 </div>
 <script>
-    Jet.global.setLink({
-        last:'绑定的分类',
-        lastUrl:'/bind/type',
-        next:'数组方法',
-        nextUrl:'/bind/array',
-    });
     new Jet({
         data:{//数据
             user:{

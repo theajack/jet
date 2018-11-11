@@ -22,9 +22,9 @@
         word-wrap: break-word;
     }
 </style>
-<div class='title'>在线使用Jet <button class='j-btn f-right back' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i> 返回</button></div>
+<div class='title'>在线使用Jet <button class='j-btn f-right back' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i>返回</button></div>
 <div class='text clearfix'>    
-    <button class='j-btn f-left' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i> 返回</button>
+    <button class='j-btn f-left' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i>返回</button>
     <div class='switch-w'>
         <span class='code-text'>编辑</span>
         <div class="j-switch" jui-bind='codeBool' jui-change='changeMode'>
@@ -46,7 +46,7 @@
         <div jdom='result' class='text result tm'>
         </div>
         <div>console:(按住ctrl+enter运行代码)</div>
-        <button class="j-btn m" jon='runConsole'><i class="j-icon icon-share-sign"></i> 运行</button>
+        <button class="j-btn m" jon='runConsole'><i class="j-icon icon-share-sign"></i>运行</button>
         <div class='j-code' jdom='console' jui-bind='consoleCode' width='99%' height='auto'>
         </div>
         <div j='res'></div>
@@ -54,10 +54,6 @@
 </div>
 <script>
     
-Jet.global.setLink({
-    last:'tab',
-    lastUrl:'/jui/tab'
-});
 new Jet({
     name:'test',
     onrouted:function(){
@@ -65,6 +61,7 @@ new Jet({
     onmounted:function(){
         //this.code=aa.html();
         this.initKeyDown(this.$dom.console);
+        //<div jif='{{$.age}}<18:text[未成年|成年人]'></div>\n\
     },
     data:{
         codeBool:false,
@@ -75,7 +72,7 @@ new Jet({
     <div j='user'>\n\
     <div j=name>'姓名:'+$</div>\n\
     <div>年龄:<input j='age' type='text' class='j-input' jon='input:console.log(this.user.age)'/></div>\n\
-    <div jif='{{$.age}}<18:text[未成年|成年人]'></div>\n\
+    <div j='age'>($<18)?'未成年':'成年人'</div>\n\
 </div>\n\
 <script>\n\
     new Jet({\n\
@@ -120,10 +117,10 @@ new Jet({
                 this.$init();
             }
         },loadCode:function(){
-            if(typeof Jet.global._code!=='undefined'){
-                this.code=Jet.global._code
-                //this.$jui('code').txt(Jet.global._code)
-                Jet.global._code=undefined;
+            if(typeof Jet.$root._code!=='undefined'){
+                this.code=Jet.$root._code
+                //this.$jui('code').txt(Jet.$root._code)
+                Jet.$root._code=undefined;
                 this.back=true;
             }
         },initKeyDown:function(jdom){

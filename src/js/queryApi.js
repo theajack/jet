@@ -50,18 +50,26 @@ Jet.$define('Query',function(){
         intro:'用于父组件与子组件的状态共享',
         des:'par'
     },{
+        name:'Jet生命周期',
+        url:'/intro/life',
+        intro:'Jet 有8个生命周期函数',
+    },{
         name:'ondatachange',
-        url:'/intro/grammer',
-        intro:'ondatachange 属性用于为Jet数据添加一个数据变化的监听事件',
+        url:'/intro/life',
+        intro:'为Jet数据添加一个数据变化的监听事件',
         des:'ondatachange'
     },{
-        name:'生命周期函数',
-        url:'/intro/grammer',
-        intro:'Jet 有7个生命周期函数',
-        des:'life'
+        name:'beforeinitawait',
+        url:'/intro/life',
+        intro:'用于在渲染之前保证一些异步操作执行完毕',
+        des:'beforeinitawait'
+    },{
+        name:'资源管理',
+        url:'/intro/res',
+        intro:'Jet.res.define()：统一定义资源文件',
     },{
         name:'api目录',
-        url:'/intro/about',
+        url:'/intro/api',
         intro:'api汇总',
     },{
         name:'关于',
@@ -77,7 +85,7 @@ Jet.$define('Query',function(){
         url:'/bind',
         intro:'Jet中的UI是由数据驱动，所有动态的html内容都与Jet的数据绑定，当数据改变时，对应的UI内容会自动更新',
     },{
-        name:'属性J',
+        name:'绑定(属性J)',
         url:'/bind/j',
         intro:'Jet中使用属性J将Jet中的数据和UI绑定',
         des:''
@@ -100,6 +108,31 @@ Jet.$define('Query',function(){
         url:'/bind/grammer',
         intro:'当绑定的数据是数组时，就会使用 new Jet.For() 生成一个for类型的Jet元素。',
         des:'for'
+    },{
+        name:'$each',
+        url:'/bind/grammer',
+        intro:'$each 是与数组中的每一个数组元素对应。',
+        des:'for-$each'
+    },{
+        name:'for-switch',
+        url:'/bind/grammer',
+        intro:'for 中根据不同的数据来使用不同的html内容。',
+        des:'for-$each'
+    },{
+        name:'$index',
+        url:'/bind/grammer',
+        intro:'$index 指的是数组元素的索引，也可用于多层嵌套。',
+        des:'for-$index'
+    },{
+        name:'$value',
+        url:'/bind/grammer',
+        intro:'$value 的使用场景当 for 数组中的元素是指类型。',
+        des:'for-$value'
+    },{
+        name:'for-inline',
+        url:'/bind/grammer',
+        intro:'使用 jfor-inline 可以使 each 为一个行内元素。',
+        des:'for-inline'
     },{
         name:'text',
         url:'/bind/grammer',
@@ -185,40 +218,45 @@ Jet.$define('Query',function(){
         intro:'使用父元素的数据',
         des:'parData'
     },{
-        name:'jif',
+        name:'jif:条件判断',
         url:'/attr/if',
         intro:'可以根据给定的布尔值或布尔表达式的结果对元素进行两种不同的操作',
     },{
-        name:'jshow',
+        name:'jshow:选择展示',
         url:'/attr/show',
         intro:'可以根据一个布尔值或者布尔表达式来显示或者隐藏绑定的html元素',
     },{
-        name:'jattr',
+        name:'jattr:绑定属性',
         url:'/attr/attr',
         intro:'可以给html元素绑定属性',
     },{
-        name:'Jstyle',
+        name:'jstyle:绑定样式',
         url:'/attr/style',
         intro:'可以给html元素绑定样式',
     },{
-        name:'Jrun',
+        name:'jrun:执行回调',
         url:'/attr/run',
         intro:'可以给html元素添加一个或者多个加载之后的回调函数',
     },{
-        name:'Jon',
+        name:'jon:绑定事件',
         url:'/attr/on',
         intro:'可以给html元素添加一个加载之后的回调函数',
     },{
-        name:'Jload',
+        name:'jload:组件',
         url:'/attr/load',
-        intro:'可以在某个元素之内加载其他的html模板',
+        intro:'可以在某个元素之内加载其他组件',
     },{
+        name:'父子组件通信',
+        url:'/attr/load',
+        intro:'介绍Jet中父子组件通信方式',
+        des:'par-child'
+    },,{
         name:'Jpar',
         url:'/attr/load',
         intro:'设置子组件中Jet元素的父元素',
         des:'jpar'
     },{
-        name:'Jroot',
+        name:'jroot:根数据',
         url:'/attr/root',
         intro:'可以将html元素绑定到Jet根元素上',
     },{
@@ -227,11 +265,11 @@ Jet.$define('Query',function(){
         intro:'使用 $r 来调用Jet数据',
         des:'r'
     },{
-        name:'Jdom',
+        name:'jdom:操作DOM',
         url:'/attr/dom',
         intro:'生成一个可以使用Jet特殊语法操作的类dom元素',
     },{
-        name:'Jhtml',
+        name:'jhtml:渲染HTML',
         url:'/attr/html',
         intro:'将绑定的内容设置成为innerHTML',
     },{
@@ -388,6 +426,10 @@ Jet.$define('Query',function(){
         url:'/router/route',
         intro:'使用代码进行路由跳转',
     },{
+        name:'Jet.router中的方法',
+        url:'/router/func',
+        intro:'介绍Jet.router中的其他一些方法',
+    },{
         name:'路由属性',
         url:'/router/prop',
         intro:'许多与路由相关的属性',
@@ -412,8 +454,8 @@ Jet.$define('Query',function(){
         url:'/module/module',
         intro:'已引入的模块集合',
     },{
-        name:'$use',
-        url:'/module/use',
+        name:'$get',
+        url:'/module/get',
         intro:'使用模块',
     },{
         name:'css配置文件',
@@ -487,6 +529,11 @@ Jet.$define('Query',function(){
         intro:'在JUI组件绑定完成时触发一个事件',
         des:'jui-onload'
     },{
+        name:'jui工具方法',
+        url:'/jui/',
+        intro:'扩展了Jet工具方法',
+        des:'jui-tool'
+    },{
         name:'基础样式类',
         url:'/jui/base',
         intro:'一套基础样式类',
@@ -543,6 +590,10 @@ Jet.$define('Query',function(){
         name:'滑动选择器slider',
         url:'/jui/slider',
         intro:'滑动选择器',
+    },{
+        name:'进度条progress',
+        url:'/jui/progress',
+        intro:'进度条',
     },{
         name:'提示框msg',
         url:'/jui/msg',

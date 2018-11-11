@@ -64,7 +64,7 @@ Jet.$import('module1','module2',function(modules){//使用回调函数，加载�
     </div>
     <div class='title'>2.Jet.prototype.$import</div>
     <div class='text'>
-        在 Jet元素中可以使用 this.$import()来引入模块，使用以后除了在Jet.$module中会添加对应的模块，还不在当前Jet元素的$module中会添加对应的模块。
+        在 Jet元素中可以使用 this.$import()来引入模块，使用以后除了在Jet.$module中会添加对应的模块，还会在当前Jet元素的$module中会添加对应的模块。
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
 new Jet({
@@ -103,11 +103,3 @@ Jet.$import('new(module1) as mym2','new(module2) as mym2',function(modules){
 });
     </div>
 </div>
-<script>
-    Jet.global.setLink({
-        last:'$export:输出',
-        lastUrl:'/module/export',
-        next:'$module:集合',
-        nextUrl:'/module/module',
-    });
-</script>

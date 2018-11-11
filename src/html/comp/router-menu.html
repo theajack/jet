@@ -1,0 +1,34 @@
+<!--  Jrouter='/intro' -->
+
+<div id='menuScroll' j='data'>
+    <div class="menu-item" j='$each'>
+        <div class="menu-main-item" jattr='Jrouter:{{$.url}}'>
+            <div class="menu-main-bar"></div>
+            <i class="j-icon icon-chevron-down" jif='{{$.url}}=="/code":class[hide]'></i>
+            <div class='relative' j='name'></div>
+        </div>
+        <div class='item-w' j='children'>
+            <div j='$each' class="menu-s-item" jattr='Jrouter:{{$.url}}'>
+                <div class="menu-s-bar"></div>
+                <div class='relative' j='name'></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        data: {
+            data: []
+            // {
+            //     name: '',
+            //     url: '',
+            //     children: []
+            // }
+        },
+        onmounted: function () {
+            this.data = Jet.$module.Content.getContents();
+            Jet.$module.Scroll.bindShowMenu();
+        },
+    })
+
+</script>

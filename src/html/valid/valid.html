@@ -46,12 +46,6 @@
     上述的规则中 除了null 其他都只能单独使用，null可以和其他任何规则共同使用，表示可以为空或者符合验证的规则。当与notnull共同使用时会忽略null。
 </div>
 <script>
-    Jet.global.setLink({
-        last:'表单验证',
-        lastUrl:'/valid',
-        next:'Jform',
-        nextUrl:'/valid/form',
-    });
     new Jet({
         onmounted:function(){
             Jet.valid.useDefaultStyle=true;

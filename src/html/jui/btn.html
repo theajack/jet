@@ -35,27 +35,36 @@
         <button class="j-btn info l">次大</button>
         <button class="j-btn danger xl">最大</button>
     </div>
-    <div class='text'>3.带图标的按钮：</div>
+    <div class='text'>3.带图标的按钮：<span class='link' jon='jump' data-route='/jui/icon'>(icon列表<i class="icon icon-double-angle-right"></i>)</span></div>
     <div class='j-code' disabled width='99%' height='auto'>
-<button class="j-btn normal xs"><i class='j-icon icon-pencil'></i> 普通</button>
-<button class="j-btn success s"><i class='j-icon icon-time'></i> 成功</button>
-<button class="j-btn warn m"><i class='j-icon icon-unlock-alt'></i> 警告</button>
-<button class="j-btn info l"><i class='j-icon icon-heart'></i> 点赞</button>
-<button class="j-btn danger xl"><i class='j-icon icon-trash'></i> 删除</button>
+<button class="j-btn normal xs" icon="pencil">普通</button>
+<button class="j-btn success s" icon="time">成功</button>
+<button class="j-btn warn m" icon="unlock-alt">警告</button>
+<button class="j-btn info l" icon="heart">点赞</button>
+<button class="j-btn danger xl" icon="trash">删除</button><br>
+<button class="j-btn"><i class='j-icon icon-resize'></i>使用 i 标签</button>
+<!--j-btn 下的按钮有margin-left，如果想只使用图标作为按钮，可以使用 icon-mn 类来修饰-->
+<button class="j-btn"><i class='j-icon icon-pie-chart icon-mn'></i></button>
+<button class="j-btn icon-mn" icon='camera'></button>
     </div>
     <div class="out">
-        <button class="j-btn normal xs"><i class='j-icon icon-pencil'></i> 普通</button>
-        <button class="j-btn success s"><i class='j-icon icon-time'></i> 成功</button>
-        <button class="j-btn warn m"><i class='j-icon icon-unlock-alt'></i> 警告</button>
-        <button class="j-btn info l"><i class='j-icon icon-heart'></i> 点赞</button>
-        <button class="j-btn danger xl"><i class='j-icon icon-trash'></i> 删除</button>
+        <button class="j-btn normal xs" icon="pencil">普通</button>
+        <button class="j-btn success s" icon="time">成功</button>
+        <button class="j-btn warn m" icon="unlock-alt">警告</button>
+        <button class="j-btn info l" icon="heart">点赞</button>
+        <button class="j-btn danger xl" icon="trash">删除</button><br>
+        <button class="j-btn"><i class='j-icon icon-resize'></i>使用 i 标签</button>
+        <!--j-btn 下的按钮有margin-left，如果想只使用图标作为按钮，可以使用 icon-mn 类来修饰-->
+        <button class="j-btn"><i class='j-icon icon-pie-chart icon-mn'></i></button>
+        <button class="j-btn icon-mn" icon='camera'></button>
     </div>
 </div>
 <script>
-    Jet.global.setLink({
-        last:'栅格',
-        lastUrl:'/jui/grid',
-        next:'输入框',
-        nextUrl:'/jui/input',
-    });
+    new Jet({
+        func:{
+            jump:function(opt){
+                Jet.router.route(opt.ele.attr('data-route'))
+            }
+        }
+    })
 </script>

@@ -37,8 +37,8 @@
 <div class='sub'>
     <div class='text'>
         <div>
-            <img class='pay' src="alipay.jpg" alt="">
-            <img class='pay' src="wechatpay.jpg" alt="">
+            <img class='pay' src="@alipay" alt="">
+            <img class='pay' src="@wechatpay" alt="">
         </div>
         <div class=''>
             Jet 是由个人开发维护的一款框架,
@@ -49,17 +49,11 @@
     </div>
 </div>
 <script>
-    Jet.global.setLink({
-        last:'api目录',
-        lastUrl:'/intro/api',
-        next:'数据绑定',
-        nextUrl:'/bind',
-    });
     new Jet({
         data:{
             info:{
                 img:'',
-                wechat:'wechat.png',
+                wechat:'@wechat',
                 author:'theajack',
                 version:'1.0',
                 date:'2018/3/15',

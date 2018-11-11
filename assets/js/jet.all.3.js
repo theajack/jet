@@ -1,129 +1,188 @@
-//加入 jattr jstyle jroot
-//bug: 对于数组，若是没有绑定元素，则无法使用$push等方法
-//      对于数组，直接对数组赋值，ui不会改变
-//jui checkbox 由于以上两点bug 很难完成
-//jui select 对绑定的选项进行$push 或其他操作，ui不变
+/***** 
+加入 jattr jstyle jroot
+bug: 对于数组，若是没有绑定元素，则无法使用$push等方法
+     对于数组，直接对数组赋值，ui不会改变
+jui checkbox 由于以上两点bug 很难完成
+jui select 对绑定的选项进行$push 或其他操作，ui不变
 
 
-//暂不支持路由的嵌套
-//暂不支持动态添加元素的渲染 已通过init解决
-//暂不支持jrepeat 重复单个元素
-//jdom获取样式有待改进
-//jif jshow jattr jstyle 数组中不支持index
-//jimg 的想法 已通过js修改图片的src解决
+暂不支持路由的嵌套
+暂不支持动态添加元素的渲染 已通过init解决
+暂不支持jrepeat 重复单个元素
+jdom获取样式有待改进
+jif jshow jattr jstyle 数组中不支持index
+jimg 的想法 已通过js修改图片的src解决
 
-//2018
-//1-25 修复了一个for的bug 没有包裹each时，元素的孩子和文字顺序会混乱
-//2-1 新增了ondatachange；修复了 jif中attr的不能正确移除属性的bug
-//2-3 新增jdom 
-//2-5 jrun jon 支持多个函数，支持js代码，jon支持绑定多个事件
-//2-6 jload 修复了子模版使用父模版元素的bug
-//2-6 可以越过作用域一级一级向上查找属性，不会直接报错
-//2-7 新增jhtml属性, text元素设置html值
-//2-7 新增$makeChange方法，手动触发某值改变的回调函数
-//2-8 发现并修复空值不会渲染的bug
-//2-9 修复多层循环 使用 $.$par.$index 的bug
+2018
+1-25 修复了一个for的bug 没有包裹each时，元素的孩子和文字顺序会混乱
+2-1 新增了ondatachange；修复了 jif中attr的不能正确移除属性的bug
+2-3 新增jdom 
+2-5 jrun jon 支持多个函数，支持js代码，jon支持绑定多个事件
+2-6 jload 修复了子模版使用父模版元素的bug
+2-6 可以越过作用域一级一级向上查找属性，不会直接报错
+2-7 新增jhtml属性, text元素设置html值
+2-7 新增$makeChange方法，手动触发某值改变的回调函数
+2-8 发现并修复空值不会渲染的bug
+2-9 修复多层循环 使用 $.$par.$index 的bug
 
-//修复bug：jetterjs 验证express 不会显示正确的错误提示
-//修复bug：jetterjs 验证decimal ->float
+修复bug：jetterjs 验证express 不会显示正确的错误提示
+修复bug：jetterjs 验证decimal ->float
 
-//Jet新增 $jui()
+Jet新增 $jui()
 
-//18-3-20:
-// 路由配置 默认与名称一样
-// 新增 css.conf 文件 可以设置css变量和函数 设置路由模板的公共样式
-// Jet.$route Jet.$route.back Jet.$route.forward
-//valid 可以设置 useJUI
-//$remove 支持元素
-//18-3-21
-//新增jui page tab
-//18 3-22
-//修复一个ie上的hash模式时的页面不会正确加载的bug
-//3-23 新增了 $r 获取根元素数据，修改了get方法
-//JUI msg新增 hover参数 默认为true 鼠标移上时不会自动消失
+18-3-20:
+路由配置 默认与名称一样
+新增 css.conf 文件 可以设置css变量和函数 设置路由模板的公共样式
+Jet.$route Jet.$route.back Jet.$route.forward
+valid 可以设置 useJUI
+$remove 支持元素
+18-3-21
+新增jui page tab
+18 3-22
+修复一个ie上的hash模式时的页面不会正确加载的bug
+3-23 新增了 $r 获取根元素数据，修改了get方法
+JUI msg新增 hover参数 默认为true 鼠标移上时不会自动消失
 
-//18 3-27 完善了ajax $ajax $ajax.get $ajax.post 
-//j-icon font-size 初始值为 inherit
-// 修复了 for 的关于索引的 bug 
-// for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代替其所绑定的数据 ,对数组操作进行了完善
+18 3-27 完善了ajax $ajax $ajax.get $ajax.post 
+j-icon font-size 初始值为 inherit
+修复了 for 的关于索引的 bug 
+for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代替其所绑定的数据 ,对数组操作进行了完善
 
-/*3-28 修复了jload和路由组件模式下 JUI绑定的bug 现在如果jui-bind的属性不在当前Jet元素的数据中，则会在子Jet元素中寻找，如果都没有则会忽略掉
-  子页面的Jet最好使用 ele:jdom 指定Jet绑定的html元素，这样可以很好地解决子页面与父页面和子页面与子页面之间的命名冲突的问题
-  增加了Jet name属性，用于生成一个在Jet.$ele 中的以 name属性命名的 Jet元素变量
-*/
-//3-30 jattr和jstyle添加 $r 的支持
-//3-31 新增Jet.valid.useOnInput
-/*4-2 新增 Jet.prototype.$init 对动态添加的元素 初始化
+3-28 修复了jload和路由组件模式下 JUI绑定的bug 现在如果jui-bind的属性不在当前Jet元素的数据中，则会在子Jet元素中寻找，如果都没有则会忽略掉
+子页面的Jet最好使用 ele:jdom 指定Jet绑定的html元素，这样可以很好地解决子页面与父页面和子页面与子页面之间的命名冲突的问题
+ 增加了Jet name属性，用于生成一个在Jet.$ele 中的以 name属性命名的 Jet元素变量
+
+3-30 jattr和jstyle添加 $r 的支持
+3-31 新增Jet.valid.useOnInput
+4-2 新增 Jet.prototype.$init 对动态添加的元素 初始化
   新增 Jet.prototype.$cookie 操作cookie
   新增 Jet.prototype.$storage 操作localStorage
   修复了 input类型元素 绑定的是数字 后可能会导致的类型紊乱的错误
   修复了 input类型元素输入焦点会到最后面的bug
+
+4-4 修复了 数组元素的国际化 bug
+国际化现在可以包含一个json或者数组，而不只是一个值类型
+
+4-19 JUI 新增 j-drag
+4-23 修复：数组的方法不会触发数组的监听回掉，现在使用数组的长度的绑定会被正确刷新
+4-24 新增 $define，$export，$get,$import，$module，，as 关键字
+4-24 新增css scoped 属性，默认值为true;
+    新增 JUI.dialog.isOpen clear ; 新增JUI.confirm.isOpen clear 
+    数组removeByIndex
+    新增 new Jet()的name 参数
+5-14 完善js模块规范
+5-15 修复css scoped的bug
+ 需要新增 index.html 文件中加载资源的介绍 目录的介绍 在路由设置tureBase=true的时候
+5-16：修复了 JUI 组件关于disabled属性的bug
+/     完成了ondatachange的嵌套，并修复了$regist 多层数组嵌套时的bug ,(a[0][0]时用出错)
+
+5-24 修复存在多个 jload 元素，JUI加载不正常的bug， 修复 j-dialog 不同页面之间切换不会移除的 bug
+    JUI.dialog.removeAll 不同组件之间切换时使用，路由切换已经写进源码
+    修复了添加或刪除数组元素时 $index不能正确改变 的bug，修复了使用JUI时for元素添加新元素时不会被渲染
+    新增 Jet 的 par 属性，用于指定父元素，父元素会有一个 $child 属性
+5-25 修复了for元素中使用radio或checkbox时添加新元素是，group不会被正确绑定的bug
+5-26 jui dialog 新增尺寸 xs s l xl full
+   新增 jpar 属性，用于指定 jload元素中的Jet 元素的父Jet元素。（这是用于当一个jload可能会对应多个父元素时的情况）
+   修复了 checkbox和radio checked的bug，
+   新增 checkbox group的selectAll 方法，用于全选；
+   新增 checkbox group的clear方法，用于清空所有选择
+   新增 radio group的clear方法，用于清空选中
+   新增 checkbox group 和 radio group的removeAll方法，用于删除所有checkbox|radio子元素
+   新增 checkbox group 和 radio group的remove方法
+5-27 新增 jui-type 属性，用于指定jui绑定数据的类型，可选值有 bool number string，默认值为string
+5-28 **新增 if,show,style,attr中绑定的 $.$par(index) 方法，可用于获取父元素数据，index 默认值为1,若是参数小于0，会用1计算，超过父元素级数会返回最上层父元素，也就是jet元素
+    bind元素不需要父元素，因为如果子元素中没有对应的属性，会自动向上查找父元素
+    在执行语句中，可以使用 Jet元素的 $parData(index) 方法获取或设置父元素的数据
+5-30 对于display none的元素 禁用了_validInput
+6-6 修复了因为修改jload.init引入的bug:jload 子组件无法引用父组件的数据
+6-20 ajax 新增header  新增支持数据为数组
+ jui msg text 支持 数字类型
+ 增加_hasDisabled 属性 以修复 当数组为空时 其中的Jet元素可能会报错的bug
+ 修复了 当输入框类型为password时 启用了 onchange 事件的bug
+ 待增加：jui-bind 使用父元素或根元素数据**
+6-24 j-select 组件支持 数据绑定 j-option，
+ 当j-option过多时，支持上下滚动显示
+ 修复了 j=‘’ 绑定数据且其数据处于上级作用域的元素，其子元素不会使用于其相同的作用域的bug 
+ （*重要）现在可以对绑定数据的数组 使用 = 号直接赋值 ，不必使用 $replace; 也对json进行了优化，现在都可以使用 = 直接赋值
+ 6-26
+   修复数组插入数据 ，for中的input输入会错乱的bug 
+   修改了Jetterjs 的 insertArray(使用原生splice) removeByIndex(支持第二个参数选择删除个数)
+   （*重要）修改了原生数组操作方法(push,pop,splice,shift,unshift,reverse,sort)，现在可以使用原生数组操作来操作Jet的绑定数组
+   新增delay 和 interval 用于解决由于异步加载导致的依赖项未加载完成的情况，设置一个延迟或循环 获取依赖项
+6-27 text 元素中func 可以使用opt参数
+   dialog.reinitPos
+   修改了 jet数据的 defineJson 的方法 现在json使用等于直接赋值可以触发绑定。（目前设定的是Jet数据中没有属性，不会被赋值到Jet数据中）
+   JUI message 和 confirm 新增 html 属性
+   （*重要）JUI date 新增 jui-date-time=true 支持选择24进制的时间
+   （*重要）JUI date 新增 jui-date-detail=true hover可以显示农历和节日节气等信息
+   JUI date 新增 jui-date-max 和 jui-date-min
+6-30    JUI dialog noclose nodrag 属性
+   Jet run现在会在渲染数据完成之后触发 ；jload jonload属性
+7-3     修复了当input没有type属性时 绑定无效的bug; 修复了Date日期选择器当日期或月份是个位数时导致日期紊乱的bug
+   jstyle等元素来使用函数 $r.func({{$.score}})，text元素可以使用立即执行函数或this.func来使用函数
+ jui-date 添加选择今日按钮
+ 现在jload不一定非要设置jpar属性，会将其所在的页面的Jet元素作为其父元素
+7-10 （*重要）将jcode融入了JUI ,新增了索引和点击某行高亮；jui-code-line 用于是否显示索引默认为true
+ 新增了jui-onload属性
+7-5:路由新增use参数新增oninit 用于在路由化之后调用，一般可以用来加载模块  
+
+//---表示与开发者无关
+10-30
+ 修复表达式中出现 小于大于号时会出错的bug
+ 增加JUI中button 的 icon 属性
+ ---现在，就算没有声明Jet的name参数，也会为Jet对象默认指定一个name
+10-31
+ 整理删除JUI中的冗余代码
+11-1
+ 子组件添加name属性，用于指定 子组件中的 name参数
+
+ 
+ * 11-3
+ * (*重要) 新增 jet tool(attr style if show) 中支持 $index 和 $index() 获取 索引
+ * 使用 $index() 来替换 $.$p().$index
+ * (*重要) 新增父子组件通信 传值  三种方式  
+ *      :name='' 可以是父元素中的data或是一个js表达式 
+ *      ::name='' 同上 不同的是会将数据做一个深拷贝而不是直接引用
+ *      @func='' 可以是父元素中的func或是一个js表达式 
+        当时js表达式时，需要使用 {} 包裹起来，否则会当成一个字符串处理 
+        在js表达式中 this指代父元素，有两个参数 $和opt ，$指代作用域内的数据，opt指代如下
+ *      opt={
+          data:指代作用域内的数据,
+          ele:指代当前dom元素,
+          jet:指代父Jet元素,
+          root:指代根Jet元素
+        }
+        在子元素中使用 this.$props对象就可以获取到父元素给子元素传递的数据。
+        也可以使用 属性J 绑定 $props 中的数据
+        由于属性不支持大写，所以以 - 来代替大写，比如 user-info 会被Jet翻译成 userInfo
+    _JT_replaceAll 支持数组传参
+    新增 media 目录
+    新增 Jet.router.url 属性
+    新增资源管理 Jet.res.define   Jet.res.getSrc  @
+    ---Jet.load.__loadStore   
+    ---在load.init 回调中 init router
+    ---现在 Jet组件都会有严格的父子组件关系、对应的ele 和 name（如没有定义就按照Jet规则默认命名）
+    ---只存在一个默认绑定HTML标签的根root组件
+  11-4
+  新增生命周期 beforeInitWait
+  新增 Jet.router.activeRouter 重新激活active router link，用于一些后加载的组件中的router-link的激活
+  新增 新增 Jet.prototype.$module
+
+  api jrouter&jout 新增jrouter-active说明
+
+  11-6 
+  router onroute onrouted 新增一个bool参数，表示是初始化加载还是 页面无刷新的路由跳转
+  route() 增加第二个参数 ，为路由跳转完成的回调函数
+  11-7 jui 新增 progress，并且slider和progress都支持了颜色、大小，slider支持了disabled
+
+
+
+
+  
+  需修改 css scope 属性
+  需新增 组件销毁的生命周期
+  需拆分 Jet，使用Jet.$use() 按需加载 ['router','lang','module','css-config','jui','valid'] 
 */
-//4-4 修复了 数组元素的国际化 bug
-// 国际化现在可以包含一个json或者数组，而不只是一个值类型
-
-//4-19 JUI 新增 j-drag
-//4-23 修复：数组的方法不会触发数组的监听回掉，现在使用数组的长度的绑定会被正确刷新
-//4-24 新增 $define，$export，$use，$import，$module，，as 关键字
-//4-24 新增css scoped 属性，默认值为true;
-//     新增 JUI.dialog.isOpen clear ; 新增JUI.confirm.isOpen clear 
-//     数组removeByIndex
-//     新增 new Jet()的name 参数
-//5-14 完善js模块规范
-//5-15 修复css scoped的bug
-//  需要新增 index.html 文件中加载资源的介绍 目录的介绍 在路由设置tureBase=true的时候
-//5-16：修复了 JUI 组件关于disabled属性的bug
-///     完成了ondatachange的嵌套，并修复了$regist 多层数组嵌套时的bug ,(a[0][0]时用出错)
-
-//5-24 修复存在多个 jload 元素，JUI加载不正常的bug， 修复 j-dialog 不同页面之间切换不会移除的 bug
-//     JUI.dialog.removeAll 不同组件之间切换时使用，路由切换已经写进源码
-//     修复了添加或刪除数组元素时 $index不能正确改变 的bug，修复了使用JUI时for元素添加新元素时不会被渲染
-//     新增 Jet 的 par 属性，用于指定父元素，父元素会有一个 $child 属性
-//5-25 修复了for元素中使用radio或checkbox时添加新元素是，group不会被正确绑定的bug
-//5-26 jui dialog 新增尺寸 xs s l xl full
-//    新增 jpar 属性，用于指定 jload元素中的Jet 元素的父Jet元素。（这是用于当一个jload可能会对应多个父元素时的情况）
-//    修复了 checkbox和radio checked的bug，
-//    新增 checkbox group的selectAll 方法，用于全选；
-//    新增 checkbox group的clear方法，用于清空所有选择
-//    新增 radio group的clear方法，用于清空选中
-//    新增 checkbox group 和 radio group的removeAll方法，用于删除所有checkbox|radio子元素
-//    新增 checkbox group 和 radio group的remove方法
-//5-27 新增 jui-type 属性，用于指定jui绑定数据的类型，可选值有 bool number string，默认值为string
-//5-28 **新增 if,show,style,attr中绑定的 $.$par(index) 方法，可用于获取父元素数据，index 默认值为1,若是参数小于0，会用1计算，超过父元素级数会返回最上层父元素，也就是jet元素
-//     bind元素不需要父元素，因为如果子元素中没有对应的属性，会自动向上查找父元素
-//     在执行语句中，可以使用 Jet元素的 $parData(index) 方法获取或设置父元素的数据
-//5-30 对于display none的元素 禁用了_validInput
-//6-6 修复了因为修改jload.init引入的bug:jload 子组件无法引用父组件的数据
-//6-20 ajax 新增header  新增支持数据为数组
-//  jui msg text 支持 数字类型
-//  增加_hasDisabled 属性 以修复 当数组为空时 其中的Jet元素可能会报错的bug
-//  修复了 当输入框类型为password时 启用了 onchange 事件的bug
-//  待增加：jui-bind 使用父元素或根元素数据**
-//6-24 j-select 组件支持 数据绑定 j-option，
-//  当j-option过多时，支持上下滚动显示
-//  修复了 j=‘’ 绑定数据且其数据处于上级作用域的元素，其子元素不会使用于其相同的作用域的bug 
-//  （*重要）现在可以对绑定数据的数组 使用 = 号直接赋值 ，不必使用 $replace; 也对json进行了优化，现在都可以使用 = 直接赋值
-//  6-26
-//    修复数组插入数据 ，for中的input输入会错乱的bug 
-//    修改了Jetterjs 的 insertArray(使用原生splice) removeByIndex(支持第二个参数选择删除个数)
-//    （*重要）修改了原生数组操作方法(push,pop,splice,shift,unshift,reverse,sort)，现在可以使用原生数组操作来操作Jet的绑定数组
-//    新增delay 和 interval 用于解决由于异步加载导致的依赖项未加载完成的情况，设置一个延迟或循环 获取依赖项
-// 6-27 text 元素中func 可以使用opt参数
-//    dialog.reinitPos
-//    修改了 jet数据的 defineJson 的方法 现在json使用等于直接赋值可以触发绑定。（目前设定的是Jet数据中没有属性，不会被赋值到Jet数据中）
-//    JUI message 和 confirm 新增 html 属性
-//    （*重要）JUI date 新增 jui-date-time=true 支持选择24进制的时间
-//    （*重要）JUI date 新增 jui-date-detail=true hover可以显示农历和节日节气等信息
-//    JUI date 新增 jui-date-max 和 jui-date-min
-//6-30    JUI dialog noclose nodrag 属性
-//    Jet run现在会在渲染数据完成之后触发 ；jload jonload属性
-//7-3     修复了当input没有type属性时 绑定无效的bug; 修复了Date日期选择器当日期或月份是个位数时导致日期紊乱的bug
-//    jstyle等元素来使用函数 $r.func({{$.score}})，text元素可以使用立即执行函数或this.func来使用函数
-//  jui-date 添加选择今日按钮
-//  现在jload不一定非要设置jpar属性，会将其所在的页面的Jet元素作为其父元素
-//7-10 重要：将jcode融入了JUI ,新增了索引和点击某行高亮；jui-code-line 用于是否显示索引默认为true
-//  新增了jui-onload属性
-//7-5:路由新增use参数新增oninit 用于在路由化之后调用，一般可以用来加载模块  
 (function(){
   var _JT = { 
     cls: function(a) {
@@ -151,6 +210,7 @@
     ct: _create,
     ajax:_ajax,
     cookie:_cookie,
+    storage:_storage,
     load:_load,
     clone:_clone,
     html5:function(){
@@ -162,18 +222,24 @@
     urlParam: _getUrlParam,
     delay:function(call,time){
       time=time||500;
-      setTimeout(function(){
+      return setTimeout(function(){
         call.call(this);
       },time);
     },
     interval:function(bool,call,time){
       time=time||500;
-      var t=setInterval(function(){
+      return setInterval(function(){
         if(bool().call(this)){
           clearInterval(t);
           call().call(this);
         }
       },time)
+    },
+    clearDelay:function(t){
+      return setTimeout(t);
+    },
+    clearInterval:function(t){
+      return clearInterval(t);
     }
   };
   function _clone(obj){
@@ -204,23 +270,44 @@
     }
   };
   function _storage(a,b){
-    if(b===undefined){
-      var d=localStorage.getItem(a);
-      try{
-        return JSON.parse(d)
-      }catch(e){
-        if(d===parseFloat(d).toString()){
-          return parseFloat(d);
+    if(typeof a==='object' && a!==null){
+      for(var k in a){
+        _storage(k,a[k]);
+      }
+      return
+    }
+    var store=localStorage;
+    if (b === undefined) {
+        if(a===undefined){
+            var obj={};
+            Object.keys(store).forEach(function(item){
+                obj[item]=store.getItem(item);
+            });
+            return obj;
+        }else if(a===null){
+            Object.keys(store).forEach(function(item){
+                store.removeItem(item);
+            });
+        }else{
+            var d = store.getItem(a);
+            try {
+                return JSON.parse(d)
+            } catch (e) {
+                if (d === parseFloat(d).toString()) {
+                    return parseFloat(d);
+                }
+                return d;
+            }
         }
-        return d;
-      }
-    }else{
-      if(typeof b==='object'){
-        localStorage.setItem(a, JSON.stringify(b))
-      }else{
-        localStorage.setItem(a, b)
-      }
-      return b
+    } else if(b === null){
+        store.removeItem(a)
+    } else {
+        if (typeof b === 'object') {
+            store.setItem(a, JSON.stringify(b))
+        } else {
+            store.setItem(a, b)
+        }
+        return b
     }
   }
   function _cookie(a, b, d, e) {
@@ -308,6 +395,8 @@
       }
     }
     return c;
+
+    
   };
   function _load(name,call,ecall){
     return _JT.ajax({ 
@@ -316,11 +405,10 @@
       success : function(result){ 
         call(result);
       },
-      base:false,
       error : function(err){ 
         if(ecall!=undefined)
           ecall(err);
-        console.warn("加载失败:"+name);
+        _warn("加载失败:"+name);
       },
     })
   };
@@ -390,7 +478,12 @@
     return b
   };
   
-  HTMLElement.prototype._JT_css = function(d, a) {
+  var EleProto=HTMLElement.prototype;
+  var CollProto=HTMLCollection.prototype;
+  var NodeProto=NodeList.prototype;
+  var ArrProto=Array.prototype;
+  var StrProto=String.prototype;
+  EleProto._JT_css = function(d, a) {
     if (a == undefined) {
       if (_JT.type(d)=="json") {
         for (var b in d) {
@@ -449,19 +542,7 @@
     return [parseFloat(a.substring(0, a.indexOf(b))), b]
   };
 
-  function _checkStyleName(b) {
-    var a = b.split("-");
-    if (a.length <= 1) {
-      return b
-    } else {
-      var c = a[0];
-      for (var i = 1; i < a.length; i++) {
-        c += (a[i].charAt(0).toUpperCase() + a[i].substring(1))
-      }
-      return c
-    }
-  };
-  HTMLElement.prototype._JT_attr = function(c, b) {
+  EleProto._JT_attr = function(c, b) {
     if (b == undefined) {
       if (_JT.type(c)=="json") {
         for (var a in c) {
@@ -478,7 +559,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_attr = NodeList.prototype._JT_attr = function(d, c) {
+  CollProto._JT_attr = NodeProto._JT_attr = function(d, c) {
     if (c == undefined && _JT.type(d)!="json") {
       var a = [];
       this._JT_each(function(b) {
@@ -492,10 +573,10 @@
       return this
     }
   };
-  HTMLElement.prototype._JT_hasAttr = function(a) {
+  EleProto._JT_hasAttr = function(a) {
     return this.hasAttribute(a)
   };
-  HTMLElement.prototype._JT_removeAttr = function(b) {
+  EleProto._JT_removeAttr = function(b) {
     var c = b.split(" ");
     if (c.length > 1) {
       var d = this;
@@ -507,25 +588,25 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_removeAttr = NodeList.prototype._JT_removeAttr = function(b) {
+  CollProto._JT_removeAttr = NodeProto._JT_removeAttr = function(b) {
     this._JT_each(function(a) {
       a._JT_removeAttr(b)
     });
     return this
   };
-  HTMLElement.prototype._JT_findTag = function(a) {
+  EleProto._JT_findTag = function(a) {
     return _checkSelect(this.getElementsByTagName(a))
   };
-  HTMLElement.prototype._JT_findAttr = function(a) {
+  EleProto._JT_findAttr = function(a) {
     return _checkSelect(this.querySelectorAll("[" + a + "]"))
   };
-  HTMLElement.prototype._JT_findClass = function(a) {
+  EleProto._JT_findClass = function(a) {
     return _checkSelect(this.getElementsByClassName(a))
   };
-  HTMLElement.prototype._JT_select = function(a) {
+  EleProto._JT_select = function(a) {
     return _checkSelect(this.querySelectorAll(a))
   };
-  HTMLElement.prototype._JT_addClass = function(a) {
+  EleProto._JT_addClass = function(a) {
     if(a._JT_has(" ")){
       var b = a.split(" ");
       var c = this;
@@ -543,13 +624,13 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_addClass = NodeList.prototype._JT_addClass = function(a) {
+  CollProto._JT_addClass = NodeProto._JT_addClass = function(a) {
     this._JT_each(function(b) {
       b._JT_addClass(a)
     });
     return this
   };
-  HTMLElement.prototype._JT_removeClass = function(a) {
+  EleProto._JT_removeClass = function(a) {
     if (a == undefined) {
       this.className = ""
     } else if(a.trim()!==""){
@@ -572,13 +653,13 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_removeClass = NodeList.prototype._JT_removeClass = function(a) {
+  CollProto._JT_removeClass = NodeProto._JT_removeClass = function(a) {
     this._JT_each(function(b) {
       b._JT_removeClass(a)
     });
     return this
   };
-  HTMLElement.prototype._JT_val = function(a) {
+  EleProto._JT_val = function(a) {
     if (a == undefined && arguments.length == 0) {
       return this.value
     } else {
@@ -588,7 +669,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_val = NodeList.prototype._JT_val = function(v) {
+  CollProto._JT_val = NodeProto._JT_val = function(v) {
     if (v == undefined) {
       var a = [];
       this._JT_each(function(b) {
@@ -602,7 +683,7 @@
       return this
     }
   };
-  HTMLElement.prototype._JT_txt = function(a) {
+  EleProto._JT_txt = function(a) {
     if (a == undefined && arguments.length == 0) {
       return this.innerText
     } else {
@@ -610,7 +691,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_txt = NodeList.prototype._JT_txt = function(v) {
+  CollProto._JT_txt = NodeProto._JT_txt = function(v) {
     if (v == undefined && arguments.length == 0) {
       var a = [];
       this._JT_each(function(b) {
@@ -625,7 +706,7 @@
     }
   };
 
-  HTMLElement.prototype._JT_html = function(a) {
+  EleProto._JT_html = function(a) {
     if (a == undefined) {
       return this.innerHTML
     } else {
@@ -633,7 +714,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_html = NodeList.prototype._JT_html = function(v) {
+  CollProto._JT_html = NodeProto._JT_html = function(v) {
     if (v == undefined) {
       var a = [];
       this._JT_each(function(b) {
@@ -647,7 +728,7 @@
       return this
     }
   };
-  HTMLElement.prototype._JT_allHtml = function(a) {
+  EleProto._JT_allHtml = function(a) {
     if (a == undefined) {
       return this.outerHTML;
     } else {
@@ -655,14 +736,14 @@
       return this;
     }
   };
-  HTMLCollection.prototype._JT_allHtml = NodeList.prototype._JT_allHtml = function(v) {
+  CollProto._JT_allHtml = NodeProto._JT_allHtml = function(v) {
     var a = [];
     this._JT_each(function(b) {
       a._JT_append(b._JT_allHtml(v))
     });
     return a
   };
-  HTMLElement.prototype._JT_hasClass = function(a) {
+  EleProto._JT_hasClass = function(a) {
     if(a.trim()===""){
       return true;
     }
@@ -671,14 +752,14 @@
     }
     return new RegExp("(\\s|^)" + a + "(\\s|$)").test(this.className)
   };
-  HTMLElement.prototype._JT_next = function(i) {
+  EleProto._JT_next = function(i) {
     if (i != undefined) {
       return this._JT_parent()._JT_child(this._JT_index() + i)
     } else {
       return this._JT_parent()._JT_child(this._JT_index() + 1)
     }
   };
-  HTMLElement.prototype._JT_prev = function(i) {
+  EleProto._JT_prev = function(i) {
     if (i != undefined) {
       return this._JT_parent()._JT_child(this._JT_index() - i)
     } else {
@@ -689,17 +770,17 @@
   function _checkArg(a, b) {
     return (a == undefined) ? b : a
   };
-  HTMLElement.prototype._JT_child = function(i) {
+  EleProto._JT_child = function(i) {
     if (i == undefined) {
       return this.children
     } else {
       return this.children[i]
     }
   };
-  HTMLElement.prototype._JT_clone = function() {
+  EleProto._JT_clone = function() {
     return this.cloneNode()._JT_html(this._JT_html());
   };
-  HTMLElement.prototype._JT_parent = function(i) {
+  EleProto._JT_parent = function(i) {
     if (i == undefined) {
       return this.parentElement
     } else {
@@ -710,7 +791,7 @@
       return p
     }
   };
-  HTMLElement.prototype._JT_prepend = function(a) {
+  EleProto._JT_prepend = function(a) {
     var t=_JT.type(a);
     if (t=="array"||t=="htmlcollection"||t=="nodelist") {
       var b = this;
@@ -724,13 +805,13 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_prepend = NodeList.prototype._JT_prepend = function(a) {
+  CollProto._JT_prepend = NodeProto._JT_prepend = function(a) {
     this._JT_each(function(c) {
       c._JT_prepend(a)
     });
     return this
   };
-  HTMLElement.prototype._JT_append = function(b, a) {
+  EleProto._JT_append = function(b, a) {
     if (a == undefined) {
       var type=_JT.type(b);
       if (type=="array"||type=="htmlcollection"||type=="nodelist") {
@@ -747,10 +828,16 @@
     }
     return this
   };
-  HTMLElement.prototype._JT_toArray=function(){
+  CollProto._JT_append = NodeProto._JT_append = function(b, a) {
+    this._JT_each(function(c) {
+      c._JT_append(b, a)
+    });
+    return this
+  };
+  EleProto._JT_toArray=function(){
     return [this];
   };
-  HTMLCollection.prototype._JT_toArray = NodeList.prototype._JT_toArray = function(bool) {
+  CollProto._JT_toArray = NodeProto._JT_toArray = function(bool) {
     if(bool!=false){
       var a=[];
       for(var i=0;i<this.length;i++){
@@ -772,13 +859,7 @@
     }
     return a;
   };
-  HTMLCollection.prototype._JT_append = NodeList.prototype._JT_append = function(b, a) {
-    this._JT_each(function(c) {
-      c._JT_append(b, a)
-    });
-    return this
-  };
-  HTMLElement.prototype._JT_index = function() {
+  EleProto._JT_index = function() {
     var a = this._JT_parent()._JT_child();
     for (var i = 0; i < a.length; i++) {
       if (a[i] == this) {
@@ -787,7 +868,7 @@
     }
     return -1
   };
-  HTMLElement.prototype._JT_on = function(a, b,d) {
+  EleProto._JT_on = function(a, b,d) {
     if(_JT.type(a)=="string"){
       return this._JT_event("on"+a,b,d);
     }else{
@@ -798,23 +879,23 @@
       return this._JT_event(a,b);
     }
   };
-  HTMLCollection.prototype._JT_on = NodeList.prototype._JT_on = function(a, c,d) {
+  CollProto._JT_on = NodeProto._JT_on = function(a, c,d) {
     this._JT_each(function(b) {
       b._JT_on(_JT.clone(a), c,d)
     });
     return this
   };
-  HTMLElement.prototype._JT_clk = function(b,d) {
+  EleProto._JT_clk = function(b,d) {
     return this._JT_event("onclick",b,d);
   };
-  HTMLCollection.prototype._JT_clk = NodeList.prototype._JT_clk = function(a, c) {
+  CollProto._JT_clk = NodeProto._JT_clk = function(a, c) {
     this._JT_each(function(b) {
       b._JT_clk(a, c)
     });
     return this
   };
   
-  HTMLElement.prototype._JT_event = function(a, b,d) {
+  EleProto._JT_event = function(a, b,d) {
     if(_JT.type(a)=="string"){
       if(d===true){
         _attachEvent(this,a,b);
@@ -841,26 +922,26 @@
       obj.attachEvent(event,  _checkFunction(fun));
     }
   };
-  HTMLCollection.prototype._JT_event = NodeList.prototype._JT_event = function(a, c,d) {
+  CollProto._JT_event = NodeProto._JT_event = function(a, c,d) {
     this._JT_each(function(b) {
       b._JT_event(a, c,d)
     });
     return this
   };
-  HTMLElement.prototype._JT_empty = function() {
+  EleProto._JT_empty = function() {
     return this._JT_html("")
   };
-  HTMLCollection.prototype._JT_empty = NodeList.prototype._JT_empty = function() {
+  CollProto._JT_empty = NodeProto._JT_empty = function() {
     this._JT_each(function(a) {
       a._JT_empty()
     });
     return this
   };
-  HTMLElement.prototype._JT_remove = function() {
+  EleProto._JT_remove = function() {
     if(this.parentNode===null)return;
     this.parentNode.removeChild(this)
   };
-  HTMLCollection.prototype._JT_remove = NodeList.prototype._JT_remove = function(a) {
+  CollProto._JT_remove = NodeProto._JT_remove = function(a) {
     if (a == undefined) {
       for (var i = 0; i < this.length;) {
         this[i]._JT_remove()
@@ -883,47 +964,47 @@
       }
     }
   };
-  HTMLElement.prototype._JT_each = function(b,d) {
+  EleProto._JT_each = function(b,d) {
     b(this, 0,d);
     return this
   };
-  HTMLCollection.prototype._JT_each = NodeList.prototype._JT_each = function(b,d) {
+  CollProto._JT_each = NodeProto._JT_each = function(b,d) {
     var arr=this._JT_toArray();//removeClass 情况下
     for (var a = 0; a < arr.length; a++) {
       b(arr[a], a,d)
     }
     return this
   };
-  Array.prototype._JT_each = function(b,d) {
+  ArrProto._JT_each = function(b,d) {
     for (var a = 0; a < this.length; a++) {
       b(this[a], a,d)
     }
     return this
   };
-  Array.prototype._JT_clone = function() {
+  ArrProto._JT_clone = function() {
     var a=new Array();
     this.forEach(function(item){
       a.push(_clone(item));
     });
     return a;
   };
-  Array.prototype._JT_empty = function(b) {
+  ArrProto._JT_empty = function(b) {
     this.length = 0;
     return this;
   };
-  HTMLElement.prototype._JT_last =function(){
+  EleProto._JT_last =function(){
     return this._JT_child()._JT_last();
   };
-  HTMLElement.prototype._JT_first =function(){
+  EleProto._JT_first =function(){
     return this._JT_child()._JT_first();
   };
-  HTMLCollection.prototype._JT_last = NodeList.prototype._JT_last =Array.prototype._JT_last = function(b) {
+  CollProto._JT_last = NodeProto._JT_last =ArrProto._JT_last = function(b) {
     return this[this.length-1];
   };
-  HTMLCollection.prototype._JT_first = NodeList.prototype._JT_first =Array.prototype._JT_first = function(b) {
+  CollProto._JT_first = NodeProto._JT_first =ArrProto._JT_first = function(b) {
     return this[0];
   };
-  Array.prototype._JT_remove = function(b,order) {
+  ArrProto._JT_remove = function(b,order) {
     var index=this.indexOf(b)
     if(order==false){
       this[a]=this[this.length--];
@@ -932,27 +1013,19 @@
     }
     return this
   };
-  Array.prototype._JT_removeByIndex = function(b,n) {
+  ArrProto._JT_removeByIndex = function(b,n) {
     this.splice(b,n||1);
     return this
   };
-  Array.prototype._JT_insert = function(b, i) {
+  ArrProto._JT_insert = function(b, i) {
     this.splice(i,0,b);
     return this
   };
-  Array.prototype._JT_insertArray = function(arr,i) {
+  ArrProto._JT_insertArray = function(arr,i) {
     //var _arr=arr._JT_clone();//深拷贝
     var _arr=arr.slice(0);//浅拷贝
     _arr.splice(0,0,i,0);
-    Array.prototype.splice.apply(this,_arr)
-    // var index=i;
-    // var n=arr.length;
-    // for (var a = this.length - 1; a >= index; a--) {
-    //   this[a + n] = this[a]
-    // }
-    // for(var j=0;j<n;j++){
-    //   this[index+j] = arr[j];
-    // }
+    ArrProto.splice.apply(this,_arr)
     return this
   };
   function _argsToArray(args,index){
@@ -962,11 +1035,11 @@
     }
     return arr;
   }
-  Array.prototype._JT_append = function() {
-    Array.prototype.push.apply(this,arguments)
+  ArrProto._JT_append = function() {
+    ArrProto.push.apply(this,arguments)
     return this
   };
-  Array.prototype._JT_prepend = function(b) {
+  ArrProto._JT_prepend = function(b) {
     if(arguments.length==1){
       return this._JT_insert(b, 0)
     }else{
@@ -1002,7 +1075,7 @@
       return type;
     }
   };
-  String.prototype._JT_has = function(s) {
+  StrProto._JT_has = function(s) {
     if (_JT.type(s)=="string") {
       if (this.includes == undefined) {
         return (this.indexOf(s) != -1)
@@ -1017,7 +1090,14 @@
       }
     }
   };
-  String.prototype._JT_replaceAll = function(a, b) {
+  StrProto._JT_replaceAll = function(a, b) {
+    if(_JT.type(a)=="array"){
+      var s=this;
+      a.forEach(function(item){
+        s=s._JT_replaceAll(item[0],item[1]);
+      })
+      return s;
+    }
     if (_JT.type(b)=="array") {
       if (_JT.type(a)=="string") {
         var s = this.split(a);
@@ -1054,13 +1134,13 @@
   
 
 
-  HTMLElement.prototype._JT_exist = function(call,callf){
+  EleProto._JT_exist = function(call,callf){
     if(call!=undefined){
       _checkFunction(call)(this);
     }
     return true;
   };
-  HTMLCollection.prototype._JT_exist = NodeList.prototype._JT_exist= Array.prototype._JT_exist= function(call,callf){
+  CollProto._JT_exist = NodeProto._JT_exist= ArrProto._JT_exist= function(call,callf){
     if(this.length>0){
       if(this.length==1){
         _checkFunction(call)(this[0]);
@@ -1093,7 +1173,7 @@
     }
   };
 
-  HTMLElement.prototype._JT_content = function(a) {
+  EleProto._JT_content = function(a) {
     if (this.tagName == "INPUT" || this.tagName == "TEXTAREA"|| this.tagName == "SELECT") {
       if (a == undefined && arguments.length == 0) {
         return this.value
@@ -1291,6 +1371,9 @@ var _bind="J",
 function _throw(err){
   throw new Error(err);
 }
+function _warn(info){
+  console.warn('JET warning:\r\n  '+info);
+}
 function _isUd(o){
   return (typeof o==='undefined');
 }
@@ -1399,9 +1482,217 @@ function _createEmpty(){
   a.__proto__=null;
   return a;
 }
-window.Jet=function(par,opt){
-  if(typeof par==='string'){
-    opt.par=par;
+var _props='props',_dataPrefix=':',_dataClonePrefix='::',_funcPrefix='@';
+function _initLoadEle(opt){
+  var ctx=opt.ele.__loadOpt;//jload元素独有的数据作用域等信息
+    // _data
+    // calls
+    // data
+    // ele
+    // jet
+    // name
+    // par
+  if(!ctx)
+    return;
+  this._tools._props=_formatProps(this,ctx,opt);
+  this._tools._data.$props=this._tools._props;
+  // for(var k in this.$props){
+  //   if(typeof this.$props[k]!='function'){
+  //     if(k in opt.data){
+  //       _throw('Jet data 中的命名与组件属性名冲突')
+  //     }
+  //     if(opt.func&&k in opt.func){
+  //       _throw('Jet func 中的命名与组件属性名冲突')
+  //     }
+  //     opt.data[k]=this.$props[k];
+  //   }
+  // }
+}
+//将直接引用的数据添加到$Props上
+function _addParPropsToJet(_this){
+  var _tools=_this._tools._props_tools;
+  if(!_tools)
+    return;
+  _tools._props.forEach(function(d){
+    if(d.isExp){
+      //连接回调函数队列
+      _initExpPropsCall(_this,_tools,d)
+    }else{
+      //注册响应数据
+      _defineProps(_this.$props,_tools._ctx_data,d.name,d.value);
+      //连接源数据
+      _this._tools._data.$props[d.name]=_tools._ctx_source_data[d.value]
+      //连接回调函数队列
+      _this._tools._calls.$props[d.name]=_tools._ctx_call[d.value]
+    }
+  })
+  //delete _this._tools._props_tools;
+  Object.defineProperty(_this,'$props',{
+    set:function(val){
+      _throw('$prop 不能被赋值')
+    }
+  })
+}
+function _initExpPropsCall(_this,_tools,d){
+  var m=d.value.match(_reg);
+  if(m==null)
+    return;
+  m.forEach(function(item){
+    item=item.substring(2,item.length-2);
+    if(item!==''){
+      if(item=='$'){
+        _this._tools._calls.$props[d.name]=_tools._ctx_call;
+      }else if(item.substring(0,2)=='$.'){
+        if(typeof _this.$props[d.name]=='object'){
+          // 引用类型数据 会自动改变
+          _this._tools._calls.$props[d.name]=(new Function('$','return '+item))(_tools._ctx_call);
+        }else{
+          // 非引用类型数据 需要手动双向绑定
+          _this._tools._calls.$props[d.name]._func.push(function(k,v){
+            //_tools._ctx_jet[k]=v;//直接设置会报错 Maximum call stack size exceeded
+            //debugger
+            _tools._ctx_source_data[k]=v
+            _tools._ctx_call[k]._func.forEach(function(f){f()})
+          })
+          _tools._ctx_call[d.name]._func.push(function(k,v){
+            if(k){
+              _this.$props[k]=v;
+            }
+          })
+        }
+      }
+    }
+  })
+}
+function _defineProps(p,data,name,value){
+  Object.defineProperty(p,name,{
+    configurable:true,
+    get:function(){
+      //debugger;
+      return data[value];
+    },set:function(val){
+      data[value]=val;
+    }
+  })
+}
+function _formatProps(_this,ctx,opt){
+  var ats=opt.ele.attributes;
+  var jet=ctx.jet;
+  var data=ctx.data;
+  var pt={};
+  pt._ctx_jet=jet;
+  pt._ctx_call=ctx.calls;
+  pt._ctx_source_data=ctx._data;
+  pt._ctx_data=ctx.data;
+  pt._props=[];
+  var p={};
+  for(var i=0;i<ats.length;i++){
+    var d=_getPrefixAndName(ats[i]);
+    if(d!=null){
+      if(d.value in ctx._data||(jet[d.value]&&typeof jet[d.value]=='function')){//在作用域内有数据或函数;
+        // if(typeof jet[d.value]!='function'){
+        if(d.value in ctx._data){
+          if(d.prefix==_dataClonePrefix){
+            p[d.name]=_simpleCloneObject(data[d.value])
+          }else{
+            //debugger
+            //p[d.name]=jet._tools._data[d.value];
+            pt._props.push({
+              name:d.name,value:d.value
+            })
+            //_defineProps(p,jet,d.name,d.value)
+          }
+        }else{
+          p[d.name]=jet[d.value].bind(jet);
+          p[d.name].__props_child=true;//在参数中添加一个child
+        }
+      }else{
+        var newOpt={
+          data:data,
+          ele:opt.ele,
+          jet:jet,
+          root:Jet.$root
+        }
+        if(d.prefix==_funcPrefix){
+          if(d.value[0]=='{'&&d.value[d.value.length-1]=='}'){//用{}表示bool表达式
+            p[d.name]=(new Function('$','opt',d.value)).bind(jet,data,newOpt)
+          }else{
+            _throw('子组件使用js表达式作为函数参数时请使用{ }包裹')
+          }
+        }else{
+          if(d.value[0]=='{'&&d.value[d.value.length-1]=='}'){//用{}表示bool表达式
+            d.value=d.value.substring(1,d.value.length-1);
+            var _val=d.value;
+            d.value=d.value._JT_replaceAll([
+              ["{{",''],["}}",'']
+            ])
+            var _data=(new Function('$','opt','return '+d.value)).call(jet,data,newOpt);
+            if(d.prefix==_dataClonePrefix){
+              p[d.name]=_simpleCloneObject(_data)
+            }else{
+              p[d.name]=_data;
+              pt._props.push({
+                name:d.name,value:_val,isExp:true
+              })
+            }
+          }else{
+            p[d.name]=d.value;
+          }
+        }
+      }
+    }
+  }
+  _this._tools._props_tools=pt;
+  return p;
+}
+function _simpleCloneObject(obj){
+  if(typeof obj=='object')
+    return JSON.parse(JSON.stringify(obj))
+  return obj;
+}
+function _getPrefixAndName(ats){
+  var name=ats.name;
+  var val=ats.value;
+  var pname='',prefix='';
+  if(name.substring(0,2)==_dataClonePrefix){
+    pname=name.substring(2);
+    prefix=_dataClonePrefix;
+  }else{
+    if(name[0]==_dataPrefix){
+      prefix=_dataPrefix;
+      pname=name.substring(1);
+    }else if(name[0]==_funcPrefix){
+      prefix=_funcPrefix;
+      pname=name.substring(1);
+    }
+  }
+  if(prefix=='')
+    return null;
+  return {
+    prefix:prefix,name:_formatLine2Upper(pname),value:val
+  }
+}
+function _formatLine2Upper(s){
+  var arr=s.split('-');
+  if(arr.length==1){
+    return s;
+  }
+  s=arr[0];
+  for(var i=1;i<arr.length;i++){
+    s+= arr[i][0].toUpperCase()+arr[i].substring(1);
+  }
+  return s;
+}
+var __jet_id=0,__ele_id=0,__comp_id='comp__id',__jet_root='_root',__router_comp='routerComp',__comp_name='name';
+window.Jet=function(par,ele,opt){
+  if(typeof opt==='object'){
+    if(!opt.ele){
+      opt.ele=_JT.attr(__comp_id+'="'+ele+'"');
+      opt.ele._JT_removeAttr(__comp_id);
+    }
+    if(!opt.par){
+      opt.par=par;
+    }
   }else{
     opt=par;
   }
@@ -1409,34 +1700,55 @@ window.Jet=function(par,opt){
   _checkDataForData(opt);
   opt.ele=(opt.ele)?_getJdomEle(opt.ele):document.documentElement;
   opt.ele.__jet=this;
-  if(opt.name){
+  if(!Jet.$unnamedJets[__jet_root]&&opt.ele.tagName=='HTML'){
+    Jet.$unnamedJets[__jet_root]=this;
+    Jet.$root=this;
+  }
+  if(opt.ele._JT_hasAttr(__comp_name)){//优先使用 组件上的name属性
+    opt.name=opt.ele._JT_attr(__comp_name);
+  }
+  if(!opt.name){
+    if(ele=='__'+__router_comp){//路由页面组件
+      opt.name=__router_comp;
+      Jet.$unnamedJets.routerComp=this;
+    }else{
+      opt.name='_'+(__jet_id++);
+      Jet.$unnamedJets[opt.name]=this;
+    }
+  }else{
     if(Jet[opt.name]&&Jet[opt.name].$DOM==undefined){//避免与Jet.Input等冲突
       _throw('Jet name 属性等于'+opt.name+'已存在，请重新命名');
     }
     Jet[opt.name]=this;
   }
+ 
   if(opt.par){
-    this.$par=Jet[opt.par];
-    if(Jet[opt.par]){
-      if(!Jet[opt.par].$child){
-        Jet[opt.par].$child=_createEmpty();
+    this.$par=Jet[opt.par]||Jet.$unnamedJets[opt.par];
+    if(this.$par){
+      if(!this.$par.$child){
+        this.$par.$child=_createEmpty();
       }
-      var name=opt.name||('child'+Object.keys(Jet[opt.par].$child).length)
-      Jet[opt.par].$child[name]=this;
+      if(ele=='__'+__router_comp){//路由页面组件
+        this.$par.$child[__router_comp]=this;
+      }else{
+        this.$par.$child[opt.name]=this;
+      }
     }
   }
   this._tools={
     _jets:[],
     _jetTools:[],
     _calls:{},
-    _data:opt.data,
+    _data:opt.data||{},
     //_ele:(opt.ele=='')?Jet.__tempRoot:_getJdomEle(opt.ele)
     _ele:opt.ele,
     name:opt.name,
   }
   this.$dom={};
   var _this=this;
+  _initLoadEle.call(this,opt)
   _define(this,opt.data,this._tools._calls);
+  _addParPropsToJet(this);
   if(opt.func){
     for(var key in opt.func){
       if(this[key]){
@@ -1447,15 +1759,16 @@ window.Jet=function(par,opt){
     }
   }
   var _this=this;
+  
+  if(opt.beforeinit){
+    opt.beforeinit.call(this);
+  }else if(opt.beforeinitawait){
+    opt.beforeinitawait.call(this,function(){
+      _initJet.call(_this,opt,_this._tools._calls);
+    });
+    return;
+  }
   _initJet.call(_this,opt,_this._tools._calls);
-  Jet.load.init.call(this,function(list){
-    if(list!==undefined){
-      list._JT_each(function(load){
-        _initJetEle.call(_this,load,true);
-        //Jet.valid.init(load);
-      })
-    }
-  })
 };
 Jet.prototype=_createEmpty();
 Jet.prototype.$get=function(){
@@ -1522,17 +1835,41 @@ Jet.prototype.$route.forward=function(s){
 };
 Jet.prototype.$=_JT;
 Jet.prototype.$regist=function(name,call){
+  _registDataCall(_formatRegustArg(name,call,this,arguments.length));
+};
+function _formatRegustArg(name,call,_this,n){
+  var opt={jet:_this};
+  if(n==1){
+    opt.call=name;
+  }else if(n==2){
+    opt.call=call;
+    opt.name=name;
+  }
+  return opt;
+}
+function _registDataCall(opt){
+  var name=opt.name;
+  var call=opt.call;
+  var _this=opt.jet;
+  var _call=_this._tools._calls;
   var isDisable=false;
-  if(arguments.length==2){
+  if(name!==undefined){
+    // if(name._JT_has(_each)){
+    //   name=name._JT_replaceAll("\\"+_each,"$."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]")
+    // }
     if(name._JT_has('.')){
       var a=name.split('.');
-      var _call=this._tools._calls;
       for(var i=1;i<a.length;i++){
-          _call=_getCallback(_call,a[i])//_call[a[i]];
+          _call=_getCallbackOfArr(_call,a[i])//_call[a[i]];
           if(_call==null){
             isDisable=true;
-            console.log('JET:忽略了一个元素');
-            //this.disable();
+            if(opt.jet){
+              if(!_this.$DOM){
+                _this.disable();
+              }else{
+                _warn('忽略了一个元素');
+              }
+            }
             break;
           }
       }
@@ -1542,24 +1879,72 @@ Jet.prototype.$regist=function(name,call){
       if(_JT.type(call)!='function'){
         _throw('call参数必须为函数');
       }
-      var _call=_getCallback(this._tools._calls,name)
+      _call=_getCallbackOfArr(_call,name)
       if(_call==null){
         isDisable=true;
-        console.log('JET:忽略了一个元素');
-        //this.disable();
+        if(opt.jet){
+          if(!_this.$DOM){
+            _this.disable();
+          }else{
+            _warn('忽略了一个元素');
+          }
+        }
       }else{
         _call._func.push(call);
       }
     }
   }else{
-    if(_JT.type(name)!='function'){
+    if(_JT.type(call)!='function'){
       _throw('call参数必须为函数');
     }
-    this._tools._calls._func.push(name);
+    _call._func.push(call);
   }
-};
+}
+function _getCallbackOfArr(call,s){
+  var a=s.match(_numReg);
+  if(a==null){
+      if(!call[s]){
+        //_throw('没有'+s+'属性');
+        return null;
+      }
+      return call[s];
+  }else{
+      var attr=s.substring(0,s.indexOf('['));
+      var _c=call[attr];
+      a.forEach(function(item){
+          var _ss=item.substring(1,item.length-1);
+          if(!_c[_ss]){
+            //_throw('索引为'+s+'的位置没有值');
+            return null;
+          }
+          _c=_c[_ss]
+      });
+      return _c;
+  }
+}
 Jet.$=_JT;
-
+Jet.$unnamedJets={};
+// var _moduleList=['router','lang','module','css-config','jui','valid'];
+// var _usedModuleList=[];
+// Jet.$use=function(name){
+//   if(typeof name=='object'){
+//     name.forEach(function(item){
+//       Jet.$use(item);
+//     })
+//   }else{
+//     if(_moduleList.indexOf(name)==-1){
+//       _throw('模块命名错误：可选值为:'+_moduleList)
+//     }else{
+//       if(_usedModuleList.indexOf(name)==-1){
+//         _usedModuleList.push(name);
+//         _JT.body()._JT_append(_JT.ct('script')._JT_attr('src','assets/js/jet-module/'+name+'.js'));
+//       }
+//     }
+//   }
+// };
+// Jet.$useAll=function(){
+//   Jet.$use(_moduleList);
+// };
 //html text class attr css 
 //
   //
@@ -1679,12 +2064,9 @@ function _initJet(opt,calls){
   if(typeof opt.ele=='string'&&opt.ele!=''){
     opt.ele=_JT.attr(_dom+'='+opt.ele);
   }
-  if(opt.beforeinit){
-    opt.beforeinit.call(this);
-  }
   _initJetDom.call(this,opt.ele)
   var _this=this;
-  var bindList,ifList,showList,onList,runList,attrList,styleList;
+  var bindList,ifList,showList,onList,runList,attrList,styleList,loadList;
   if(opt.ele){
     bindList=opt.ele._JT_findAttr(_bind);
     ifList=opt.ele._JT_findAttr(_if);
@@ -1727,7 +2109,7 @@ function _initJet(opt,calls){
         switch(type){
           case 'json':_jet=new Jet.Bind(_opt);break;
           case 'array':_jet=new Jet.For(_opt);break;
-          default:_jet=(isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);break;
+          default:_jet=(_isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);break;
         }
         item.__isRoot=true;//为了记录根元素的初始位置，忽略非根元素
         _this._tools._jets.push(_jet);
@@ -1773,6 +2155,18 @@ function _initJet(opt,calls){
       _this._tools._jetTools.push(new Jet.Style(_jetOpt(_this,item),true));
     }
   });
+  if(opt.ele){
+    loadList=opt.ele._JT_findAttr(_jload);
+  }else{
+    loadList=_JT.attr(_jload);
+  }
+  loadList._JT_each(function(item){
+    if(!item._hasLoad&&!item._hasDisabled){
+      item._hasLoad=true;
+      var opt=_jetOpt(_this,item);
+      item.__loadOpt=opt;
+    }
+  })
   if(opt.beforemount){
     opt.beforemount.call(this);
   }
@@ -1806,6 +2200,15 @@ function _initJet(opt,calls){
   if(opt.onmounted){
     opt.onmounted.call(this);
   }
+  Jet.load.init.call(this,function(list){
+    if(list!==undefined){
+      list._JT_each(function(load){
+        _initJetEle.call(_this,load,true);
+        // _initJetEle.call(load.__jet||_this,load,true);
+        //Jet.valid.init(load);
+      })
+    }
+  })
 };
 //由于dialog元素在useBind方法中会被append 到body最后面，所以在useBind方法前先对其valid和lang进行初始化
 function _checkHasDialog(ele){
@@ -1974,7 +2377,7 @@ function _initJetEle(ele,isJload){
         switch(type){
           case 'json':_jet=new Jet.Bind(opt.opt);break;
           case 'array':_jet=new Jet.For(opt.opt);break;
-          default:_jet=(isInput(item))?new Jet.Input(opt.opt):new Jet.Text(opt.opt);break;
+          default:_jet=(_isInput(item))?new Jet.Input(opt.opt):new Jet.Text(opt.opt);break;
         }
         if(opt.isRoot)
           item.__isRoot=true;//为了记录根元素的初始位置，忽略非根元素
@@ -2024,6 +2427,14 @@ function _initJetEle(ele,isJload){
       opt.jet._tools._jetTools.push(new Jet.Style(opt.opt,true));
     }
   });
+  var loadList=ele._JT_findAttr(_jload);
+  loadList._JT_each(function(item){
+    if(!item._hasLoad&&!item._hasDisabled){
+      item._hasLoad=true;
+      var opt=_getInitData(item,undefined,_this,isJload);
+      item.__loadOpt=opt;
+    }
+  })
   //init jet ele
   if(typeof JUI!=='undefined'){
     _checkHasDialog(ele);
@@ -2090,7 +2501,6 @@ var _domSatte={
     }
   }
 }
-
 function _jetOpt(_this,item,name,calls){
   return {
     jet:_this,
@@ -2103,7 +2513,7 @@ function _jetOpt(_this,item,name,calls){
     //indexs:[]
   };
 }
-function isInput(obj){
+function _isInput(obj){
   var tag=obj.tagName;
   return (tag=="INPUT"||tag=="TEXTAREA"||tag=="SELECT"||(obj._JT_hasAttr('contenteditable')&&obj._JT_attr('contenteditable')!='false'))
 }
@@ -2152,6 +2562,8 @@ Jet.Base=function(opt,type){
 };
 Jet.Base.prototype=_createEmpty();
 Jet.Base.prototype.$parData=function(index){
+  
+  //使用 _parData
   var obj=this.par;
   if(index==undefined||index<=0){index=1}
   for(var i=0;i<index-1;i++){
@@ -2174,7 +2586,7 @@ Jet.Base.prototype.$makeChange=function(s){
   });
 };
 Jet.Base.prototype.disable=function(){
-  console.warn('JET:忽略了一个'+this.type+'元素:',this);
+  _warn('忽略了一个'+this.type+'元素:',this);
   this.disable=true;
   this.ele._JT_attr(this.type,this._attrVal);
   switch(this.type){
@@ -2193,67 +2605,10 @@ Jet.Base.prototype.disable=function(){
   }
   this.ele.__jet=undefined;
 };Jet.Base.prototype.$regist=function(name,call){
-  var isDisable=false;
-  if(arguments.length==2){
-    // if(name._JT_has(_each)){
-    //   name=name._JT_replaceAll("\\"+_each,"$."+this.ele.__jet.par.name+"["+this.ele.__jet.name+"]")
-    // }
-    if(name._JT_has('.')){
-      var a=name.split('.');
-      var _call=this._tools._calls;
-      for(var i=1;i<a.length;i++){
-          _call=_getCallback(_call,a[i])//_call[a[i]];
-          if(_call==null){
-            isDisable=true;
-            if(!this.$DOM)this.disable();
-            break;
-          }
-      }
-      if(!isDisable)
-        _call._func.push(call);
-    }else{
-      if(_JT.type(call)!='function'){
-        _throw('call参数必须为函数');
-      }
-      var _call=_getCallback(this._tools._calls,name)
-      if(_call==null){
-        isDisable=true;
-        if(!this.$DOM)this.disable();
-      }else{
-        _call._func.push(call);
-      }
-    }
-  }else{
-    if(_JT.type(name)!='function'){
-      _throw('call参数必须为函数');
-    }
-    this._tools._calls._func.push(name);
-  }
+  _registDataCall(_formatRegustArg(name,call,this,arguments.length));
 };Jet.Base.prototype.setDataIndex=function(i){
   this.name=i;
 };
-function _getCallback(call,s){
-  var a=s.match(_numReg);
-  if(a==null){
-      if(!call[s]){
-        //_throw('没有'+s+'属性');
-        return null;
-      }
-      return call[s];
-  }else{
-      var attr=s.substring(0,s.indexOf('['));
-      var _c=call[attr];
-      a.forEach(function(item){
-          var _ss=item.substring(1,item.length-1);
-          if(!_c[_ss]){
-            //_throw('索引为'+s+'的位置没有值');
-            return null;
-          }
-          _c=_c[_ss]
-      });
-      return _c;
-  }
-}
 var Super = function(){};
 function _jsonEven(a,b){
   return JSON.stringify(a)===JSON.stringify(b)
@@ -2270,8 +2625,8 @@ function _indexOf(p,c){
 }
 Super.prototype = Jet.Base.prototype;
 //********************修改原生数组方法 */
-var __push=Array.prototype.push;
-Array.prototype.push=function(){
+var __push=ArrProto.push;
+ArrProto.push=function(){
   if(typeof this._data==='undefined'){
     return __push.apply(this,arguments);
   }else{
@@ -2282,8 +2637,8 @@ Array.prototype.push=function(){
     }
   }
 }
-var __pop=Array.prototype.pop;
-Array.prototype.pop=function(){
+var __pop=ArrProto.pop;
+ArrProto.pop=function(){
   if(typeof this._data==='undefined'){
     return __pop.apply(this);
   }else{
@@ -2292,8 +2647,8 @@ Array.prototype.pop=function(){
     return a;
   }
 }
-var __splice=Array.prototype.splice;
-Array.prototype.splice=function(){
+var __splice=ArrProto.splice;
+ArrProto.splice=function(){
   if(typeof this._data==='undefined'){
     return __splice.apply(this,arguments);
   }else{
@@ -2307,8 +2662,8 @@ Array.prototype.splice=function(){
     }
   }
 }
-var __shift=Array.prototype.shift;
-Array.prototype.shift=function(){
+var __shift=ArrProto.shift;
+ArrProto.shift=function(){
   if(typeof this._data==='undefined'){
     return __shift.apply(this);
   }else{
@@ -2317,8 +2672,8 @@ Array.prototype.shift=function(){
     return a;
   }
 }
-var __unshift=Array.prototype.unshift;
-Array.prototype.unshift=function(){
+var __unshift=ArrProto.unshift;
+ArrProto.unshift=function(){
   if(typeof this._data==='undefined'){
     return __unshift.apply(this,arguments);
   }else{
@@ -2329,8 +2684,8 @@ Array.prototype.unshift=function(){
     }
   }
 }
-var __reverse=Array.prototype.reverse;
-Array.prototype.reverse=function(){
+var __reverse=ArrProto.reverse;
+ArrProto.reverse=function(){
   if(typeof this._data==='undefined'){
     return __reverse.apply(this);
   }else{
@@ -2340,8 +2695,8 @@ Array.prototype.reverse=function(){
   }
 }
 
-var __sort=Array.prototype.sort;
-Array.prototype.sort=function(sortby){
+var __sort=ArrProto.sort;
+ArrProto.sort=function(sortby){
   if(typeof this._data==='undefined'){
     return __sort.call(this,sortby);
   }else{
@@ -2352,7 +2707,7 @@ Array.prototype.sort=function(sortby){
 }
 
 
-Array.prototype.$push=function(d){
+ArrProto.$push=function(d){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2367,13 +2722,13 @@ Array.prototype.$push=function(d){
   _data.push(d);
   _defineCom(data,data.length,_data,_call);
   if(!_un)_f.refresh.push.call(_f);
-};Array.prototype.$pushArray=function(arr){
+};ArrProto.$pushArray=function(arr){
   // var _this=this;
   // arr._JT_each(function(item){
   //   _this.$push(item)
   // });
   this.$insertArray(arr,this.length);
-};Array.prototype.$prep=function(d){
+};ArrProto.$prep=function(d){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2389,9 +2744,9 @@ Array.prototype.$push=function(d){
   _call._JT_prepend({});
   _defineArray(data,_data,_call);
   if(!_un)_f.refresh.prep.call(_f);
-};Array.prototype.$prepArray=function(arr){
+};ArrProto.$prepArray=function(arr){
   this.$insertArray(arr,0);
-};Array.prototype.$insert=function(d,index){
+};ArrProto.$insert=function(d,index){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2407,7 +2762,7 @@ Array.prototype.$push=function(d){
   _call._JT_insert({},index);
   _defineArrayFormIndex(data,_data,_call,index);
   if(!_un)_f.refresh.insert.call(_f,index);
-};Array.prototype.$insertArray=function(arr,index){
+};ArrProto.$insertArray=function(arr,index){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2427,11 +2782,11 @@ Array.prototype.$push=function(d){
   _call._JT_insertArray(calls,index);
   _defineArrayFormIndex(data,_data,_call,index);
   if(!_un)_f.refresh.insertArray.call(_f,arr,index);
-};Array.prototype.$remove=function(){
+};ArrProto.$remove=function(){
   for(var i=0;i<arguments.length;i++){
     this.$removeByIndex(_indexOf(this,arguments[i]));
   }
-};Array.prototype.$removeByIndex=function(i,n){
+};ArrProto.$removeByIndex=function(i,n){
   if(i==-1){
     return 
   }
@@ -2452,7 +2807,7 @@ Array.prototype.$push=function(d){
       _throw('$remove 方法索引超过数组长度');
     }else{
       n=_data.length-i;
-      console.warn('$remove 方法删除的个数超过数组长度，只删除'+n+'个元素');
+      _warn('$remove 方法删除的个数超过数组长度，只删除'+n+'个元素');
     }
   }
   _data.splice(i,n);
@@ -2462,9 +2817,9 @@ Array.prototype.$push=function(d){
   //_defineArrayFormIndex(data,_data,_call,i);
   //data.length-=n;
   if(!_un)_f.refresh.remove.call(_f,i,n);
-};Array.prototype.$clear=function(){
+};ArrProto.$clear=function(){
   this.$removeByIndex(0,this.length);
-};Array.prototype.$replace=function(arr){
+};ArrProto.$replace=function(arr){
   this.$clear();
   this.$pushArray(arr);
   //if(typeof this._jet!=='undefined')this._jet.$makeChange();
@@ -2601,15 +2956,18 @@ Jet.router={
         }
       }
     }
+    Jet.router.out=_JT.attr(_routeout);
     Jet.router.init();
     if(opt.oninit&&typeof opt.oninit=='function'){opt.oninit();}
+    Jet.router.__isFresh=true;
     Jet.router.route(url);
   },
   conf:{
     html:"/src/html",
     js:"/src/js",
     css:"/src/css",
-    image:"/src/image"
+    image:"/src/image",
+    media:"/src/media"
   },
   init:function(obj){
     var list;
@@ -2648,6 +3006,14 @@ Jet.router={
   clearScoped:function(){
     _JT.cls(_scopeStyle)._JT_remove();
   },
+  activeRouter:function(item){
+    item=item||_JT.attr(_route+'="'+Jet.router.url+'"');
+    if(item._JT_exist()){
+      _JT.attr(_route_a)._JT_removeAttr(_route_a);
+      item._JT_attr(_route_a,'');
+      Jet.router.active=item;
+    }
+  },
   route:function(url,push,call){
     if(url._JT_has('http://')||url._JT_has('https://')){
       if(push===true){
@@ -2656,45 +3022,19 @@ Jet.router={
         Jet.$.jump(url);
       }
     }else{
+      var isFresh=Jet.router.__isFresh;
+      if(isFresh){Jet.router.__isFresh=false;}
+      _callRouterLife('__onroute',isFresh)
       if(Jet.router.__xhr!==null){
         Jet.router.__xhr.abort();
-        console.warn('JET:忽略了一个路由：'+Jet.router.path);
+        console.warn('忽略了一个路由：'+Jet.router.path);
         Jet.router.__xhr=null;
       }
-      var search='';
-      if(url.indexOf('#')!=-1){
-        var index=url.indexOf('?');
-        var _index=url.indexOf('#');
-        if(index!=-1){
-          if(index>_index){
-            Jet.router.hash=url.substring(_index,index);
-            search=url.substring(index+1);
-            url=url.substring(0,_index);
-            index=_index;
-          }else{
-            Jet.router.hash=url.substring(_index);
-            search=url.substring(index+1,_index);
-            url=url.substring(0,index);
-          }
-        }else{
-          Jet.router.hash=url.substring(_index);
-          index=_index;
-          url=url.substring(0,_index);
-        }
-      }else{
-        if(url._JT_has('?')){
-          search=url.substring(url.indexOf("?")+1);
-          url=url.substring(0,url.indexOf("?"));
-        }
-        Jet.router.hash='';
-      }
-      if(url[url.length-1]=='/'&&url.length>1)url=url.substring(0,url.length-1);
+      var _fRes=_formatUrl(url);
+      var search=_fRes.search;
+      url=_fRes.url;
       var item=_JT.attr(_route+'="'+url+'"');
-      if(item._JT_exist()){
-        _JT.attr(_route_a)._JT_removeAttr(_route_a);
-        item._JT_attr(_route_a,'');
-        Jet.router.active=item;
-      }
+      Jet.router.activeRouter(item);
       url=_checkUrl(url);
       var _r=false;
       if(!(url in Jet.router.router)){
@@ -2722,9 +3062,14 @@ Jet.router={
           search='?'+search;
         }
         Jet.router.path=url;
+        Jet.router.url=url.substring(Jet.router.base.length);
         var stateObject = {};
         var title = url;
         var newUrl = url+search+Jet.router.hash;
+        if(typeof push==='function'){
+          call=push;
+          push=undefined;
+        }
         if(push==undefined){
           history.pushState(stateObject,title,newUrl);
         }
@@ -2733,27 +3078,19 @@ Jet.router={
         }
         Jet.router.params=_JT.urlParam();
         Jet.router.lastTrueHash=location.hash;
-        Jet.router.__onroute.forEach(function(item){
-          if(item._jet){
-            item.call(item._jet,Jet.router)
-          }else{
-            item.call(Jet.router)
-          }
-        });
         if(typeof JUI!=='undefined'){
           JUI.dialog.removeAll()
         }
         Jet.router.clearScoped();
-        Jet.router.__xhr=_JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
+        Jet.router.__xhr=_JT.load(Jet.res.getSrc(file,'html'),function(html){
           Jet.router.__xhr=null;
-          var out=_JT.attr(_routeout)._JT_html(html);
+          var out=Jet.router.out._JT_html(html);
           if('undefined'!=typeof JUI){
             JUI._jui_mounted=[];
           }
-          if(call){call()}
           _loadStyle(out);
           _loadScript(out);
-          _loadCompImg(out);
+          _loadCompRes(out);
           Jet.valid.init(out);
           Jet.lang.init(out);
           Jet.router.init(out);
@@ -2761,19 +3098,55 @@ Jet.router={
             JUI.init(out);
           }
           Jet.load.init(out);
-          Jet.router.__onrouted.forEach(function(item){
-            if(item._jet){
-              item.call(item._jet,Jet.router)
-            }else{
-              item.call(Jet.router)
-            }
-          });
+          if(call){call()}
+          _callRouterLife('__onrouted',isFresh)
         });
       }
     }
   }
 };
-
+function _formatUrl(url){
+  var search='';
+  if(url.indexOf('#')!=-1){
+    var index=url.indexOf('?');
+    var _index=url.indexOf('#');
+    if(index!=-1){
+      if(index>_index){
+        Jet.router.hash=url.substring(_index,index);
+        search=url.substring(index+1);
+        url=url.substring(0,_index);
+        index=_index;
+      }else{
+        Jet.router.hash=url.substring(_index);
+        search=url.substring(index+1,_index);
+        url=url.substring(0,index);
+      }
+    }else{
+      Jet.router.hash=url.substring(_index);
+      index=_index;
+      url=url.substring(0,_index);
+    }
+  }else{
+    if(url._JT_has('?')){
+      search=url.substring(url.indexOf("?")+1);
+      url=url.substring(0,url.indexOf("?"));
+    }
+    Jet.router.hash='';
+  }
+  if(url[url.length-1]=='/'&&url.length>1)url=url.substring(0,url.length-1);
+  return {
+    url:url,search:search
+  }
+}
+function _callRouterLife(calls,isFresh){
+  Jet.router[calls].forEach(function(item){
+    if(item._jet){
+      item.call(item._jet,isFresh,Jet.router)
+    }else{
+      item.call(Jet.router,isFresh)
+    }
+  });
+}
 window.onhashchange=function(){
   if(Jet.router.lastTrueHash!=location.hash){
     window.onpopstate();
@@ -2802,7 +3175,8 @@ function _checkUrl(url){
   }
   return url;
 }
-function _loadScript(out){
+var _jetReg=new RegExp("new Jet\\([ |\r\n]*\\)","i");
+function _loadScript(out){//加载路由模块
   if(_JT.id(_routeScript)._JT_exist()){
     _JT.id(_routeScript)._JT_remove();
   }
@@ -2812,6 +3186,11 @@ function _loadScript(out){
   });
   var txt=['//# sourceURL=__dynamic.js\r\n'];
   var scripts=out._JT_findTag("script")._JT_toArray(false);
+  var id;
+  if(scripts.length>0){
+    id='__'+__router_comp
+    out._JT_attr(__comp_id,id);
+  }
   var index=-1;
   for(var i=scripts.length-1;i>=0;i--){
     if(scripts[i]._JT_hasAttr("src")){
@@ -2819,22 +3198,28 @@ function _loadScript(out){
       break;
     }
   }
+  var dealParJet=function(js){
+    if(js.match(_jetReg)!==null){
+      return js.replace(_jetReg,'new Jet("'+__jet_root+'","'+id+'",{})');
+    }
+    return js.replace('new Jet(','new Jet("'+__jet_root+'","'+id+'",');
+  };
   scripts._JT_each(function(item,i){
     if(item._JT_hasAttr("src")){
-      _JT.load(Jet.router.conf.js+_dealSrc(item._JT_attr("src")),function(scr){
-        txt[i+1]=scr;
+      _JT.load(Jet.res.getSrc(item._JT_attr("src"),'js'),function(src){
+        txt[i+1]=dealParJet(src);
         if(i==index){
           script._JT_html(txt.join(''));
           _JT.body()._JT_append(script);
         }
       });
     }else{
-      txt[i+1]=item._JT_html();
+      txt[i+1]=dealParJet(item._JT_html());
     }
     item._JT_remove();
   });
   if(index==-1){
-    script._JT_html(txt.join(''));
+    script._JT_html(txt.join(';'));
     _JT.body()._JT_append(script);
   }
 }
@@ -2873,7 +3258,7 @@ function _loadStyleCall(out,attr){
     if(isScope||(!isScope&&gStyle._styles.indexOf(attr)===-1)){
       if(!isScope)gStyle._styles.push(attr);
       if(item._JT_hasAttr("src")){
-        _JT.load(Jet.router.conf.css+_dealSrc(item._JT_attr("src")),function(css){
+        _JT.load(Jet.res.getSrc(item._JT_attr("src"),'css'),function(css){
           if(isScope){
             scopeTxt[i]=_replaceCssVar(css);
           }else{
@@ -2940,7 +3325,7 @@ function _loadCommonCss(){
       _loadCommonCssCall(commonCss,length);
     }else{
       item.forEach(function(_item){
-        _JT.load(Jet.router.conf.css+_dealSrc(_item),function(css){
+        _JT.load(Jet.res.getSrc(_item,'css'),function(css){
           length--;
           commonCss.push(css);
           _loadCommonCssCall(commonCss,length);
@@ -3021,71 +3406,134 @@ function _replaceCssVar(t){
 
 /*load*********************************************************************************/
 
-var _load="Jload";
+var _jload="Jload";
 var _par="Jpar";
 Jet.load={
+  __loadStore:{},
   init:function(obj,call){
     var data={};
     var list;
     var _this=this;
     if(obj==undefined||typeof obj=='function'){
-      list=_JT.attr(_load)._JT_toArray(false);
+      list=_JT.attr(_jload)._JT_toArray(false);
       call=obj;
     }else{
-      list=obj._JT_findAttr(_load)._JT_toArray(false);
+      list=obj._JT_findAttr(_jload)._JT_toArray(false);
     }
     var n=list.length;
-    if(n==0&&call!=undefined){//如果没有Jload 则立即执行
-      call();
+    if(n==0){//如果没有Jload 则立即执行
+      if(call)
+        call();
+      return;
     }
     list._JT_each(function(item,i){
-      var attr=item._JT_attr(_load);
-      item._JT_removeAttr(_load);
-      _JT.load(Jet.router.conf.html+_HtmlFile(attr),function(html){
-        item._JT_html(html);
-        var par=item._JT_attr(_par);
-        if(par===null&&_this.$DOM&&_this._tools.name!==undefined){
-            par=_this._tools.name;
-        }
-        _loadCompStyle(item,attr);
-        _loadCompScript(item,attr,par);
-        _loadCompImg(item);
-        Jet.valid.init(item);
-        Jet.lang.init(item);
-        if(item._JT_hasAttr('jonload')){
-          var onload=item._JT_attr('jonload')
-          if(par!==null&&Jet[par]!==undefined&&Jet[par][onload]!==undefined&&typeof Jet[par][onload]==='function'){
-            Jet[par][onload].call(Jet[par]);
-          }else if(_this.$DOM&&_this[onload]!==undefined&&typeof _this[onload]==='function'){
-              _this[onload].call(_this);
-          }else{
-              if(par!==null){
-                  (new Function(onload)).call(Jet[par]);
-              }else{
-                  (new Function(onload)).call(_this);
-              }
-          }
-        }
-
-        if(i==n-1&&call!=undefined){
-          call(list);
-        }
-        if(typeof JUI!='undefined'){
-          JUI.init(item);
-        }
-        Jet.load.init.call(_this,item);
-      });
+      var attr=item._JT_attr(_jload);
+      item._JT_removeAttr(_jload);
+      var src=Jet.res.getSrc(attr,'html');
+      if(Jet.load.__loadStore[src]){
+        setTimeout(function(){
+          _dealLoadResult(Jet.load.__loadStore[src],item,_this,attr,i,list,call);
+        },0)//????
+      }else{
+        _JT.load(src,function(html){
+          Jet.load.__loadStore[src]=html;
+          _dealLoadResult(html,item,_this,attr,i,list,call);
+        });
+      }
     });
   }
 }
-//Jet.load.init();
-function _loadCompImg(item){
-  item._JT_findTag('img')._JT_each(function(img){
-    var attr=img._JT_attr("src");
-    if(attr!=null&&attr[0]!='/'){//不是绝对路劲
-      img._JT_attr("src",Jet.router.conf.image+_dealSrc(attr));
+function _dealLoadResult(html,item,_this,attr,i,list,call){
+  var n=list.length;
+  item._JT_html(html);
+  var par=item._JT_attr(_par);
+  if(par===null&&_this.$DOM&&_this._tools.name!==undefined){
+      par=_this._tools.name;
+  }
+  _loadCompStyle(item,attr);
+  _loadCompScript(item,attr,par);
+  _loadCompRes(item);
+  Jet.valid.init(item);
+  Jet.lang.init(item);
+  Jet.router.init(item);
+  if(item._JT_hasAttr('jonload')){
+    var onload=item._JT_attr('jonload')
+    if(par!==null&&Jet[par]!==undefined&&Jet[par][onload]!==undefined&&typeof Jet[par][onload]==='function'){
+      Jet[par][onload].call(Jet[par]);
+    }else if(_this.$DOM&&_this[onload]!==undefined&&typeof _this[onload]==='function'){
+        _this[onload].call(_this);
+    }else{
+        if(par!==null){
+            (new Function(onload)).call(Jet[par]);
+        }else{
+            (new Function(onload)).call(_this);
+        }
     }
-  });
+  }
+  if(i==n-1&&call!=undefined){
+    call(list);
+  }
+  if(typeof JUI!='undefined'){
+    JUI.init(item);
+  }
+  Jet.load.init.call(_this,item);//??是否需要递归回调
+}
+function _dealResFile(str,type){
+  var def=Jet.res.defFileName[type],file=str;
+  if(def==undefined){
+    _throw('不支持的资源类型：'+type);
+  }
+  if(type=='image'||type=='media'){
+    if(str.indexOf('.')==-1){
+      file=str+def;
+    }
+  }else{
+    if(str.substring(str.lastIndexOf('.'))!==def){
+      file=str+def;
+    }
+  }
+  return Jet.router.conf[type]+ _dealSrc(file);
+}
+Jet.res={
+  defFileName:{
+    image:'.jpg',
+    media:'.mp3',
+    css:'.css',
+    js:'.js',
+    html:'.html'
+  },
+  image:{},
+  html:{},
+  js:{},
+  media:{},
+  css:{},
+  define:function(obj){
+    for(var k in obj){
+      for(var name in obj[k]){
+        Jet.res[k][name]=_dealResFile(obj[k][name],k);
+      }
+    }
+  },getSrc:function(str,type){
+    if(str[0]=='@'){
+      if(type=='html'&&str._JT_has('.html')){//路由时传来的路径，可能会包含参数
+        var arr=str.split('.html');
+        return Jet.res[type][arr[0].substring(1)]+arr[1]
+      }
+      return Jet.res[type][str.substring(1)];
+    }
+    return _dealResFile(str,type);
+  }
+}
+function _loadCompRes(item){
+  var ts=['image','media','media'];
+  ['img','audio','video'].forEach(function(tag,index){
+    item._JT_findTag(tag)._JT_each(function(img){
+      var attr=img._JT_attr("src");
+      if(attr!=null&&attr[0]!='/'){//不是绝对路径
+        img._JT_attr("src",Jet.res.getSrc(attr,ts[index]));
+      }
+    });
+  })
 }
 function _loadCompScript(out,attr,par){
   //Jet.__tempRoot=out;
@@ -3093,6 +3541,20 @@ function _loadCompScript(out,attr,par){
     attr=attr+"-"+par
   }
   var script=_JT.attr('load-script="'+attr+'"');
+  var id;
+  var initId=function(){
+    id=out._JT_attr('id');
+    if(id==null){
+      id=__ele_id++;
+    }
+    out._JT_attr(__comp_id,id);
+  }
+  var dealParJet=function(js){
+    if(par!==null){
+      return js.replace('new Jet(','new Jet("'+par+'","'+id+'",');
+    }
+    return js;
+  };
   if(!script._JT_exist()){
     script=_JT.ct('script')._JT_attr({
       'load-script':attr,
@@ -3100,6 +3562,9 @@ function _loadCompScript(out,attr,par){
     });
     var txt=['//# sourceURL='+attr+'.js\r\n'];
     var scripts=out._JT_findTag("script")._JT_toArray(false);
+    if(scripts.length>0){
+      initId();
+    }
     var index=-1;
     for(var i=scripts.length-1;i>=0;i--){
       if(scripts[i]._JT_hasAttr("src")){
@@ -3107,16 +3572,12 @@ function _loadCompScript(out,attr,par){
         break;
       }
     }
-    var dealParJet=function(js){
-      if(par!==null){
-        return js.replace('new Jet(','new Jet("'+par+'",');
-      }
-      return js;
-    };
+    var sourceSrc=[];
     scripts._JT_each(function(item,i){
       if(item._JT_hasAttr("src")){
-        _JT.load(Jet.router.conf.js+_dealSrc(item._JT_attr("src")),function(src){
+        _JT.load(Jet.res.getSrc(item._JT_attr("src"),'js'),function(src){
           txt[i+1]=dealParJet(src);
+          sourceSrc[i+1]=src;
           if(i==index){
             script._JT_html(txt.join(';'));
             _JT.body()._JT_append(script);
@@ -3124,20 +3585,28 @@ function _loadCompScript(out,attr,par){
         });
       }else{
         txt[i+1]=dealParJet(item._JT_html());
+        sourceSrc[i+1]=item._JT_html();
       }
       item._JT_remove();
     });
     if(index==-1){
       script._JT_html(txt.join(';'));
+      script.__sourceSrc=sourceSrc;
       _JT.body()._JT_append(script);
     }
-  }else{
-    var txt=script._JT_html();
-    script._JT_remove();
-    _JT.body()._JT_append(_JT.ct('script')._JT_attr({
+  }else{//重新执行
+    initId();
+    var src='';
+    script.__sourceSrc.forEach(function(item){
+      src+=dealParJet(item);
+    })
+    var newScript=_JT.ct('script')._JT_attr({
       'load-script':attr,
       'type':'text/javascript'
-    })._JT_html(txt));
+    })._JT_html(src);
+    newScript.__sourceSrc=script.__sourceSrc;
+    script._JT_remove();
+    _JT.body()._JT_append(newScript);
   }
 }
 function _loadCompStyle(out,attr){
@@ -3344,7 +3813,7 @@ Object.defineProperties(Jet.valid,{
     set:function(val){
       if(Jet.valid.__default!==val){
         if(Jet.valid.__useOnInput===true&&val===true){
-          console.warn('useOnInput 模式下不可使用默认样式');
+          _warn('useOnInput 模式下不可使用默认样式');
         }else{
           Jet.valid.__default=val;
           Jet.valid.__lastUseDef=val;
@@ -3400,7 +3869,7 @@ function _checkIsPw(a) {
   }
 };
 
-HTMLElement.prototype._JT_validate = function(s, f) {
+EleProto._JT_validate = function(s, f) {
   _validateForm({
     ele:this,
     pass:s,
@@ -3784,6 +4253,11 @@ Jet.Bind.prototype.refresh=function(key){
         item.setIndex(i);
       }
     });
+    this._tools._jetTools._JT_each(function(item){
+      if(item._hasIndex){
+        item.refreshIndex(i);
+      }
+    });
   //}
 };
 function _initBind(opt){
@@ -3805,23 +4279,40 @@ function _initBind(opt){
         var _opt=_bindOpt(_this,item,_this.name,_this.par._tools._calls[_this.name]);
         _opt.data=_this.data;
         _opt._data=_this._data;
-        _jet=(isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);
-      }else if(attr==_index||attr._JT_has("$.$p")){
+        _jet=(_isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);
+      }else if(attr._JT_has(_index)){
         var _opt=_bindOpt(_this,item,attr,_this.par._tools._calls);
         _opt.index=_this.name;
-        if(isInput(item)){
+        if(_isInput(item)){
           //_jet=new Jet.Input(_opt);
           _throw('input:不允许将index绑定到输入项中');
         }else{
-          if(attr._JT_has("$.$p")){
-            if(attr._JT_has('(')){
-              _opt._parIndex=parseInt(attr.substring(attr.indexOf('(')+1,attr.indexOf(')')));
-            }else{
-              _opt._parIndex=(attr.split('$p').length-1);//需要修改timeOf
-            }
+          if(attr._JT_has(_index+'(')){
+            var num=attr.substring(attr.indexOf('(')+1,attr.indexOf(')'));
+            if(num==''){num=1;}
+            _opt._parIndex=parseInt(num);
           }
           _jet=new Jet.Text(_opt);
         }
+
+        // else if(attr==_index||attr._JT_has("$.$p")){
+        //   var _opt=_bindOpt(_this,item,attr,_this.par._tools._calls);
+        //   _opt.index=_this.name;
+        //   if(_isInput(item)){
+        //     //_jet=new Jet.Input(_opt);
+        //     _throw('input:不允许将index绑定到输入项中');
+        //   }else{
+        //     if(attr._JT_has("$.$p")){
+        //       if(attr._JT_has('(')){
+        //         _opt._parIndex=parseInt(attr.substring(attr.indexOf('(')+1,attr.indexOf(')')));
+        //       }else{
+        //         _opt._parIndex=(attr.split('$p').length-1);//需要修改timeOf
+        //       }
+        //     }
+        //     _jet=new Jet.Text(_opt);
+        //   }
+        // }
+
       }else{
           var _opt=(item._JT_hasAttr(_root))?
             _bindRootOpt(_this.jet,item,attr):
@@ -3831,7 +4322,7 @@ function _initBind(opt){
               switch(type){
                 case 'json':_jet=new Jet.Bind(_opt);break;
                 case 'array':_jet=new Jet.For(_opt);break;
-                default:_jet=(isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);break;
+                default:_jet=(_isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);break;
               }
           }else{
             addToJumpList(item,jumpList);
@@ -3899,12 +4390,26 @@ function _initBind(opt){
           }
       }
   });
+  var loadList=this.ele._JT_findAttr(_jload);
+  loadList._JT_each(function(item){
+    if(!item._hasLoad&&!item._hasDisabled){
+      item._hasLoad=true;
+      var opt;
+      if(item._JT_hasAttr(_root)){
+        opt=_bindRootOpt(_this.jet,item);
+      }else{
+        opt=_bindOpt(_this,item);
+      }
+      item.__loadOpt=opt;
+    }
+  })
   _checkJetTools.call(this,opt);
   
   this.$regist(function(key,val){
     _this.refresh();
   });
 };
+
 function _bindOpt(_this,item,name,_calls){
   return {
     jet:_this.jet,
@@ -3955,17 +4460,19 @@ Jet.For.prototype.refresh=function(key){
   this.$makeChange();
 };Jet.For.prototype.$get=function(){
   return this.data[this.name];
-};Jet.For.prototype.refreshParIndex=function(){
-  this._tools._jets._JT_each(function(item){
-    item._tools._jets._JT_each(function(_item){
-      if(_item._parIndex&&_item.type==_text){
-        _item.refresh();
-      }else if(_item.type==_for){
-        _item.refreshParIndex();
-      }
-    });
-  });
-};Jet.For.prototype.refresh.push=function(){
+};
+// Jet.For.prototype.refreshParIndex=function(){
+//   this._tools._jets._JT_each(function(item){
+//     item._tools._jets._JT_each(function(_item){
+//       if(_item._parIndex&&_item.type==_text){
+//         _item.refresh();
+//       }else if(_item.type==_for){
+//         _item.refreshParIndex();
+//       }
+//     });
+//   });
+// };
+Jet.For.prototype.refresh.push=function(){
   if(this._switch){
     var _t=this._data[this.name]._JT_last()[this._type];
     if(_t in this._html){
@@ -4163,7 +4670,7 @@ function _initForRule(ele){
   }
   if(this.data[this.name].length==0){
     var _this=this;
-    [_bind,_if,_show,_attr,_style,_run,_on,_load].forEach(function(name){
+    [_bind,_if,_show,_attr,_style,_run,_on,_jload].forEach(function(name){
       _this.ele._JT_findAttr(name)._JT_each(function(item){
         item._hasDisabled=true;
       })
@@ -4283,7 +4790,7 @@ Jet.Text.prototype.refresh=function(key){
   }
 };Jet.Text.prototype.$get=function(){//indexs
   if(this._parIndex){
-    return _getParIndex(this,this._parIndex)
+    return __index.call(this,this._parIndex)
     //return this.indexs[this.indexs.length-1-this._parIndex];
   }else{
     if(this.index!=undefined){
@@ -4309,22 +4816,11 @@ Jet.Text.prototype.refresh=function(key){
   //   }
   // });
 };
-function _getParIndex(_this,i){
-  var par=_this.par;
-  while(i>0){
-    par=par.par;
-    if(_type(par._data)!='array'){
-      par=par.par;
-    }
-    i--;
-  }
-  return par.ele._JT_index();
-}
 function _initText(opt){
   _checkLangJet.call(this,opt);
   var _this=this;
-  if(this.ele._JT_html().trim()!=''){
-    this.func=new Function("$",'opt','return '+this.ele._JT_html().trim());
+  if(this.ele._JT_txt().trim()!=''){
+    this.func=new Function("$",'opt','return '+this.ele._JT_txt().trim());
   }
   this.$regist(function(key,val){
     _this.refresh();
@@ -4369,8 +4865,8 @@ function _initInput(opt){
   }
   if(this.ele._JT_hasAttr('contenteditable')){
     this.isContent=true;
-    if(this.ele._JT_html().trim()!='')
-      this.func=new Function("$",'return '+this.ele._JT_html());
+    if(this.ele._JT_txt().trim()!='')
+      this.func=new Function("$",'return '+this.ele._JT_txt());
   }else if(this.ele.tagName!='SELECT'&&this.ele._JT_val().trim()!=''){
     this.func=new Function("$",'return '+this.ele._JT_val());
   }
@@ -4462,7 +4958,6 @@ Jet.If.prototype.$get=function(){
 };Jet.If.prototype.refresh=function(i){
   // if(this.ele.attr('id')=='queryResult'){
   // }
-  var _this=this;
   if(this.index!=undefined&&i!=undefined&&this.index!=i){
     this.index==i;
   }
@@ -4474,43 +4969,54 @@ Jet.If.prototype.$get=function(){
       jet:this,
       root:this.jet
     }
-    var _par=function(i){
-      if(i==undefined||i<=0){i=1;}
-      if(i>=_this._parData.length){
-        return _this._parData[_this._parData.length-1]
-      }
-      return _this._parData[i-1];
-    };
     //if(this.exp.call(opt,d)===true){ //弃用原因 不好做数据改变的检测
     // if(this.exp.toString()._JT_has('"a"'))
     // console.loconsole.log(this.exp)
-    if(this.exp(d,this.jet,_par)===true){
+    if(_callFuncForJetTools.call(this,this.exp,d)===true){
       this.func_true.call(this.jet,opt);
     }else{
       this.func_false.call(this.jet,opt);
     }
   }
-};
-function _getParData(){
-  var m=this._attrVal.match(_reg);
-  this._parData=[this.data];
-  var par=this;
-  while(!par.par.$DOM){
-    par=par.par;
-    this._parData.push(par.data);
+};Jet.If.prototype.refreshIndex=function(i){
+  if(this._hasIndex){
+    this.refresh();
   }
-}
+};
+
 function _formatBindStr(s){
-  return s._JT_replaceAll("\\$.\\$par",'_par')._JT_replaceAll("\\$","d")._JT_replaceAll("{{",'')._JT_replaceAll("}}",'');
+  return s._JT_replaceAll([
+    ["\\$.\\$par","_par"],
+    ["\\$index\\(","_index\("],
+    ["\\$index","_index\(\)"],
+    ["\\$","d"],
+    ["{{",''],
+    ["}}",'']
+  ])
+}
+function _makeFuncForJetTools(str){
+  return new Function("d","dr","_par","_index","return ("+str+")");
+}
+function _callFuncForJetTools(func,d){
+  return func(d,this.jet,__par.bind(this),__index.bind(this));
+}
+function _initParData(){
+  if(this._attrVal._JT_has('$.$par')){
+    var m=this._attrVal.match(_reg);
+    this._parData=[this.data];
+    var par=this;
+    while(!par.par.$DOM){
+      par=par.par;
+      this._parData.push(par.data);
+    }
+  }
 }
 function _initIf(){
   var _this=this;
   var ifAttr=this._attrVal;
-  if(ifAttr._JT_has('$.$par')){
-    _getParData.call(this);
-  }
+  _initParData.call(this);
   if(this.type==_show){
-      _registForWrapperVar(this,ifAttr);
+      _registForWrapperVar(ifAttr,this);
       this.func_true=function(){
           _this.ele.style.display=''
       };
@@ -4527,10 +5033,10 @@ function _initIf(){
       }else{
         ifAttr='d.'+ifAttr;
       }
-      this.exp=new Function("d","dr","_par","return ("+ifAttr+")");
+      this.exp=_makeFuncForJetTools(ifAttr);
   }else{
       var temp=ifAttr.substring(0,ifAttr.indexOf(":"));
-      _registForWrapperVar(this,temp);
+      _registForWrapperVar(temp,this);
       if(typeof this._data!=='object'){
         temp=_formatBindStr(temp);
       }else{
@@ -4540,7 +5046,7 @@ function _initIf(){
           temp='d.'+temp;
         }
       }
-      this.exp=new Function("d","dr","_par","return ("+temp+")");
+      this.exp=_makeFuncForJetTools(temp);
       ifAttr=ifAttr.substring(ifAttr.indexOf(":")+1);
       var func_t="";
       var func_f="";
@@ -4676,8 +5182,10 @@ function _initIf(){
   this.refresh();
 }
 
-function _registForWrapperVar(_this,content){
+function _registForWrapperVar(content,_this){
+  //debugger
   var m=content.match(_reg);
+  var _hasIndex=false;
   if(m==null){
       if(!(content in _this._data)&&!content._JT_has("$.")){
           //_throw(_this.type+':['+content+']若值是表达式，请使用{{}}将表达式里的变量包裹起来');
@@ -4695,27 +5203,52 @@ function _registForWrapperVar(_this,content){
                       _this.refresh();
                   });
               }else{
-                var obj=_this;//$.
+                var obj=_this,jump=false;//$.
                 if(_ele._JT_has('$r.')){
                   obj=_this.jet;
                 }else if(_ele._JT_has('.$par(')){//$.$par()
                   var num=_ele.substring(_ele.indexOf('.$par(')+6,_ele.indexOf(')'))
                   num=(num==='')?1:parseInt(num);
-                  for(var i=0;i<num;i++){
-                    obj=obj.par;
-                    if(obj.$DOM){//到达最顶层
-                      break;
-                    }
-                  }
+                  obj=_findRegistPar(obj,num);
+                  // for(var i=0;i<num;i++){
+                  //   obj=obj.par;
+                  //   if(obj.$DOM){//到达最顶层
+                  //     break;
+                  //   }
+                  // }
                   _ele='{{$'+_ele.substring(_ele.indexOf(')')+1)
+                }else if(_ele._JT_has(_index)){//索引的话就跳过
+                  _this._hasIndex=true;
+                  _hasIndex=true;
+                  jump=true;
                 }
-                obj.$regist(_ele.substring(2,_ele.length-2),function(key,val){
-                  _this.refresh();
-                })
+                if(!jump){
+                  if(_ele=="{{$}}"){
+                    _this.$regist(function(key,val){
+                        _this.refresh();
+                    });
+                  }else{
+                    obj.$regist(_ele.substring(2,_ele.length-2),function(key,val){
+                      _this.refresh();
+                    })
+                  }
+                }
               }
           }
       });
   }
+  return _hasIndex;
+}
+function _findRegistPar(obj,num){
+  if(num>obj._parData.length-1){
+    return obj.jet;
+  }
+  var d=obj._parData[num];
+  var p=obj.par;
+  while(p.$get()!==d&&!p.$DOM){//找到父元素 或 到达最顶层
+    p=p.par;
+  }
+  return p;
 }
 /*on*********************************************************************************/
 Jet.On=function(opt){
@@ -4786,23 +5319,36 @@ function _initOn(){
       _f=e1;
       //_this.func=_this.jet[e1];
     }
-    if(_f in _this.jet||_f.substring(0,_f.indexOf(',')) in _this.jet){
+    var _s_f=_f.substring(0,_f.indexOf(','));
+    var _p=_this.jet.$props;
+    if(_f in _this.jet||_s_f in _this.jet||(_p&&(_f in _p||_s_f in _p))){
       _f.split(',').forEach(function(f){
-        if(typeof _this.jet[f]!='function')
+        if(typeof _this.jet[f]!='function'&&_p&&typeof _p[f]!='function')
           _throw(f+' 不是一个方法');
-        else
-          func.push(_this.jet[f]);
+        else{
+          if(_this.jet[f]){
+            func.push(_this.jet[f]);
+          }else{
+            func.push(_p[f]);
+          }
+        }
       });
     }else{
       func=[new Function('opt',_f)];
     }
     if(valid&&_valid_false!=null){
-      if(_valid_false in _this.jet||_valid_false.substring(0,_valid_false.indexOf(',')) in _this.jet){
+      var _s_vf=_valid_false.substring(0,_valid_false.indexOf(','));
+      if(_valid_false in _this.jet||_s_vf in _this.jet||(_p&&(_valid_false in _p||_s_vf in _p))){
         _valid_false.split(',').forEach(function(f){
           if(typeof _this.jet[f]!='function')
             _throw(f+' 不是一个方法');
-          else
-            _vf_func.push(_this.jet[f]);
+          else{
+            if(_this.jet[f]){
+              _vf_func.push(_this.jet[f]);
+            }else{
+              _vf_func.push(_p[f]);
+            }
+          }
         });
       }else{
         _vf_func=[new Function('opt',_valid_false)];
@@ -4819,23 +5365,31 @@ function _initOn(){
       if(valid){
         validPar._JT_validate(function(){
           func.forEach(function(f){
-            f.call(_this.jet,opt);
+            _callCheckChild(f,_this,opt)
           });
         },function(){
           _vf_func.forEach(function(f){
-            f.call(_this.jet,opt);
+            _callCheckChild(f,_this,opt)
           });
         });
       }else{
         func.forEach(function(f){
-          f.call(_this.jet,opt);
+          _callCheckChild(f,_this,opt)
         });
       }
     });
   });
 
 }
-
+function _callCheckChild(f,_this,opt){
+  if(f.__props_child){
+    opt.child=_this.jet;
+    f.call(_this.jet,opt);
+    delete opt.child;
+  }else{
+    f.call(_this.jet,opt);
+  }
+}
 
 /*run*********************************************************************************/
 Jet.Run=function(opt){
@@ -4882,6 +5436,26 @@ function _initRun(opt){
   this.run();
 }
 
+//if attr show style 中获取父元素数据的函数
+function __par(i){
+  if(i==undefined||i<=0){i=1;}
+  if(i>=this._parData.length){
+    return this._parData[this._parData.length-1]
+  }
+  return this._parData[i-1];
+}
+//获取for元素的索引 i表示第几层父元素
+function __index(i){
+  var par=this.par;
+  while(i>0){
+    par=par.par;
+    if(_type(par._data)!='array'){
+      par=par.par;
+    }
+    i--;
+  }
+  return par.ele._JT_index();
+}
 
 /*attr*********************************************************************************/
 // Jattr="value:aa;disabled:aa"
@@ -4909,27 +5483,26 @@ Jet.Attr.prototype.$get=function(){
   }else{
     return this.data[this.name];
   }
-};Jet.Attr.prototype.refresh=function(i){
-  var _this=this;
+};Jet.Attr.prototype.refresh=function(checkIsIndex){
   var d=this.$get();
   if(!_isUd(d)){
-    var _par=function(i){
-      if(i==undefined||i<=0){i=1;}
-      if(i>=_this._parData.length){
-        return _this._parData[_this._parData.length-1]
-      }
-      return _this._parData[i-1];
-    };
     for(var k in this.attrs){
-      this.setFunc.call(this.ele,k,this.attrs[k](d,this.jet,_par))
+      if(!checkIsIndex||this.attrs[k]._hasIndex==true){
+        this.setFunc.call(
+          this.ele,k,
+          _callFuncForJetTools.call(this,this.attrs[k],d)
+        )
+      }
     }
+  }
+};Jet.Attr.prototype.refreshIndex=function(i){
+  if(this._hasIndex){
+    this.refresh(true);
   }
 };
 function _initAttr(opt){
   var attr=this._attrVal;
-  if(attr._JT_has('$.$par')){
-    _getParData.call(this);
-  }
+  _initParData.call(this);
   this.attrs={};
   var _this=this;
   if(attr._JT_has(';')){
@@ -4948,9 +5521,13 @@ function _initOneAttr(attr){
       var index=attr.indexOf(":");
       var _s=attr.substring(index+1);
       if(_s._JT_has('{{')){//动态
-        _registForWrapperVar(this,_s);
+        var hasIndex=_registForWrapperVar(_s,this);
         _s=_formatBindStr(_s);
-        this.attrs[attr.substring(0,index)]=new Function("d",'dr','_par',"return ("+_s+")");
+        var func=_makeFuncForJetTools(_s);
+        if(hasIndex){
+          func._hasIndex=true;
+        }
+        this.attrs[attr.substring(0,index)]=func;
       }else{//静态
         this.attrs[attr.substring(0,index)]=new Function("return '"+_s+"'");
       }
@@ -5037,8 +5614,8 @@ Jet.$export=function(call,json){
   //   delete json.__call;
   // }
 }
-//var mod=Jet.$use('name')
-Jet.$use=function(name){
+//var mod=Jet.$get('name')
+Jet.$get=function(name){
   if(arguments.length==1){
     return Jet.$module[name];
   }else{
@@ -5050,25 +5627,25 @@ Jet.$use=function(name){
     return ms;
   }
 }
-Jet.prototype.$use=function(name){
-  return Jet.$use(name);
+Jet.prototype.$get=function(name){
+  return Jet.$get(name);
 }
-function _jsFile(file){
-  var src=_dealSrc(file);
-  if(!src._JT_has('.js')){
-    src=src+'.js'
-  }
-  return src;
-}
-function _HtmlFile(file){
-  var src=_dealSrc(file);
-  if(!src._JT_has('.html')){
-    src=src+'.html'
-  }
-  return src;
-}
+// function _jsFile(file){
+//   var src=_dealSrc(file);
+//   if(!src._JT_has('.js')){
+//     src=src+'.js'
+//   }
+//   return src;
+// }
+// function _HtmlFile(file){
+//   var src=_dealSrc(file);
+//   if(!src._JT_has('.html')){
+//     src=src+'.html'
+//   }
+//   return src;
+// }
 function _loadOneModule(src,key,isNew,call){ 
-  _JT.load(Jet.router.conf.js+src,function(code){
+  _JT.load(Jet.res.getSrc(src,'js'),function(code){
     code=('//# sourceURL='+src+'\r\n'+code);
     _check_is_new=(isNew===false)?false:true;
     if(call){
@@ -5105,11 +5682,12 @@ Jet.$import=function(){
       item=isNew;
     }
     var json=_getKeyAndMod(item);
-    var src=_jsFile(json.mod);
+    //var src=_jsFile(json.mod);
+    var src=json.mod;
     if(typeof _modules[src]!=='undefined'&&isNew===false){
       if(callback!==null){
         var _func=function(modName){
-          var mod=Jet.$use(modName);
+          var mod=Jet.$get(modName);
           var func=function(m){
             index++;
             modules[(item._JT_has(' as ')?json.key:modName)]=m;
@@ -5181,7 +5759,7 @@ var _addModule=function(_this,mods){
 }
 function _importBase(obj,key,mod){
   if(typeof mod==='string'){
-    obj[key]=Jet.$use(mod);
+    obj[key]=Jet.$get(mod);
   }else{
     obj[key]=mod
   }

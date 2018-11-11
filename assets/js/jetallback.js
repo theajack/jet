@@ -64,7 +64,7 @@
 
 //4-19 JUI 新增 j-drag
 //4-23 修复：数组的方法不会触发数组的监听回掉，现在使用数组的长度的绑定会被正确刷新
-//4-24 新增 $define，$export，$use，$import，$module，，as 关键字
+//4-24 新增 $define，$export，$get,$import，$module，，as 关键字
 //4-24 新增css scoped 属性，默认值为true;
 //     新增 JUI.dialog.isOpen clear ; 新增JUI.confirm.isOpen clear 
 //     数组removeByIndex
@@ -76,7 +76,7 @@
 ///     完成了ondatachange的嵌套，并修复了$regist 多层数组嵌套时的bug ,(a[0][0]时用出错)
 
 //5-24 修复存在多个 jload 元素，JUI加载不正常的bug， 修复 j-dialog 不同页面之间切换不会移除的 bug
-//     JUI.DIALOG.removeAll 不同组件之间切换时使用，路由切换已经写进源码
+//     JUI.dialog.removeAll 不同组件之间切换时使用，路由切换已经写进源码
 //     修复了添加或刪除数组元素时 $index不能正确改变 的bug，修复了使用JUI时for元素添加新元素时不会被渲染
 //     新增 Jet 的 par 属性，用于指定父元素，父元素会有一个 $child 属性
 //5-25 修复了for元素中使用radio或checkbox时添加新元素是，group不会被正确绑定的bug
@@ -93,8 +93,46 @@
 //     bind元素不需要父元素，因为如果子元素中没有对应的属性，会自动向上查找父元素
 //     在执行语句中，可以使用 Jet元素的 $parData(index) 方法获取或设置父元素的数据
 //5-30 对于display none的元素 禁用了_validInput
-//(function(){
-  var _JT = {
+//6-6 修复了因为修改jload.init引入的bug:jload 子组件无法引用父组件的数据
+//6-20 ajax 新增header  新增支持数据为数组
+//  jui msg text 支持 数字类型
+//  增加_hasDisabled 属性 以修复 当数组为空时 其中的Jet元素可能会报错的bug
+//  修复了 当输入框类型为password时 启用了 onchange 事件的bug
+//  待增加：jui-bind 使用父元素或根元素数据**
+//6-24 j-select 组件支持 数据绑定 j-option，
+//  当j-option过多时，支持上下滚动显示
+//  修复了 j=‘’ 绑定数据且其数据处于上级作用域的元素，其子元素不会使用于其相同的作用域的bug 
+//  （*重要）现在可以对绑定数据的数组 使用 = 号直接赋值 ，不必使用 $replace; 也对json进行了优化，现在都可以使用 = 直接赋值
+//  6-26
+//    修复数组插入数据 ，for中的input输入会错乱的bug 
+//    修改了Jetterjs 的 insertArray(使用原生splice) removeByIndex(支持第二个参数选择删除个数)
+//    （*重要）修改了原生数组操作方法(push,pop,splice,shift,unshift,reverse,sort)，现在可以使用原生数组操作来操作Jet的绑定数组
+//    新增delay 和 interval 用于解决由于异步加载导致的依赖项未加载完成的情况，设置一个延迟或循环 获取依赖项
+// 6-27 text 元素中func 可以使用opt参数
+//    dialog.reinitPos
+//    修改了 jet数据的 defineJson 的方法 现在json使用等于直接赋值可以触发绑定。（目前设定的是Jet数据中没有属性，不会被赋值到Jet数据中）
+//    JUI message 和 confirm 新增 html 属性
+//    （*重要）JUI date 新增 jui-date-time=true 支持选择24进制的时间
+//    （*重要）JUI date 新增 jui-date-detail=true hover可以显示农历和节日节气等信息
+//    JUI date 新增 jui-date-max 和 jui-date-min
+//6-30    JUI dialog noclose nodrag 属性
+//    Jet run现在会在渲染数据完成之后触发 ；jload jonload属性
+//7-3     修复了当input没有type属性时 绑定无效的bug; 修复了Date日期选择器当日期或月份是个位数时导致日期紊乱的bug
+//    jstyle等元素来使用函数 $r.func({{$.score}})，text元素可以使用立即执行函数或this.func来使用函数
+//  jui-date 添加选择今日按钮
+//  现在jload不一定非要设置jpar属性，会将其所在的页面的Jet元素作为其父元素
+//7-10 重要：将jcode融入了JUI ,新增了索引和点击某行高亮；jui-code-line 用于是否显示索引默认为true
+//  新增了jui-onload属性
+//7-5:路由新增use参数新增oninit 用于在路由化之后调用，一般可以用来加载模块  
+
+//10-30
+//  修复表达式中出现 小于大于号时会出错的bug
+//  增加JUI中button 的 icon 属性
+//  现在，就算没有声明Jet的name参数，也会为Jet对象默认指定一个name
+//10-31
+//  整理删除JUI中的冗余代码
+(function(){
+  var _JT = { 
     cls: function(a) {
       return _checkSelect(document.getElementsByClassName(a))
     },
@@ -120,6 +158,7 @@
     ct: _create,
     ajax:_ajax,
     cookie:_cookie,
+    storage:_storage,
     load:_load,
     clone:_clone,
     html5:function(){
@@ -128,7 +167,28 @@
       }
       return false;
     },
-    urlParam: _getUrlParam
+    urlParam: _getUrlParam,
+    delay:function(call,time){
+      time=time||500;
+      return setTimeout(function(){
+        call.call(this);
+      },time);
+    },
+    interval:function(bool,call,time){
+      time=time||500;
+      return setInterval(function(){
+        if(bool().call(this)){
+          clearInterval(t);
+          call().call(this);
+        }
+      },time)
+    },
+    clearDelay:function(t){
+      return setTimeout(t);
+    },
+    clearInterval:function(t){
+      return clearInterval(t);
+    }
   };
   function _clone(obj){
     if(obj==undefined){
@@ -143,7 +203,7 @@
         if(obj[attr]==null||obj[attr]==undefined){
           a[attr]=obj[attr];
         }else if(_type(obj[attr])=="array"){
-          a[attr]=obj[attr].clone();
+          a[attr]=obj[attr]._JT_clone();
         }else if(_type(obj[attr])=="json"||_type(obj[attr])=="object"){
           a[attr]=_clone(obj[attr]);
         }else{
@@ -158,23 +218,44 @@
     }
   };
   function _storage(a,b){
-    if(b===undefined){
-      var d=localStorage.getItem(a);
-      try{
-        return JSON.parse(d)
-      }catch(e){
-        if(d===parseFloat(d).toString()){
-          return parseFloat(d);
+    if(typeof a==='object' && a!==null){
+      for(var k in a){
+        _storage(k,a[k]);
+      }
+      return
+    }
+    var store=localStorage;
+    if (b === undefined) {
+        if(a===undefined){
+            var obj={};
+            Object.keys(store).forEach(function(item){
+                obj[item]=store.getItem(item);
+            });
+            return obj;
+        }else if(a===null){
+            Object.keys(store).forEach(function(item){
+                store.removeItem(item);
+            });
+        }else{
+            var d = store.getItem(a);
+            try {
+                return JSON.parse(d)
+            } catch (e) {
+                if (d === parseFloat(d).toString()) {
+                    return parseFloat(d);
+                }
+                return d;
+            }
         }
-        return d;
-      }
-    }else{
-      if(typeof b==='object'){
-        localStorage.setItem(a, JSON.stringify(b))
-      }else{
-        localStorage.setItem(a, b)
-      }
-      return b
+    } else if(b === null){
+        store.removeItem(a)
+    } else {
+        if (typeof b === 'object') {
+            store.setItem(a, JSON.stringify(b))
+        } else {
+            store.setItem(a, b)
+        }
+        return b
     }
   }
   function _cookie(a, b, d, e) {
@@ -223,7 +304,8 @@
       contentType: a.contentType || "application/x-www-form-urlencoded",
       beforeSend: a.beforeSend ||function() {},
       success: a.success ||function() {},
-      error: a.error ||function() {}
+      error: a.error ||function() {},
+      header:a.header||{}
     };
     b.beforeSend();
     var c;
@@ -233,12 +315,19 @@
       c = ActiveXObject("Microsoft.XMLHTTP")
     }
     var _d=_convertData(b.data);
-    if(b.type.toLowerCase()=='get'&&_d!==''){
+    var _t=b.type.toLowerCase();
+    //||_t=='delete'
+    if((_t=='get')&&_d!==''){
       b.url=b.url+'?'+_d;
     }
     c.open(b.type, b.url, b.async);
     c.responseType = b.dataType;
-    c.setRequestHeader("Content-Type", b.contentType);
+    if(a.contentType!==null){
+        c.setRequestHeader("Content-Type", b.contentType);
+    }
+    for(var k in b.header){
+      c.setRequestHeader(k, b.header[k]);
+    }
     if(b.type.toLowerCase()=='get'){
       c.send();
     }else{
@@ -254,6 +343,8 @@
       }
     }
     return c;
+
+    
   };
   function _load(name,call,ecall){
     return _JT.ajax({ 
@@ -262,7 +353,6 @@
       success : function(result){ 
         call(result);
       },
-      base:false,
       error : function(err){ 
         if(ecall!=undefined)
           ecall(err);
@@ -277,24 +367,31 @@
     if(a==undefined){
       return "";
     }
-    if (_JT.type(a)=="json") {
+    var t=$J.type(a);
+    if (t=="json") {
       var b = "";
       for (var c in a) {
-        b += c + "=" + a[c] + "&"
+        if(typeof a[c]==='object'){
+          b += (c + "=" + encodeURIComponent(JSON.stringify(a[c])) + "&")
+        }else{
+          b += (c + "=" + encodeURIComponent(a[c]) + "&")
+        }
       }
       b = b.substring(0, b.length - 1);
       return b
-    } /*else if(_JT.type(a)=="formdata"){
-      if(a.entries!=undefined){
-        var b = "";
-        for (var i of a.entries()) {
-          b += i[0] + "=" + i[1] + "&"
-        }
-        b = b.substring(0, b.length - 1);
-        return b
-      }
+    }else if(t=='array'){
+      return JSON.stringify(a);
+    } else if($J.type(a)=="formdata"){
+      // if(a.entries!=undefined){
+      //   var b = "";
+      //   for (var i of a.entries()) {
+      //     b += i[0] + "=" + i[1] + "&"
+      //   }
+      //   b = b.substring(0, b.length - 1);
+      //   return b
+      // }
       return a;
-    }*/else{
+    }else{
       return a;
     }
   }
@@ -329,7 +426,12 @@
     return b
   };
   
-  HTMLElement.prototype._JT_css = function(d, a) {
+  var EleProto=HTMLElement.prototype;
+  var CollProto=HTMLCollection.prototype;
+  var NodeProto=NodeList.prototype;
+  var ArrProto=Array.prototype;
+  var StrProto=String.prototype;
+  EleProto._JT_css = function(d, a) {
     if (a == undefined) {
       if (_JT.type(d)=="json") {
         for (var b in d) {
@@ -388,19 +490,7 @@
     return [parseFloat(a.substring(0, a.indexOf(b))), b]
   };
 
-  function _checkStyleName(b) {
-    var a = b.split("-");
-    if (a.length <= 1) {
-      return b
-    } else {
-      var c = a[0];
-      for (var i = 1; i < a.length; i++) {
-        c += (a[i].charAt(0).toUpperCase() + a[i].substring(1))
-      }
-      return c
-    }
-  };
-  HTMLElement.prototype._JT_attr = function(c, b) {
+  EleProto._JT_attr = function(c, b) {
     if (b == undefined) {
       if (_JT.type(c)=="json") {
         for (var a in c) {
@@ -417,7 +507,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_attr = NodeList.prototype._JT_attr = function(d, c) {
+  CollProto._JT_attr = NodeProto._JT_attr = function(d, c) {
     if (c == undefined && _JT.type(d)!="json") {
       var a = [];
       this._JT_each(function(b) {
@@ -431,10 +521,10 @@
       return this
     }
   };
-  HTMLElement.prototype._JT_hasAttr = function(a) {
+  EleProto._JT_hasAttr = function(a) {
     return this.hasAttribute(a)
   };
-  HTMLElement.prototype._JT_removeAttr = function(b) {
+  EleProto._JT_removeAttr = function(b) {
     var c = b.split(" ");
     if (c.length > 1) {
       var d = this;
@@ -446,25 +536,25 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_removeAttr = NodeList.prototype._JT_removeAttr = function(b) {
+  CollProto._JT_removeAttr = NodeProto._JT_removeAttr = function(b) {
     this._JT_each(function(a) {
       a._JT_removeAttr(b)
     });
     return this
   };
-  HTMLElement.prototype._JT_findTag = function(a) {
+  EleProto._JT_findTag = function(a) {
     return _checkSelect(this.getElementsByTagName(a))
   };
-  HTMLElement.prototype._JT_findAttr = function(a) {
+  EleProto._JT_findAttr = function(a) {
     return _checkSelect(this.querySelectorAll("[" + a + "]"))
   };
-  HTMLElement.prototype._JT_findClass = function(a) {
+  EleProto._JT_findClass = function(a) {
     return _checkSelect(this.getElementsByClassName(a))
   };
-  HTMLElement.prototype._JT_select = function(a) {
+  EleProto._JT_select = function(a) {
     return _checkSelect(this.querySelectorAll(a))
   };
-  HTMLElement.prototype._JT_addClass = function(a) {
+  EleProto._JT_addClass = function(a) {
     if(a._JT_has(" ")){
       var b = a.split(" ");
       var c = this;
@@ -482,13 +572,13 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_addClass = NodeList.prototype._JT_addClass = function(a) {
+  CollProto._JT_addClass = NodeProto._JT_addClass = function(a) {
     this._JT_each(function(b) {
       b._JT_addClass(a)
     });
     return this
   };
-  HTMLElement.prototype._JT_removeClass = function(a) {
+  EleProto._JT_removeClass = function(a) {
     if (a == undefined) {
       this.className = ""
     } else if(a.trim()!==""){
@@ -511,13 +601,13 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_removeClass = NodeList.prototype._JT_removeClass = function(a) {
+  CollProto._JT_removeClass = NodeProto._JT_removeClass = function(a) {
     this._JT_each(function(b) {
       b._JT_removeClass(a)
     });
     return this
   };
-  HTMLElement.prototype._JT_val = function(a) {
+  EleProto._JT_val = function(a) {
     if (a == undefined && arguments.length == 0) {
       return this.value
     } else {
@@ -527,7 +617,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_val = NodeList.prototype._JT_val = function(v) {
+  CollProto._JT_val = NodeProto._JT_val = function(v) {
     if (v == undefined) {
       var a = [];
       this._JT_each(function(b) {
@@ -541,7 +631,7 @@
       return this
     }
   };
-  HTMLElement.prototype._JT_txt = function(a) {
+  EleProto._JT_txt = function(a) {
     if (a == undefined && arguments.length == 0) {
       return this.innerText
     } else {
@@ -549,7 +639,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_txt = NodeList.prototype._JT_txt = function(v) {
+  CollProto._JT_txt = NodeProto._JT_txt = function(v) {
     if (v == undefined && arguments.length == 0) {
       var a = [];
       this._JT_each(function(b) {
@@ -564,7 +654,7 @@
     }
   };
 
-  HTMLElement.prototype._JT_html = function(a) {
+  EleProto._JT_html = function(a) {
     if (a == undefined) {
       return this.innerHTML
     } else {
@@ -572,7 +662,7 @@
       return this
     }
   };
-  HTMLCollection.prototype._JT_html = NodeList.prototype._JT_html = function(v) {
+  CollProto._JT_html = NodeProto._JT_html = function(v) {
     if (v == undefined) {
       var a = [];
       this._JT_each(function(b) {
@@ -586,7 +676,7 @@
       return this
     }
   };
-  HTMLElement.prototype._JT_allHtml = function(a) {
+  EleProto._JT_allHtml = function(a) {
     if (a == undefined) {
       return this.outerHTML;
     } else {
@@ -594,14 +684,14 @@
       return this;
     }
   };
-  HTMLCollection.prototype._JT_allHtml = NodeList.prototype._JT_allHtml = function(v) {
+  CollProto._JT_allHtml = NodeProto._JT_allHtml = function(v) {
     var a = [];
     this._JT_each(function(b) {
       a._JT_append(b._JT_allHtml(v))
     });
     return a
   };
-  HTMLElement.prototype._JT_hasClass = function(a) {
+  EleProto._JT_hasClass = function(a) {
     if(a.trim()===""){
       return true;
     }
@@ -610,14 +700,14 @@
     }
     return new RegExp("(\\s|^)" + a + "(\\s|$)").test(this.className)
   };
-  HTMLElement.prototype._JT_next = function(i) {
+  EleProto._JT_next = function(i) {
     if (i != undefined) {
       return this._JT_parent()._JT_child(this._JT_index() + i)
     } else {
       return this._JT_parent()._JT_child(this._JT_index() + 1)
     }
   };
-  HTMLElement.prototype._JT_prev = function(i) {
+  EleProto._JT_prev = function(i) {
     if (i != undefined) {
       return this._JT_parent()._JT_child(this._JT_index() - i)
     } else {
@@ -628,17 +718,17 @@
   function _checkArg(a, b) {
     return (a == undefined) ? b : a
   };
-  HTMLElement.prototype._JT_child = function(i) {
+  EleProto._JT_child = function(i) {
     if (i == undefined) {
       return this.children
     } else {
       return this.children[i]
     }
   };
-  HTMLElement.prototype._JT_clone = function() {
+  EleProto._JT_clone = function() {
     return this.cloneNode()._JT_html(this._JT_html());
   };
-  HTMLElement.prototype._JT_parent = function(i) {
+  EleProto._JT_parent = function(i) {
     if (i == undefined) {
       return this.parentElement
     } else {
@@ -649,7 +739,7 @@
       return p
     }
   };
-  HTMLElement.prototype._JT_prepend = function(a) {
+  EleProto._JT_prepend = function(a) {
     var t=_JT.type(a);
     if (t=="array"||t=="htmlcollection"||t=="nodelist") {
       var b = this;
@@ -663,13 +753,13 @@
     }
     return this
   };
-  HTMLCollection.prototype._JT_prepend = NodeList.prototype._JT_prepend = function(a) {
+  CollProto._JT_prepend = NodeProto._JT_prepend = function(a) {
     this._JT_each(function(c) {
       c._JT_prepend(a)
     });
     return this
   };
-  HTMLElement.prototype._JT_append = function(b, a) {
+  EleProto._JT_append = function(b, a) {
     if (a == undefined) {
       var type=_JT.type(b);
       if (type=="array"||type=="htmlcollection"||type=="nodelist") {
@@ -686,10 +776,16 @@
     }
     return this
   };
-  HTMLElement.prototype._JT_toArray=function(){
+  CollProto._JT_append = NodeProto._JT_append = function(b, a) {
+    this._JT_each(function(c) {
+      c._JT_append(b, a)
+    });
+    return this
+  };
+  EleProto._JT_toArray=function(){
     return [this];
   };
-  HTMLCollection.prototype._JT_toArray = NodeList.prototype._JT_toArray = function(bool) {
+  CollProto._JT_toArray = NodeProto._JT_toArray = function(bool) {
     if(bool!=false){
       var a=[];
       for(var i=0;i<this.length;i++){
@@ -711,13 +807,7 @@
     }
     return a;
   };
-  HTMLCollection.prototype._JT_append = NodeList.prototype._JT_append = function(b, a) {
-    this._JT_each(function(c) {
-      c._JT_append(b, a)
-    });
-    return this
-  };
-  HTMLElement.prototype._JT_index = function() {
+  EleProto._JT_index = function() {
     var a = this._JT_parent()._JT_child();
     for (var i = 0; i < a.length; i++) {
       if (a[i] == this) {
@@ -726,7 +816,7 @@
     }
     return -1
   };
-  HTMLElement.prototype._JT_on = function(a, b,d) {
+  EleProto._JT_on = function(a, b,d) {
     if(_JT.type(a)=="string"){
       return this._JT_event("on"+a,b,d);
     }else{
@@ -737,25 +827,25 @@
       return this._JT_event(a,b);
     }
   };
-  HTMLCollection.prototype._JT_on = NodeList.prototype._JT_on = function(a, c,d) {
+  CollProto._JT_on = NodeProto._JT_on = function(a, c,d) {
     this._JT_each(function(b) {
       b._JT_on(_JT.clone(a), c,d)
     });
     return this
   };
-  HTMLElement.prototype._JT_clk = function(b,d) {
+  EleProto._JT_clk = function(b,d) {
     return this._JT_event("onclick",b,d);
   };
-  HTMLCollection.prototype._JT_clk = NodeList.prototype._JT_clk = function(a, c) {
+  CollProto._JT_clk = NodeProto._JT_clk = function(a, c) {
     this._JT_each(function(b) {
       b._JT_clk(a, c)
     });
     return this
   };
   
-  HTMLElement.prototype._JT_event = function(a, b,d) {
+  EleProto._JT_event = function(a, b,d) {
     if(_JT.type(a)=="string"){
-      if(d==true){
+      if(d===true){
         _attachEvent(this,a,b);
       }else{
         this[a]=_checkFunction(b);
@@ -763,7 +853,7 @@
     }else{
       for (var c in a) {
         if (a[c] != undefined) {
-          if(b==true){
+          if(b===true){
             _attachEvent(this,c,a[c]);
           }else{
             this[c]=_checkFunction(a[c]);
@@ -780,25 +870,26 @@
       obj.attachEvent(event,  _checkFunction(fun));
     }
   };
-  HTMLCollection.prototype._JT_event = NodeList.prototype._JT_event = function(a, c,d) {
+  CollProto._JT_event = NodeProto._JT_event = function(a, c,d) {
     this._JT_each(function(b) {
       b._JT_event(a, c,d)
     });
     return this
   };
-  HTMLElement.prototype._JT_empty = function() {
+  EleProto._JT_empty = function() {
     return this._JT_html("")
   };
-  HTMLCollection.prototype._JT_empty = NodeList.prototype._JT_empty = function() {
+  CollProto._JT_empty = NodeProto._JT_empty = function() {
     this._JT_each(function(a) {
       a._JT_empty()
     });
     return this
   };
-  HTMLElement.prototype._JT_remove = function() {
+  EleProto._JT_remove = function() {
+    if(this.parentNode===null)return;
     this.parentNode.removeChild(this)
   };
-  HTMLCollection.prototype._JT_remove = NodeList.prototype._JT_remove = function(a) {
+  CollProto._JT_remove = NodeProto._JT_remove = function(a) {
     if (a == undefined) {
       for (var i = 0; i < this.length;) {
         this[i]._JT_remove()
@@ -821,47 +912,47 @@
       }
     }
   };
-  HTMLElement.prototype._JT_each = function(b,d) {
+  EleProto._JT_each = function(b,d) {
     b(this, 0,d);
     return this
   };
-  HTMLCollection.prototype._JT_each = NodeList.prototype._JT_each = function(b,d) {
+  CollProto._JT_each = NodeProto._JT_each = function(b,d) {
     var arr=this._JT_toArray();//removeClass 情况下
     for (var a = 0; a < arr.length; a++) {
       b(arr[a], a,d)
     }
     return this
   };
-  Array.prototype._JT_each = function(b,d) {
+  ArrProto._JT_each = function(b,d) {
     for (var a = 0; a < this.length; a++) {
       b(this[a], a,d)
     }
     return this
   };
-  Array.prototype._JT_clone = function() {
+  ArrProto._JT_clone = function() {
     var a=new Array();
     this.forEach(function(item){
       a.push(_clone(item));
     });
     return a;
   };
-  Array.prototype._JT_empty = function(b) {
+  ArrProto._JT_empty = function(b) {
     this.length = 0;
     return this;
   };
-  HTMLElement.prototype._JT_last =function(){
+  EleProto._JT_last =function(){
     return this._JT_child()._JT_last();
   };
-  HTMLElement.prototype._JT_first =function(){
+  EleProto._JT_first =function(){
     return this._JT_child()._JT_first();
   };
-  HTMLCollection.prototype._JT_last = NodeList.prototype._JT_last =Array.prototype._JT_last = function(b) {
+  CollProto._JT_last = NodeProto._JT_last =ArrProto._JT_last = function(b) {
     return this[this.length-1];
   };
-  HTMLCollection.prototype._JT_first = NodeList.prototype._JT_first =Array.prototype._JT_first = function(b) {
+  CollProto._JT_first = NodeProto._JT_first =ArrProto._JT_first = function(b) {
     return this[0];
   };
-  Array.prototype._JT_remove = function(b,order) {
+  ArrProto._JT_remove = function(b,order) {
     var index=this.indexOf(b)
     if(order==false){
       this[a]=this[this.length--];
@@ -870,52 +961,38 @@
     }
     return this
   };
-  Array.prototype._JT_removeByIndex = function(b) {
-    this.splice(b,1);
+  ArrProto._JT_removeByIndex = function(b,n) {
+    this.splice(b,n||1);
     return this
   };
-  Array.prototype._JT_insert = function(b, i) {
+  ArrProto._JT_insert = function(b, i) {
     this.splice(i,0,b);
     return this
   };
-  Array.prototype._JT_insertArray = function(arr,i) {
-    var index=i;
-    var n=arr.length;
-    for (var a = this.length - 1; a >= index; a--) {
-      this[a + n] = this[a]
-    }
-    for(var j=0;j<n;j++){
-      this[index+j] = arr[j];
-    }
+  ArrProto._JT_insertArray = function(arr,i) {
+    //var _arr=arr._JT_clone();//深拷贝
+    var _arr=arr.slice(0);//浅拷贝
+    _arr.splice(0,0,i,0);
+    ArrProto.splice.apply(this,_arr)
     return this
   };
-  Array.prototype._JT_append = function() {
-    Array.prototype.push.apply(this,arguments)
+  function _argsToArray(args,index){
+    var arr=[];
+    for(var i=index||0;i<args.length;i++){
+      arr.push(args[i]);
+    }
+    return arr;
+  }
+  ArrProto._JT_append = function() {
+    ArrProto.push.apply(this,arguments)
     return this
   };
-  Array.prototype._JT_prepend = function(b) {
+  ArrProto._JT_prepend = function(b) {
     if(arguments.length==1){
       return this._JT_insert(b, 0)
     }else{
-      return this._JT_insertArray(arguments, 0)
+      return this._JT_insertArray(_argsToArray(arguments), 0)
     }
-  };
-  function _each(obj,fun,arg){
-    var type=_JT.type(obj);
-    if(type=="json"||type=="object"){
-      var k=0;
-      for (var a in obj) {
-        if(_JT.type(obj[a])!="function"){
-          fun(obj[a], a,k,obj)
-        }
-        k++;
-      }
-    }else if(type=="number"||type=="boolean"||type=="string"||type=="function"){
-      fun(obj, 0,arg);
-    }else{
-      obj._JT_each(fun,arg);
-    }
-    return obj;
   };
   function _type(obj){
     if(arguments.length==0){
@@ -946,7 +1023,7 @@
       return type;
     }
   };
-  String.prototype._JT_has = function(s) {
+  StrProto._JT_has = function(s) {
     if (_JT.type(s)=="string") {
       if (this.includes == undefined) {
         return (this.indexOf(s) != -1)
@@ -961,7 +1038,7 @@
       }
     }
   };
-  String.prototype._JT_replaceAll = function(a, b) {
+  StrProto._JT_replaceAll = function(a, b) {
     if (_JT.type(b)=="array") {
       if (_JT.type(a)=="string") {
         var s = this.split(a);
@@ -998,13 +1075,13 @@
   
 
 
-  HTMLElement.prototype._JT_exist = function(call,callf){
+  EleProto._JT_exist = function(call,callf){
     if(call!=undefined){
       _checkFunction(call)(this);
     }
     return true;
   };
-  HTMLCollection.prototype._JT_exist = NodeList.prototype._JT_exist= Array.prototype._JT_exist= function(call,callf){
+  CollProto._JT_exist = NodeProto._JT_exist= ArrProto._JT_exist= function(call,callf){
     if(this.length>0){
       if(this.length==1){
         _checkFunction(call)(this[0]);
@@ -1037,7 +1114,7 @@
     }
   };
 
-  HTMLElement.prototype._JT_content = function(a) {
+  EleProto._JT_content = function(a) {
     if (this.tagName == "INPUT" || this.tagName == "TEXTAREA"|| this.tagName == "SELECT") {
       if (a == undefined && arguments.length == 0) {
         return this.value
@@ -1091,14 +1168,14 @@ function _defineCom(obj,k,data,calls){
     if(!calls[k])calls[k]=[];
     _o._calls=calls[k];
     _o._data=data[k];
-    _defineBase(obj,data,k,_o,calls[k]);
+    _defineBase(obj,data,k,_o,calls[k],true);
     _defineArray(_o,data[k],calls[k]);
   }else{
     if(!calls[k]||!calls[k]._func)calls[k]={_func:[]};
     defineFinal(obj,data,k,calls[k])
   }
 }
-function _defineBase(obj,data,key,temp,calls){
+function _defineBase(obj,data,key,temp,calls,isArray){
   Object.defineProperty(obj, key, {
     configurable:true,
     enumerable:true,
@@ -1106,8 +1183,12 @@ function _defineBase(obj,data,key,temp,calls){
       return temp;
     },
     set: function (val) {
-      data[key] = val;
-      _copyValue(temp,val,calls);
+      if(isArray){
+        obj[key].$replace(val);//数组赋值
+      }else{
+        data[key] = val;
+        _copyValue(temp,val,calls);
+      }
       calls._func._JT_each(function(call){
         call(key,val);
       })
@@ -1160,12 +1241,13 @@ function _copyValueJson(a,b,calls){
   }
 }
 function _copyValueArr(a,b,calls){
-  for(var k=0;k<b.length;k++){
-    _copyCom(a,b,k,calls);
-  }
+  a.$replace(b);
+  // for(var k=0;k<b.length;k++){
+  //   _copyCom(a,b,k,calls);
+  // }
 }
 function _copyCom(a,b,k,calls){
-  if(a[k]){
+  if(a[k]!==undefined){
     var t=_JT.type(a[k]);
     if(t=='json'){
       _copyValueJson(a[k],b[k],calls[k]);
@@ -1182,7 +1264,7 @@ function _copyCom(a,b,k,calls){
 function _checkType(a,b){
   var a_t=_JT.type(a);
   var b_t=_JT.type(b);
-  if(a_t!=b_t){
+  if(a_t!==b_t){
     _throw('不允许前后设置的值类型不一致');
   }
   return a_t;
@@ -1338,6 +1420,7 @@ function _createEmpty(){
   a.__proto__=null;
   return a;
 }
+var __jet_id=0;
 window.Jet=function(par,opt){
   if(typeof par==='string'){
     opt.par=par;
@@ -1348,12 +1431,16 @@ window.Jet=function(par,opt){
   _checkDataForData(opt);
   opt.ele=(opt.ele)?_getJdomEle(opt.ele):document.documentElement;
   opt.ele.__jet=this;
-  if(opt.name){
+  if(!opt.name){
+    opt.name='_'+(__jet_id++);
+    Jet.$unnamedJets[opt.name]=this;
+  }else{
     if(Jet[opt.name]&&Jet[opt.name].$DOM==undefined){//避免与Jet.Input等冲突
       _throw('Jet name 属性等于'+opt.name+'已存在，请重新命名');
     }
     Jet[opt.name]=this;
   }
+
   if(opt.par){
     this.$par=Jet[opt.par];
     if(Jet[opt.par]){
@@ -1370,7 +1457,8 @@ window.Jet=function(par,opt){
     _calls:{},
     _data:opt.data,
     //_ele:(opt.ele=='')?Jet.__tempRoot:_getJdomEle(opt.ele)
-    _ele:opt.ele
+    _ele:opt.ele,
+    name:opt.name,
   }
   this.$dom={};
   var _this=this;
@@ -1386,10 +1474,10 @@ window.Jet=function(par,opt){
   }
   var _this=this;
   _initJet.call(_this,opt,_this._tools._calls);
-  Jet.load.init(function(list){
+  Jet.load.init.call(this,function(list){
     if(list!==undefined){
       list._JT_each(function(load){
-        _initJetEle.call(_this,load);
+        _initJetEle.call(_this,load,true);
         //Jet.valid.init(load);
       })
     }
@@ -1469,7 +1557,7 @@ Jet.prototype.$regist=function(name,call){
           _call=_getCallback(_call,a[i])//_call[a[i]];
           if(_call==null){
             isDisable=true;
-            console.log('忽略了一个元素');
+            console.log('JET:忽略了一个元素');
             //this.disable();
             break;
           }
@@ -1483,7 +1571,7 @@ Jet.prototype.$regist=function(name,call){
       var _call=_getCallback(this._tools._calls,name)
       if(_call==null){
         isDisable=true;
-        console.log('忽略了一个元素');
+        console.log('JET:忽略了一个元素');
         //this.disable();
       }else{
         _call._func.push(call);
@@ -1497,7 +1585,28 @@ Jet.prototype.$regist=function(name,call){
   }
 };
 Jet.$=_JT;
-
+Jet.$unnamedJets={};
+var _moduleList=['router','lang','module','css-config','jui','valid'];
+var _usedModuleList=[];
+Jet.$use=function(name){
+  if(typeof name=='object'){
+    name.forEach(function(item){
+      Jet.$use(item);
+    })
+  }else{
+    if(_moduleList.indexOf(name)==-1){
+      _throw('模块命名错误：可选值为:'+_moduleList)
+    }else{
+      if(_usedModuleList.indexOf(name)==-1){
+        _usedModuleList.push(name);
+        _JT.body()._JT_append(_JT.ct('script')._JT_attr('src','assets/js/jet-module/'+name+'.js'));
+      }
+    }
+  }
+};
+Jet.$useAll=function(){
+  Jet.$use(_moduleList);
+};
 //html text class attr css 
 //
   //
@@ -1649,8 +1758,9 @@ function _initJet(opt,calls){
   //     item:item
   //   });
   // });
+  var jumpList=[];
   bindList._JT_each(function(item,index){
-    if(!item._hasBind){
+    if(!item._hasBind&&!item._hasDisabled){
       //dom.appendChild(item);
       var attr=item._JT_attr(_bind);
       if(opt.data==undefined||attr==''){
@@ -1664,51 +1774,49 @@ function _initJet(opt,calls){
         switch(type){
           case 'json':_jet=new Jet.Bind(_opt);break;
           case 'array':_jet=new Jet.For(_opt);break;
-          default:{
-            if(isInput(item)){
-              _jet=new Jet.Input(_opt);
-            }else{
-              _jet=new Jet.Text(_opt);
-            }
-          };break;
+          default:_jet=(isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);break;
         }
         item.__isRoot=true;//为了记录根元素的初始位置，忽略非根元素
         _this._tools._jets.push(_jet);
       }else{
         item.__isRoot=true;
+        addToJumpList(item,jumpList);
         //if(item._JT_find)
         //_throw('原数据没有'+attr+'属性');
       }
     }
   });
+  jumpList._JT_each(function(item,index){
+      item._hasJumped=undefined;
+  })
   //如果属性jet元素是 绑定数据的jet元素，则给绑定数据处理，否则交给父元素
   ifList._JT_each(function(item){
-    if(!item._hasIf){//不需要加root判断 因为本来就是root
+    if(!item._hasIf&&!item._hasDisabled){//不需要加root判断 因为本来就是root
       _this._tools._jetTools.push(new Jet.If(_jetOpt(_this,item)));
     }
   });
   showList._JT_each(function(item){
-    if(!item._hasShow){
+    if(!item._hasShow&&!item._hasDisabled){
       _this._tools._jetTools.push(new Jet.Show(_jetOpt(_this,item),true));
     }
   });
   onList._JT_each(function(item){
-    if(!item._hasOn){
+    if(!item._hasOn&&!item._hasDisabled){
       _this._tools._jetTools.push(new Jet.On(_jetOpt(_this,item)));
     }
   });
   runList._JT_each(function(item){
-    if(!item._hasRun){
+    if(!item._hasRun&&!item._hasDisabled){
       _this._tools._jetTools.push(new Jet.Run(_jetOpt(_this,item)));
     }
   });
   attrList._JT_each(function(item){
-    if(!item._hasAttr){
+    if(!item._hasAttr&&!item._hasDisabled){
       _this._tools._jetTools.push(new Jet.Attr(_jetOpt(_this,item)));
     }
   });
   styleList._JT_each(function(item){
-    if(!item._hasStyle){
+    if(!item._hasStyle&&!item._hasDisabled){
       _this._tools._jetTools.push(new Jet.Style(_jetOpt(_this,item),true));
     }
   });
@@ -1859,8 +1967,8 @@ function _addRegistDc(jet,path,attr,call,index){
 //       }
 //   }
 // }
-function _getInitData(item,attr,_this){
-  var jet=_findParJet(item);
+function _getInitData(item,attr,_this,isJload){
+  var jet=(isJload===true)?_this:_findParJet(item);
   var isJet=(typeof jet.$DOM!=='undefined');
   if(!isJet&&jet.type!==_bind){
     _throw('只可在Jet元素或Bind元素作用于域下动态插入DOM元素初始化，当前插入作用域为'+jet.type);
@@ -1875,8 +1983,15 @@ function _getInitData(item,attr,_this){
     opt:_opt
   }
 }
-
-function _initJetEle(ele){
+function addToJumpList(item,jumpList){
+  [_bind,_if,_show,_on,_run,_attr,_style].forEach(function(name){
+    item._JT_findAttr(name)._JT_each(function(c){
+      c._hasJumped=true;//子元素在本轮遍历中也设置跳过
+      jumpList.push(c);
+    })
+  })
+}
+function _initJetEle(ele,isJload){
   ele=ele||this._tools._ele;
   if(typeof ele==='string'){
     ele=_getJdomEle(ele);
@@ -1890,11 +2005,12 @@ function _initJetEle(ele){
     runList=ele._JT_findAttr(_run),
     attrList=ele._JT_findAttr(_attr),
     styleList=ele._JT_findAttr(_style);
+  var jumpList=[];
   bindList._JT_each(function(item,index){
-    if(!item._hasBind){
+    if(!item._hasBind&&!item._hasDisabled){
       //dom.appendChild(item);
       var attr=item._JT_attr(_bind);
-      var opt=_getInitData(item,attr,_this);
+      var opt=_getInitData(item,attr,_this,isJload);
       if(opt.data==undefined||attr==''){
         var _opt=_jetOpt(_this,item,attr,{_func:[]});
         item.__isRoot=true;
@@ -1905,55 +2021,53 @@ function _initJetEle(ele){
         switch(type){
           case 'json':_jet=new Jet.Bind(opt.opt);break;
           case 'array':_jet=new Jet.For(opt.opt);break;
-          default:{
-            if(isInput(item)){
-              _jet=new Jet.Input(opt.opt);
-            }else{
-              _jet=new Jet.Text(opt.opt);
-            }
-          };break;
+          default:_jet=(isInput(item))?new Jet.Input(opt.opt):new Jet.Text(opt.opt);break;
         }
         if(opt.isRoot)
           item.__isRoot=true;//为了记录根元素的初始位置，忽略非根元素
         opt.jet._tools._jets.push(_jet);
       }else{
         item.__isRoot=true;
+        addToJumpList(item,jumpList);
       }
     }
   });
+  jumpList._JT_each(function(item,index){
+      item._hasJumped=undefined;
+  })
   ifList._JT_each(function(item){
-    if(!item._hasIf){//不需要加root判断 因为本来就是root
-      var opt=_getInitData(item,undefined,_this);
+    if(!item._hasIf&&!item._hasDisabled){//不需要加root判断 因为本来就是root
+      var opt=_getInitData(item,undefined,_this,isJload);
       opt.jet._tools._jetTools.push(new Jet.If(opt.opt));
     }
   });
   showList._JT_each(function(item){
-    if(!item._hasShow){
-      var opt=_getInitData(item,undefined,_this);
+    if(!item._hasShow&&!item._hasDisabled){
+      var opt=_getInitData(item,undefined,_this,isJload);
       opt.jet._tools._jetTools.push(new Jet.Show(opt.opt,true));
     }
   });
   onList._JT_each(function(item){
-    if(!item._hasOn){
-      var opt=_getInitData(item,undefined,_this);
+    if(!item._hasOn&&!item._hasDisabled){
+      var opt=_getInitData(item,undefined,_this,isJload);
       opt.jet._tools._jetTools.push(new Jet.On(opt.opt));
     }
   });
   runList._JT_each(function(item){
-    if(!item._hasRun){
-      var opt=_getInitData(item,undefined,_this);
+    if(!item._hasRun&&!item._hasDisabled){
+      var opt=_getInitData(item,undefined,_this,isJload);
       opt.jet._tools._jetTools.push(new Jet.Run(opt.opt));
     }
   });
   attrList._JT_each(function(item){
-    if(!item._hasAttr){
-      var opt=_getInitData(item,undefined,_this);
+    if(!item._hasAttr&&!item._hasDisabled){
+      var opt=_getInitData(item,undefined,_this,isJload);
       opt.jet._tools._jetTools.push(new Jet.Attr(opt.opt));
     }
   });
   styleList._JT_each(function(item){
-    if(!item._hasStyle){
-      var opt=_getInitData(item,undefined,_this);
+    if(!item._hasStyle&&!item._hasDisabled){
+      var opt=_getInitData(item,undefined,_this,isJload);
       opt.jet._tools._jetTools.push(new Jet.Style(opt.opt,true));
     }
   });
@@ -1965,7 +2079,7 @@ function _initJetEle(ele){
   }
   Jet.valid.init(ele);
   Jet.lang.init(ele);
-  Jet.load.init(ele);
+  Jet.load.init.call(this,ele);
 }
 
 var _domSatte={
@@ -2023,7 +2137,6 @@ var _domSatte={
     }
   }
 }
-
 function _jetOpt(_this,item,name,calls){
   return {
     jet:_this,
@@ -2085,13 +2198,13 @@ Jet.Base=function(opt,type){
 };
 Jet.Base.prototype=_createEmpty();
 Jet.Base.prototype.$parData=function(index){
-  var obj=this;
+  var obj=this.par;
   if(index==undefined||index<=0){index=1}
   for(var i=0;i<index-1;i++){
-    obj=obj.par;
     if(obj.$DOM){//到达最顶层
       return obj;
     }
+    obj=obj.par;
   }
   return obj.data;
 }
@@ -2107,7 +2220,7 @@ Jet.Base.prototype.$makeChange=function(s){
   });
 };
 Jet.Base.prototype.disable=function(){
-  console.warn('忽略了一个元素');
+  console.warn('JET:忽略了一个'+this.type+'元素:',this);
   this.disable=true;
   this.ele._JT_attr(this.type,this._attrVal);
   switch(this.type){
@@ -2202,7 +2315,90 @@ function _indexOf(p,c){
   return p.indexOf(c);
 }
 Super.prototype = Jet.Base.prototype;
-Array.prototype.$push=function(d){
+//********************修改原生数组方法 */
+var __push=ArrProto.push;
+ArrProto.push=function(){
+  if(typeof this._data==='undefined'){
+    return __push.apply(this,arguments);
+  }else{
+    if(arguments.length===1){
+      this.$push(arguments[0]);
+    }else if(arguments.length>1){
+      this.$pushArray(_argsToArray(arguments));
+    }
+  }
+}
+var __pop=ArrProto.pop;
+ArrProto.pop=function(){
+  if(typeof this._data==='undefined'){
+    return __pop.apply(this);
+  }else{
+    var a=this._JT_last();
+    this.$removeByIndex(this.length-1);
+    return a;
+  }
+}
+var __splice=ArrProto.splice;
+ArrProto.splice=function(){
+  if(typeof this._data==='undefined'){
+    return __splice.apply(this,arguments);
+  }else{
+    if(arguments.length===1){
+      this.$removeByIndex(arguments[0],this.length-1);
+    }else if(arguments.length===2){
+      this.$removeByIndex(arguments[0],arguments[1]);
+    }else if(arguments.length>2){
+      this.$removeByIndex(arguments[0],arguments[1]);
+      this.$insertArray(_argsToArray(arguments,2),arguments[0]);
+    }
+  }
+}
+var __shift=ArrProto.shift;
+ArrProto.shift=function(){
+  if(typeof this._data==='undefined'){
+    return __shift.apply(this);
+  }else{
+    var a=this[0];
+    this.$removeByIndex(0);
+    return a;
+  }
+}
+var __unshift=ArrProto.unshift;
+ArrProto.unshift=function(){
+  if(typeof this._data==='undefined'){
+    return __unshift.apply(this,arguments);
+  }else{
+    if(arguments.length===1){
+      this.$prep(arguments[0]);
+    }else if(arguments.length>1){
+      this.$prepArray(_argsToArray(arguments));
+    }
+  }
+}
+var __reverse=ArrProto.reverse;
+ArrProto.reverse=function(){
+  if(typeof this._data==='undefined'){
+    return __reverse.apply(this);
+  }else{
+    var d=__reverse.apply(this._data)._JT_clone();
+    this.$replace(d);
+    return d;
+  }
+}
+
+var __sort=ArrProto.sort;
+ArrProto.sort=function(sortby){
+  if(typeof this._data==='undefined'){
+    return __sort.call(this,sortby);
+  }else{
+    var d=__sort.call(this._data,sortby)._JT_clone();
+    this.$replace(d);
+    return d;
+  }
+}
+
+
+ArrProto.$push=function(d){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2217,13 +2413,13 @@ Array.prototype.$push=function(d){
   _data.push(d);
   _defineCom(data,data.length,_data,_call);
   if(!_un)_f.refresh.push.call(_f);
-};Array.prototype.$pushArray=function(arr){
+};ArrProto.$pushArray=function(arr){
   // var _this=this;
   // arr._JT_each(function(item){
   //   _this.$push(item)
   // });
   this.$insertArray(arr,this.length);
-};Array.prototype.$prep=function(d){
+};ArrProto.$prep=function(d){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2239,9 +2435,9 @@ Array.prototype.$push=function(d){
   _call._JT_prepend({});
   _defineArray(data,_data,_call);
   if(!_un)_f.refresh.prep.call(_f);
-};Array.prototype.$prepArray=function(arr){
+};ArrProto.$prepArray=function(arr){
   this.$insertArray(arr,0);
-};Array.prototype.$insert=function(d,index){
+};ArrProto.$insert=function(d,index){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2257,7 +2453,7 @@ Array.prototype.$push=function(d){
   _call._JT_insert({},index);
   _defineArrayFormIndex(data,_data,_call,index);
   if(!_un)_f.refresh.insert.call(_f,index);
-};Array.prototype.$insertArray=function(arr,index){
+};ArrProto.$insertArray=function(arr,index){
   var _f=this._jet;
   var data,_data,_call,_un=(typeof _f==='undefined');
   if(_un){
@@ -2271,17 +2467,17 @@ Array.prototype.$push=function(d){
   }
   _data._JT_insertArray(arr,index);
   var calls=[];
-  arr._JT_each(function(){
+  for(var i=0;i<arr.length;i++){
     calls.push({});
-  });
+  }
   _call._JT_insertArray(calls,index);
   _defineArrayFormIndex(data,_data,_call,index);
   if(!_un)_f.refresh.insertArray.call(_f,arr,index);
-};Array.prototype.$remove=function(){
+};ArrProto.$remove=function(){
   for(var i=0;i<arguments.length;i++){
     this.$removeByIndex(_indexOf(this,arguments[i]));
   }
-};Array.prototype.$removeByIndex=function(i,n){
+};ArrProto.$removeByIndex=function(i,n){
   if(i==-1){
     return 
   }
@@ -2312,9 +2508,9 @@ Array.prototype.$push=function(d){
   //_defineArrayFormIndex(data,_data,_call,i);
   //data.length-=n;
   if(!_un)_f.refresh.remove.call(_f,i,n);
-};Array.prototype.$clear=function(){
+};ArrProto.$clear=function(){
   this.$removeByIndex(0,this.length);
-};Array.prototype.$replace=function(arr){
+};ArrProto.$replace=function(arr){
   this.$clear();
   this.$pushArray(arr);
   //if(typeof this._jet!=='undefined')this._jet.$makeChange();
@@ -2452,6 +2648,7 @@ Jet.router={
       }
     }
     Jet.router.init();
+    if(opt.oninit&&typeof opt.oninit=='function'){opt.oninit();}
     Jet.router.route(url);
   },
   conf:{
@@ -2507,7 +2704,7 @@ Jet.router={
     }else{
       if(Jet.router.__xhr!==null){
         Jet.router.__xhr.abort();
-        console.warn('忽略了一个路由：'+Jet.router.path);
+        console.warn('JET:忽略了一个路由：'+Jet.router.path);
         Jet.router.__xhr=null;
       }
       var search='';
@@ -2590,7 +2787,7 @@ Jet.router={
           }
         });
         if(typeof JUI!=='undefined'){
-          JUI.DIALOG.removeAll()
+          JUI.dialog.removeAll()
         }
         Jet.router.clearScoped();
         Jet.router.__xhr=_JT.load(Jet.router.conf.html+_dealSrc(file),function(html){
@@ -2870,40 +3067,60 @@ function _replaceCssVar(t){
 
 /*load*********************************************************************************/
 
-var _load="Jload";
+var _jload="Jload";
 var _par="Jpar";
 Jet.load={
   init:function(obj,call){
     var data={};
     var list;
+    var _this=this;
     if(obj==undefined||typeof obj=='function'){
-      list=_JT.attr(_load)._JT_toArray(false);
+      list=_JT.attr(_jload)._JT_toArray(false);
       call=obj;
     }else{
-      list=obj._JT_findAttr(_load)._JT_toArray(false);
+      list=obj._JT_findAttr(_jload)._JT_toArray(false);
     }
     var n=list.length;
     if(n==0&&call!=undefined){//如果没有Jload 则立即执行
       call();
     }
+    //debugger;
     list._JT_each(function(item,i){
-      var attr=item._JT_attr(_load);
-      item._JT_removeAttr(_load);
-      var par=item._JT_attr(_par);
+      var attr=item._JT_attr(_jload);
+      item._JT_removeAttr(_jload);
       _JT.load(Jet.router.conf.html+_HtmlFile(attr),function(html){
         item._JT_html(html);
+        var par=item._JT_attr(_par);
+        if(par===null&&_this.$DOM&&_this._tools.name!==undefined){
+            par=_this._tools.name;
+        }
         _loadCompStyle(item,attr);
         _loadCompScript(item,attr,par);
         _loadCompImg(item);
         Jet.valid.init(item);
         Jet.lang.init(item);
+        if(item._JT_hasAttr('jonload')){
+          var onload=item._JT_attr('jonload')
+          if(par!==null&&Jet[par]!==undefined&&Jet[par][onload]!==undefined&&typeof Jet[par][onload]==='function'){
+            Jet[par][onload].call(Jet[par]);
+          }else if(_this.$DOM&&_this[onload]!==undefined&&typeof _this[onload]==='function'){
+              _this[onload].call(_this);
+          }else{
+              if(par!==null){
+                  (new Function(onload)).call(Jet[par]);
+              }else{
+                  (new Function(onload)).call(_this);
+              }
+          }
+        }
+
         if(i==n-1&&call!=undefined){
           call(list);
         }
         if(typeof JUI!='undefined'){
           JUI.init(item);
         }
-        Jet.load.init(item);
+        Jet.load.init.call(_this,item);
       });
     });
   }
@@ -2912,13 +3129,16 @@ Jet.load={
 function _loadCompImg(item){
   item._JT_findTag('img')._JT_each(function(img){
     var attr=img._JT_attr("src");
-    if(attr[0]!='/'){//不是绝对路劲
+    if(attr!=null&&attr[0]!='/'){//不是绝对路劲
       img._JT_attr("src",Jet.router.conf.image+_dealSrc(attr));
     }
   });
 }
 function _loadCompScript(out,attr,par){
   //Jet.__tempRoot=out;
+  if(par!==null){
+    attr=attr+"-"+par
+  }
   var script=_JT.attr('load-script="'+attr+'"');
   if(!script._JT_exist()){
     script=_JT.ct('script')._JT_attr({
@@ -3227,7 +3447,7 @@ function _checkIsPw(a) {
   }
 };
 
-HTMLElement.prototype._JT_validate = function(s, f) {
+EleProto._JT_validate = function(s, f) {
   _validateForm({
     ele:this,
     pass:s,
@@ -3592,19 +3812,23 @@ Jet.Bind.prototype = new Super();
 Jet.Bind.prototype.refresh=function(key){
   //if(!key||key==this.name){
     this._tools._jets._JT_each(function(item){
-      item.refresh(key);
+      if(item)
+        item.refresh(key);
     });
     this._tools._jetTools._JT_each(function(item){
-      item.refresh(key);
+      if(item)
+        item.refresh(key);
     });
   //}
 };Jet.Bind.prototype.$get=function(){
   return this.data[this.name];
-};Jet.Bind.prototype.refreshIndex=function(key){
+};Jet.Bind.prototype.refreshIndex=function(key,i){
   //if(!key||key==this.name){
     this._tools._jets._JT_each(function(item){
       if(item.type===_text){
-        item.refreshIndex();
+        item.refreshIndex(i);
+      }else if(item.type===_input){
+        item.setIndex(i);
       }
     });
   //}
@@ -3619,19 +3843,16 @@ function _initBind(opt){
   var runList=this.ele._JT_findAttr(_run);
   var attrList=this.ele._JT_findAttr(_attr);
   var styleList=this.ele._JT_findAttr(_style);
+  var jumpList=[];
   bindList._JT_each(function(item,index){
-    if(!item._hasBind){
+    if(!item._hasBind&&!item._hasDisabled&&!item._hasJumped){//item._hasJumped=true 表示由于数据不存在跳过的元素的子元素也被跳过
       var attr=item._JT_attr(_bind);
       var _jet;
       if(attr==_value){
         var _opt=_bindOpt(_this,item,_this.name,_this.par._tools._calls[_this.name]);
         _opt.data=_this.data;
         _opt._data=_this._data;
-        if(isInput(item)){
-          _jet=new Jet.Input(_opt);
-        }else{
-          _jet=new Jet.Text(_opt);
-        }
+        _jet=(isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);
       }else if(attr==_index||attr._JT_has("$.$p")){
         var _opt=_bindOpt(_this,item,attr,_this.par._tools._calls);
         _opt.index=_this.name;
@@ -3649,34 +3870,29 @@ function _initBind(opt){
           _jet=new Jet.Text(_opt);
         }
       }else{
-          var _opt;
-          if(item._JT_hasAttr(_root)){
-              _opt=_bindRootOpt(_this.jet,item,attr);
-          }else{
-              _opt=_bindOpt(_this,item,attr,_this._tools._calls[attr]);
-          }
-          if(attr in _opt._data){
+          var _opt=(item._JT_hasAttr(_root))?
+            _bindRootOpt(_this.jet,item,attr):
+            _bindOpt(_this,item,attr,_this._tools._calls[attr]);
+          if(typeof  _opt._data==='object'&&attr in _opt._data){
               var type=_JT.type(_opt._data[attr]);
               switch(type){
-              case 'json':_jet=new Jet.Bind(_opt);break;
-              case 'array':_jet=new Jet.For(_opt);break;
-              default:{
-                  if(isInput(item)){
-                  _jet=new Jet.Input(_opt);
-                  }else{
-                  _jet=new Jet.Text(_opt);
-                  }
-              };break;
+                case 'json':_jet=new Jet.Bind(_opt);break;
+                case 'array':_jet=new Jet.For(_opt);break;
+                default:_jet=(isInput(item))?new Jet.Input(_opt):new Jet.Text(_opt);break;
               }
           }else{
+            addToJumpList(item,jumpList);
               //_throw('原数据没有'+attr+'属性');
           }
       }
       _this._tools._jets.push(_jet);
     }
   });
+  jumpList._JT_each(function(item,index){
+      item._hasJumped=undefined;
+  })
   ifList._JT_each(function(item){
-    if(!item._hasIf){
+    if(!item._hasIf&&!item._hasDisabled){
       if(item._JT_hasAttr(_root)){
           _this._tools._jetTools.push(new Jet.If(_bindRootOpt(_this.jet,item)));
       }else{
@@ -3685,7 +3901,7 @@ function _initBind(opt){
     }
   });
   showList._JT_each(function(item){
-    if(!item._hasShow){
+    if(!item._hasShow&&!item._hasDisabled){
       if(item._JT_hasAttr(_root)){
           _this._tools._jetTools.push(new Jet.Show(_bindRootOpt(_this.jet,item),true));
       }else{
@@ -3694,7 +3910,7 @@ function _initBind(opt){
     }
   });
   onList._JT_each(function(item){
-    if(!item._hasOn){
+    if(!item._hasOn&&!item._hasDisabled){
       if(item._JT_hasAttr(_root)){
           _this._tools._jetTools.push(new Jet.On(_bindRootOpt(_this.jet,item)));
       }else{
@@ -3703,7 +3919,7 @@ function _initBind(opt){
     }
   });
   runList._JT_each(function(item){
-    if(!item._hasRun){
+    if(!item._hasRun&&!item._hasDisabled){
       if(item._JT_hasAttr(_root)){
           _this._tools._jetTools.push(new Jet.Run(_bindRootOpt(_this.jet,item)));
       }else{
@@ -3713,7 +3929,7 @@ function _initBind(opt){
   });
   
   attrList._JT_each(function(item){
-      if(!item._hasAttr){
+      if(!item._hasAttr&&!item._hasDisabled){
           if(item._JT_hasAttr(_root)){
               _this._tools._jetTools.push(new Jet.Attr(_bindRootOpt(_this.jet,item)));
           }else{
@@ -3722,7 +3938,7 @@ function _initBind(opt){
       }
   });
   styleList._JT_each(function(item){
-      if(!item._hasStyle){
+      if(!item._hasStyle&&!item._hasDisabled){
           if(item._JT_hasAttr(_root)){
               _this._tools._jetTools.push(new Jet.Style(_bindRootOpt(_this.jet,item),true));
           }else{
@@ -3760,6 +3976,11 @@ function _bindRootOpt(jet,item,name){
   }
 }
 /*for*********************************************************************************/
+function _checkForSelectOption(obj){
+  if(this.__addSelectOption!==undefined){
+    this.__addSelectOption(obj);
+  }
+}
 Jet.For=function(opt){
   Jet.Base.call(this,opt,_for);
   _initFor.call(this,opt);
@@ -3776,7 +3997,7 @@ Jet.For.prototype.refresh=function(key){
   // }
 };Jet.For.prototype.refreshIndex=function(s){
   for(var i=s||0;i<this._tools._jets.length;i++){
-    this._tools._jets[i].refreshIndex();
+    this._tools._jets[i].refreshIndex(null,i);
   }
   this.$makeChange();
 };Jet.For.prototype.$get=function(){
@@ -3802,7 +4023,8 @@ Jet.For.prototype.refresh=function(key){
   }else{
     this.ele._JT_append(this._html);
   }
-  var item=this.ele._JT_child()._JT_last(),i=this.data[this.name].length-1;
+  var item=this.ele._JT_child()._JT_last(),
+    i=this.data[this.name].length-1;
   var _opt=_forOpt(this,item,i);
   if(_JT.type(_opt.data[0])=='array'){
     this._tools._jets.push(new Jet.For(_opt));
@@ -3810,6 +4032,7 @@ Jet.For.prototype.refresh=function(key){
     this._tools._jets.push(new Jet.Bind(_opt));
   }
   _initOneForBindTool(this,item,i);
+  _checkForSelectOption.call(this,item);
   _checkForJUI.call(this);
   this.$makeChange();
 };Jet.For.prototype.refresh.prep=function(){
@@ -3833,6 +4056,7 @@ Jet.For.prototype.refresh=function(key){
   this.refreshIndex(1);
   //_refreshIndex.call(this,1);
   _initOneForBindTool(this,item,0);
+  _checkForSelectOption.call(this,item);
   _checkForJUI.call(this);
 };
 Jet.For.prototype.refresh.insert=function(index){
@@ -3847,7 +4071,8 @@ Jet.For.prototype.refresh.insert=function(index){
   }else{
     this.ele._JT_append(this._html,index);
   }
-  var _opt=_forOpt(this,this.ele._JT_child(index),index);
+  var item=this.ele._JT_child(index);
+  var _opt=_forOpt(this,item,index);
   if(_JT.type(_opt.data[0])=='array'){
     this._tools._jets._JT_insert(new Jet.For(_opt),index);
   }else{
@@ -3855,7 +4080,8 @@ Jet.For.prototype.refresh.insert=function(index){
   }
   this.refreshIndex(index);
   //_refreshIndex.call(this,index+1);
-  _initOneForBindTool(this,this.ele._JT_child(index),index+1);
+  _initOneForBindTool(this,item,index);
+  _checkForSelectOption.call(this,item);
   _checkForJUI.call(this);
 };
 Jet.For.prototype.refresh.insertArray=function(arr,index){//bug
@@ -3873,13 +4099,15 @@ Jet.For.prototype.refresh.insertArray=function(arr,index){//bug
     }else{
       _this.ele._JT_append(_this._html,_i);
     }
-    var _opt=_forOpt(_this,_this.ele._JT_child(_i),_i);
+    var _o=_this.ele._JT_child(_i);
+    var _opt=_forOpt(_this,_o,_i);
     if(type=='array'){
       _this._tools._jets._JT_insert(new Jet.For(_opt),_i);
     }else{
       _this._tools._jets._JT_insert(new Jet.Bind(_opt),_i);
     }
-    _initOneForBindTool(_this,_this.ele._JT_child(_i),_i);
+    _initOneForBindTool(_this,_o,_i);
+    _checkForSelectOption.call(_this,_o);
   });
   this.refreshIndex(index+arr.length);
   _checkForJUI.call(this);
@@ -3887,9 +4115,12 @@ Jet.For.prototype.refresh.insertArray=function(arr,index){//bug
 };
 Jet.For.prototype.refresh.remove=function(index,n){
   for(var i=0;i<n;i++){
-    this.ele._JT_child(index)._JT_remove();
+    var _o=this.ele._JT_child(index);
+    _checkForSelectOption.call(this,_o,true);
+    _o._JT_remove();
   }
   this._tools._jets.splice(index,n);
+  
   this.refreshIndex(index);
   //_refreshIndex.call(this,index);
 };
@@ -3955,7 +4186,7 @@ function _initForRule(ele){
         _tag='span';
         this.ele._JT_removeAttr('jfor-inline')
       }
-      this._html='<'+_tag+' '+_bind+'="'+_each+'">'+html+'</'+_tag+'>'
+      this._html='<'+_tag+' '+_bind+'="'+_each+'">'+html+'</'+_tag+'>';
       for(var i=0;i<this.data[this.name].length;i++){
         var each=_JT.ct(_tag)._JT_attr(_bind,_each);
         if(i==0){
@@ -3978,9 +4209,12 @@ function _initForRule(ele){
     }
   }
   if(this.data[this.name].length==0){
-    this.ele._JT_findAttr(_bind)._JT_each(function(item){
-      item._hasRemove=true;
-    })
+    var _this=this;
+    [_bind,_if,_show,_attr,_style,_run,_on,_jload].forEach(function(name){
+      _this.ele._JT_findAttr(name)._JT_each(function(item){
+        item._hasDisabled=true;
+      })
+    });
     this.ele._JT_empty();
   }
 }
@@ -4072,7 +4306,12 @@ Jet.Text.prototype.refresh=function(key){
   if(!key||key==this.name){
     var d=this.$get();
     if(!_isUd(d)){
-      var val=(this.func)?this.func.call(this.jet,d):d;
+      var val=(this.func)?this.func.call(this.jet,d,{
+        data:d,
+        ele:this.ele,
+        jet:this,
+        root:this.jet
+      }):d;
       if(this.isHtml){
         this.ele._JT_html(val);
       }else{
@@ -4080,9 +4319,13 @@ Jet.Text.prototype.refresh=function(key){
       }
     }
   }
-};Jet.Text.prototype.refreshIndex=function(){
+};Jet.Text.prototype.refreshIndex=function(i){
   if(this._attrVal._JT_has(_index)){
-    this.index=this.par._data.indexOf(this._data);
+    if(i!==undefined){
+      this.index=i;
+    }else{
+      this.index=this.par._data.indexOf(this._data);
+    }
     this.refresh();
   }
 };Jet.Text.prototype.$get=function(){//indexs
@@ -4127,14 +4370,14 @@ function _getParIndex(_this,i){
 function _initText(opt){
   _checkLangJet.call(this,opt);
   var _this=this;
-  if(this.ele._JT_html().trim()!=''){
-    this.func=new Function("$",'return '+this.ele._JT_html());
+  if(this.ele._JT_txt().trim()!=''){
+    this.func=new Function("$",'opt','return '+this.ele._JT_txt().trim());
   }
-  _checkJetTools.call(this,opt);
   this.$regist(function(key,val){
     _this.refresh();
   });
   this.refresh();
+  _checkJetTools.call(this,opt);
 }
 /*input*********************************************************************************/
 
@@ -4160,14 +4403,21 @@ Jet.Input.prototype.refresh=function(key){
   }
 };Jet.Input.prototype.$get=function(){
   return this.data[this.name];
-};
+};Jet.Input.prototype.setIndex=function(i){
+  if(_JT.type(this.data)==='array'&&typeof this.name==='number'&&i!==undefined){
+    this.name=i;
+  }
+}
 function _initInput(opt){
   _checkLangJet.call(this,opt);
   var _this=this;
+  if(this.ele._JT_attr('j-type')==='number'||this.ele._JT_attr('type')==='number'){
+    _this.forceNum=true;
+  }
   if(this.ele._JT_hasAttr('contenteditable')){
     this.isContent=true;
-    if(this.ele._JT_html().trim()!='')
-      this.func=new Function("$",'return '+this.ele._JT_html());
+    if(this.ele._JT_txt().trim()!='')
+      this.func=new Function("$",'return '+this.ele._JT_txt());
   }else if(this.ele.tagName!='SELECT'&&this.ele._JT_val().trim()!=''){
     this.func=new Function("$",'return '+this.ele._JT_val());
   }
@@ -4178,7 +4428,10 @@ function _initInput(opt){
     _this.refresh();
   });
   this.isNum=(_JT.type(this.$get())=='number');
-  if(this.ele.tagName=='SELECT'||(this.ele.tagName=='INPUT'&&this.ele._JT_attr('type').toLowerCase()!='text')){
+  var iname=this.ele.tagName;
+  var itype=this.ele._JT_attr('type');
+  if(itype!==null)itype=itype.toLowerCase();
+  if(iname=='SELECT'||(iname=='INPUT'&&itype!='text'&&itype!='password'&&itype!='number'&&itype!=null)){
     this.ele._JT_on("change",function(){
       _dealOnInputOn.call(this,_this);
     },true);
@@ -4197,20 +4450,27 @@ function _initInput(opt){
       }
     },true);
   }
-  _checkJetTools.call(this,opt);
   this.refresh();
+  _checkJetTools.call(this,opt);
 }
 function _dealOnInputOn(_this){
   var val=(_this.isContent)?this._JT_html():this._JT_val();
-  //if(_this.isNum){
-    var _v=parseFloat(val);
-    if(val==_v.toString()){
-      _this.isNum=true;
-      val=_v;
-    }else{
-      _this.isNum=false;
+  if(_this.forceNum){
+    val=parseFloat(val);
+    if(val.toString()==='NaN'){
+      val='';
     }
-  //}
+  }else{
+    if(_this.isNum){
+      var _v=parseFloat(val);
+      if(val==_v.toString()){
+        _this.isNum=true;
+        val=_v;
+      }else{
+        _this.isNum=false;
+      }
+    }
+  }
   _this.data[_this.name]=val;
 }
 /*if*********************************************************************************/
@@ -4248,7 +4508,6 @@ Jet.If.prototype.$get=function(){
   }
 };Jet.If.prototype.refresh=function(i){
   // if(this.ele.attr('id')=='queryResult'){
-  //   debugger;
   // }
   var _this=this;
   if(this.index!=undefined&&i!=undefined&&this.index!=i){
@@ -4487,7 +4746,6 @@ function _registForWrapperVar(_this,content){
                 if(_ele._JT_has('$r.')){
                   obj=_this.jet;
                 }else if(_ele._JT_has('.$par(')){//$.$par()
-                  // debugger
                   var num=_ele.substring(_ele.indexOf('.$par(')+6,_ele.indexOf(')'))
                   num=(num==='')?1:parseInt(num);
                   for(var i=0;i<num;i++){
@@ -4513,7 +4771,10 @@ Jet.On=function(opt){
   var __jet=this.ele.__jet;
   if(typeof __jet!=='undefined'&&(__jet.type==_text||__jet.type==_input)){
     this.needParData=true;
+  }else if(typeof this.data!=='object'){
+    this.needParData=true;
   }
+  
 };
 Jet.On.prototype = new Super();
 Jet.On.prototype.$get=function(){
@@ -4823,8 +5084,8 @@ Jet.$export=function(call,json){
   //   delete json.__call;
   // }
 }
-//var mod=Jet.$use('name')
-Jet.$use=function(name){
+//var mod=Jet.$get('name')
+Jet.$get=function(name){
   if(arguments.length==1){
     return Jet.$module[name];
   }else{
@@ -4836,8 +5097,8 @@ Jet.$use=function(name){
     return ms;
   }
 }
-Jet.prototype.$use=function(name){
-  return Jet.$use(name);
+Jet.prototype.$get=function(name){
+  return Jet.$get(name);
 }
 function _jsFile(file){
   var src=_dealSrc(file);
@@ -4895,7 +5156,7 @@ Jet.$import=function(){
     if(typeof _modules[src]!=='undefined'&&isNew===false){
       if(callback!==null){
         var _func=function(modName){
-          var mod=Jet.$use(modName);
+          var mod=Jet.$get(modName);
           var func=function(m){
             index++;
             modules[(item._JT_has(' as ')?json.key:modName)]=m;
@@ -4967,7 +5228,7 @@ var _addModule=function(_this,mods){
 }
 function _importBase(obj,key,mod){
   if(typeof mod==='string'){
-    obj[key]=Jet.$use(mod);
+    obj[key]=Jet.$get(mod);
   }else{
     obj[key]=mod
   }
@@ -4988,7 +5249,7 @@ function _getKeyAndMod(name){
 }
 
 
-//})();
+})();
 
 
 

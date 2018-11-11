@@ -1,0 +1,66 @@
+<style>
+        .out{
+            background-color: #fff;
+            border: 1px solid #888;
+            width:99%;
+            color:#444;
+        }
+    </style>
+    <div class='title'>进度条</div>
+    
+    <div class="sub">
+        <div class='text'>
+                所有的可配置的属性如下：<br>
+                &lt;div class='j-progress' width='100%' value='0' jui-change=''>&lt;/div><br>
+                以上属性值皆为默认值。<br>
+                绑定的value值范围必须在0-100之间。若是不在这个范围之间，Jet会将值强制设置到这个区间之内。
+                slider可以使用JUI中的 大小、颜色<br>
+                width支持各种css单位，若是不带单位默认是px<br>
+                请看一个例子：
+            <div class="out">
+                <div class='j-progress success xs' jui-bind='progress1'></div>
+                <input type='number' j='progress1'/>
+                <div class='j-progress warn s' width='30%' jui-bind='progress2'></div>
+                <input type='number' j='progress2'/>
+                <div class='j-progress' width='300px' jui-bind='progress3'></div>
+                <input type='number' j='progress3'/>
+                <div class='j-progress info l' width='40em' jui-bind='progress4'></div>
+                <input type='number' j='progress4'/>
+                <div class='j-progress danger xl' jui-bind='progress5'></div>
+                <input type='number' j='progress5'/>
+            </div>
+            <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class='j-progress success xs' jui-bind='progress1'>&lt;/div>
+&lt;input type='number' j='progress1'/>
+&lt;div class='j-progress warn s' width='30%' jui-bind='progress2'>&lt;/div>
+&lt;input type='number' j='progress2'/>
+&lt;div class='j-progress' width='300px' jui-bind='progress3'>&lt;/div>
+&lt;input type='number' j='progress3'/>
+&lt;div class='j-progress info l' width='40em' jui-bind='progress4'>&lt;/div>
+&lt;input type='number' j='progress4'/>
+&lt;div class='j-progress danger xl' jui-bind='progress5'>&lt;/div>
+&lt;input type='number' j='progress5'/>
+&lt;script>
+new Jet({
+    data:{
+        progress1:-120,
+        progress2:10,
+        progress3:50,
+        progress4:70,
+        progress5:150
+    }
+});
+&lt;/script>
+            </div>
+        </div>
+    <script>
+        new Jet({
+            data:{
+                progress1:-120,
+                progress2:10,
+                progress3:50,
+                progress4:70,
+                progress5:150
+            }
+        });
+    </script>

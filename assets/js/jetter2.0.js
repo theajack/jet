@@ -11,19 +11,20 @@
   default -> def
   null -> 使用字符串 "null"
   float -> 使用字符串 "float"
-新增方法 $J.type() 去除了全部的 constructor 因为兼容
+新增方法 J.type() 去除了全部的 constructor 因为兼容
 因为兼容 formdata.get方法需要try catch
-$J.show() 增加了center样式 17-9-30
-$J.load 重命名为 $J.onload
-$J.load 变成新方法 使用ajax请求加载文件
+J.show() 增加了center样式 17-9-30
+J.load 重命名为 J.onload
+J.load 变成新方法 使用ajax请求加载文件
 添加 hasData
 data 方法对于不存在的数据返回undefined
 removeClass("a b") 支持空格
-$J.delay
-$J.clearDelay
+J.delay
+J.clearDelay
 HTMLCollection NodeList Array 添加了findClass ....
 HTMLCollection NodeList indexOf
 17 12-30：修改urlParam
+18/1/10 修正create中的bug
 */
 (function(){
   //(function(){var meta=document.createElement("meta");
@@ -126,8 +127,9 @@ HTMLCollection NodeList indexOf
     load:_load,
     jsonp:_jsonp,
     cookie:_cookie,
+    storage:_storage,
     initTip:function(){
-      $J.attr("jet-tip").each(function(item){
+      J.attr("jet-tip").each(function(item){
         item.tip(item.attr("jet-tip"));
       });
     },
@@ -167,13 +169,13 @@ HTMLCollection NodeList indexOf
     },
     
     jetForm:function(a) {
-      return $J.attr("jet-form=" + a)
+      return J.attr("jet-form=" + a)
     },
     jetName:function(a, b) {
       if (arguments.length == 2) {
-        return $J.attr("jet-form=" + a).findAttr("jet-name=" + b)
+        return J.attr("jet-form=" + a).findAttr("jet-name=" + b)
       } else {
-        return $J.attr("jet-name=" + a)
+        return J.attr("jet-name=" + a)
       }
     },
     useDefaultStyle: true,
@@ -205,14 +207,14 @@ HTMLCollection NodeList indexOf
     initValid: function(b) {
       var c;
       if (b == undefined) {
-        c = $J.attr("jet-valid")
+        c = J.attr("jet-valid")
       } else {
         c = _checkJetForm(b).select("[jet-valid]")
       }
       c.each(function(a) {
         a.on({
-          "blur": "$J.validInput(this)",
-          "focus": "$J.addValidValue(this)"
+          "blur": "J.validInput(this)",
+          "focus": "J.addValidValue(this)"
         },true)._jet_v_event=true;
         if (this.showInPlaceHolder) {
           a.attr("placeholder", _getValueText(a.attr("jet-valid")))
@@ -233,7 +235,7 @@ HTMLCollection NodeList indexOf
       }
     },
     validText: function(a, b) {
-      if($J.type(a)=="json"&&b==undefined){
+      if(J.type(a)=="json"&&b==undefined){
         for (var c in a) {
           this.validText(c,a[c]);
         }
@@ -247,7 +249,7 @@ HTMLCollection NodeList indexOf
     },
     banDefault: function() {
       this.useDefaultStyle = false;
-      var b = $J.cls("jet-unpass");
+      var b = J.cls("jet-unpass");
       b.each(function(a) {
         _checkIsPw(a);
         a.removeClass("jet-unpass").val(a.attr("jet-value")).removeAttr("jet-value")
@@ -264,13 +266,13 @@ HTMLCollection NodeList indexOf
     },
     banPlaceHolder: function() {
       this.showInPlaceHolder = false;
-      $J.attr("jet-valid").each(function(a) {
+      J.attr("jet-valid").each(function(a) {
         a.attr("placeholder", "")
       })
     },
     usePlaceHolder: function() {
       this.showInPlaceHolder = true;
-      $J.attr("jet-valid").each(function(a) {
+      J.attr("jet-valid").each(function(a) {
         a.attr("placeholder", _getValueText(a.attr("jet-valid")))
       })
     },
@@ -294,40 +296,40 @@ HTMLCollection NodeList indexOf
     inputOk:_inputOk,
     inputCancel:_inputCancel,
     input: function(c, d, e) {
-      var f = $J.id("jetInputContent");
+      var f = J.id("jetInputContent");
       if (!f.exist()) {
         _addInputWrapper();
-        f = $J.id("jetInputContent")
+        f = J.id("jetInputContent")
       }
       f.empty();
-      if ($J.type(c)=="string") {
-        f.append($J.ct("div").txt(_checkArg(c, (this.language == "CHINESE") ? "信息输入" : "Input Information")));
+      if (J.type(c)=="string") {
+        f.append(J.ct("div").txt(_checkArg(c, (this.language == "CHINESE") ? "信息输入" : "Input Information")));
         _appendOneInput((this.language == "CHINESE") ? "请输入：" : "Please input:", null, null,null)
-      } else if ($J.type(c)=="array") {
-        f.append($J.ct("div").txt(_checkArg(c[0], (this.language == "CHINESE") ? "信息输入" : "Input Information")));
+      } else if (J.type(c)=="array") {
+        f.append(J.ct("div").txt(_checkArg(c[0], (this.language == "CHINESE") ? "信息输入" : "Input Information")));
         _appendOneInput(c[1], c[2], c[3],c[4]);
         if (c[3] != undefined) {
           this.initValid(f)
         }
       } else {
-        f.append($J.ct("div").txt(_checkArg(c.title, (this.language == "CHINESE") ? "信息输入" : "Input Information")));
+        f.append(J.ct("div").txt(_checkArg(c.title, (this.language == "CHINESE") ? "信息输入" : "Input Information")));
         var a = _checkArg(c.def, []);
         var b = _checkArg(c.valid, []);
         var p = _checkArg(c.placeholder, []);
-        if (c.text == undefined || $J.type(c.text)=="string") {
+        if (c.text == undefined || J.type(c.text)=="string") {
           _appendOneInput(c.text, a, b,p)
         } else {
           for (var i = 0; i < c.text.length; i++) {
             _appendOneInput(_checkArg(c.text[i], (this.language == "CHINESE") ? "请输入：" : "Please input:"), a[i], b[i],p[i])
           }
         }
-        if (b.length > 0 || $J.type(b)=="string") {
+        if (b.length > 0 || J.type(b)=="string") {
           this.initValid(f)
         }
       }
       _submitCall=_checkFunction(d);
       _submitCancelCall=_checkFunction(e);
-      setTimeout(function(){$J.id("jetInputWrapper").css("top", "0");},0);
+      setTimeout(function(){J.id("jetInputWrapper").css("top", "0");},0);
     }
   };
   function _scrollTo(y, a, b) {
@@ -335,7 +337,7 @@ HTMLCollection NodeList indexOf
     document.documentElement.scrollTo(y, null, b);
     if (a != undefined) {
       b = _checkArg(b, 400);
-      if ($J.type(b)=="number") {
+      if (J.type(b)=="number") {
         b = _checkAnimateSpeed(b)
       }
       setTimeout(_checkFunction(a), b);
@@ -348,7 +350,7 @@ HTMLCollection NodeList indexOf
         document.documentElement.scroll(a, null, c);
         if (b != undefined) {
           c = _checkArg(c, 400);
-          if ($J.type(c)=="number") {
+          if (J.type(c)=="number") {
             c = _checkAnimateSpeed(c)
           }
           setTimeout(_checkFunction(b), c);
@@ -363,41 +365,57 @@ HTMLCollection NodeList indexOf
     }
   };
   function _ajax(a) {
-      var b = {
-        type: a.type || "GET",
-        url: a.url || "",
-        async: a.async || "true",
-        data: a.data || null,
-        dataType: a.dataType || "text",
-        contentType: a.contentType || "application/x-www-form-urlencoded",
-        beforeSend: a.beforeSend ||function() {},
-        success: a.success ||function() {},
-        error: a.error ||function() {}
-      };
-      b.beforeSend();
-      var c;
-      if (window.ActiveXObject) {
-        c = ActiveXObject("Microsoft.XMLHTTP")
-      } else if (window.XMLHttpRequest) {
-        c =new XMLHttpRequest()
-      }
-      c.responseType = b.dataType;
-      c.open(b.type, b.url, b.async);
-      c.setRequestHeader("Content-Type", b.contentType);
-      //header
-      c.send(_convertData(b.data));
-      c.onreadystatechange = function() {
-        if (c.readyState == 4) {
-          if (c.status == 200) {
-            b.success(c.response)
-          } else {
-            b.error()//errInfo
-          }
+    var b = {
+      type: a.type || "get",
+      url: a.url || "",
+      async: a.async || true,
+      data: a.data || null,
+      dataType: a.dataType || "text",
+      contentType: a.contentType || "application/x-www-form-urlencoded",
+      beforeSend: a.beforeSend ||function() {},
+      success: a.success ||function() {},
+      error: a.error ||function() {},
+      header:a.header||{}
+    };
+    b.beforeSend();
+    var c;
+    if (window.XMLHttpRequest) {
+      c =new XMLHttpRequest()
+    } else if (window.ActiveXObject) {
+      c = ActiveXObject("Microsoft.XMLHTTP")
+    }
+    var _d=_convertData(b.data);
+    var _t=b.type.toLowerCase();
+    //||_t=='delete'
+    if((_t=='get')&&_d!==''){
+      b.url=b.url+'?'+_d;
+    }
+    c.open(b.type, b.url, b.async);
+    c.responseType = b.dataType;
+    if(a.contentType!==null){
+        c.setRequestHeader("Content-Type", b.contentType);
+    }
+    for(var k in b.header){
+      c.setRequestHeader(k, b.header[k]);
+    }
+    if(b.type.toLowerCase()=='get'){
+      c.send();
+    }else{
+      c.send(_d);
+    }
+    c.onreadystatechange = function() {
+      if (c.readyState == 4) {
+        if (c.status == 200) {
+          b.success(c.response||c.responseText)
+        } else {
+          b.error(c.response||c.responseText)//errInfo
         }
       }
-    };
+    }
+    return c;
+  };
   function _load(name,call,ecall){
-    $J.ajax({ 
+    J.ajax({ 
       url : name, 
       async:true,
       success : function(result){ 
@@ -415,15 +433,15 @@ HTMLCollection NodeList indexOf
       throw new Error("Parameter error");
     }else{
       var callbackName = ('_jsonp' + Math.random()).replace(".", "").substring(0, 15);
-      var head = $J.tag("head");
+      var head = J.tag("head");
       options.data[_checkArg(options.callback, "callback")] = callbackName;
-      var script = $J.ct('script');
+      var script = J.ct('script');
       head.append(script);
       window[callbackName] = function(a) {
         head.removeChild(script);
         clearTimeout(script.timer);
         window[callbackName] = null;
-        if($J.type(a)=="string"){
+        if(J.type(a)=="string"){
           a=JSON.parse(a);
         }
         options.success && options.success(a);
@@ -443,6 +461,47 @@ HTMLCollection NodeList indexOf
       }, options.time)
     }
   };
+  function _storage(a,b){
+    if(typeof a==='object' && a!==null){
+      for(var k in a){
+        _storage(k,a[k]);
+      }
+      return
+    }
+    var store=localStorage;
+    if (b === undefined) {
+        if(a===undefined){
+            var obj={};
+            Object.keys(store).forEach(function(item){
+                obj[item]=store.getItem(item);
+            });
+            return obj;
+        }else if(a===null){
+            Object.keys(store).forEach(function(item){
+                store.removeItem(item);
+            });
+        }else{
+            var d = store.getItem(a);
+            try {
+                return JSON.parse(d)
+            } catch (e) {
+                if (d === parseFloat(d).toString()) {
+                    return parseFloat(d);
+                }
+                return d;
+            }
+        }
+    } else if(b === null){
+        store.removeItem(a)
+    } else {
+        if (typeof b === 'object') {
+            store.setItem(a, JSON.stringify(b))
+        } else {
+            store.setItem(a, b)
+        }
+        return b
+    }
+  }
   function _cookie(a, b, d, e) {
     if (arguments.length == 1) {
       if (document.cookie.length > 0) {
@@ -457,7 +516,7 @@ HTMLCollection NodeList indexOf
       return ""
     } else {
       if (b == null) {
-        $J.cookie(a, "", -1)
+        J.cookie(a, "", -1)
       } else {
         var c = a + "=" + escape(b);
         if (d != undefined) {
@@ -466,7 +525,7 @@ HTMLCollection NodeList indexOf
           c += ";expires=" + h.toGMTString()
         }
         if (e != undefined) {
-          if ($J.type(e)=="boolean") {
+          if (J.type(e)=="boolean") {
             if (e) {
               c += (";path=/")
             }
@@ -526,24 +585,31 @@ HTMLCollection NodeList indexOf
     if(a==undefined){
       return "";
     }
-    if ($J.type(a)=="json") {
+    var t=$J.type(a);
+    if (t=="json") {
       var b = "";
       for (var c in a) {
-        b += c + "=" + a[c] + "&"
+        if(typeof a[c]==='object'){
+          b += (c + "=" + encodeURIComponent(JSON.stringify(a[c])) + "&")
+        }else{
+          b += (c + "=" + encodeURIComponent(a[c]) + "&")
+        }
       }
       b = b.substring(0, b.length - 1);
       return b
-    } /*else if($J.type(a)=="formdata"){
-      if(a.entries!=undefined){
-        var b = "";
-        for (var i of a.entries()) {
-          b += i[0] + "=" + i[1] + "&"
-        }
-        b = b.substring(0, b.length - 1);
-        return b
-      }
+    }else if(t=='array'){
+      return JSON.stringify(a);
+    } else if($J.type(a)=="formdata"){
+      // if(a.entries!=undefined){
+      //   var b = "";
+      //   for (var i of a.entries()) {
+      //     b += i[0] + "=" + i[1] + "&"
+      //   }
+      //   b = b.substring(0, b.length - 1);
+      //   return b
+      // }
       return a;
-    }*/else{
+    }else{
       return a;
     }
   }
@@ -551,7 +617,7 @@ HTMLCollection NodeList indexOf
     if(a==undefined){
       return function(){};
     }else{
-      var b=$J.type(a);
+      var b=J.type(a);
       if(b=="function"){
         return a;
       }else if(b=="string"){
@@ -568,24 +634,24 @@ HTMLCollection NodeList indexOf
     }
     return b.join("&")
   }
-  $J.ready(function() {
-    $J.tag("head").append($J.ct("style").txt("#jCopyInput{height:0px;position:fixed;top:-100px;}.j-for-slide-height{opacity:0!important;position:absolute!important;display:block!important}.j-none{visibility:hidden!important;position:absolute!important;display:block!important}.j-animation{transition:all .5s linear!important;-moz-transition:all .5s linear!important;-webkit-transition:all .5s linear!important;-o-transition:all .5s linear!important}.j-slide{overflow:hidden!important;height:0!important;padding-top:0!important;padding-bottom:0!important}.j-fade{opacity:0!important}.j-display-none{display:none!important}@keyframes j-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}@-moz-keyframes j-spin{from{-moz-transform:rotate(0)}to{-moz-transform:rotate(360deg)}}@-webkit-keyframes j-spin{from{-webkit-transform:rotate(0)}to{-webkit-transform:rotate(360deg)}}@-o-keyframes j-spin{from{-o-transform:rotate(0)}to{-o-transform:rotate(360deg)}}@keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-moz-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-webkit-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-o-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}.j-over-hidden{overflow:hidden!important}#jetTip{box-shadow:2px 2px 5px 0 #666;top:-100px;position:absolute;border:1px solid#222;background-color:rgba(255,255,255,.8);color:#222;font-size:10px;padding:3px;transition:opacity .2s;-moz-transition:opacity .2s linear;-webkit-transition:opacity .2s linear;-o-transition:opacity .2s linear;opacity:0;z-index:10000}#jetTip.j_active{opacity:1}"));
-    $J.initTip();
+  J.ready(function() {
+    J.tag("head").append(J.ct("style").txt("#jCopyInput{height:0px;position:fixed;top:-100px;}.j-for-slide-height{opacity:0!important;position:absolute!important;display:block!important}.j-none{visibility:hidden!important;position:absolute!important;display:block!important}.j-animation{transition:all .5s linear!important;-moz-transition:all .5s linear!important;-webkit-transition:all .5s linear!important;-o-transition:all .5s linear!important}.j-slide{overflow:hidden!important;height:0!important;padding-top:0!important;padding-bottom:0!important}.j-fade{opacity:0!important}.j-display-none{display:none!important}@keyframes j-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}@-moz-keyframes j-spin{from{-moz-transform:rotate(0)}to{-moz-transform:rotate(360deg)}}@-webkit-keyframes j-spin{from{-webkit-transform:rotate(0)}to{-webkit-transform:rotate(360deg)}}@-o-keyframes j-spin{from{-o-transform:rotate(0)}to{-o-transform:rotate(360deg)}}@keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-moz-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-webkit-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}@-o-keyframes j-twinkle{0%{opacity:1}50%{opacity:.1}100%{opacity:1}}.j-over-hidden{overflow:hidden!important}#jetTip{box-shadow:2px 2px 5px 0 #666;top:-100px;position:absolute;border:1px solid#222;background-color:rgba(255,255,255,.8);color:#222;font-size:10px;padding:3px;transition:opacity .2s;-moz-transition:opacity .2s linear;-webkit-transition:opacity .2s linear;-o-transition:opacity .2s linear;opacity:0;z-index:10000}#jetTip.j_active{opacity:1}"));
+    J.initTip();
     
-    $J.initValid();
-    $J.tag("head").append($J.ct("style").txt(".jet-unpass{border-color:#f20!important;border-style:solid!important;background-color:rgba(255,0,0,.1)!important;color:red!important}.jet-icon-wrapper{width:100%;height:40px}.jet-icon-circle{display:block;width:40px;height:40px;margin:0 auto;border-radius:20px;border:5px solid #fff;position:relative}.jet-icon-circle span{background-color:#fff;display:block;position:absolute;border-radius:3px}.jet-icon-circle.jet-no-border{border-color:transparent;position:relative;top:-3px}.jet-icon-part-ok1{width:11px;height:7px;top:14px;left:5px}.jet-icon-part-ok2{width:7px;height:18px;top:7px;left:14px}.jet-icon-part-x{width:7px;height:20px;top:5px;left:11px}.jet-rotate-45{transform:rotate(45deg);-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);-o-transform:rotate(45deg);-moz-transform:rotate(45deg)}.jet-rotate-045{transform:rotate(-45deg);-ms-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-o-transform:rotate(-45deg);-moz-transform:rotate(-45deg)}.jet-icon-part-bar,.jet-icon-part-block{width:7px;left:11px}.jet-icon-part-block{height:7px}.jet-icon-part-bar{height:13px}.jet-icon-part-info1,.jet-icon-part-warn1{top:4px}.jet-icon-part-info2{top:13px}.jet-icon-part-warn2{top:19px}#jetConfirmWrapper,#jetConfirmWrapper *,#jetInputWrapper,#jetInputWrapper *,#jetNoteWrapper,#jetNoteWrapper *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}#jetConfirmWrapper,#jetInputWrapper,#jetNoteWrapper{position:fixed;top:-100%;z-index:10000;transition:top .3s ease;-webkit-transition:top .3s ease;-moz-transition:top .3s ease;-o-transition:top .3s ease;min-height:65px;text-align:center;border:1px solid #666;border-radius:0 0 10px 10px;border-top:0;padding-top:10px;background-color:rgba(51,134,51,.9);left:50%;width:30%;margin-left:-15%;font-family:microsoft Yahei}#jetConfirmWrapper{z-index:10001}#jetNoteWrapper{z-index:10002;cursor:pointer}#jetConfirmWrapper,#jetInputWrapper{background-color:rgba(50,50,50,.9);border-color:#eee;padding-top:0}#jetInputWrapper{background-color:rgba(40,40,40,.9)}#jetConfirmContent,#jetInputContent{font-size:22px;padding:3% 10px 10px 10px;color:#fff;height:50%;white-space:normal;word-break:break-all}#jetConfirmBtnWrapper,#jetInputBtnWrapper{height:40px}#jetInputContent{padding:3% 10% 10px 10%}.jet-input{width:100%;color:#888;padding-left:5px;font-size:18px}.jet-input-text{text-align:left}#jetConfirmCancel,#jetConfirmOk,#jetInputCancel,#jetInputOk{width:50%;float:left;height:100%;border-top:2px solid rgba(255,255,255,.9);cursor:pointer}#jetNoteContent{color:#fff;font-size:20px;margin-bottom:5px;padding-top:5px;white-space:normal;word-break:break-all;text-align:center}#jetConfirmCancel,#jetInputCancel{border-radius:0 0 10px 0}#jetConfirmOk,#jetInputOk{border-radius:0 0 0 10px}#jetConfirmCancel:hover,#jetConfirmOk:hover,#jetInputCancel:hover,#jetInputOk:hover{background-color:rgba(80,80,80,.8)}#jetConfirmCancel:active,#jetConfirmOk:active,#jetInputCancel:active,#jetInputOk:active{background-color:rgba(120,120,120,.8)}#jetConfirmOk{border-right:1px solid rgba(255,255,255,.9)}#jetConfirmCancel,#jetInputCancel{border-left:1px solid rgba(255,255,255,.9)}#jetNoteWrapper[jet-style=gray].jet-success{background-color:rgba(210,210,210,.9);color:#444}#jetNoteWrapper[jet-style=gray].jet-info .jet-icon-circle,#jetNoteWrapper[jet-style=gray].jet-success .jet-icon-circle{border-color:#444}#jetNoteWrapper[jet-style=gray].jet-info .jet-icon-circle span,#jetNoteWrapper[jet-style=gray].jet-success .jet-icon-circle span{background-color:#444}#jetNoteWrapper[jet-style=gray].jet-info{background-color:rgba(170,170,170,.9);color:#444}#jetNoteWrapper[jet-style=gray].jet-warn{background-color:rgba(80,80,80,.9);color:#ccc}#jetNoteWrapper[jet-style=gray].jet-info #jetNoteContent,#jetNoteWrapper[jet-style=gray].jet-success #jetNoteContent{color:#222}#jetNoteWrapper[jet-style=gray].jet-error .jet-icon-circle,#jetNoteWrapper[jet-style=gray].jet-warn .jet-icon-circle{border-color:#ccc}#jetNoteWrapper[jet-style=gray].jet-error .jet-icon-circle span,#jetNoteWrapper[jet-style=gray].jet-warn .jet-icon-circle span{background-color:#ccc}#jetNoteWrapper[jet-style=gray].jet-error{background-color:rgba(40,40,40,.9);color:#ccc}#jetNoteWrapper[jet-style=color]{border-color:#ddd;color:#fff}#jetNoteWrapper[jet-style=color].jet-success,#jetNoteWrapper[jet-style=simple].jet-success{background-color:rgba(51,134,51,.9)}#jetNoteWrapper[jet-style=color].jet-info,#jetNoteWrapper[jet-style=simple].jet-info{background-color:rgba(55,78,237,.9)}#jetNoteWrapper[jet-style=color].jet-warn,#jetNoteWrapper[jet-style=simple].jet-warn{background-color:rgba(237,149,58,.9)}#jetNoteWrapper[jet-style=color].jet-error,#jetNoteWrapper[jet-style=simple].jet-error{background-color:rgba(212,73,73,.9)}#jetNoteWrapper[jet-style=color] .jet-icon-circle,#jetNoteWrapper[jet-style=gray] .jet-icon-circle{border-color:#fff}#jetNoteWrapper[jet-style=color] .jet-icon-circle span,#jetNoteWrapper[jet-style=gray] .jet-icon-circle span{background-color:#fff}#jetNoteWrapper[jet-style=simple]{color:#fff;opacity:0;top:-100%;transition:opacity .5s ease;-webkit-transition:opacity .5s ease;-moz-transition:opacity .5s ease;-o-transition:opacity .5s ease;font-size:20px;padding:15px;min-height:50px;line-height:20px;border-radius:0;border:1px solid #ccc;border-top:none}#jetNoteWrapper[jet-style=center]{width:140px;height:140px;position:fixed;left:50%;opacity:0!important;margin:-70px -70px;background-color:rgba(0,0,0,.5);border-radius:5px;box-shadow:#444 1px 1px 20px 1px;padding:35px 0;z-index:20;transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}#jetNoteWrapper.jet-jumpout{opacity:1!important;animation:jet-jumpout .5s ease;-moz-animation:jet-jumpout .5s ease;-webkit-animation:jet-jumpout .5s ease;-o-animation:jet-jumpout .5s ease}#jetNoteWrapper.jet-jumpoff{transform:scale(0);-moz-transform:scale(0);-webkit-transform:scale(0);-o-transform:scale(0);animation:jet-jumpoff .5s ease;-moz-animation:jet-jumpoff .5s ease;-webkit-animation:jet-jumpoff .5s ease;-o-animation:jet-jumpoff .5s ease}@keyframes jet-jumpout{0%{transform:scale(0);top:20%}50%{transform:scale(1.2);top:50%}100%{transform:scale(1);top:50%}}@-moz-keyframes jet-jumpout{0%{-moz-transform:scale(0);top:20%}50%{-moz-transform:scale(1.2);top:50%}100%{-moz-transform:scale(1);top:50%}}@-webkit-keyframes jet-jumpout{0%{-webkit-transform:scale(0);top:20%}50%{-webkit-transform:scale(1.2);top:50%}100%{-webkit-transform:scale(1);top:50%}}@-o-keyframes jet-jumpout{0%{-o-transform:scale(0);top:20%}50%{-o-transform:scale(1.2);top:50%}100%{-o-transform:scale(1);top:50%}}@keyframes jet-jumpoff{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(0)}}@-moz-keyframes jet-jumpoff{0%{-moz-transform:scale(1)}50%{-moz-transform:scale(1.2)}100%{-moz-transform:scale(0)}}@-webkit-keyframes jet-jumpoff{0%{-webkit-transform:scale(1)}50%{-webkit-transform:scale(1.2)}100%{-webkit-transform:scale(0)}}@-o-keyframes jet-jumpoff{0%{-o-transform:scale(1)}50%{-o-transform:scale(1.2)}100%{-o-transform:scale(0)}}@media screen and (min-width:500px) and (max-width:1200px){#jetConfirmWrapper,#jetInputWrapper,#jetNoteWrapper{width:50%;margin-left:-25%}#jetConfirmContent,#jetInputContent{font-size:19px}#jetNoteContent{font-size:17px}.jet-input{font-size:15px}#jetNoteWrapper[jet-style=simple]{min-height:40px;padding:10px;font-size:18px;width:60%;margin-left:-30%}}@media screen and (max-width:500px){#jetConfirmWrapper,#jetInputWrapper,#jetNoteWrapper{width:80%;margin-left:-40%}#jetConfirmContent,#jetInputContent{font-size:16px}#jetNoteContent{font-size:14px}.jet-input{font-size:12px}#jetNoteWrapper[jet-style=simple]{min-height:40px;padding:10px;font-size:16px;width:98%;margin-left:-49%}}"));
+    J.initValid();
+    J.tag("head").append(J.ct("style").txt(".jet-unpass{border-color:#f20!important;border-style:solid!important;background-color:rgba(255,0,0,.1)!important;color:red!important}.jet-icon-wrapper{width:100%;height:40px}.jet-icon-circle{display:block;width:40px;height:40px;margin:0 auto;border-radius:20px;border:5px solid #fff;position:relative}.jet-icon-circle span{background-color:#fff;display:block;position:absolute;border-radius:3px}.jet-icon-circle.jet-no-border{border-color:transparent;position:relative;top:-3px}.jet-icon-part-ok1{width:11px;height:7px;top:14px;left:5px}.jet-icon-part-ok2{width:7px;height:18px;top:7px;left:14px}.jet-icon-part-x{width:7px;height:20px;top:5px;left:11px}.jet-rotate-45{transform:rotate(45deg);-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);-o-transform:rotate(45deg);-moz-transform:rotate(45deg)}.jet-rotate-045{transform:rotate(-45deg);-ms-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-o-transform:rotate(-45deg);-moz-transform:rotate(-45deg)}.jet-icon-part-bar,.jet-icon-part-block{width:7px;left:11px}.jet-icon-part-block{height:7px}.jet-icon-part-bar{height:13px}.jet-icon-part-info1,.jet-icon-part-warn1{top:4px}.jet-icon-part-info2{top:13px}.jet-icon-part-warn2{top:19px}#jetConfirmWrapper,#jetConfirmWrapper *,#jetInputWrapper,#jetInputWrapper *,#jetNoteWrapper,#jetNoteWrapper *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}#jetConfirmWrapper,#jetInputWrapper,#jetNoteWrapper{position:fixed;top:-100%;z-index:10000;transition:top .3s ease;-webkit-transition:top .3s ease;-moz-transition:top .3s ease;-o-transition:top .3s ease;min-height:65px;text-align:center;border:1px solid #666;border-radius:0 0 10px 10px;border-top:0;padding-top:10px;background-color:rgba(51,134,51,.9);left:50%;width:30%;margin-left:-15%;font-family:microsoft Yahei}#jetConfirmWrapper{z-index:10001}#jetNoteWrapper{z-index:10002;cursor:pointer}#jetConfirmWrapper,#jetInputWrapper{background-color:rgba(50,50,50,.9);border-color:#eee;padding-top:0}#jetInputWrapper{background-color:rgba(40,40,40,.9)}#jetConfirmContent,#jetInputContent{font-size:22px;padding:3% 10px 10px 10px;color:#fff;height:50%;white-space:normal;word-break:break-all}#jetConfirmBtnWrapper,#jetInputBtnWrapper{height:40px}#jetInputContent{padding:3% 10% 10px 10%}.jet-input{width:100%;color:#888;padding-left:5px;font-size:18px}.jet-input-text{text-align:left}#jetConfirmCancel,#jetConfirmOk,#jetInputCancel,#jetInputOk{width:50%;float:left;height:100%;border-top:2px solid rgba(255,255,255,.9);cursor:pointer}#jetNoteContent{color:#fff;font-size:20px;margin-bottom:5px;padding-top:5px;white-space:normal;word-break:break-all;text-align:center}#jetConfirmCancel,#jetInputCancel{border-radius:0 0 10px 0}#jetConfirmOk,#jetInputOk{border-radius:0 0 0 10px}#jetConfirmCancel:hover,#jetConfirmOk:hover,#jetInputCancel:hover,#jetInputOk:hover{background-color:rgba(80,80,80,.8)}#jetConfirmCancel:active,#jetConfirmOk:active,#jetInputCancel:active,#jetInputOk:active{background-color:rgba(120,120,120,.8)}#jetConfirmOk{border-right:1px solid rgba(255,255,255,.9)}#jetConfirmCancel,#jetInputCancel{border-left:1px solid rgba(255,255,255,.9)}#jetNoteWrapper[jet-style=gray].jet-success{background-color:rgba(210,210,210,.9);color:#444}#jetNoteWrapper[jet-style=gray].jet-info .jet-icon-circle,#jetNoteWrapper[jet-style=gray].jet-success .jet-icon-circle{border-color:#444}#jetNoteWrapper[jet-style=gray].jet-info .jet-icon-circle span,#jetNoteWrapper[jet-style=gray].jet-success .jet-icon-circle span{background-color:#444}#jetNoteWrapper[jet-style=gray].jet-info{background-color:rgba(170,170,170,.9);color:#444}#jetNoteWrapper[jet-style=gray].jet-warn{background-color:rgba(80,80,80,.9);color:#ccc}#jetNoteWrapper[jet-style=gray].jet-info #jetNoteContent,#jetNoteWrapper[jet-style=gray].jet-success #jetNoteContent{color:#222}#jetNoteWrapper[jet-style=gray].jet-error .jet-icon-circle,#jetNoteWrapper[jet-style=gray].jet-warn .jet-icon-circle{border-color:#ccc}#jetNoteWrapper[jet-style=gray].jet-error .jet-icon-circle span,#jetNoteWrapper[jet-style=gray].jet-warn .jet-icon-circle span{background-color:#ccc}#jetNoteWrapper[jet-style=gray].jet-error{background-color:rgba(40,40,40,.9);color:#ccc}#jetNoteWrapper[jet-style=color]{border-color:#ddd;color:#fff}#jetNoteWrapper[jet-style=color].jet-success,#jetNoteWrapper[jet-style=simple].jet-success{background-color:rgba(51,134,51,.9)}#jetNoteWrapper[jet-style=color].jet-info,#jetNoteWrapper[jet-style=simple].jet-info{background-color:rgba(55,78,237,.9)}#jetNoteWrapper[jet-style=color].jet-warn,#jetNoteWrapper[jet-style=simple].jet-warn{background-color:rgba(237,149,58,.9)}#jetNoteWrapper[jet-style=color].jet-error,#jetNoteWrapper[jet-style=simple].jet-error{background-color:rgba(212,73,73,.9)}#jetNoteWrapper[jet-style=color] .jet-icon-circle,#jetNoteWrapper[jet-style=gray] .jet-icon-circle{border-color:#fff}#jetNoteWrapper[jet-style=color] .jet-icon-circle span,#jetNoteWrapper[jet-style=gray] .jet-icon-circle span{background-color:#fff}#jetNoteWrapper[jet-style=simple]{color:#fff;opacity:0;top:-100%;transition:opacity .5s ease;-webkit-transition:opacity .5s ease;-moz-transition:opacity .5s ease;-o-transition:opacity .5s ease;font-size:20px;padding:15px;min-height:50px;line-height:20px;border-radius:0;border:1px solid #ccc;border-top:none}#jetNoteWrapper[jet-style=center]{width:140px;height:140px;position:fixed;left:50%;opacity:0!important;margin:-70px -70px;background-color:rgba(0,0,0,.5);border-radius:5px;box-shadow:#444 1px 1px 20px 1px;padding:35px 0;z-index:20;transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}#jetNoteWrapper.jet-jumpout{opacity:1!important;animation:jet-jumpout .5s ease;-moz-animation:jet-jumpout .5s ease;-webkit-animation:jet-jumpout .5s ease;-o-animation:jet-jumpout .5s ease}#jetNoteWrapper.jet-jumpoff{transform:scale(0);-moz-transform:scale(0);-webkit-transform:scale(0);-o-transform:scale(0);animation:jet-jumpoff .5s ease;-moz-animation:jet-jumpoff .5s ease;-webkit-animation:jet-jumpoff .5s ease;-o-animation:jet-jumpoff .5s ease}@keyframes jet-jumpout{0%{transform:scale(0);top:20%}50%{transform:scale(1.2);top:50%}100%{transform:scale(1);top:50%}}@-moz-keyframes jet-jumpout{0%{-moz-transform:scale(0);top:20%}50%{-moz-transform:scale(1.2);top:50%}100%{-moz-transform:scale(1);top:50%}}@-webkit-keyframes jet-jumpout{0%{-webkit-transform:scale(0);top:20%}50%{-webkit-transform:scale(1.2);top:50%}100%{-webkit-transform:scale(1);top:50%}}@-o-keyframes jet-jumpout{0%{-o-transform:scale(0);top:20%}50%{-o-transform:scale(1.2);top:50%}100%{-o-transform:scale(1);top:50%}}@keyframes jet-jumpoff{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(0)}}@-moz-keyframes jet-jumpoff{0%{-moz-transform:scale(1)}50%{-moz-transform:scale(1.2)}100%{-moz-transform:scale(0)}}@-webkit-keyframes jet-jumpoff{0%{-webkit-transform:scale(1)}50%{-webkit-transform:scale(1.2)}100%{-webkit-transform:scale(0)}}@-o-keyframes jet-jumpoff{0%{-o-transform:scale(1)}50%{-o-transform:scale(1.2)}100%{-o-transform:scale(0)}}@media screen and (min-width:500px) and (max-width:1200px){#jetConfirmWrapper,#jetInputWrapper,#jetNoteWrapper{width:50%;margin-left:-25%}#jetConfirmContent,#jetInputContent{font-size:19px}#jetNoteContent{font-size:17px}.jet-input{font-size:15px}#jetNoteWrapper[jet-style=simple]{min-height:40px;padding:10px;font-size:18px;width:60%;margin-left:-30%}}@media screen and (max-width:500px){#jetConfirmWrapper,#jetInputWrapper,#jetNoteWrapper{width:80%;margin-left:-40%}#jetConfirmContent,#jetInputContent{font-size:16px}#jetNoteContent{font-size:14px}.jet-input{font-size:12px}#jetNoteWrapper[jet-style=simple]{min-height:40px;padding:10px;font-size:16px;width:98%;margin-left:-49%}}"));
   });
   window.S=function(s) {
     if (s == undefined) {
-      return $J.body()
+      return J.body()
     } else {
-      return $J.select(s)
+      return J.select(s)
     }
   };
 
   function _checkSelect(b) {
     if(b==null||b==undefined){
-      return $J.ct("div").findClass("a");
+      return J.ct("div").findClass("a");
     }else if (b.length == 1) {
       return b[0]
     }
@@ -593,7 +659,7 @@ HTMLCollection NodeList indexOf
   };
   HTMLElement.prototype.css = function(d, a) {
     if (a == undefined) {
-      if ($J.type(d)=="json") {
+      if (J.type(d)=="json") {
         for (var b in d) {
           if (d[b].has("!important")) {
             this.style.setProperty(b, _checkCssValue(this, b, d[b].substring(0, d[b].indexOf("!important"))), "important")
@@ -615,7 +681,7 @@ HTMLCollection NodeList indexOf
     }
   };
   HTMLCollection.prototype.css = NodeList.prototype.css = function(d, c) {
-    if (c == undefined && $J.type(d)!="json") {
+    if (c == undefined && J.type(d)!="json") {
       var a = [];
       this.each(function(b) {
         a.append(b.css(d))
@@ -643,7 +709,7 @@ HTMLCollection NodeList indexOf
         this.j_data=undefined;
         return this
       } else {
-        if ($J.type(d)=="json") {
+        if (J.type(d)=="json") {
           if (this.j_data!=undefined) {
             for (var e in d) {
               if (d[e] != undefined) {
@@ -667,7 +733,7 @@ HTMLCollection NodeList indexOf
     } else {
       if (b == undefined) {
         if (this.j_data!=undefined) {
-          if ($J.type(d)=="array") {
+          if (J.type(d)=="array") {
             d.each(function(a) {
               delete this.j_data[a]
             })
@@ -689,20 +755,20 @@ HTMLCollection NodeList indexOf
     }
   };
   HTMLCollection.prototype.data = NodeList.prototype.data = function(d, c) {
-    if (c == undefined && $J.type(d)!="json" && d != undefined) {
+    if (c == undefined && J.type(d)!="json" && d != undefined) {
       var a = [];
       this.each(function(b) {
-        a.append(b.data($J.clone(d)))
+        a.append(b.data(J.clone(d)))
       });
       return a
     } else {
       if (c == undefined) {
         this.each(function(a) {
-          a.data($J.clone(d))
+          a.data(J.clone(d))
         })
       } else {
         this.each(function(a) {
-          a.data($J.clone(d), c)
+          a.data(J.clone(d), c)
         })
       };
       return this
@@ -758,7 +824,7 @@ HTMLCollection NodeList indexOf
   };
   HTMLElement.prototype.attr = function(c, b) {
     if (b == undefined) {
-      if ($J.type(c)=="json") {
+      if (J.type(c)=="json") {
         for (var a in c) {
           this.setAttribute(a, c[a])
         }
@@ -772,7 +838,7 @@ HTMLCollection NodeList indexOf
     }
   };
   HTMLCollection.prototype.attr = NodeList.prototype.attr = function(d, c) {
-    if (c == undefined && $J.type(d)!="json") {
+    if (c == undefined && J.type(d)!="json") {
       var a = [];
       this.each(function(b) {
         a.append(b.attr(d))
@@ -821,7 +887,7 @@ HTMLCollection NodeList indexOf
     return arr
   };
   HTMLElement.prototype.findId = function(a) {
-    return $J.id(a)
+    return J.id(a)
   };
   HTMLCollection.prototype.findId = NodeList.prototype.findId =  Array.prototype.findId = function(a) {
     var arr=[];
@@ -911,7 +977,7 @@ HTMLCollection NodeList indexOf
         c.addClass(i)
       });
     }else {
-      if($J.html5()){
+      if(J.html5()){
         this.classList.add(a)
       }else{
         if (!this.hasClass(a)) {
@@ -950,7 +1016,7 @@ HTMLCollection NodeList indexOf
           d.removeClass(i)
         })
       }else {
-        if($J.html5()){
+        if(J.html5()){
           this.classList.remove(a)
         }else{
           if (this.hasClass(a)) {
@@ -976,7 +1042,7 @@ HTMLCollection NodeList indexOf
         c.toggleClass(i)
       });
     }else{
-      if($J.html5()){
+      if(J.html5()){
         this.classList.toggle(a)
       }else{
         if (c.hasClass(a)) {
@@ -1087,13 +1153,13 @@ HTMLCollection NodeList indexOf
   };
 
   function _copy(b) {
-    var a = $J.id("jCopyInput");
+    var a = J.id("jCopyInput");
     if (!a.exist()) {
-      a = $J.ct("input").attr({
+      a = J.ct("input").attr({
         "type": "text",
         "id": "jCopyInput"
       });
-      $J.body().append(a)
+      J.body().append(a)
     }
     a.val(b).select();
     if (document.execCommand("Copy")) {
@@ -1130,7 +1196,7 @@ HTMLCollection NodeList indexOf
   };
   HTMLElement.prototype.allHtml = function(a) {
     if (a == undefined) {
-      return $J.ct("div").append(this.clone()).html();
+      return J.ct("div").append(this.clone()).html();
     } else {
       var index=this.index();
       var par=this.parent().append(a,index);
@@ -1146,7 +1212,7 @@ HTMLCollection NodeList indexOf
     return a
   };
   HTMLElement.prototype.hasClass = function(a) {
-    if($J.html5()){
+    if(J.html5()){
       return this.classList.contains(a);
     }
     return new RegExp("(\\s|^)" + a + "(\\s|$)").test(this.className)
@@ -1359,7 +1425,7 @@ HTMLCollection NodeList indexOf
       a = 2
     }
     _checkOrigin(this, c);
-    if ($J.type(b)=="number") {
+    if (J.type(b)=="number") {
       this.stopSpin();
       var f = this;
       setTimeout(function() {
@@ -1377,7 +1443,7 @@ HTMLCollection NodeList indexOf
       "-webkit-animation": "j-spin " + a + "s " + e + " 0s " + b,
       "-o-animation": "j-spin " + a + "s " + e + " 0s " + b
     });
-    if ($J.type(b)=="number") {
+    if (J.type(b)=="number") {
       if (d != undefined) {
         setTimeout(function() {
           _checkCallBack(d, f)
@@ -1394,7 +1460,7 @@ HTMLCollection NodeList indexOf
     } else {
       a = 2
     }
-    if ($J.type(b)=="number") {
+    if (J.type(b)=="number") {
       this.stopSpin();
       var f = this;
       setTimeout(function() {
@@ -1412,7 +1478,7 @@ HTMLCollection NodeList indexOf
       "-webkit-animation": "j-twinkle " + a + "s " + e + " 0s " + b,
       "-o-animation": "j-twinkle " + a + "s " + e + " 0s " + b
     });
-    if ($J.type(b)=="number") {
+    if (J.type(b)=="number") {
       if (d != undefined) {
         setTimeout(function() {
           _checkCallBack(d, f)
@@ -1434,7 +1500,7 @@ HTMLCollection NodeList indexOf
   };
 
   function _checkSpinSpeed(a) {
-    if ($J.type(a)=="string") {
+    if (J.type(a)=="string") {
       switch (a) {
       case "slower":
         a = 3;
@@ -1498,28 +1564,28 @@ HTMLCollection NodeList indexOf
   };
 
   HTMLElement.prototype.tip = function(text) {
-    if(!$J.id("jetTip").exist()){
-      $J.body().append($J.ct("span#jetTip").clk('this.removeClass("j_active").css("top","-100px")'));
+    if(!J.id("jetTip").exist()){
+      J.body().append(J.ct("span#jetTip").clk('this.removeClass("j_active").css("top","-100px")'));
     }
-    if($J.type(text)=="array"){
+    if(J.type(text)=="array"){
       text=text[0];
     }
     this.jetTip=text;
     this.on({
       mousemove: function(e){
-        $J.id("jetTip").txt(this.jetTip).addClass("j_active").css({
+        J.id("jetTip").txt(this.jetTip).addClass("j_active").css({
           top:e.pageY+5+"px",
           left:e.pageX+8+"px"
         })
       },
       mouseleave:function(){
-        $J.id("jetTip").removeClass("j_active").css("top","-100px");
+        J.id("jetTip").removeClass("j_active").css("top","-100px");
       }
     },true);
     return this
   };
   HTMLCollection.prototype.tip = NodeList.prototype.tip = function(text) {
-    if($J.type(text)=="array"){
+    if(J.type(text)=="array"){
       this.each(function(a,i) {
         a.tip(text[i])
       });
@@ -1772,7 +1838,7 @@ HTMLCollection NodeList indexOf
   };
 
   function _checkAnimateSpeed(a) {
-    if ($J.type(a)=="string") {
+    if (J.type(a)=="string") {
       switch (a) {
       case "slower":
         a = 1500;
@@ -1879,7 +1945,7 @@ HTMLCollection NodeList indexOf
     }
   };
   HTMLElement.prototype.prepend = function(a) {
-    var t=$J.type(a);
+    var t=J.type(a);
     if (t=="array"||t=="htmlcollection"||t=="nodelist") {
       var b = this;
       a.each(function(item) {
@@ -1900,7 +1966,7 @@ HTMLCollection NodeList indexOf
   };
   HTMLElement.prototype.append = function(b, a) {
     if (a == undefined) {
-      var type=$J.type(b);
+      var type=J.type(b);
       if (type=="array"||type=="htmlcollection"||type=="nodelist") {
         for(var i=0;i<b.length;i++){
           this.append(b[i]);
@@ -1926,8 +1992,8 @@ HTMLCollection NodeList indexOf
     return a
   };
   function _checkHtmle(a){
-    if($J.type(a)=="string"){
-      var e=$J.ct("div").html(a);
+    if(J.type(a)=="string"){
+      var e=J.ct("div").html(a);
       if(e.child().length==1){
         return e.child(0);
       }else{
@@ -1937,7 +2003,7 @@ HTMLCollection NodeList indexOf
     return a;
   };
   HTMLElement.prototype.after = function(b) {
-    var type=$J.type(b);
+    var type=J.type(b);
     if (type=="array"||type=="htmlcollection"||type=="nodelist") {
       var c = this;
       var d = c.next();
@@ -1956,7 +2022,7 @@ HTMLCollection NodeList indexOf
     return this
   };
   HTMLElement.prototype.before = function(b) {
-    var type=$J.type(b);
+    var type=J.type(b);
     if (type=="array"||type=="htmlcollection"||type=="nodelist") {
       var c = this;
       b.each(function(a) {
@@ -1989,7 +2055,7 @@ HTMLCollection NodeList indexOf
     return -1
   };
   HTMLElement.prototype.on = function(a, b,d) {
-    if($J.type(a)=="string"){
+    if(J.type(a)=="string"){
       return this.event("on"+a,b,d);
     }else{
       for (var c in a) {
@@ -2001,7 +2067,7 @@ HTMLCollection NodeList indexOf
   };
   HTMLCollection.prototype.on = NodeList.prototype.on = function(a, c,d) {
     this.each(function(b) {
-      b.on($J.clone(a), c,d)
+      b.on(J.clone(a), c,d)
     });
     return this
   };
@@ -2016,7 +2082,7 @@ HTMLCollection NodeList indexOf
   };
   
   HTMLElement.prototype.event = function(a, b,d) {
-    if($J.type(a)=="string"){
+    if(J.type(a)=="string"){
       if(d==true){
         _attachEvent(this,a,b);
       }else{
@@ -2058,6 +2124,7 @@ HTMLCollection NodeList indexOf
     return this
   };
   HTMLElement.prototype.remove = function() {
+    if(this.parentNode===null)return
     this.parentNode.removeChild(this)
   };
   HTMLCollection.prototype.remove = NodeList.prototype.remove = function(a) {
@@ -2066,7 +2133,7 @@ HTMLCollection NodeList indexOf
         this[i].remove()
       }
     } else {
-      if ($J.type(a)=="number") {
+      if (J.type(a)=="number") {
         for (var i = 0; i < this.length; i++) {
           if (i == a) {
             this[i].remove();
@@ -2203,13 +2270,13 @@ HTMLCollection NodeList indexOf
     return false;
   };
   function _getSortValue(value,type){
-    if(type==undefined||$J.type(type)=="boolean"){
+    if(type==undefined||J.type(type)=="boolean"){
       return value;
     }else{
       var res=null;
       switch(type){
         case "date":
-          if($J.type(value)=="date"){
+          if(J.type(value)=="date"){
             res=value;
           }else{
             var arr;
@@ -2229,11 +2296,11 @@ HTMLCollection NodeList indexOf
     }
   };
   function _each(obj,fun,arg){
-    var type=$J.type(obj);
+    var type=J.type(obj);
     if(type=="json"||type=="object"){
       var k=0;
       for (var a in obj) {
-        if($J.type(obj[a])!="function"){
+        if(J.type(obj[a])!="function"){
           fun(obj[a], a,k,obj)
         }
         k++;
@@ -2245,40 +2312,40 @@ HTMLCollection NodeList indexOf
     }
     return obj;
   };
-  function _type(obj){
-    if(arguments.length==0){
-      throw new Error("This function need a argument");
-    }else{
-      var type=typeof obj;
-      if(type=="object"){
-        if(obj===null){
-          return "null";
-        }else{
-          var con = obj.constructor;
-          switch(con){
-            case Object:type="json";break;
-            case Array:type="array";break;
-            case HTMLCollection:type="htmlcollection";break;
-            case NodeList:type="nodelist";break;
-            case FormData:type="formdata";break;
-            case Error:type="error";break;
-            case Date:type="date";break;
-            default:if(con.toString().has("HTML")){
-                      type="htmlelement";
-                    }else{
-                      type="object";
-                    };break;
+    function _type(obj){
+      if(arguments.length==0){
+        _throw("This function need a argument");
+      }else{
+        var type=typeof obj;
+        if(type=="object"){
+          if(obj===null){
+            return "null";
+          }else{
+            var con = obj.constructor;
+            switch(con){
+              case Object:type="json";break;
+              case Array:type="array";break;
+              case HTMLCollection:type="htmlcollection";break;
+              case NodeList:type="nodelist";break;
+              case FormData:type="formdata";break;
+              case Error:type="error";break;
+              case Date:type="date";break;
+              default:if(obj.nodeType===1&&typeof obj.nodeName === 'string'){
+                        type="htmlelement";
+                      }else{
+                        type="object";
+                      };break;
+            }
           }
         }
+        return type;
       }
-      return type;
-    }
-  };
+    };
   function _clone(obj){
     if(obj==undefined){
       return null;
     }
-    var type=$J.type(obj);
+    var type=J.type(obj);
     if(type=="htmlelement"||type=="array"){
       return obj.clone();
     }else if(type=="json"||type=="object"){
@@ -2286,9 +2353,9 @@ HTMLCollection NodeList indexOf
       for(var attr in obj){
         if(obj[attr]==null||obj[attr]==undefined){
           a[attr]=obj[attr];
-        }else if($J.type(obj[attr])=="array"){
+        }else if(J.type(obj[attr])=="array"){
           a[attr]=obj[attr].clone();
-        }else if($J.type(obj[attr])=="json"||$J.type(obj[attr])=="object"){
+        }else if(J.type(obj[attr])=="json"||J.type(obj[attr])=="object"){
           a[attr]=_clone(obj[attr]);
         }else{
           a[attr]=obj[attr];
@@ -2305,8 +2372,8 @@ HTMLCollection NodeList indexOf
     if(a==undefined||b==undefined){
       return (a==b);
     }else{
-      var atype=$J.type(a);
-      var btype=$J.type(b);
+      var atype=J.type(a);
+      var btype=J.type(b);
       if(atype!=btype){
         return false;
       }else{
@@ -2316,7 +2383,7 @@ HTMLCollection NodeList indexOf
           return (a.toString()==b.toString());
         }else if(atype=="htmlelement"||atype=="htmlcollection"||atype=="nodelist"){
           var arr=a.allHtml();
-          if($J.type(arr)=="array"){
+          if(J.type(arr)=="array"){
             return _even(arr,b.allHtml());
           }
           return (arr==b.allHtml());
@@ -2330,7 +2397,7 @@ HTMLCollection NodeList indexOf
     if(a==undefined){
       return "undefined";
     }else{
-      var type=$J.type(a);
+      var type=J.type(a);
       if(type=="json"||type=="object"){
         return JSON.stringify(a);
       }else if(type=="string"){
@@ -2346,7 +2413,7 @@ HTMLCollection NodeList indexOf
         return s+"]";
       }else if(type=="htmlelement"||type=="htmlcollection"||type=="nodelist"){
         var arr=a.allHtml();
-        if($J.type(arr)=="array"){
+        if(J.type(arr)=="array"){
           return arr.toString();
         }
         return arr;
@@ -2380,18 +2447,18 @@ HTMLCollection NodeList indexOf
       if(a!=undefined){
         return this.slice(a,b).sum();
       }else{
-        var con=$J.type(this[0]);
+        var con=J.type(this[0]);
         if(con=="number"||con=="string"||con=="array"){
           var sum;
-          if(con=="number"||(con=="array"&&$J.type(this[0][0])=="number")){
+          if(con=="number"||(con=="array"&&J.type(this[0][0])=="number")){
             sum=0;
-          }else if(con=="string"||(con=="array"&&$J.type(this[0][0])=="string")){
+          }else if(con=="string"||(con=="array"&&J.type(this[0][0])=="string")){
             sum="";
           }else{
             throw new Error("sum方法不支持除Number,String,Array以外的类型");
           }
           this.each(function(a){
-            if($J.type(a)=="array"){
+            if(J.type(a)=="array"){
               a.each(function(b){
                 sum+=b;
               });
@@ -2410,7 +2477,7 @@ HTMLCollection NodeList indexOf
   };
   Array.prototype.avg = function() {
     if(_checkEmptyArray(this)){
-      var con=$J.type(this[0]);
+      var con=J.type(this[0]);
       if(con=="number"||con=="string"){
         return this.sum()/this.length;
       }else{
@@ -2420,18 +2487,18 @@ HTMLCollection NodeList indexOf
   };
   Array.prototype.max = function(attr,type) {
     if(_checkEmptyArray(this)){
-      var type=$J.type(this[0]);
+      var type=J.type(this[0]);
       if(type=="number"){
         return Math.max.apply(null,this);
       }else if(type=="string"||type=="array"){
-        return $J.clone(this).sortByAttr("length").last();
+        return J.clone(this).sortByAttr("length").last();
       }else if(type=="date"){
-        return $J.clone(this).sort().last();
+        return J.clone(this).sort().last();
       }else if(type=="json"||type=="object"){
         if(attr==undefined){
           throw new Error("Object类型数组参数不可为空");
         }else{
-          return $J.clone(this).sortByAttr(attr,type).last();
+          return J.clone(this).sortByAttr(attr,type).last();
         }
       }
       throw new Error("不支持的类型");
@@ -2439,18 +2506,18 @@ HTMLCollection NodeList indexOf
   };
   Array.prototype.min = function() {
     if(_checkEmptyArray(this)){
-      var type=$J.type(this[0]);
+      var type=J.type(this[0]);
       if(type=="number"){
         return Math.min.apply(null,this);
       }else if(type=="string"||type=="array"){
-        return $J.clone(this).sortByAttr("length").first();
+        return J.clone(this).sortByAttr("length").first();
       }else if(type=="date"){
-        return $J.clone(this).sort().first();
+        return J.clone(this).sort().first();
       }else if(type=="json"||type=="object"){
         if(attr==undefined){
           throw new Error("Object类型数组参数不可为空");
         }else{
-          return $J.clone(this).sortByAttr(attr,type).first();
+          return J.clone(this).sortByAttr(attr,type).first();
         }
       }
       throw new Error("不支持的类型");
@@ -2468,7 +2535,7 @@ HTMLCollection NodeList indexOf
   };
   Array.prototype.has = function(a) {
     if(_checkEmptyArray(this,false)){
-      var type=$J.type(this[0]);
+      var type=J.type(this[0]);
       if(type=="number"||type=="string"){
         return (this.indexOf(a)>-1);
       }else{
@@ -2527,7 +2594,7 @@ HTMLCollection NodeList indexOf
     return s;
   };
   String.prototype.has = function(s) {
-    if ($J.type(s)=="string") {
+    if (J.type(s)=="string") {
       if (this.includes == undefined) {
         return (this.indexOf(s) != -1)
       } else {
@@ -2542,7 +2609,7 @@ HTMLCollection NodeList indexOf
     }
   };
   String.prototype.timeOf = function(s) {
-    if ($J.type(s)=="string") {
+    if (J.type(s)=="string") {
       return this.split(s).length - 1
     } else {
       var a = this.match(s);
@@ -2554,8 +2621,8 @@ HTMLCollection NodeList indexOf
     }
   };
   String.prototype.replaceAll = function(a, b) {
-    if ($J.type(b)=="array") {
-      if ($J.type(a)=="string") {
+    if (J.type(b)=="array") {
+      if (J.type(a)=="string") {
         var s = this.split(a);
         var d = s[0];
         s.each(function(a, i) {
@@ -2580,7 +2647,7 @@ HTMLCollection NodeList indexOf
         return this
       }
     } else {
-      if ($J.type(a)=="string") {
+      if (J.type(a)=="string") {
         return this.replace(new RegExp(a, "g"), b)
       } else {
         return this.replace(a, b)
@@ -2590,7 +2657,7 @@ HTMLCollection NodeList indexOf
   String.prototype.indexsOf = function(a, i) {
     var b = this.split(a);
     var c = null;
-    if ($J.type(a)!="string") {
+    if (J.type(a)!="string") {
       c = this.match(a)
     }
     if (b.length <= 2) {
@@ -2710,14 +2777,14 @@ HTMLCollection NodeList indexOf
 
   function _inputOk() {
     if (_submitCall != null) {
-      $J.id("jetInputContent").validate(function() {
+      J.id("jetInputContent").validate(function() {
         var a=_submitCall;
         _submitCall = null;
-        a($J.id("jetInputContent").findClass("jet-input").val());
+        a(J.id("jetInputContent").findClass("jet-input").val());
         _inputClose();
       });
     } else {
-      $J.id("jetInputContent").validate(function() {
+      J.id("jetInputContent").validate(function() {
         _inputClose()
       });
     }
@@ -2733,10 +2800,10 @@ HTMLCollection NodeList indexOf
   };
 
   function _inputClose() {
-    if($J.id("jetInputWrapper").exist()){
-      $J.id("jetInputWrapper").css("top", "-100%");
+    if(J.id("jetInputWrapper").exist()){
+      J.id("jetInputWrapper").css("top", "-100%");
       setTimeout(function() {
-        $J.id("jetInputContent").empty()
+        J.id("jetInputContent").empty()
       }, 300)
     }
   };
@@ -2746,12 +2813,12 @@ HTMLCollection NodeList indexOf
       b = a.def;
       c = a.valid;
       p=a.placeholder;
-      a = $J.checkArg(a.text, ($J.language == "CHINESE") ? "请输入：" : "Please input:")
+      a = J.checkArg(a.text, (J.language == "CHINESE") ? "请输入：" : "Please input:")
     } else {
-      a = $J.checkArg(a, ($J.language == "CHINESE") ? "请输入：" : "Please input:")
+      a = J.checkArg(a, (J.language == "CHINESE") ? "请输入：" : "Please input:")
     }
-    $J.id("jetInputContent").append($J.ct("div").addClass("jet-input-text").txt(a));
-    var d = $J.ct("input.jet-input[type=text]");
+    J.id("jetInputContent").append(J.ct("div").addClass("jet-input-text").txt(a));
+    var d = J.ct("input.jet-input[type=text]");
     if (b != undefined) {
       d.val(b)
     }
@@ -2761,11 +2828,11 @@ HTMLCollection NodeList indexOf
     if (p != undefined) {
       d.attr("placeholder", p)
     }
-    $J.id("jetInputContent").append(d)
+    J.id("jetInputContent").append(d)
   };
   HTMLElement.prototype.addValid = function(a) {
     if (this.hasAttr("jet-form")) {
-      if ($J.type(a)=="json"||$J.type(a)=="object") {
+      if (J.type(a)=="json"||J.type(a)=="object") {
         for (var b in a) {
           this.findAttr("jet-name=" + b).addValid(a[b])
         }
@@ -2778,15 +2845,15 @@ HTMLCollection NodeList indexOf
       });
       if(this._jet_v_event!=true){
         this.on({
-          "blur": "$J.validInput(this)",
-          "focus": "$J.addValidValue(this)"
+          "blur": "J.validInput(this)",
+          "focus": "J.addValidValue(this)"
         },true)._jet_v_event=true;
       }
     }
     return this
   };
   HTMLCollection.prototype.addValid = NodeList.prototype.addValid = function(b) {
-    if ($J.type(b)=="array") {
+    if (J.type(b)=="array") {
       this.each(function(a, i) {
         a.addValid(b[i])
       })
@@ -2834,10 +2901,10 @@ HTMLCollection NodeList indexOf
     return _getContentForGet(this)
   };
   HTMLElement.prototype.get = function(a, b) {
-    return $J.get(this, a, b)
+    return J.get(this, a, b)
   };
   HTMLElement.prototype.initValid = function() {
-    $J.initValid(this);
+    J.initValid(this);
     return this
   };
   HTMLCollection.prototype.initValid = NodeList.prototype.initValid = function() {
@@ -2847,11 +2914,11 @@ HTMLCollection NodeList indexOf
     return this
   };
   HTMLElement.prototype.set = function(a, b, c) {
-    $J.set(this, a, b, c);
+    J.set(this, a, b, c);
     return this
   };
   HTMLElement.prototype.clear = function(a) {
-    $J.clear(this, a);
+    J.clear(this, a);
     return this
   };
   HTMLElement.prototype.validate = function(s, f) {
@@ -2859,8 +2926,8 @@ HTMLCollection NodeList indexOf
   };
 
   function _checkJetForm(a) {
-    if ($J.type(a)=="string") {
-      return $J.select("[jet-form=" + a + "]")
+    if (J.type(a)=="string") {
+      return J.select("[jet-form=" + a + "]")
     }
     return a
   };
@@ -2930,9 +2997,9 @@ HTMLCollection NodeList indexOf
     
   };
   function _getObjOrFormData(d,a){
-    if ($J.type(d)=="json"||$J.type(d)=="object") {
+    if (J.type(d)=="json"||J.type(d)=="object") {
       return d[a];
-    }else if($J.type(d)=="formdata"){
+    }else if(J.type(d)=="formdata"){
       try{
         return d.get(a);
       }catch(e){
@@ -2974,21 +3041,21 @@ HTMLCollection NodeList indexOf
         c = _checkValue(v, b.content())
       }
       if (c == "true") {
-        if ($J.useDefaultStyle) {
+        if (J.useDefaultStyle) {
           b.removeClass("jet-unpass").attr("jet-value", "");
           _checkIsPw(b)
         }
         if (_onOnePass != undefined) _onOnePass(b, c)
       } else {
-        if ($J.useDefaultStyle) {
+        if (J.useDefaultStyle) {
           b.attr("jet-value", b.content()).content(c).addClass("jet-unpass");
           if (b.attr("type") == "password") {
             b.attr("jet-ispw", "true").attr("type", "text")
           }
         }
         if (_onOneFail != undefined) _onOneFail(b, c);
-        if ($J.useShowForValid && a != false) {
-          $J.show(c, "error")
+        if (J.useShowForValid && a != false) {
+          J.show(c, "error")
         }
       }
     }
@@ -3037,9 +3104,9 @@ HTMLCollection NodeList indexOf
       if (b) {
         _checkFunction(c)(e,g);
       }
-      var i = ($J.language == "CHINESE") ? "输入有误，请按提示改正。" : "Values is not expected";
-      if ($J.useShowForValid) {
-        $J.show(i, "error")
+      var i = (J.language == "CHINESE") ? "输入有误，请按提示改正。" : "Values is not expected";
+      if (J.useShowForValid) {
+        J.show(i, "error")
       } else {
         //alert(i)
       }
@@ -3116,7 +3183,7 @@ HTMLCollection NodeList indexOf
   };
 
   function _getValidText(a, b) {
-    if ($J.language == "CHINESE") {
+    if (J.language == "CHINESE") {
       if (b == undefined) {
         return validTextCn[a]
       } else {
@@ -3262,12 +3329,12 @@ HTMLCollection NodeList indexOf
 
   function _mesShow(a, b, c, d, e) {//text type time call needClose
     clearTimeout(_t);
-    var f = $J.id("jetNoteWrapper");
+    var f = J.id("jetNoteWrapper");
     if (!f.exist()) {
       _addNoteWrapper();
-      f = $J.id("jetNoteWrapper");
+      f = J.id("jetNoteWrapper");
     }
-    var style=$J.noteStyleStr;
+    var style=J.noteStyleStr;
     if(style!="simple"){
       var g = f.findClass("jet-icon-circle").child();
       if (!b) {
@@ -3298,9 +3365,9 @@ HTMLCollection NodeList indexOf
           break
         }
       }
-      $J.id("jetNoteContent").txt(a);
+      J.id("jetNoteContent").txt(a);
     }else{
-      $J.id("jetNoteWrapper").txt(a);
+      J.id("jetNoteWrapper").txt(a);
     }
     f.className = "jet-" + b;
     setTimeout(function(){
@@ -3317,8 +3384,8 @@ HTMLCollection NodeList indexOf
         f.css("top", "0");
       }
     },0);
-    c = $J.checkArg(c, 1500);
-    if ($J.type(c)=="string") {
+    c = J.checkArg(c, 1500);
+    if (J.type(c)=="string") {
       switch (c) {
       case "slower":
         c = 2500;
@@ -3352,19 +3419,19 @@ HTMLCollection NodeList indexOf
   };
   
   function _mesShowWait(a, b) {
-    b = $J.checkArg(b, "info");
+    b = J.checkArg(b, "info");
     _mesShow(a, b, 0, function() {}, false)
   };
 
   function _mesClose() {
-    if($J.id("jetNoteWrapper").exist()){
-      if($J.noteStyleStr=="simple"){
-        $J.id("jetNoteWrapper").css("opacity", "0");
-        setTimeout(function(){$J.id("jetNoteWrapper").css("top", "-100%")},550);
-      }else if($J.noteStyleStr=="center"){
-        $J.id("jetNoteWrapper").addClass("jet-jumpoff");
+    if(J.id("jetNoteWrapper").exist()){
+      if(J.noteStyleStr=="simple"){
+        J.id("jetNoteWrapper").css("opacity", "0");
+        setTimeout(function(){J.id("jetNoteWrapper").css("top", "-100%")},550);
+      }else if(J.noteStyleStr=="center"){
+        J.id("jetNoteWrapper").addClass("jet-jumpoff");
       }else{
-        $J.id("jetNoteWrapper").css("top", "-100%")
+        J.id("jetNoteWrapper").css("top", "-100%")
       }
     }
   };
@@ -3373,13 +3440,13 @@ HTMLCollection NodeList indexOf
   var _cancelCall = null;
 
   function _confirmShow(a, b, c) {
-    var d = $J.id("jetConfirmContent");
+    var d = J.id("jetConfirmContent");
     if (!d.exist()) {
       _addConfirmWrapper();
-      d = $J.id("jetConfirmContent")
+      d = J.id("jetConfirmContent")
     }
     d.txt(a);
-    setTimeout(function(){$J.id("jetConfirmWrapper").css("top", "0");},0);
+    setTimeout(function(){J.id("jetConfirmWrapper").css("top", "0");},0);
     _okCall=_checkFunction(b);
     _cancelCall=_checkFunction(c);
   };
@@ -3404,8 +3471,8 @@ HTMLCollection NodeList indexOf
   };
 
   function _confirmClose() {
-    if($J.id("jetConfirmWrapper").exist()){
-      $J.id("jetConfirmWrapper").css("top", "-100%")
+    if(J.id("jetConfirmWrapper").exist()){
+      J.id("jetConfirmWrapper").css("top", "-100%")
     }
   };
 
@@ -3413,9 +3480,9 @@ HTMLCollection NodeList indexOf
     if(a==undefined){
       a="gray";
     }
-    var w=$J.id("jetNoteWrapper");
-    var old=$J.noteStyleStr;
-    $J.noteStyleStr = a;
+    var w=J.id("jetNoteWrapper");
+    var old=J.noteStyleStr;
+    J.noteStyleStr = a;
     if (w != undefined) {
       if((old!="simple")&&a=="simple"){
         w.empty();
@@ -3428,53 +3495,53 @@ HTMLCollection NodeList indexOf
     _mesClose();
   };
   function _addNoteWrapper() {
-    var d = $J.ct("div").attr({
+    var d = J.ct("div").attr({
       "id": "jetNoteWrapper",
-      "jet-style": $J.noteStyleStr,
-      "onclick": "$J.close()"
+      "jet-style": J.noteStyleStr,
+      "onclick": "J.close()"
     });
-    if($J.noteStyleStr!="simple"){
+    if(J.noteStyleStr!="simple"){
       d.append(_geneNoteContent());
     }
-    $J.body().append(d);
+    J.body().append(d);
   };
   function _geneNoteContent(){
-    var a = $J.ct("span").addClass("jet-icon-circle").append([$J.ct("span"), $J.ct("span")]);
-    var b = $J.ct("div").attr("id", "jetNoteIcon").addClass("jet-icon-wrapper").append(a);
-    var c = $J.ct("div").attr("id", "jetNoteContent");
+    var a = J.ct("span").addClass("jet-icon-circle").append([J.ct("span"), J.ct("span")]);
+    var b = J.ct("div").attr("id", "jetNoteIcon").addClass("jet-icon-wrapper").append(a);
+    var c = J.ct("div").attr("id", "jetNoteContent");
     return [b,c];
   }
   function _addConfirmWrapper() {
-    var a = $J.ct("span").addClass("jet-icon-circle jet-no-border").append([$J.ct("span").addClass("jet-icon-part-ok1 jet-rotate-45"), $J.ct("span").addClass("jet-icon-part-ok2 jet-rotate-45")]);
-    var b = $J.ct("span").addClass("jet-icon-circle jet-no-border").append([$J.ct("span").addClass("jet-icon-part-x jet-rotate-45"), $J.ct("span").addClass("jet-icon-part-x jet-rotate-045")]);
-    var c = $J.ct("div").attr({
+    var a = J.ct("span").addClass("jet-icon-circle jet-no-border").append([J.ct("span").addClass("jet-icon-part-ok1 jet-rotate-45"), J.ct("span").addClass("jet-icon-part-ok2 jet-rotate-45")]);
+    var b = J.ct("span").addClass("jet-icon-circle jet-no-border").append([J.ct("span").addClass("jet-icon-part-x jet-rotate-45"), J.ct("span").addClass("jet-icon-part-x jet-rotate-045")]);
+    var c = J.ct("div").attr({
       "id": "jetConfirmOk",
-      "onclick": "$J.confirmOk()"
+      "onclick": "J.confirmOk()"
     }).append(a);
-    var d = $J.ct("div").attr({
+    var d = J.ct("div").attr({
       "id": "jetConfirmCancel",
-      "onclick": "$J.confirmCancel()"
+      "onclick": "J.confirmCancel()"
     }).append(b);
-    var e = $J.ct("div").attr("id", "jetConfirmBtnWrapper").append([c, d]);
-    var f = $J.ct("div").attr("id", "jetConfirmContent");
-    var g = $J.ct("div").attr("id", "jetConfirmWrapper").append([f, e]);
-    $J.body().append(g);
+    var e = J.ct("div").attr("id", "jetConfirmBtnWrapper").append([c, d]);
+    var f = J.ct("div").attr("id", "jetConfirmContent");
+    var g = J.ct("div").attr("id", "jetConfirmWrapper").append([f, e]);
+    J.body().append(g);
   };
 
   function _addInputWrapper() {
-    var a = $J.ct("span").addClass("jet-icon-circle jet-no-border").append([$J.ct("span").addClass("jet-icon-part-ok1 jet-rotate-45"), $J.ct("span").addClass("jet-icon-part-ok2 jet-rotate-45")]);
-    var b = $J.ct("span").addClass("jet-icon-circle jet-no-border").append([$J.ct("span").addClass("jet-icon-part-x jet-rotate-45"), $J.ct("span").addClass("jet-icon-part-x jet-rotate-045")]);
-    var c = $J.ct("div").attr({
+    var a = J.ct("span").addClass("jet-icon-circle jet-no-border").append([J.ct("span").addClass("jet-icon-part-ok1 jet-rotate-45"), J.ct("span").addClass("jet-icon-part-ok2 jet-rotate-45")]);
+    var b = J.ct("span").addClass("jet-icon-circle jet-no-border").append([J.ct("span").addClass("jet-icon-part-x jet-rotate-45"), J.ct("span").addClass("jet-icon-part-x jet-rotate-045")]);
+    var c = J.ct("div").attr({
       "id": "jetInputOk",
-      "onclick": "$J.inputOk()"
+      "onclick": "J.inputOk()"
     }).append(a);
-    var d = $J.ct("div").attr({
+    var d = J.ct("div").attr({
       "id": "jetInputCancel",
-      "onclick": "$J.inputCancel()"
+      "onclick": "J.inputCancel()"
     }).append(b);
-    var e = $J.ct("div").attr("id", "jetInputBtnWrapper").append([c, d]);
-    var f = $J.ct("div").attr("id", "jetInputContent");
-    var g = $J.ct("div").attr("id", "jetInputWrapper").append([f, e]);
-    $J.body().append(g);
+    var e = J.ct("div").attr("id", "jetInputBtnWrapper").append([c, d]);
+    var f = J.ct("div").attr("id", "jetInputContent");
+    var g = J.ct("div").attr("id", "jetInputWrapper").append([f, e]);
+    J.body().append(g);
   };
 })();

@@ -7,13 +7,14 @@
         分别指代event，绑定的html元素，绑定的数据和对应的jet元素。
     </div>
     <div class='text indent'>
-        Jon可以给html元素绑定多个事件，每个之间使用 双冒号隔开(;;)。Jon支持所有的html支持的事件。
+        Jon可以给html元素绑定多个事件，每个之间使用 双冒号隔开(<span class='red'>;;</span>)。Jon支持所有的html支持的事件。
     </div>
     <div class='text indent'>
         Jon属性如果没有事件名，则默认为click事件。Jon="func" 等价于 Jon="click:func"
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
 &lt;div>&lt;input type="button" jon='click:func1' value='单个事件，单个jet方法'>&lt;/div>
+&lt;!--jon='click:func1' 等价于 jon='func1'-->
 &lt;div>&lt;input type="button" jon='click:func1,func2' value='单个事件，多个jet方法'>&lt;/div>
 &lt;div>&lt;input type="button" jon='click:func(this,opt)' value='单个事件，使用全局函数'>&lt;/div>
 &lt;div>&lt;input type="button" jon='click:this.html="click:"+opt.ele.value' value='单个事件，使用js代码'>&lt;/div>
@@ -30,7 +31,7 @@
                 this.html='click:'+opt.ele.value;
             },
             func2:function(opt){
-                this.html+='\r\n'+'click第二个方法:'+opt.ele.value;
+                this.html+='\r\nclick第二个方法:'+opt.ele.value;
             },
             enter:function(opt){
                 this.html='mouseenter:'+opt.ele.value;
@@ -60,12 +61,6 @@
     
 </div>
 <script>
-    Jet.global.setLink({
-        last:'Jrun',
-        lastUrl:'/attr/run',
-        next:'Jload',
-        nextUrl:'/attr/load',
-    });
     new Jet({
         data:{
             html:'测试区域'
@@ -75,7 +70,7 @@
                 this.html='click:'+opt.ele.value;
             },
             func2:function(opt){
-                this.html+='\r\n'+'click第二个方法:'+opt.ele.value;
+                this.html+='\r\nclick第二个方法:'+opt.ele.value;
             },
             enter:function(opt){
                 this.html='mouseenter:'+opt.ele.value;
