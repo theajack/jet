@@ -205,7 +205,7 @@ new Jet({
           有三种类型的属性声明，如下：
             <div class="list">
                 <div>1. :name='' <span class="light-text">(声明子元素的数据：可以是父元素中的data或是一个js表达式【支持Jet中的数据作用域】)</span></div>
-                <div>2. ::name='' <span class="light-text">(声明子元素的数据：同上 不同的是会将数据做一个深拷贝而不是直接引用)</span></div>
+                <div>2. ::name='' <span class="light-text">(声明子元素的数据：同上 不同的是会将数据做一个深拷贝而不是直接引用，完全切断子元素与父元素的绑定关系)</span></div>
                 <div>3. @func='' <span class="light-text">(声明子元素的方法：可以是父元素中的func或是一个js表达式)</span></div>
             </div>
         </div>
@@ -213,6 +213,8 @@ new Jet({
         
         <div class="text">对于属性值，可以是<span class="red">数据作用域内的数据</span>、<span class="red">js表达式</span>或是<span class="red">普通的字符串</span>。</div>
         <div class="text"><span class='bold'>js表达式：</span>当属性值使用时，需要使用 <span class="red">{ }</span> 包裹起来，否则会当成一个字符串处理。</div>
+        <div class="text">注：当 js表达式与 : 组合使用时，仅支持单向数据流，即父元素数据改变会影响子元素，但是子元素数据改变不会影响父元素，这是因为这里的子元素数据是由父元素数据计算得到的，而不是严格对应的。</div>
+        
         <div class="text">
             <span class='bold'>保持父子组件双向绑定：</span>在使用 js表达式 时，如果想要在{}中引用的父元素数据也与子元素保持双向绑定，请使用 <span class="red">{{ }}</span> 包裹起引用的数据，使用方式就如同在 jif等元素中使用一样，
             如 {{{$.age}}+1} 最外层括号表示是使用js表达式，里面的双层括号表示保持双向绑定。
