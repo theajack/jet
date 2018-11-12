@@ -1,5 +1,5 @@
 
-<div j='user'>
+<!-- <div j='user'>
     <span j='name'></span>:
     <span jif='{{$.age}}>20:class[_red]' j='age'></span>
 </div>
@@ -18,6 +18,21 @@
         },
         data:{
             message:'hello jload',
+        }
+    })
+</script> -->
+
+<div>aaa</div>
+<script>
+    new Jet({
+        onmounted:function(){
+            debugger;
+        },
+        func:{
+            log:function() {
+                debugger;
+                console.log(this._tools.name)
+            }
         }
     })
 </script>

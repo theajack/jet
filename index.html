@@ -23,45 +23,41 @@
   <body class="common" jstyle="overflow-y:{{$.bodyFix}}?'hidden':'auto'">
       <div id="menu" jattr='class:({{$.showMenu}})?"open":""'>
         <div class='logo-text'><img class='logo-img' src="/jet/src/image/jet.png">JET</div>
-        <div jload='@routerMenu' jonload='onmenuload'></div>
+        <div
+          jload='@routerMenu'
+          jonload='onmenuload'>
+        </div>
       </div>
       <div id="main">
-        <div id='header'>
-          <i class="j-icon icon-bars menu-bar" jon='click:this.showMenu=true'></i>
-          <i class="j-icon icon-github h-icon f-right" jon='click:$J.open("https://github.com/theajack/jet")'></i>
-          <i class="j-icon icon-arrow-up h-icon f-right" jon='click:$J.scrollTo(0)'></i>
-          <div id="searchWrapper" class='f-right'>
-              <i class="j-icon" jif='showResult:class[icon-times|icon-search]' jon='click:if(this.showResult)this.showResult=false'></i>
-              <input type="text" class='j-input' jon='focus:searchFocus' j='queryString' placeholder="搜索api">
-              <div j='queryList' jshow='{{$.queryList}}.length>0&&{{$.showResult}}' id='queryResult'>
-                <div j='$each'>
-                  <div class='q-item' jon='click:toQueryResult'>
-                    <div j='name' jattr='title:{{$.name}}' class='q-name' jhtml>this.shapeQueryName($)</div>
-                    <div j='intro' jattr='title:{{$.intro}}' class='q-intro'></div>
-                  </div>
-                </div>
-              </div>
-          </div>
-          <span j='number' jshow='{{$.showResult}}' class='f-right' id='number'>$+'条记录'</span>
+        <div id='header' 
+          jload='@header'
+          :show-menu='showMenu'
+          @jump-to='jumpTo'>
         </div>
         <div Jout id='routerOut' jdom='out'></div>
-        <div id='footer'>
-          <div jshow='{{$.last}}!=""' class='last' jon='click:lastApi'>
-            <i class="j-icon icon-double-angle-left"></i>
-            <span j='last'></span>
-          </div>
-          <div jshow='{{$.next}}!=""' class='next' jon='click:nextApi'>
-              <span j='next'></span>
-              <i class="j-icon icon-double-angle-right"></i>
-          </div>
-          <span class='footer-text'>theajack@qq.com | ©2018 theajack | <a href="https://www.theajack.com">theajack.com</a></span>
+        <div id='footer' 
+          jload='@footer' 
+          jonload='onfooterload'>
         </div>
       </div>
-      <div jattr='class:({{$.showMenu}})?"menu-bar-cover open":"menu-bar-cover"' jon='click:this.showMenu=false'></div>
+      <div jattr='class:({{$.showMenu}})?"menu-bar-cover open":"menu-bar-cover"' jon='this.showMenu=false'></div>
 
     <script type="text/javascript" src="/jet/assets/js/jet.min.js"></script>
     <script type="text/javascript" src="/jet/assets/js/jui.min.js"></script>
-    <script type="text/javascript" src="/jet/src/js/router.js"></script>
+    <!-- <script type="text/javascript" src="/jet/assets/js/jet.all.3.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jui.all.js"></script> -->
+    <!-- <script type="text/javascript" src="/jet/assets/js/jet-module/jet-main.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jet-module/router.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jet-module/load.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jet-module/valid.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jet-module/lang.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jet-module/module.js"></script> -->
+
+
+    <script type="text/javascript" src="/jet/src/js/config.js"></script>
+    <!-- <script type="text/javascript" src="/jet/assets/js/jui/jcode.js"></script> -->
+    <!-- <script type="text/javascript" src="/jet/src/js/common.js"></script> -->
+    <!-- <script type="text/javascript" src="/jet/src/js/history.js"></script> -->
     <script type="text/javascript" src="/jet/index.js"></script>
     <!-- <script name="Jet_api" src="https://www.theajack.com/jet/assets/js/stat.js"></script> -->
     <!-- <script type="text/javascript" src="/jet/src/js/queryApi.js"></script> -->

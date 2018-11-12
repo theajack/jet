@@ -113,8 +113,11 @@ new Jet({
             使用<span class='red'>jpar</span>属性设置子组件Jet元素的父Jet元素，用于父组件与子组件间状态共享。jpar值为父组件的name属性。
             若是不设置jpar属性，Jet会将jload所在页面的Jet元素作为load元素的父元素。
         </div>
+        <div class='text indent' jump-des='jonload'>
+            使用<span class='red'>jonload</span>属性可一个Jload元素添加一个加载完成的回调函数，值可以是其父Jet元素的一个Jet函数名、元素自己的一个而函数名或者一串js代码。
+        </div>
         <div class='text indent'>
-            使用<span class='red'>jonload</span>属性可一个Jload元素添加一个加载完成的回调函数，值可以是其父Jet元素的一个Jet函数名或者一串js代码。
+            jonload 支持一个 json类型的参数，它有三个属性，分别是：ele(jload对应的dom元素)、par(父jet元素)、jet(自身jet元素)
         </div>
         <div class='text indent'>
             接下来请看一个加载for_load.html文件的例子:
@@ -213,7 +216,8 @@ new Jet({
         
         <div class="text">对于属性值，可以是<span class="red">数据作用域内的数据</span>、<span class="red">js表达式</span>或是<span class="red">普通的字符串</span>。</div>
         <div class="text"><span class='bold'>js表达式：</span>当属性值使用时，需要使用 <span class="red">{ }</span> 包裹起来，否则会当成一个字符串处理。</div>
-        <div class="text">注：当 js表达式与 : 组合使用时，仅支持单向数据流，即父元素数据改变会影响子元素，但是子元素数据改变不会影响父元素，这是因为这里的子元素数据是由父元素数据计算得到的，而不是严格对应的。</div>
+        <div class="text">注：当 js表达式与 : 组合使用时，仅支持单向数据流，即父元素数据改变会影响子元素，但是子元素数据改变不会影响父元素，这是因为这里的子元素数据是由父元素数据计算得到的，
+            而不是严格对应的。若想要让子元素数据改变后 反向计算得到对应父元素数据并且改变父元素数据，请使用 ondatachange 。</div>
         
         <div class="text">
             <span class='bold'>保持父子组件双向绑定：</span>在使用 js表达式 时，如果想要在{}中引用的父元素数据也与子元素保持双向绑定，请使用 <span class="red">{{ }}</span> 包裹起引用的数据，使用方式就如同在 jif等元素中使用一样，

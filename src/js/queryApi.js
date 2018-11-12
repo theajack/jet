@@ -8,7 +8,6 @@ Jet.$define('Query',function(){
         name:'安装使用',
         url:'/intro/install',
         intro:'以script标签引入或者在lite-server中使用',
-
     },{
         name:'目录结构',
         url:'/intro/contents',
@@ -37,7 +36,7 @@ Jet.$define('Query',function(){
     },{
         name:'局部渲染',
         url:'/intro/grammer',
-        intro:'通过给 new Jet() 参数增加一个 ele 属性（值是一个id值或者是一个dom元素）。可以局部渲染html元素',
+        intro:'根据Jet数据局部渲染html元素',
         des:'part'
     },{
         name:'name参数',
@@ -50,9 +49,14 @@ Jet.$define('Query',function(){
         intro:'用于父组件与子组件的状态共享',
         des:'par'
     },{
+        name:'static参数',
+        url:'/intro/grammer',
+        intro:'给Jet元素设置静态数据$data',
+        des:'static'
+    },{
         name:'Jet生命周期',
         url:'/intro/life',
-        intro:'Jet 有8个生命周期函数',
+        intro:'Jet 有11个生命周期函数',
     },{
         name:'ondatachange',
         url:'/intro/life',
@@ -245,6 +249,11 @@ Jet.$define('Query',function(){
         name:'jload:组件',
         url:'/attr/load',
         intro:'可以在某个元素之内加载其他组件',
+    },{
+        name:'jonload',
+        url:'/attr/load',
+        intro:'jload加载完成的回调函数',
+        des:'jonload'
     },{
         name:'父子组件通信',
         url:'/attr/load',
@@ -450,6 +459,21 @@ Jet.$define('Query',function(){
         url:'/module/import',
         intro:'引入模块',
     },{
+        name:'Jet.prototype.$import',
+        url:'/module/import',
+        intro:'在Jet元素中引入模块',
+        des:'Jet.prototype.$import'
+    },{
+        name:'模块别名',
+        url:'/module/import',
+        intro:'为模块设置别名',
+        des:'s-name'
+    },{
+        name:'new关键字',
+        url:'/module/import',
+        intro:'使用new关键字加载一个独立的模块',
+        des:'new'
+    },{
         name:'$module',
         url:'/module/module',
         intro:'已引入的模块集合',
@@ -626,7 +650,7 @@ Jet.$define('Query',function(){
     Jet.$export({
         search:function(s){
             return map.filter(function(item){
-                return item.name.toLowerCase().has(s.toString().toLowerCase());
+                return item.name.toLowerCase().has(s.toString().toLowerCase())||item.intro.toLowerCase().has(s.toString().toLowerCase());
             })
         },getData:function(){
             return map;

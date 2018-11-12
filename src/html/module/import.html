@@ -62,7 +62,7 @@ Jet.$import('module1','module2',function(modules){//使用回调函数，加载�
     //modules={m1:模块一,m2:模块二},表示当前$import 加载的模块集合
 });
     </div>
-    <div class='title'>2.Jet.prototype.$import</div>
+    <div class='title' jump-des='Jet.prototype.$import'>2.Jet.prototype.$import</div>
     <div class='text'>
         在 Jet元素中可以使用 this.$import()来引入模块，使用以后除了在Jet.$module中会添加对应的模块，还会在当前Jet元素的$module中会添加对应的模块。
     </div>
@@ -78,7 +78,7 @@ new Jet({
     }
 })
     </div>
-    <div class='title'>3.为模块设置别名</div>
+    <div class='title' jump-des='s-name'>3.为模块设置别名</div>
     <div class='text'>
         使用$import() 加载模块时可以使用 as 为模块设置别名，但是别名只在回调函数中可用，不会记录到 Jet.$module 或this.$module 集合中，集合中的模块名仍然对应的是 $define 方法设置的模块名，请看一个例子：
     </div>
@@ -88,7 +88,7 @@ Jet.$import('module1 as mym2','module2 as mym2',function(modules){
     //Jet.$module={m1:模块一,m2:模块二}
 });
     </div>
-    <div class='title'>4.使用new加载一个独立的模块</div>
+    <div class='title' jump-des='new'>4.使用new加载一个独立的模块</div>
     <div class='text'>
         前面的教程提到过，Jet中多次加载相同的模块都指向的是同一对象，如果希望它们互相独立，需要使用new关键字，new可以与as一起使用。
         独立模块不会被加入到$module集合中。用法如下：

@@ -62,7 +62,6 @@
         new Jet({
             name:'api',
             onmounted:function(){
-                var _this=this;
                 var keys=[
                     {url:'/intro',text:'介绍'},
                     {url:'/bind',text:'数据绑定'},
@@ -76,21 +75,19 @@
                     {url:'/jui',text:'JUI'},
                     {url:'/code',text:'在线使用'}
                 ];
-                this.$import('queryApi',function(mod){
-                    var data=mod.Query.getData();
-                    var _d=[];
-                    keys.forEach(function(key){
-                        var res=data.filter(function(item){
-                            return item.url.substring(0,key.url.length)==key.url;
-                        })
-                        _d.push({
-                            name:key.text,
-                            api:res
-                        });
-
+                var data=this.$get('Query').getData();
+                var _d=[];
+                keys.forEach(function(key){
+                    var res=data.filter(function(item){
+                        return item.url.substring(0,key.url.length)==key.url;
+                    })
+                    _d.push({
+                        name:key.text,
+                        api:res
                     });
-                    _this.data.$replace(_d);
-                })
+
+                });
+                this.data=_d;
             },
             data:{
                 data:[]

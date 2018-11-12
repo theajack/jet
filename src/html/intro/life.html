@@ -2,35 +2,22 @@
 <div class='title'>1.Jet生命周期函数</div>
 <div class="sub">
     <div class='text'>
-        Jet 有以下8个生命周期函数，各自的执行先后顺序与其序号一致。
+        Jet 有以下11个生命周期函数，各自的执行先后顺序与其序号一致。
         <div class='list'>
             <div>1.beforeinit：<span class="light-text">(在生成Jet元素和渲染HTML元素之前执行)</span></div>
             <div>2.beforemount：<span class="light-text">(在生成Jet元素和之后、渲染HTML元素之前执行)</span></div>
             <div>3.onmounted：<span class="light-text">(在渲染HTML元素完成之后执行)</span></div>
-            <div>4.onroute：<span class="light-text">(在路由发生之前执行)</span></div>
+            <div>4.onroute：<span class="light-text">(在路由发生之前执行，在组件卸载之后会被移除，如果要使全局可用，请在根Jet中使用或者使用Jet.router.onroute())</span></div>
             <div>5.onready：<span class="light-text">(在HTML元素加载完成之后执行，不包括图片和其他非文本元素)</span></div>
             <div>6.onload：<span class="light-text">(在HTML元素加载完成之后执行，包括图片和其他非文本元素)</span></div>
-            <div>7.onrouted：<span class="light-text">(在路由完成之后执行)</span></div>
-            <div class='link' jump-to='ondatachange'>8.ondatachange：(用于监测 Jet data 数据改变，并且执行对应的回调函数)<i class="icon icon-double-angle-right"></i></div>
-            <div class='link' jump-to='beforeinitawait'>9.beforeinitawait(beforeinit的同步方法，主要用于在渲染之前保证一些异步操作执行完毕，如加载模块等)<i class="icon icon-double-angle-right"></i></div>
+            <div>7.onrouted：<span class="light-text">(在路由完成之后执行，在组件卸载之后会被移除，如果要使全局可用，请在根Jet中使用或者使用Jet.router.onrouted())</span></div>
+            <div>8.beforeunmount<span class="light-text">(在组件卸载之前执行)</span></div>
+            <div>9.onunmounted<span class="light-text">(在组件卸载之后执行（组件卸载之后Jet中对应的对象会被清除）)</span></div>
+            <div class='link' jump-to='ondatachange'>10.ondatachange：(用于监测 Jet data 数据改变，并且执行对应的回调函数)<i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jump-to='beforeinitawait'>11.beforeinitawait(beforeinit的同步方法，主要用于在渲染之前保证一些异步操作执行完毕，如加载模块等)<i class="icon icon-double-angle-right"></i></div>
         </div>
-        但是，只有在index.html文件才会触发所有的生命周期函数。才使用路由时的html模板中只会出发以下六个函数。
-        <div class='list'>
-            <div>1.onroute</div>
-            <div>2.beforeinit</div>
-            <div>3.beforemount</div>
-            <div>4.onready</div>
-            <div>5.onmounted</div>
-            <div>6.onrouted</div>
-        </div>
-        在模板中，只有在页面跳转时才会全部执行以上六个函数，各自的执行先后顺序与其序号一致。在模板中刷新页面时，只执行以下五个函数：
-        <div class='list'>
-            <div>1.beforeinit</div>
-            <div>2.beforemount</div>
-            <div>3.onready</div>
-            <div>4.onmounted</div>
-            <div>5.onrouted</div>
-        </div>
+        但是，只有在根Jet元素中才会触发所有的生命周期函数。在其他Jet元素中不会触发以下onload函数。
+        在非根Jet元素中刷新页面时，不会触发其onroute函数：
         生命周期函数用法如下：
     </div>
     <div class='j-code' disabled width='99%' height='auto'>
@@ -49,7 +36,7 @@
             console.log('onready');
         },
         onload:function(){
-        console.log('onload');
+            console.log('onload');
         },
         onmounted:function(){
             console.log('onmounted');
@@ -57,10 +44,12 @@
         onrouted:function(){
             console.log('onrouted');
         },
-        data:{
+        beforeunmount:function(){
+            console.log('beforeunmount');
         },
-        func:{
-        }
+        onunmounted:function(){
+            console.log('onunmounted');
+        },
     });
 &lt;/script>
     </div>
@@ -247,6 +236,11 @@
 <div class="sub">
     <div class='text indent'>
         beforeinitawait 方法是 beforeinit 的同步版本，主要用于在渲染之前保证一些异步操作执行完毕，如加载模块等。
+    </div>
+    <div class='text indent'>
+        若 beforeinitawait 和 beforeinit 同时存在，Jet 只会选择执行一个，且优先选择 beforeinit。
+    </div>
+    <div class='text indent'>
         使用该方法会阻塞 Jet 渲染。该方法支持一个回调参数，是一个function类型的参数，在手动调用该方法以后，Jet 才会继续渲染。 请看一个例子
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
@@ -265,6 +259,7 @@ new Jet({
 
 <script>
     new Jet({
+
         data:{//数据
             string:'hello word',
             json:{

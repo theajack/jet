@@ -325,71 +325,7 @@ pre{
   height:23px;
   margin-right:5px;
 }
-.h-icon{
-  color: #00b2d7!important;
-  cursor: pointer;
-  font-size: 25px!important;
-  margin: 13px 5px;
-}
-#searchWrapper{
-  position: relative;
-  margin: 7px 5px;
-  width: 250px;
-}
-#searchWrapper .j-input{
-  width: 100%;
-}
-#searchWrapper .j-icon{
-  position: absolute;
-  color: #00b2d7!important;
-  top: 8px;
-  font-size: 18px;
-  right: 4px;
-}
-#searchWrapper .icon-times{
-  cursor: pointer
-}
-#searchWrapper .icon-times:hover{
-  color: #028eaa!important;
-}
-#number{
-  color: #c00;
-  margin-top: 15px;
-}
 
-#queryResult{
-  position: absolute;
-  width: 100%;
-  overflow: hidden;
-  margin: 3px;
-  background-color: rgba(255,255,255,.95);
-  top: 30px;
-  border: 1px solid #ccc;
-  padding: 5px;
-  max-height: 335px;
-  overflow-y: auto;
-}
-.q-item{
-  border-bottom: 1px solid #ccc;
-  padding: 5px 0;
-  cursor: pointer;
-}
-.q-item.b-none{
-  border-bottom: none
-}
-.q-item:hover{
-  background-color: #eee;
-}
-.q-name{
-  font-weight:bold;
-  font-size: 18px;
-}
-.q-intro,.q-name{
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: center;
-}
 .__red{
   color:#f44;
   margin: 0 2px;

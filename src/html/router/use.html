@@ -30,21 +30,27 @@ Jet.router.use({
 })
     </div>
     <div class='text indent'>
-        history参数表示是否启用history模式，关闭history模式则在链接中会含有 # ，但是对后端开发人员要求较小。
+        <span class='bold'>history参数</span>
+        表示是否启用history模式，关闭history模式则在链接中会含有 # ，但是对后端开发人员要求较小。
         若是开启了history模式，则链接中不含有 #，但是需要后端开发人员将所有访问地址都指向index.html文件。该参数默认为false。
     </div>
     <div class='text indent'>
-        base参数表示是否在host和路由地址之间增加一级地址，改地址可以使虚拟的也可以是真实的文件目录。
+        <span class='bold'>base参数</span>
+        表示是否在host和路由地址之间增加一级地址，改地址可以是虚拟的也可以是真实的文件目录。
     </div>
     <div class='text indent'>
-        trueBase参数用于指明base参数设置的增加的根目录地址是否是真实的。该参数默认为false，在没有设置base参数是，该参数不起作用。
+        <span class='bold'>trueBase参数</span>
+        用于指明base参数设置的增加的根目录地址是否是真实的。该参数默认为false，在没有设置base参数是，该参数不起作用。
     </div>
     <div class='text indent'>
-        index参数用于指定应用程序的入口路由地址。
+        <span class='bold'>index参数</span>
+        用于指定应用程序的入口路由地址。
     </div>
     <div class='text indent'>
-        router参数是最重要的一个参数，它是一个json数据，将路由地址映射成真实的html文件。
-        json的键是一个路由地址，值可以是字符串，表示在 /src/html 文件夹中的一个文件，可以使用多重文件夹嵌套，另外.html的后缀可以省略，如果值与键相等，则可以使用空字符串代替值。
+        <span class='bold'>map参数</span>
+        是最重要的一个参数，它是一个json数据，将路由地址映射成真实的html文件。
+        json的键是一个路由地址，值是字符串类型，表示在 /src/html 文件夹中的一个文件，可以使用多重文件夹嵌套，另外.html的后缀可以省略，如果值与键相等，则可以使用空字符串代替值。
+        如果使用了资源管理，则也可以使用 资源管理的方式表示html文件地址。
     </div>
     <div class='text indent'>对于get类型请求的参数，如上面的例子，可以在值后面带上 ?parame=v... 。
         值除了可以使字符串还可以是json数据，json数据中可用的属性有 name、params和children，name指的是 路由地址html文件路径，

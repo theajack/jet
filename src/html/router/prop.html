@@ -11,7 +11,7 @@
             <div>5.url <span class="light-text">(当前的不包含根路径的路由路径)</span></div>
             <div>6.params <span class="light-text">(链接后面的参数，json类型)</span></div>
             <div>7.conf <span class="light-text">(存放资源文件的目录，json类型)</span></div>
-            <div>8.router <span class="light-text">(路由的信息，json类型)</span></div>
+            <div>8.map <span class="light-text">(路由的映射表，json类型)</span></div>
             <div>9.active <span class="light-text">(当前路由页面对应的jrouter dom元素)</span></div>
             <div>10.out <span class="light-text">(路由出口对应的dom元素)</span></div>
             <div>11.index <span class="light-text">(路由首页)</span></div>
@@ -27,7 +27,7 @@
 &lt;div j='url'>'url: '+$&lt;/div>
 &lt;div j='params'>'params: '+$&lt;/div>
 &lt;div j='conf'>'conf: '+$&lt;/div>
-&lt;div j='router'>'router: '+$&lt;/div>
+&lt;div j='map'>'map: '+$&lt;/div>
 &lt;script>
     new Jet({
         data:{
@@ -37,7 +37,7 @@
             path:null,
             url:null,
             params:null,
-            router:null,
+            map:null,
             conf:null
         },onmounted:function(){
             this.base=Jet.router.base;
@@ -46,7 +46,7 @@
             this.path=Jet.router.path;
             this.url=Jet.router.url;
             this.params=JSON.stringify(Jet.router.params);
-            this.router=JSON.stringify(Jet.router.router);
+            this.map=JSON.stringify(Jet.router.map);
             this.conf=JSON.stringify(Jet.router.conf);
         }
     })
@@ -61,7 +61,7 @@
             <div j='url'>'url: '+$</div>
             <div j='params'>'params: '+$</div>
             <div j='conf'>'conf: '+$</div>
-            <div j='router'>'router: '+$</div>
+            <div j='map'>'map: '+$</div>
         </div>
     </div>
 </div>
@@ -75,7 +75,7 @@
             path:null,
             url:null,
             params:null,
-            router:null,
+            map:null,
             conf:null
         },onmounted:function(){
             this.base=Jet.router.base;
@@ -84,7 +84,7 @@
             this.path=Jet.router.path;
             this.url=Jet.router.url;
             this.params=JSON.stringify(Jet.router.params);
-            this.router=JSON.stringify(Jet.router.router);
+            this.map=JSON.stringify(Jet.router.map);
             this.conf=JSON.stringify(Jet.router.conf);
         }
     });

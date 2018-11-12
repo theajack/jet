@@ -1,0 +1,34 @@
+<div jshow='{{$.last}}!=""' class='last' jon='click:lastApi'>
+    <i class="j-icon icon-double-angle-left"></i>
+    <span j='last'></span>
+</div>
+<div jshow='{{$.next}}!=""' class='next' jon='click:nextApi'>
+    <span j='next'></span>
+    <i class="j-icon icon-double-angle-right"></i>
+</div>
+<span class='footer-text'>theajack@qq.com | ©2018 theajack |
+    <a href="https://www.theajack.com">theajack.com</a>
+</span>
+<script>
+    new Jet({
+        name:'footer',
+        data: {
+            last: '',
+            lastUrl: '',
+            next: '安装使用',
+            nextUrl: '/intro/install'
+        },
+        func: {
+            nextApi: function () {
+                Jet.router.route(this.nextUrl);
+            }, lastApi: function () {
+                Jet.router.route(this.lastUrl);
+            }, setLink: function (opt) {
+                this.last = opt.last || '';
+                this.lastUrl = opt.lastUrl;
+                this.next = opt.next || '';
+                this.nextUrl = opt.nextUrl;
+            }
+        }
+    })
+</script>

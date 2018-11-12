@@ -12,7 +12,6 @@ Jet.$define('Scroll', function () {
         }
     };
     if ($J.isMobile()) {
-        
         var _setHeight = function () {
             $J.id('menuScroll').exist(function(item){
                 item.css('height', ($J.height() - 40) + 'px')
@@ -26,7 +25,7 @@ Jet.$define('Scroll', function () {
     } else {
         var menuScroll = 0;
         $J.id('menu').onmousewheel = function (e) {
-            //stopPro(e);
+            //Jet.$root.stopPro(e);
             if (!_g.bodyFix) _g.bodyFix = true;
             if (max > 0) {
                 var _top = menuScroll + $J.sign(e.wheelDelta) * 80;
@@ -45,12 +44,7 @@ Jet.$define('Scroll', function () {
         window.onresize = _checkScroll;
     }
     Jet.$export({
-        $init: function () {
-            _g.needUseRouted = true;
-            this.routeFunc();
-        },
         routed: function () {
-            _g.needUseRouted=true;
             document.documentElement.scrollTop = 0;
             $J.body().scrollTop = 0;
             $J.attr('jump-to').each(function (item) {
@@ -73,23 +67,20 @@ Jet.$define('Scroll', function () {
                     _g._top = undefined;
                 }
             }
-            _g.setLink(Jet.$module.Content.getJumpInfo())
+            Jet.footer.setLink(Jet.$module.Content.getJumpInfo())
             this.routeFunc();
         },
         checkScroll: _checkScroll,
         routeFunc: function () {
-            if (_g.needUseRouted) {
-                $J.attr('jrouter-active').exist(function (item) {
-                    if (item.hasClass('menu-s-item')) {
-                        var _i = item.parent().prev();
-                        _i.next().slideDown(function () {
-                            _checkScroll();
-                        }, 200, "ease");
-                        _i.child(1).addClass('active');
-                    }
-                });
-                _g.needUseRouted = false
-            }
+            $J.attr('jrouter-active').exist(function (item) {
+                if (item.hasClass('menu-s-item')) {
+                    var _i = item.parent().prev();
+                    _i.next().slideDown(function () {
+                        _checkScroll();
+                    }, 200, "ease");
+                    _i.child(1).addClass('active');
+                }
+            });
         },
         bindShowMenu: function (ele) {
             var isLock = false;
