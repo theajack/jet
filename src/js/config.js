@@ -30,6 +30,7 @@ Jet.router.use({
         '/intro': {
             name: '/intro/index',
             children: {
+                '/img': '/intro/img',
                 '/install': '@pageInstall',
                 '/contents': '/intro/contents',
                 '/html': '/intro/html',
@@ -37,6 +38,7 @@ Jet.router.use({
                 '/res': '/intro/res',
                 '/life': '/intro/life',
                 '/api': '/intro/api',
+                '/update': '/intro/update',
                 '/about': '/intro/about',
             }
         },

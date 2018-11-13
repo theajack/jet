@@ -1,7 +1,7 @@
 <div class='title'>Jet语法</div>
 
 <div class='text indent'>
-    本节将介绍以下Jet的总体语法，主要从以下四个方面介绍：
+    本节将介绍以下Jet的总体语法，主要从以下五个方面介绍：
     <span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
     <div class="list">
         <div class='link' jump-to='base'>1.基本使用 <span class="light-text">(参数列表与说明)</span><i class="icon icon-double-angle-right"></i></div>
@@ -9,12 +9,12 @@
         <div class='link' jump-to='name'>3.name参数 <span class="light-text">(为Jet元素设置一个唯一标识，设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='par'>4.par参数 <span class="light-text">(设置当前元素的父元素)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='static'>5.static参数 <span class="light-text">(设置Jet元素的静态数据)</span><i class="icon icon-double-angle-right"></i></div>
-
-        <div class='link' jon='Jet.$root.jumpTo("/intro/life")'>6.生命周期 <span class="light-text">(获取或者设置[增加或删除]dom元素的属性)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='Jet.$root.jumpTo("/intro/life")'>6.生命周期 <span class="light-text">(在组件的不同状态时触发设置的对应函数)</span><i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 <div class='title' jump-des='base'>1.基本使用</div>
 <div class="sub">
+    <div class='title' jump-des='data&func'>1.data和func的使用</div>
     <div class='text'>Jet 使用
         <span class='red'>new Jet()</span>
         来创建一个Jet组件，该组件的作用范围是当前html模板以及其中加载的Jload。
@@ -25,11 +25,11 @@
         <div class="list">
             <div>1.data <span class="light-text">(获取或者设置dom元素的innerHTML)</span></div>
             <div>2.func <span class="light-text">(获取dom元素的outerHTML)</span></div>
-            <div class='link' jon='Jet.$root.jumpTo("/intro/life")'>3.11个生命周期函数 <span class="light-text">(设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
-            <div class='link' jump-to='name'>3.name参数 <span class="light-text">(为Jet元素设置一个唯一标识，设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
-            <div class='link' jump-to='par'>4.par参数 <span class="light-text">(设置当前元素的父元素)</span><i class="icon icon-double-angle-right"></i></div>
-            <div class='link' jump-to='part'>5.ele参数 <span class="light-text">(根据设置的ele参数局部渲染dom)</span><i class="icon icon-double-angle-right"></i></div>
-            <div class='link' jump-to='static'>6.static参数 <span class="light-text">(设置Jet元素的静态数据)</span><i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='Jet.$root.jumpTo("/intro/life")'>3.9个生命周期函数 <span class="light-text">(设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jump-to='name'>4.name参数 <span class="light-text">(为Jet元素设置一个唯一标识，设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jump-to='par'>5.par参数 <span class="light-text">(设置当前元素的父元素)</span><i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jump-to='part'>6.ele参数 <span class="light-text">(根据设置的ele参数局部渲染dom)</span><i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jump-to='static'>7.static参数 <span class="light-text">(设置Jet元素的静态数据)</span><i class="icon icon-double-angle-right"></i></div>
         </div>
     </div>
 
@@ -51,6 +51,40 @@
     <div class='text'>以下是输出的html:
         <div class='out'>
             <div j='message'>
+            </div>
+        </div>
+    </div>
+    <div class='title' jump-des='data-func'>2.data的立即执行函数</div>
+    <div class="text">在声明data时，除了可以使用值以外，还可以使用带有返回值的函数。</div>
+    <div class="text">这些函数被称为<span class='red'>data的立即执行函数</span>，使用立即执行函数的好处是，可以在声明data时直接声明一些需要计算才能得到的值，比如根据其他某个组件中某个属性或多个属性计算得到的值或是获取dom元素的属性等。</div>
+    <div class="text">在这些函数中 this指代当前的Jet元素，函数接受两个参数，第一个参数是当前Jet元素的源数据，第二个参数是当前数据域。请看一个例子：</div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='dataFunc'>&lt;/div>
+&lt;div j='jsonDataFunc'>
+    &lt;span j='dataFunc'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            message:'hello word',
+            dataFunc:function(data,curData){
+                return data.message+' !'
+            },
+            jsonDataFunc:{
+                mes:'hello func',
+                dataFunc:function(data,curData){
+                    return curData.mes+' again !!'
+                }
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div j='dataFunc'></div>
+            <div j='jsonDataFunc'>
+                <span j='dataFunc'></span>
             </div>
         </div>
     </div>
@@ -203,6 +237,15 @@
         data:{//数据
             myMessage:'myJet',
             message:'hello word',
+            dataFunc:function(data,curData){
+                return data.message+' !'
+            },
+            jsonDataFunc:{
+                mes:'hello func',
+                dataFunc:function(data,curData){
+                    return curData.mes+' again !!'
+                }
+            }
         }
     });
 </script>

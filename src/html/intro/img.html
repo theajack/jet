@@ -1,0 +1,52 @@
+
+
+<style>
+    .jet-img-intro-pc{
+        display: block;
+    }
+    .jet-img-intro-mobile{
+        display: none;
+    }
+    .jet-img-intro-nobile img,.max-w-full{
+        max-width:100%;
+    }
+    @media screen and (max-width: 600px) {
+        .jet-img-intro-pc{
+            display: none;
+        }
+        .jet-img-intro-mobile{
+            display: block;
+        }
+    }
+</style>
+<div class='title'>Jet 图解</div>
+<div class='text indent'>在使用和学习Jet之前，先通过一张图了解一下Jet是如何工作，以及Jet能做些什么。</div>
+<div class='text indent'>以下是一个标准的Jet应用的所有主要部分和工作流程。</div>
+<div class='text indent'>Jet将 DOM树映射成<span class="red">Jet组件树</span>，Jet组件由<span class="red">new Jet()</span>声明，
+    每一个Jet组件由<span class="red">源数据、响应数据、函数、Jet元素树、生命周期和非响应数据</span>构成。
+    其中Jet元素树对应的是由Jet容器中的DOM树映射而成。</div>
+<div class='text indent'>Jet元素分为两大类：绑定元素和工具元素。这些元素都继承自Jet.Base，<span class="red">Jet元素是Jet MVVM模式的核心</span>。
+    每个Jet元素由<span class="red">源数据、响应域数据、DOM元素、响应域函数队列、$regist、$refresh</span>还有其他一些方法组成，
+    其中View对应的就是DOM元素，Modal对应的是源数据，其他部分构成ViewModel，负责源数据与DOM之间的双向绑定。</div>
+<div class='text indent'>除此之外，Jet还包含一些<span class="red">外围设施</span>供开发者开箱即用，帮助更高效的构建Web应用。</div>
+<div class='text indent'>Jet组件包含的<span class="red">特性</span>和Jet元素包含的<span class="red">修饰属性</span>，为Jet应用赋予更强大的功能。</div>
+<div class='text jet-img-intro-pc'>
+    <img class='w-full' src="Jet图解.jpg" alt="">
+</div>
+<div class='text jet-img-intro-mobile'>
+    <div>Jet应用与外围设施</div>
+    <img src="概要与外围.jpg" alt="">
+    <div>Jet组件</div>
+    <img src="Jet组件.jpg" alt="">
+    <div>Jet元素</div>
+    <img src="Jet元素.jpg" alt="">
+</div>
+<div class='title' jump-des='life'>Jet组件生命周期图解</div> 
+<div class='text indent'>每一个Jet组件都有它的<span class="link" jon='Jet.$root.jumpTo("/intro/life")'>生命周期</span>，包含以下9个，
+    大致流程请参考下图，具体使用见 <span class="link" jon='Jet.$root.jumpTo("/intro/life")'>Jet生命周期章节</span>。</div>
+<div class='text t-center'>
+    <img class='max-w-full' src="Jet生命周期.jpg" alt="">
+</div>
+<script>
+    new Jet()
+</script>

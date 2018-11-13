@@ -2,21 +2,19 @@
 <div class='title'>1.Jet生命周期函数</div>
 <div class="sub">
     <div class='text'>
-        Jet 有以下11个生命周期函数，各自的执行先后顺序与其序号一致。
+        Jet 有以下9个生命周期函数，各自的执行先后顺序与其序号一致。
         <div class='list'>
             <div>1.beforeinit：<span class="light-text">(在生成Jet元素和渲染HTML元素之前执行)</span></div>
             <div>2.beforemount：<span class="light-text">(在生成Jet元素和之后、渲染HTML元素之前执行)</span></div>
             <div>3.onmounted：<span class="light-text">(在渲染HTML元素完成之后执行)</span></div>
             <div>4.onroute：<span class="light-text">(在路由发生之前执行，在组件卸载之后会被移除，如果要使全局可用，请在根Jet中使用或者使用Jet.router.onroute())</span></div>
-            <div>5.onready：<span class="light-text">(在HTML元素加载完成之后执行，不包括图片和其他非文本元素)</span></div>
-            <div>6.onload：<span class="light-text">(在HTML元素加载完成之后执行，包括图片和其他非文本元素)</span></div>
-            <div>7.onrouted：<span class="light-text">(在路由完成之后执行，在组件卸载之后会被移除，如果要使全局可用，请在根Jet中使用或者使用Jet.router.onrouted())</span></div>
-            <div>8.beforeunmount<span class="light-text">(在组件卸载之前执行)</span></div>
-            <div>9.onunmounted<span class="light-text">(在组件卸载之后执行（组件卸载之后Jet中对应的对象会被清除）)</span></div>
-            <div class='link' jump-to='ondatachange'>10.ondatachange：(用于监测 Jet data 数据改变，并且执行对应的回调函数)<i class="icon icon-double-angle-right"></i></div>
-            <div class='link' jump-to='beforeinitawait'>11.beforeinitawait(beforeinit的同步方法，主要用于在渲染之前保证一些异步操作执行完毕，如加载模块等)<i class="icon icon-double-angle-right"></i></div>
+            <div>5.onrouted：<span class="light-text">(在路由完成之后执行，在组件卸载之后会被移除，如果要使全局可用，请在根Jet中使用或者使用Jet.router.onrouted())</span></div>
+            <div>6.beforeunmount<span class="light-text">(在组件卸载之前执行)</span></div>
+            <div>7.onunmounted<span class="light-text">(在组件卸载之后执行（组件卸载之后Jet中对应的对象会被清除）)</span></div>
+            <div class='link' jump-to='ondatachange'>8.ondatachange：(用于监测 Jet data 数据改变，并且执行对应的回调函数)<i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jump-to='beforeinitawait'>9.beforeinitawait(beforeinit的同步方法，主要用于在渲染之前保证一些异步操作执行完毕，如加载模块等)<i class="icon icon-double-angle-right"></i></div>
         </div>
-        但是，只有在根Jet元素中才会触发所有的生命周期函数。在其他Jet元素中不会触发以下onload函数。
+        但是，只有在根Jet元素中才会触发所有的生命周期函数。
         在非根Jet元素中刷新页面时，不会触发其onroute函数：
         生命周期函数用法如下：
     </div>

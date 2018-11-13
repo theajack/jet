@@ -45,6 +45,7 @@ pre{
   padding: 5px;
   padding-left: 10px;
   font-size: 15px;
+  white-space: pre-line;
 }
 #header,#footer{
     position: fixed;
@@ -55,6 +56,10 @@ pre{
     background-color: #eee;
     z-index:10;
     padding-left: 230px;
+}
+
+#footer.pc-hide{
+  padding-left: 10px;
 }
 #header{
   top:0;
@@ -70,16 +75,21 @@ pre{
 #menu{
     position: fixed;
     top:0;
-    left: 0;
+    left:0px;
     background-color: #1D2B35;
     width: 220px;
     height: 100%;
     color:#fff;
     z-index:20;
-    overflow: hidden;
     padding-top: 40px;
     box-shadow: 5px 0px 20px 0px #aaa;
+    transition: left .3s ease;
+    -webkit-transition: left .3s ease;
 }
+#menu.pc-hide{
+  left: -220px;
+}
+
 #menuScroll{
   position: relative;
   top:0;
@@ -167,10 +177,16 @@ pre{
 }
 #main{
     width: 100%;
-    padding-left: 230px;
     /* padding-top: 60px; */
     padding-top: 60px;
     padding-bottom: 50px;
+    color:#333;
+    padding-left: 230px;
+    transition: padding-left .3s linear;
+    -webkit-transition: padding-left .3s linear;
+}
+#main.pc-hide{
+  padding-left:10px;
 }
 .menu-main-item .j-icon{
   position: absolute;
@@ -178,7 +194,7 @@ pre{
   right: 20px;
     top: 16px;
   transition: transform .3s linear;
-  -webkit-transition: transform .3s linear;
+  -webkit-transition: -webkit-transform .3s linear;
 }
 
 .menu-main-item .j-icon.active{
@@ -203,10 +219,6 @@ pre{
   right:10px;
 }
 
-#main{
-  color:#333;
-  padding-left: 240px;
-}
 .title{
   font-size: 25px;
   line-height: 25px;
@@ -256,6 +268,8 @@ pre{
   color: #aaa;
   text-align: center;
   padding-top: 8px;
+  transition: padding-left .3s linear;
+  -webkit-transition: padding-left .3s linear;
 }
 #footer a{
   color:#888;
@@ -310,7 +324,7 @@ pre{
 .logo-text{
   position: fixed;
   top: 0;
-  left:0;
+  left:0px;
   font-size: 30px;
   height: 40px;
   text-align: center;
@@ -320,12 +334,35 @@ pre{
   background-color: #fff;
   z-index: 20;
   color:#1D2B35;
+  transition: left .3s ease;
+  -webkit-transition: left .3s ease;
+}
+.logo-text.pc-hide{
+  left:-220px;
 }
 .logo-img{
   height:23px;
   margin-right:5px;
 }
-
+.icon-pc-show-menu{
+  position: absolute;
+  right: 20px;
+  color: #00b2d7;
+  font-size: 23px;
+  top: 9px;
+  cursor: pointer;
+  z-index:40;
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+  transition: all .3s ease;
+  -webkit-transition: all .3s ease;
+}
+.icon-pc-show-menu.pc-hide{
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  right:-30px;
+  top: 13px;
+}
 .__red{
   color:#f44;
   margin: 0 2px;
@@ -352,8 +389,6 @@ pre{
   }
   .logo-text{
     left:-220px;
-    transition: left .3s ease;
-    -webkit-transition: left .3s ease;
   }
   #menu.open .logo-text{
     left:0;
@@ -362,14 +397,12 @@ pre{
     left:-220px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    transition: left .3s ease;
-    -webkit-transition: left .3s ease;
   }
   #menu.open{
     left:0;
   }
   #main{
-    padding-left: 0px;
+    padding-left: 0px!important;
   }
   #header{
     padding: 0px;

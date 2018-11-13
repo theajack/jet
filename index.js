@@ -9,20 +9,42 @@ new Jet({
       next();
     })
   },
+  
+
+// beforeinit:function(){
+//     console.log('beforeinit');
+// },
+beforemount:function(){
+    console.log('beforemount');
+},
+onmounted:function(){
+    console.log('onmounted');
+},
+beforeunmount:function(){
+    console.log('beforeunmount');
+},
+onunmounted:function(){
+    console.log('onunmounted');
+},
   // beforeinit:function(){
   //   Jet.$import('contents','queryApi','scroll')
   // },
   onroute:function(){
+    console.log('onroute');
     this.$dom.out.html='<div class="loading"><i class="j-icon icon-spin icon-spinner-snake"></i><div class="loading-text"> 加载中...</div></div>';
   },
   onrouted:function(isFresh){
+    console.log('onrouted');
     if(!isFresh){
       Jet.$module.Scroll.routed();
     }
   },
   data:{
     bodyFix:false,
-    showMenu: false
+    showMenu:false,
+    showMenuInPc:function(){
+      return $J.width()>600
+    }
   },
   func:{
     // stopPro:function(event){

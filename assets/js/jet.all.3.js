@@ -67,61 +67,7 @@
       return clearInterval(t);
     }
   };
-  var _domSatte = {
-    ready: (function () {
-      var b = [];
-      var d = false;
-      var jet = null;
-      function c(g) {
-        if (d) {
-          return
-        }
-        if (g.type === "onreadystatechange" && document.readyState !== "complete") {
-          return
-        }
-        for (var f = 0; f < b.length; f++) {
-          b[f].call(jet)
-        }
-        d = true;
-        b = null
-      }
-      if (document.addEventListener) {
-        document.addEventListener("DOMContentLoaded", c, false);
-        document.addEventListener("readystatechange", c, false);
-        window.addEventListener("load", c, false)
-      } else {
-        if (document.attachEvent) {
-          document.attachEvent("onreadystatechange", c);
-          window.attachEvent("onload", c)
-        }
-      }
-      return function a(e, j) {
-        jet = j;
-        if (d) {
-          e.call(jet)
-        } else {
-          b.push(e)
-        }
-      }
-    })(),
-    load: function (a, jet) {
-      if (document.addEventListener) {
-        document.addEventListener("DOMContentLoaded", function () {
-          document.removeEventListener("DOMContentLoaded", arguments, false);
-          a.call(jet)
-        }, false)
-      } else {
-        if (document.attachEvent) {
-          document.attachEvent("onreadystatechange", function () {
-            if (document.readyState == "complete") {
-              document.detachEvent("onreadystatechange", arguments);
-              a.call(jet)
-            }
-          })
-        }
-      }
-    }
-  }
+
   //*********************工具对象 结束********************
   //*********************工具方法 开始********************
   function _clone(obj) {
@@ -706,6 +652,7 @@
               } else {
                 p[d.name] = jet[d.value].bind(jet);
                 p[d.name].__props_child = true;//在参数中添加一个child
+                p[d.name].__isPropsFunc=true;//区别于data中的立即执行函数
               }
             } else {
               var newOpt = {
@@ -717,6 +664,7 @@
               if (d.prefix == _funcPrefix) {
                 if (d.value[0] == '{' && d.value[d.value.length - 1] == '}') {//用{}表示bool表达式
                   p[d.name] = (new Function('$', 'opt', d.value)).bind(jet, data, newOpt)
+                  p[d.name].__isPropsFunc=true;
                 } else {
                   _throw('子组件使用js表达式作为函数参数时请使用{ }包裹')
                 }
@@ -904,8 +852,11 @@
       }
       function _initJet(opt, calls) {
         
-        if(Jet.router.__await)
+        if(Jet.router.__await){
           Jet.router.__await();
+        }else{
+          Jet.router.__hasInitJet=true;
+        }
         if (typeof opt.ele == 'string' && opt.ele != '') {
           opt.ele = _JT.attr(_dom + '=' + opt.ele);
         }
@@ -1029,12 +980,6 @@
           _checkHasDialog(opt.ele);
           JUI.useBind(this);
           JUI.init(opt.ele);
-        }
-        if (opt.onready) {
-          _domSatte.ready(opt.onready, this);
-        }
-        if (opt.onload) {
-          _domSatte.load(opt.onload, this);
         }
         if (opt.onroute) {
           Jet.router.onroute(opt.onroute, this);
@@ -1278,6 +1223,9 @@
         return getComputedStyle(this)[d]
       }
     } else {
+      if(typeof a==='number'){
+        a=a+'px';
+      }
       if (a._JT_has("!important")) {
         this.style.setProperty(d, _checkCssValue(this, d, a.substring(0, a.indexOf("!important"))), "important")
       } else {
@@ -1858,35 +1806,39 @@
   _initCommonStyle();
   
   /****定义相应数据 开始*********************************************************************************/
-  function _define(obj, data, calls) {
+  function _define(obj, data, calls,jet) {
     if (!calls._func) calls._func = [];
     for (var k in data) {
-      _defineCom(obj, k, data, calls);
+      _defineCom(obj, k, data, calls,jet);
     }
   }
-  function _defineArray(obj, data, calls) {
-    _defineArrayFormIndex(obj, data, calls);
+  function _defineArray(obj, data, calls,jet) {
+    _defineArrayFormIndex(obj, data, calls,0,jet);
   }
-  function _defineArrayFormIndex(obj, data, calls, index) {
+  function _defineArrayFormIndex(obj, data, calls, index,jet) {
     if (!calls._func) calls._func = [];
     for (var k = index || 0; k < data.length; k++) {
-      _defineCom(obj, k, data, calls);
+      _defineCom(obj, k, data, calls,jet);
     }
   }
-  function _defineCom(obj, k, data, calls) {
+  function _defineCom(obj, k, data, calls,jet) {
     var type = _JT.type(data[k]);
+    if(type=='function'&&!data[k].__isPropsFunc&&!_isUd(jet)){//立即执行函数
+      data[k]=data[k].call(jet,jet._tools._data,data);
+      type = _JT.type(data[k]);
+    }
     if (type == "json") {
       var _o = {};
       if (!calls[k]) calls[k] = {};
       _defineBase(obj, data, k, _o, calls[k]);
-      _define(_o, data[k], calls[k]);
+      _define(_o, data[k], calls[k],jet);
     } else if (type == 'array') {
       var _o = [];
       if (!calls[k]) calls[k] = [];
       _o._calls = calls[k];
       _o._data = data[k];
       _defineBase(obj, data, k, _o, calls[k], true);
-      _defineArray(_o, data[k], calls[k]);
+      _defineArray(_o, data[k], calls[k],jet);
     } else {
       if (!calls[k] || !calls[k]._func) calls[k] = { _func: [] };
       _defineFinal(obj, data, k, calls[k])
@@ -1982,7 +1934,6 @@
 
   window.Jet = function (par, ele, opt) {
     if (typeof opt === 'object') {
-      
       if (!opt.ele) {
         opt.ele = _JT.attr(__comp_id + '="' + ele + '"');
         opt.ele._JT_removeAttr(__comp_id);
@@ -1994,6 +1945,9 @@
       opt = par;
     }
     if (opt === undefined) opt = {};
+    if(opt.static){
+      this.$data=opt.static;
+    }
     _checkDataForLang(opt);
     opt.ele = (opt.ele) ? _getJdomEle(opt.ele) : document.documentElement;
     opt.ele.__jet = this;
@@ -2045,7 +1999,7 @@
     this.$dom = {};
     var _this = this;
     _initLoadEle.call(this, opt)
-    _define(this, opt.data, this._tools._calls);
+    _define(this, opt.data, this._tools._calls,this);
     _addParPropsToJet(this);
     if (opt.func) {
       for (var key in opt.func) {
@@ -2055,9 +2009,6 @@
           this[key] = opt.func[key]
         }
       }
-    }
-    if(opt.static){
-      this.$data=opt.static;
     }
     var _this = this;
     if (opt.beforeinit) {
@@ -2455,7 +2406,7 @@
   };
   ArrProto.$prep = function (d) {
     var _f = this._jet;
-    var data, _data, _call, _un = (typeof _f === 'undefined');
+    var data, _data, _call,_un = (typeof _f === 'undefined');
     if (_un) {
       data = this;
       _data = this._data;
@@ -2620,6 +2571,9 @@
     }
   }
   function _checkRouterName(k, name) {
+    if(k===Jet.router.index){
+      Jet.router.indexMap=name;
+    }
     if (typeof name != 'string') {
       var _s = ''
       if ('params' in name) {
@@ -2660,12 +2614,12 @@
     params: null,
     map: {},
     use: function (opt) {
-      _initRouterConf(opt);
       if ('index' in opt) {
         Jet.router.index = opt.index;
       } else {
         Jet.router.index = '/index';
       }
+      _initRouterConf(opt);
       var url = Jet.router.index;
       if (!location.pathname._JT_has("index.html")) {
         if (Jet.router.history) {//pathname+search
@@ -2686,6 +2640,10 @@
         Jet.router.__isFresh = true;
         Jet.router.route(url);
         delete Jet.router.__await;
+      }
+      if(Jet.router.__hasInitJet){
+        Jet.router.__await();
+        delete Jet.router.__hasInitJet;
       }
     },
     conf: {

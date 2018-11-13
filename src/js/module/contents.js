@@ -1,6 +1,6 @@
 Jet.$define('Content',function(){
     var contents=[
-        "介绍", "安装使用", "目录结构", "html模板", "Jet语法", "Jet生命周期", "资源管理", "api目录", "关于", 
+        "介绍",'Jet图解', "安装使用", "目录结构", "html模板", "Jet语法", "Jet生命周期", "资源管理", "api目录",'更新日志', "关于", 
         "数据绑定", "绑定(属性J)", "$init", "绑定的分类", "绑定的语法", "数组方法", 
         "属性样式事件", "jif:条件判断", "jshow:选择展示", "jattr:绑定属性", "jstyle:绑定样式", "jrun:执行回调", "jon:绑定事件", "jload:组件", "jroot:根数据", "jdom:操作DOM", "jhtml:渲染HTML", 
         "表单验证", "jvalid", "jform", "Jet.valid", "自定义样式", 
@@ -14,7 +14,7 @@ Jet.$define('Content',function(){
         "在线使用"
     ]
     var urls=[
-        '/intro','/intro/install','/intro/contents','/intro/html','/intro/grammer','/intro/life','/intro/res','/intro/api','/intro/about',
+        '/intro','/intro/img','/intro/install','/intro/contents','/intro/html','/intro/grammer','/intro/life','/intro/res','/intro/api','/intro/update','/intro/about',
         '/bind','/bind/j','/bind/init','/bind/type','/bind/grammer','/bind/array',
         '/attr','/attr/if','/attr/show','/attr/attr','/attr/style','/attr/run','/attr/on','/attr/load','/attr/root','/attr/dom','/attr/html',
         '/valid','/valid/form','/valid/method','/valid/valid','/valid/custom',
@@ -50,6 +50,9 @@ Jet.$define('Content',function(){
     Jet.$export({
         getJumpInfo:function(){
             var currentUrl=Jet.router.url;
+            if(Jet.router.url===Jet.router.index){
+                currentUrl='/intro';
+            }
             var index=urls.indexOf(currentUrl);
             if(index==-1){
                 return null;

@@ -3,7 +3,15 @@ Jet.$define('Query',function(){
         name:'Jet简介',
         url:'/intro',
         intro:'Jet是一个前端的轻量级的js框架，不依赖任何第三方库。Jet采用数据双向绑定，以数据驱动视图。',
-        des:''
+    },{
+        name:'Jet图解',
+        url:'/intro/img',
+        intro:'图解Jet，了解其如何工作以及能做些什么',
+    },{
+        name:'Jet生命周期图解',
+        url:'/intro/img',
+        intro:'图解Jet生命周期，了解生命周期流程',
+        des:'life'
     },{
         name:'安装使用',
         url:'/intro/install',
@@ -11,8 +19,7 @@ Jet.$define('Query',function(){
     },{
         name:'目录结构',
         url:'/intro/contents',
-        intro:'介绍Jet项目的目录结构。',
-        des:''
+        intro:'介绍Jet项目的目录结构。'
     },{
         name:'HTML模板',
         url:'/intro/html',
@@ -32,7 +39,16 @@ Jet.$define('Query',function(){
         name:'Jet语法',
         url:'/intro/grammer',
         intro:'Jet 使用 new Jet() 来创建一个Jet组件',
-        des:''
+    },{
+        name:'data和func',
+        url:'/intro/grammer',
+        intro:'new Jet()参数中data和func的使用',
+        des:'data&func'
+    },{
+        name:'data的立即执行函数',
+        url:'/intro/grammer',
+        intro:'在声明data的使用带有返回值的函数',
+        des:'data-func'
     },{
         name:'局部渲染',
         url:'/intro/grammer',
@@ -56,7 +72,7 @@ Jet.$define('Query',function(){
     },{
         name:'Jet生命周期',
         url:'/intro/life',
-        intro:'Jet 有11个生命周期函数',
+        intro:'Jet 有9个生命周期函数',
     },{
         name:'ondatachange',
         url:'/intro/life',
@@ -75,6 +91,10 @@ Jet.$define('Query',function(){
         name:'api目录',
         url:'/intro/api',
         intro:'api汇总',
+    },{
+        name:'更新日志和功能说明',
+        url:'/intro/update',
+        intro:'更新日志和功能说明',
     },{
         name:'关于',
         url:'/intro/about',
