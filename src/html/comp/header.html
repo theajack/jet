@@ -11,8 +11,9 @@
         color: #028eaa!important;
     }
     #searchIcon{
-        position: relative;
         z-index: 10;
+        position: absolute;
+        right: 70px;
     }
     #searchIcon.icon-times{
         margin-right: 5px;
@@ -26,7 +27,6 @@
         -webkit-transform:scaleX(0);
         transform-origin:right;
         -webkit-transform-origin:right;
-        right: -30px;
         transition: transform .3s ease;
         -webkit-transition: -webkit-transform .3s ease;
     }
@@ -90,11 +90,13 @@
     @media screen and (max-width: 600px) {
         #searchWrapper{
             margin: 7px 0;
-            width: 175px;
-            right: -25px;
+            width: 214px;
         }
         .h-ico{
             margin: 13px 2px;
+        }
+        #searchIcon{
+            right: 65px;
         }
     }
 </style>
@@ -103,7 +105,7 @@
 <i class="j-icon icon-github h-icon f-right" jon='toGithub'></i>
 <i class="j-icon icon-arrow-up h-icon f-right" jon='toTop'></i>
 <i id='searchIcon' class="j-icon h-icon f-right" jif='showSearch:class[icon-times|icon-search]' jon='toggleSearch'></i>
-<div id="searchWrapper" jif='showSearch:class[w-show]' class='f-right'>
+<div id="searchWrapper" jif='showSearch:class[w-show]' jstyle='width:{{$.swWidth}}' class='f-right'>
     <input type="text" class='j-input' jon='focus:searchFocus' j='queryString' placeholder="搜索api">
     <div j='number' jshow='{{$.showResult}}' id='number'>$+'条记录'</div>
     <div j='queryList' jshow='{{$.queryList}}.length>0&&{{$.showResult}}' id='queryResult'>
@@ -121,7 +123,13 @@
             showResult: false,
             showSearch:false,
             queryString: '',
-            number: 0
+            number: 0,
+            swWidth:function(){
+                if($J.width()<600){
+                    return $J.width()-106
+                }
+                return 350
+            }
         },
         ondatachange: {
             queryString: function (v) {

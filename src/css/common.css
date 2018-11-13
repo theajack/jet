@@ -47,6 +47,9 @@ pre{
   font-size: 15px;
   white-space: pre-line;
 }
+.o-hide{
+  overflow: hidden;
+}
 #header,#footer{
     position: fixed;
     left: 0;
@@ -236,12 +239,18 @@ pre{
   box-shadow: 0 5px 20px 0px #ddd;
   line-height: 27px;
 }
+.text,.title{
+   word-break: break-word;
+}
 .indent{
   text-indent: 2em;
 }
 .out{
   background-color: #444;
   color: #fff;
+  word-wrap: break-word;
+}
+.break-word{
   word-wrap: break-word;
 }
 .list{
@@ -413,6 +422,7 @@ pre{
     color: #1D2B35;
     margin: 10px 0px;
     margin-left: 10px;
+    position: absolute;
   }
   .menu-bar-cover{
     position: fixed;
@@ -425,13 +435,6 @@ pre{
     transition: opacity .3s ease;
     -webkit-transition: opacity .3s ease;
     z-index: 10;
-  }
-  #searchWrapper{
-    margin: 7px 0;
-    width: 150px;
-  }
-  .h-ico{
-    margin: 13px 2px;
   }
   .menu-bar-cover.open{
     display: block;

@@ -361,6 +361,9 @@
   function _warn(info) {
     console.warn('JET warning:\r\n  ' + info);
   }
+  function _info(info) {
+    console.info('JET info:\r\n  ' + info);
+  }
   function _isUd(o) {
     return (typeof o === 'undefined');
   }
@@ -1949,8 +1952,15 @@
       this.$data=opt.static;
     }
     _checkDataForLang(opt);
+    var a=opt.ele;
+    
     opt.ele = (opt.ele) ? _getJdomEle(opt.ele) : document.documentElement;
-    opt.ele.__jet = this;
+    if(!_isUd(opt.ele)){
+      opt.ele.__jet = this;
+    }else{
+      _info('忽略了一个组件，可能是由于操作过快，组件对应的dom已经被移除')
+      return
+    }
     if (!Jet.$unnamedJets[__jet_root] && opt.ele.tagName == 'HTML') {
       Jet.$unnamedJets[__jet_root] = this;
       Jet.$root = this;
@@ -2722,7 +2732,7 @@
         _callRouterLife('__onroute', isFresh)
         if (Jet.router.__xhr !== null) {
           Jet.router.__xhr.abort();
-          console.warn('忽略了一个路由：' + Jet.router.path);
+          _info('忽略了一个路由：' + Jet.router.path+'；可能是由于点击过快');
           Jet.router.__xhr = null;
         }
         var _fRes = _formatUrl(url);
