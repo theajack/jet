@@ -452,4 +452,7 @@ pre{
   #menu.open{
     box-shadow: 5px 0px 20px 0px #aaa;
   }
+  .icon-pc-show-menu{
+    display: none;
+  }
 }

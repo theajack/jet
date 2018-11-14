@@ -188,5 +188,7 @@ for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代�
   需修改 css scope 属性
   需新增 组件销毁的生命周期
   需拆分 Jet，使用Jet.$use() 按需加载 ['router','lang','module','css-config','jui','valid'] 
-  
+  需重构项目结构
+  需制作脚手架工具 并发布npm包
+  需将外围设施部署成 npm包
 */
