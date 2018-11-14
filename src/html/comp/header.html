@@ -1,5 +1,5 @@
 <style scoped='false'>
-    .h-icon{
+    .h-icon {
         color: #00b2d7;
         cursor: pointer;
         font-size: 25px;
@@ -7,33 +7,39 @@
         transition: font-size .3s ease;
         -webkit-transition: font-size .3s ease;
     }
+
     .icon-times:hover {
         color: #028eaa!important;
     }
-    #searchIcon{
+
+    #searchIcon {
         z-index: 10;
         position: absolute;
         right: 70px;
     }
-    #searchIcon.icon-times{
+
+    #searchIcon.icon-times {
         margin-right: 5px;
         font-size: 22px;
     }
+
     #searchWrapper {
         position: relative;
         margin: 7px 5px;
         width: 350px;
-        transform:scaleX(0);
-        -webkit-transform:scaleX(0);
-        transform-origin:right;
-        -webkit-transform-origin:right;
+        transform: scaleX(0);
+        -webkit-transform: scaleX(0);
+        transform-origin: right;
+        -webkit-transform-origin: right;
         transition: transform .3s ease;
         -webkit-transition: -webkit-transform .3s ease;
     }
-    #searchWrapper.w-show{
-        transform:scaleX(1);
-        -webkit-transform:scaleX(1);
+
+    #searchWrapper.w-show {
+        transform: scaleX(1);
+        -webkit-transform: scaleX(1);
     }
+
     #searchWrapper .j-input {
         width: 100%;
     }
@@ -41,6 +47,7 @@
     #searchWrapper .icon-times {
         cursor: pointer
     }
+
     #number {
         color: #c00;
         width: 100%;
@@ -52,6 +59,7 @@
         border: 1px solid #ccc;
         background-color: #eee;
     }
+
     #queryResult {
         position: absolute;
         width: 100%;
@@ -65,21 +73,26 @@
         overflow-y: auto;
         min-height: 30px;
     }
+
     .q-item {
         border-top: 1px solid #ccc;
         padding: 5px 0;
         cursor: pointer;
     }
+
     .q-item.b-none {
         border-bottom: none
     }
+
     .q-item:hover {
         background-color: #eee;
     }
+
     .q-name {
         font-weight: bold;
         font-size: 18px;
     }
+
     .q-intro,
     .q-name {
         overflow: hidden;
@@ -87,16 +100,44 @@
         white-space: nowrap;
         text-align: center;
     }
+
     @media screen and (max-width: 600px) {
-        #searchWrapper{
+        #searchWrapper {
             margin: 7px 0;
             width: 214px;
         }
-        .h-ico{
+        .h-ico {
             margin: 13px 2px;
         }
-        #searchIcon{
+        #searchIcon {
             right: 65px;
+        }
+        #header {
+            padding: 0px;
+        }
+        .menu-bar {
+            display: inline-block;
+            font-size: 30px!important;
+            color: #00b2d7;
+            margin: 10px 0px;
+            margin-left: 10px;
+            position: absolute;
+        }
+        .menu-bar-cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(50, 50, 50, .5);
+            opacity: 0;
+            transition: opacity .3s ease;
+            -webkit-transition: opacity .3s ease;
+            z-index: 10;
+        }
+        .menu-bar-cover.open {
+            display: block;
+            opacity: 1;
         }
     }
 </style>
@@ -118,16 +159,16 @@
 
 <script>
     new Jet({
-        name:'header',
+        name: 'header',
         data: {
             queryList: [],
             showResult: false,
-            showSearch:false,
+            showSearch: false,
             queryString: '',
             number: 0,
-            swWidth:function(){
-                if($J.width()<600){
-                    return $J.width()-106
+            swWidth: function () {
+                if ($J.width() < 600) {
+                    return $J.width() - 106
                 }
                 return 350
             }
@@ -140,16 +181,15 @@
             }
         },
         func: {
-            toggleSearch:function(){
-                this.showSearch=!this.showSearch;
-                if(this.showResult){
-                    this.showResult=false;
+            toggleSearch: function () {
+                this.showSearch = !this.showSearch;
+                if (this.showResult) {
+                    this.showResult = false;
                 }
             },
             searchFocus: function () {
                 this.showResult = true;
             }, toQueryResult: function (opt) {
-                var _this = this;
                 this.showResult = false;
                 this.$props.jumpTo(opt.data.url, opt.data.des)
             }, shapeQueryName: function (s) {
@@ -163,7 +203,6 @@
             }, toTop: function () {
                 $J.scrollTo(0)
             }
-
         }
     })
 </script>

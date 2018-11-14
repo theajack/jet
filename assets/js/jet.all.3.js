@@ -2030,6 +2030,7 @@
       return;
     }
     _initJet.call(_this, opt, _this._tools._calls);
+    
   };
   Jet.prototype = _createEmpty();
   Jet.prototype.$getData = function () {
