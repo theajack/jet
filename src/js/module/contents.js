@@ -17,7 +17,7 @@ Jet.$define('Content',function(){
         '/intro','/intro/img','/intro/install','/intro/contents','/intro/html','/intro/grammer','/intro/life','/intro/res','/intro/api','/intro/update','/intro/about',
         '/bind','/bind/j','/bind/init','/bind/type','/bind/grammer','/bind/array',
         '/attr','/attr/if','/attr/show','/attr/attr','/attr/style','/attr/run','/attr/on','/attr/load','/attr/root','/attr/dom','/attr/html',
-        '/valid','/valid/form','/valid/method','/valid/valid','/valid/custom',
+        '/valid','/valid/valid','/valid/form','/valid/method','/valid/custom',
         '/lang','/lang/use','/lang/static','/lang/dynamic','/lang/list','/lang/type','/lang/init',
         '/router','/router/use','/router/ele','/router/on','/router/route','/router/func','/router/prop',
         '/module','/module/define','/module/export','/module/import','/module/module','/module/get',

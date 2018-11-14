@@ -182,13 +182,14 @@ for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代�
     新增生命周期 beforeunmount onunmounted 目前仅对路由组件和其子组件有效
   11-13 
     data中 新增立即执行函数
+    static 参数 支持立即执行函数
     Jet.router.indexMap 属性，保存路由首页对应的html地址 无需开发者设置
 
-  
   需修改 css scope 属性
   需新增 组件销毁的生命周期
   需拆分 Jet，使用Jet.$use() 按需加载 ['router','lang','module','css-config','jui','valid'] 
   需重构项目结构
   需制作脚手架工具 并发布npm包
   需将外围设施部署成 npm包
+  颜色选择器BUG
 */

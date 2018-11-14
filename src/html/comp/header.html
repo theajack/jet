@@ -100,7 +100,6 @@
         white-space: nowrap;
         text-align: center;
     }
-
     @media screen and (max-width: 600px) {
         #searchWrapper {
             margin: 7px 0;
@@ -115,34 +114,9 @@
         #header {
             padding: 0px;
         }
-        .menu-bar {
-            display: inline-block;
-            font-size: 30px!important;
-            color: #00b2d7;
-            margin: 10px 0px;
-            margin-left: 10px;
-            position: absolute;
-        }
-        .menu-bar-cover {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(50, 50, 50, .5);
-            opacity: 0;
-            transition: opacity .3s ease;
-            -webkit-transition: opacity .3s ease;
-            z-index: 10;
-        }
-        .menu-bar-cover.open {
-            display: block;
-            opacity: 1;
-        }
     }
 </style>
-<i class="j-icon icon-bars menu-bar" jon='this.$props.showMenu=true'>
-</i>
+
 <i class="j-icon icon-github h-icon f-right" jon='toGithub'></i>
 <i class="j-icon icon-arrow-up h-icon f-right" jon='toTop'></i>
 <i id='searchIcon' class="j-icon h-icon f-right" jif='showSearch:class[icon-times|icon-search]' jon='toggleSearch'></i>

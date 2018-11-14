@@ -61,11 +61,12 @@ onunmounted:function(){
       this.$route('/code');
     },
     jumpTo:function(url,des,call){
+      var _this=this;
       Jet.router.route(url,function(){
         setTimeout(function(){
           var top=0;
           if(des!=''){
-            top=$J.attr('jump-des="'+des+'"').offsetTop-55;
+            top=$J.attr('jump-des="'+des+'"').offsetTop+Jet.$module.Scroll.scrollTopMargin();
             Jet.$root.__des=des;
           }
           document.documentElement.scrollTop=top;

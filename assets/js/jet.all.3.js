@@ -319,6 +319,7 @@
             case Array: type = "array"; break;
             case HTMLCollection: type = "htmlcollection"; break;
             case NodeList: type = "nodelist"; break;
+            case RegExp: type = "regexp"; break;
             //case FormData:type="formdata";break;
             case Error: type = "error"; break;
             case Date: type = "date"; break;
@@ -1934,6 +1935,27 @@
   /****定义相应数据 结束*********************************************************************************/
 
   /****Jet 构造函数 开始*********************************************************************************/
+  function _initStatic(opt,_this){
+    if(opt.static){
+      _initStaticBase(opt,'static',_this,opt.data,opt.static)
+      _this.$data=opt.static;
+    }
+  }
+  function _initStaticBase(d,k,o,_d,_s){
+    var t=_type(d[k]);
+    debugger;
+    if(t==='function'){
+      d[k]=d[k].call(o,_d,_s,d);
+    }else if(t==='json'){
+      for(var _k in d[k]){
+        _initStaticBase(d[k],_k,o,_d,_s);
+      }
+    }else if(t==='array'){
+      for(var i=0;i<d[k].length;i++){
+        _initStaticBase(d[k],i,o,_d,_s);
+      }
+    }
+  }
 
   window.Jet = function (par, ele, opt) {
     if (typeof opt === 'object') {
@@ -1948,12 +1970,8 @@
       opt = par;
     }
     if (opt === undefined) opt = {};
-    if(opt.static){
-      this.$data=opt.static;
-    }
+    _initStatic(opt,this)
     _checkDataForLang(opt);
-    var a=opt.ele;
-    
     opt.ele = (opt.ele) ? _getJdomEle(opt.ele) : document.documentElement;
     if(!_isUd(opt.ele)){
       opt.ele.__jet = this;
@@ -2094,8 +2112,7 @@
   Jet.prototype.$regist = function (name, call) {
     _registDataCall(_formatRegistArg(name, call, this, arguments.length));
   };
-  Jet.prototype.$ = _JT;
-  Jet.$ = _JT;
+  Jet.prototype.$=Jet.$=_JT;
   Jet.$unnamedJets = {};
   // var _moduleList=['router','lang','module','css-config','jui','valid'];
   // var _usedModuleList=[];

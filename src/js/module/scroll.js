@@ -1,7 +1,9 @@
 Jet.$define('Scroll', function () {
     var _g = Jet.$root;
     var max;
+    var isMobile=($J.width()<600);
     var _checkScroll = function () {
+        isMobile=
         max = $J.id('menuScroll').hei() + 40 - $J.id('menu').hei();
         if (max <= 0) {
             menuScroll = 0;
@@ -44,13 +46,16 @@ Jet.$define('Scroll', function () {
         window.onresize = _checkScroll;
     }
     Jet.$export({
+        scrollTopMargin:function(){
+            return -(($J.width()<600)?50:5);
+        },
         routed: function () {
             document.documentElement.scrollTop = 0;
             $J.body().scrollTop = 0;
             $J.attr('jump-to').each(function (item) {
                 $J.attr('jump-des="' + item.attr('jump-to') + '"').exist(function (ele) {
                     item.clk(function () {
-                        $J.scrollTo(ele.offsetTop - 60);
+                        $J.scrollTo(ele.offsetTop + Jet.$module.Scroll.scrollTopMargin());
                     });
                 });
             });

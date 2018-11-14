@@ -569,7 +569,7 @@
       $J[k]=Jet.$[k]
     }
     $J.ct=_create;
-    Jet.$=$J;
+    Jet.prototype.$=Jet.$=$J;
     function _scrollTo(y, a, b) {
       document.body.scrollTo(y, null, b);
       document.documentElement.scrollTo(y, null, b);

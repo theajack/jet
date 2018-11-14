@@ -21,6 +21,7 @@
     <script type="text/javascript" src='/jet/assets/js/preload.min.js'></script>
   </head>
   <body class="common" jstyle="overflow-y:{{$.bodyFix}}?'hidden':'auto'">
+      <i class="j-icon icon-bars menu-bar" jon='this.showMenu=true'></i>
       <div id="menu" jattr='class:({{$.showMenu}})?"open":""' jif='showMenuInPc:class[|pc-hide]'>
         <i class="j-icon icon-chevron-left icon-pc-show-menu" jif='showMenuInPc:class[|pc-hide]' jon='this.showMenuInPc=!this.showMenuInPc'></i>
         <div class='logo-text' jif='showMenuInPc:class[|pc-hide]'>
@@ -45,10 +46,10 @@
       </div>
       <div jattr='class:({{$.showMenu}})?"menu-bar-cover open":"menu-bar-cover"' jon='this.showMenu=false'></div>
 
-    <script type="text/javascript" src="/jet/assets/js/jet.min.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui.min.js"></script>
-    <!-- <script type="text/javascript" src="/jet/assets/js/jet.all.3.js"></script>
-    <script type="text/javascript" src="/jet/assets/js/jui.all.js"></script> -->
+    <!-- <script type="text/javascript" src="/jet/assets/js/jet.min.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jui.min.js"></script> -->
+    <script type="text/javascript" src="/jet/assets/js/jet.all.3.js"></script>
+    <script type="text/javascript" src="/jet/assets/js/jui.all.js"></script>
     <!-- <script type="text/javascript" src="/jet/assets/js/jet-module/jet-main.js"></script>
     <script type="text/javascript" src="/jet/assets/js/jet-module/router.js"></script>
     <script type="text/javascript" src="/jet/assets/js/jet-module/load.js"></script>

@@ -22,7 +22,7 @@
         word-wrap: break-word;
     }
 </style>
-<div class='title'>在线使用Jet <button class='j-btn f-right back' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i>返回</button></div>
+<div class='title'>在线使用Jet</div>
 <div class='text clearfix'>    
     <button class='j-btn f-left' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i>返回</button>
     <div class='switch-w'>
@@ -69,7 +69,7 @@ new Jet({
         consoleCode:'',
         res:'',
         code:"<div j='message'></div><br>\n\
-    <div j='user'>\n\
+<div j='user'>\n\
     <div j=name>'姓名:'+$</div>\n\
     <div>年龄:<input j='age' type='text' class='j-input' jon='input:console.log(this.user.age)'/></div>\n\
     <div j='age'>($<18)?'未成年':'成年人'</div>\n\
@@ -89,10 +89,14 @@ new Jet({
     })\n"+
 "<"+"/script>"
     },func:{
+        replace:function (js) {
+            return js.replace('new Jet({', 'new Jet("test","test-container",{');//手动指定父元素和容器
+        },
         changeMode:function() {
             if(this.codeBool){
                 this.consoleCode=' ';
                 this.res='';
+                this.$dom.result.ele.attr('comp__id','test-container');
                 this.$dom.result.html=this.$jui('code').txt();
                 var txt=['//# sourceURL=__code_online.js\r\n'];
                 this.$dom.result.ele.findTag('script').each(function(item){
@@ -105,7 +109,7 @@ new Jet({
                 var script=$J.ct('script').attr({
                     'id':'codejs',
                     'type':'text/javascript'
-                }).html(txt.join(''));
+                }).html(this.replace(txt.join('')));
                 document.body.append(script);
                 if(this.$dom.result.ele.findAttr('jvalid').exist()){
                     Jet.valid.init();

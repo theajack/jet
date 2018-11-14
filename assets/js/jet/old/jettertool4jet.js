@@ -2,7 +2,7 @@
 /*Jetter.js
   by theajack
   2017/3/18
-  http://www.theajack.com/jetterjs/
+  https://www.theajack.com/jetterjs/
 */
 
   var _JT = {

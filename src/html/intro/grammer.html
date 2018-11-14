@@ -190,6 +190,9 @@
         与 data 参数不同，static数据不会与被整合到Jet元素中，在Jet中可以使用 this.$data 来访问和修改static数据。
         因为data会被Jet转化成一个响应数据，所以对无需与dom元素绑定的非响应数据最好使用static参数声明，这样可以提高程序效率。
     </div>
+    <div class='text indent'>
+        static 数据也可以使用函数作为值，效果与data的立即执行函数一样，不同的是函数支持三个参数，第一个是 data数据，第二个是static数据，第三个是static域数据。
+    </div>
     <div class='text'>
         请看一个例子
     </div>
