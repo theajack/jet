@@ -3,16 +3,35 @@
 //'https://www.theajack.com/cnchar/cnchar.min.js',
 //Jet.use('/src/js/cnchar.js')
 // Jet.use.define({
-//     module:{
-//         cnchar:'src/js/cnchar.js'
+//     lib:{
+//         cnchar:'src/js/cnchar.js',
+//         a:'src/js/a.js',
 //     },
-//     rely:{
-//         cnchar:['tool'],
+//     depend:{
+//         cnchar:['tool','a'],
 //     }
 // })
 // Jet.use('cnchar',function(){
 //     debugger;
 // })
+
+// Jet.use.define({
+//     lib:{
+//         a:'src/js/a.js',
+//         b:'src/js/b',//.js后缀可以省略
+//         c:'src/js/c',
+//     },
+//     depend:{
+//         a:['b','c'],
+//         b:['c','tool']//也可以依赖官方库
+//     }
+// })
+
+// //声明库之后，就可以通过 库名来使用库
+// Jet.use('a',function(){
+    
+// })
+
 Jet.use.all(
     //'cnchar',
     //'/src/js/cnchar.js',
@@ -93,7 +112,7 @@ Jet.use.all(
                     children: {
                         '/part': '/lib/part',
                         '/use': '/lib/use',
-                        '/third': '/lib/third',
+                        '/define': '/lib/define'
                     }
                 },
                 '/valid': {

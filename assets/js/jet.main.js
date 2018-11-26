@@ -2105,8 +2105,8 @@
     _initJet.call(_this, opt, _this._tools._calls);
     if(_canUse('render-time'))Jet.RenderTime.end(this,ele);
   };
-  window.JET=function(opt){
-    return new Jet(opt);
+  window.JET=function(par, ele, opt){
+    return new Jet(par, ele, opt);
   }
   Jet.prototype = _createEmpty();
   Jet.prototype.$getData = function () {
@@ -2673,7 +2673,7 @@
         _this[onload].call(_this, opt);
       } else if (jet && _checkIsFunc(jet, onload)) {
         jet[onload].call(jet, opt);
-      } else if (_this == '$root' && _checkIsFunc(Jet.root, onload)) {
+      } else if (_this == 'root' && _checkIsFunc(Jet.root, onload)) {
         Jet.root[onload].call(jet, opt);
       } else {
         if (par !== null) {
@@ -2691,7 +2691,7 @@
     }
     //不使用递归初始化load 会导致没有带 new Jet的jload 无法加载
     //使用递归初始化load 会导致子元素的Jload被父元素加载de
-    // if(!_this.toString||_this.toString()!=='$root'){
+    // if(!_this.toString||_this.toString()!=='root'){
     //   Jet.load.init.call(_this, item);//??是否需要递归回调
     // }
   }
@@ -4181,65 +4181,70 @@
   Jet.Style = Jet.Attr;
   Jet.Show = Jet.If;
 
-  //管理模块加载
-  var _moduleList = ['render-time','router', 'css-config', 'res', 'valid', 'lang', 'module','tool','jui'];//系统模块
-  var _relys={
+  //管理库加载
+  var _libList = ['render-time','router', 'css-config', 'res', 'valid', 'lang', 'module','tool','jui'];//系统模块
+  var _depends={
     'jui':['tool'],
-  }//模块依赖映射
-  var _relysModule,//需要加载依赖的模块集合
-    _beRely;//模块依赖的相反映射
-  var _defineModules={};//用户自定义模块
+  }//库依赖映射
+  var _dependsLib,//需要加载依赖的库集合
+    _beDepends;//库依赖的相反映射
+  var _defineLibs={};//用户自定义库
 
   var _use_index=-1;//use方法调用的序号
-  var _loaded_list = [];//已经加载过的模块列表（序号），
+  var _loaded_list = [];//已经加载过的库列表（序号），
   var _load_list=[];//需要加载的列表（序号），
   var _use_call=[];//加载成功回调函数（序号），
   var _use_time=[];//加载起始时间（序号），
 
-  function _initRelys(){
-    _relysModule=[];
-    _beRelys={}
-    for(var k in _relys){
-      _checkIsModule(k);
-      _relysModule.push(k);
-      _relys[k].forEach(function(rely){
-        _checkIsModule(rely);
-        if(!_beRelys[rely]){
-          _beRelys[rely]=[k]
+  function _initDepends(){
+    _dependsLib=[];
+    _beDepends={}
+    for(var k in _depends){
+      _checkIsLib(k);
+      _dependsLib.push(k);
+      _depends[k].forEach(function(depend){
+        _checkIsLib(depend);
+        if(!_beDepends[depend]){
+          _beDepends[depend]=[k]
         }else{
-          _beRelys[rely].push(k);
+          _beDepends[depend].push(k);
         }
       })
     }
   }
-  _initRelys();
-  function _checkIsModule(name){
-    if(_moduleList.indexOf(name)==-1&&!_defineModules[name]){
-      _throw('未被识别的模块名['+name+']。请先 Jet.use.define()的 module参数中声明。')
+  _initDepends();
+  function _checkIsLib(name){
+    if(_libList.indexOf(name)==-1&&!_defineLibs[name]){
+      _throw('未被识别的js库名['+name+']。请先 Jet.use.define()的 module参数中声明。')
     }
   }
-  function _checkRelys(list){
-    for(var k in _relys){
+  function _checkDepends(list){
+    for(var k in _depends){
       if(list.indexOf(k)!==-1){
-        _relys[k].forEach(function(rely){
-          if(!_canUse(rely)&&list.indexOf(rely)==-1){
-            list.push(rely);
-            _info(k+' 依赖 '+rely+',已自动添加依赖')
+        _depends[k].forEach(function(depend){
+          if(!_canUse(depend)&&list.indexOf(depend)==-1){
+            list.push(depend);
+            _info(k+' 依赖 '+depend+',已自动添加依赖')
           }
         })
       }
     }
   }
-  function _needRely(name){
-    return typeof _relys[name]!=='undefined'
+  function _needDepend(name){
+    return typeof _depends[name]!=='undefined'
   }
-  function _loadBeRelys(name,index){
-    if(!_beRelys[name]){
+  function _loadBeDepends(name,index){
+    if(!_beDepends[name]){
       return;
     }
-    _beRelys[name].forEach(function(berely){
-      if(!_canUse(berely)&&_load_list[index].indexOf(berely)!==-1){
-        _loadSingleModule(berely,index);
+    _beDepends[name].forEach(function(bedepend){
+      for(var i=0;i<_depends[bedepend].length;i++){
+        if(bedepend!==name&&!_canUse(_depends[bedepend][i])){
+          return;
+        }
+      }
+      if(!_canUse(bedepend)&&_load_list[index].indexOf(bedepend)!==-1){
+        _loadSingleLib(bedepend,index);
       }
     })
   }
@@ -4252,28 +4257,28 @@
     }
     return false;
   }
-  function _loadModules(func,index) {
+  function _loadLibs(func,index) {
     _use_call[index] = func;
     _use_time[index] = new Date();
     _load_list[index].forEach(function (name, i) {
-      if(!_needRely(name)){
-        _loadSingleModule(name,index);
+      if(!_needDepend(name)){
+        _loadSingleLib(name,index);
       }
     })
   }
-  function _loadSingleModule(name,index) {
+  function _loadSingleLib(name,index) {
     var src = name;
     Jet.use.list.push(name);
-    if (_moduleList.indexOf(name) !== -1) {
+    if (_libList.indexOf(name) !== -1) {
       src = 'assets/js/jet-lib/' + name + '.js';
-    }else if(_defineModules[name]){
-      src=_defineModules[name];
+    }else if(_defineLibs[name]){
+      src=_defineLibs[name];
     }
     var script=_JT.ct('script')._JT_attr({
       'src': src
     });
     script.onload=function(){
-      _loadBeRelys(name,index);
+      _loadBeDepends(name,index);
       Jet.use._regist(name,index)
     }
     _JT.body()._JT_append(script);
@@ -4289,18 +4294,18 @@
         if(Jet.use.list.indexOf(args[i])!==-1){
           _info('已经加载过该依赖：'+args[i]+'.本次加载跳过')
         }else{
-          var index = _moduleList.indexOf(args[i]);
+          var index = _libList.indexOf(args[i]);
           if (index !== -1) {
             list[index] = args[i];
           } else {
-            //_throw('模块命名错误：可选值为:'+_moduleList.join(','));
+            //_throw('模块命名错误：可选值为:'+_libList.join(','));
             otherList.push(args[i])
           }
         }
       } else if (typeof args[i] === 'function') {
         call = args[i];
       } else {
-        _throw('$use 方法参数错误：' + args[i]);
+        _throw('use 方法参数错误：' + args[i]);
       }
     }
     for (var i = list.length - 1; i >= 0; i--) {
@@ -4311,34 +4316,34 @@
     if (otherList.length > 0) {
       ArrProto.push.apply(list, otherList);
     }
-    _checkRelys(list);
+    _checkDepends(list);
     _load_list[_use_index]=list;
-    _loadModules(call,_use_index);
+    _loadLibs(call,_use_index);
   };
   Jet.use.all = function () {
     var args = ArrProto.splice.call(arguments, 0);
-    ArrProto.unshift.apply(args, _moduleList)
+    ArrProto.unshift.apply(args, _libList)
     Jet.use.apply(null,args);
   };
   Jet.use.define=function(opt){
-    if(opt.module){
-      for(var k in opt.module){
-        if(_moduleList.indexOf(k)!==-1){
-          _throw('自定义模块'+k+'与系统模块命名冲突。['+_moduleList.toString()+']')
+    if(opt.lib){
+      for(var k in opt.lib){
+        if(_libList.indexOf(k)!==-1){
+          _throw('第三方库'+k+'与官方库命名冲突。['+_libList.toString()+']')
         }else{
-          if(opt.module[k].substring(opt.module[k].length-3)!=='.js'){
-            opt.module[k]+='.js'
+          if(opt.lib[k].substring(opt.lib[k].length-3)!=='.js'){
+            opt.lib[k]+='.js'
           }
         }
       }
-      _defineModules=opt.module;
+      _defineLibs=opt.lib;
     }
-    if(opt.rely){
-      for(var k in opt.rely){
-        _relys[k]=opt.rely[k];
+    if(opt.depend){
+      for(var k in opt.depend){
+        _depends[k]=opt.depend[k];
       }
     }
-    _initRelys();
+    _initDepends();
   }
   Jet.use._regist = function (name,index) {
     if(!_loaded_list[index]){
@@ -4356,7 +4361,7 @@
     }
   }
   Jet.use.list = [];
-  Jet.use.allModule = _moduleList;
+  Jet.use.allModule = _libList;
   Jet.__base__ = {
     _useList:[],
     _JT: _JT,

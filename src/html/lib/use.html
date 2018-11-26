@@ -1,4 +1,4 @@
-<div class='title'>use/useAll方法</div>
+<div class='title'>use/use.all方法</div>
 <div class="sub">
     <div class='title'>use方法</div>
     <div class='text indent'>
@@ -18,9 +18,9 @@ Jet.use('lang','valid',function(){
     //some code  所有依赖加载成功之后才会执行
 })
     </div>
-    <div class='title' jump-des='useAll'>useAll方法</div>
+    <div class='title' jump-des='useAll'>use.all方法</div>
     <div class='text indent'>
-        使用useAll方法可以加载全部的官方库，该方法和use方法一样，也可以使用多个参数，最后一个参数是回调函数。使用方法如下：
+        使用use.all方法可以加载全部的官方库，该方法和use方法一样，也可以使用多个参数，最后一个参数是回调函数。使用方法如下：
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
 Jet.use.all('/src/js/xxx.js')//加载所有官方库，另外再加载一个第三方库
@@ -31,7 +31,7 @@ Jet.use.all(function(){
 })
     </div>
     <div class='text indent'>
-        其实use和useAll只是script标签的语法糖衣，您完全可以在index.html中手动插入script标签来实现同样的功能：
+        其实use和use.all只是script标签的语法糖衣，您完全可以在index.html中手动插入script标签来实现同样的功能：
     </div>
 </div>
 <script>

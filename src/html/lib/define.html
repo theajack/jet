@@ -1,0 +1,46 @@
+<div class='title'>use.define方法</div>
+<div class="sub">
+    <div class='text indent'>
+        使用 Jet.use 方法加载库时，如果库很多，而且不同库之间有依赖关系，那么需要使用define方法来管理库和他们之间的依赖关系。
+    </div>
+    <div class='text indent'>
+        使用 <span class="red">Jet.use.define</span> 方法参数有两个属性 <span class="red">lib</span>和<span class="red">depend</span>
+    </div>
+    <div class='text indent'>
+        lib 参数用于声明库，depend参数用于声明库之间的依赖关系。使用方式如下
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.use.define({
+    lib:{
+        a:'src/js/a.js',
+        b:'src/js/b',//.js后缀可以省略
+        c:'src/js/c',
+    },
+    depend:{
+        a:['b','c'],
+        b:['c','tool']//也可以依赖官方库
+    }
+})
+    </div>
+    <div class='text indent'>
+        声明库之后，就可以通过库名来加载库
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.use('a')
+    </div>
+    <div class='text indent'>
+        在上面的示例中，由于 a依赖b和c，b以来c和tool，所以Jet会自动添加b,c,tool三个依赖项，并且放在a之前加载，又因为b以来c和tool,所以c和tool会在b之前加载
+    </div>
+    <div class='text indent'>
+        Jet会严格按照定义的依赖关系按顺序分别加载js库。
+    </div>
+</div>
+<script>
+    new Jet({
+        func:{
+            jump:function(opt){
+                Jet.router.route(opt.ele.attr('data-route'))
+            }
+        }
+    })
+</script>

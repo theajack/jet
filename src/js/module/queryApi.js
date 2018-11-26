@@ -328,6 +328,10 @@ Jet.define('Query',function(){
         intro:'加载所有官方库和其他第三方库',
         des:'useAll'
     },{
+        name:'use.define()',
+        url:'/lib/define',
+        intro:'定义三方库和库之间的依赖关系',
+    },{
         name:'表单验证',
         url:'/valid',
         intro:'Jet中的自带一套表单验证的方案',
