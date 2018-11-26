@@ -1,0 +1,45 @@
+<div class='title'>use/useAll方法</div>
+<div class="sub">
+    <div class='title'>use方法</div>
+    <div class='text indent'>
+        Jet 使用use方法加载官方或者第三方库。该方法接受多个参数，最后一个参数为加载完成所以库之后的回调函数。前面的参数都是字符串参数，表示官方库的名称或者第三方库的路径。
+    </div>
+    <div class='text indent'>
+        第三方库的路径可以是一个http链接，也可以是一个项目内的路径。建议将库文件下载到项目里，使用项目路径，这样会提高加载时间和稳定性。
+    </div>
+    <div class='text indent'>
+        use方法可多次使用use，重复加载的库use会自动跳过。use方法是异步的，如果你想在某些以来加载完成之后再做某些操作，可以将最后一个参数设置为一个回调函数。使用方式如下：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.use('/src/js/xxx.js','router')//加载第三方库和官方库，可以多个参数
+//some code 异步执行
+
+Jet.use('lang','valid',function(){
+    //some code  所有依赖加载成功之后才会执行
+})
+    </div>
+    <div class='title' jump-des='useAll'>useAll方法</div>
+    <div class='text indent'>
+        使用useAll方法可以加载全部的官方库，该方法和use方法一样，也可以使用多个参数，最后一个参数是回调函数。使用方法如下：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.use.all('/src/js/xxx.js')//加载所有官方库，另外再加载一个第三方库
+//some code  异步执行
+
+Jet.use.all(function(){
+    //some code  所有依赖加载成功之后才会执行
+})
+    </div>
+    <div class='text indent'>
+        其实use和useAll只是script标签的语法糖衣，您完全可以在index.html中手动插入script标签来实现同样的功能：
+    </div>
+</div>
+<script>
+    new Jet({
+        func:{
+            jump:function(opt){
+                Jet.router.route(opt.ele.attr('data-route'))
+            }
+        }
+    })
+</script>

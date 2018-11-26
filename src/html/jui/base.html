@@ -18,7 +18,7 @@
         <div class='link' jump-to='text'>2.文字类 <i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='color'>3.颜色类<i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='margin'>4.边距类 <i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='component'>5.组件样式类 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='component'>5.组件样式 <i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 
@@ -118,13 +118,23 @@
         </div>
     </div>
 </div>
-<div class='title' jump-des="component">5.组件样式类</div>
+<div class='title' jump-des="component">5.组件样式</div>
 <div class="sub">
+    <div class='title'>组件类</div>
     <div class='text'>
         JUI 中的组件（后面会介绍到）有一些公共的样式：
         <div>颜色：【.success,.normal,.info,.warn,.error】</div> 
         <div>大小：【.xs,.s,.m,.l,.xl】</div> 
         这些类在不同的组件中样式表现各有不同，详细样式请参考后面的章节或读者自行试验。
+    </div>
+    <div class='title'>组件属性</div>
+    <div class='text'>
+        JUI 中的组件有一些公共的属性，但是特们并不是每个组件都可用，具体使用请参考后面的章节：
+        <div>width：用于控制组件的宽度，缺省单位为px。大部分组件可用。包含 btn,input,switch,date,progress,slider,code。width支持个种单位，没有单位缺省值为px</div> 
+        <div>disabled：用于启用或禁用组件，默认为false。大部分组件可用</div> 
+        <div>icon：用于给组件添加图标。可以使用的组件有：btn,radio,checkbox,select中option,switch的子元素</div> 
+        <div>checked:是否选中。可以使用的组件有：radio,checkbox,switch的子元素</div> 
+        还有其他一些属性请参考各组件的文档。
     </div>
 </div>
 <script>

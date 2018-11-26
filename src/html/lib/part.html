@@ -1,0 +1,61 @@
+<div class='title'>Jet官方库</div>
+<div class="sub">
+    <div class='text'>
+        Jet目前官方提供了以下几个库供开发者使用：
+        <div class='list'>
+            <div class=''>1.render-time <span class="light-text">(用于打印项目依赖加载时间、页面初始化和渲染时间等信息的库。)</span></div>
+            <div class='link' jon='jump' data-route='/router'>2.router <span class="light-text">(官方路由库)</span><i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='jump' data-route='/css'>3.css-config <span class="light-text">(css语法和配置文件库)</span> <i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='jump' data-route='//intro/res'>4.res <span class="light-text">(Jet的统一资源管理库)</span>  <i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='jump' data-route='/valid'>5.valid <span class="light-text">(输入验证和表单验证)</span> <i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='jump' data-route='/lang'>6.lang <span class="light-text">(国际化语言库)</span>  <i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='jump' data-route='/module'>7.module <span class="light-text">(Jet自由的模块系统)</span>  <i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='jump' data-route='/jui'>8.jui <span class="light-text">(完美契合Jet的UI框架)</span>  <i class="icon icon-double-angle-right"></i></div>
+        </div>
+    </div>
+    <div class='text'>
+        若是您使用的是 npm安装方式或手动下载Jet项目 ，也就是使用完整的Jet架构，则只需使用 下文中提到的 $use方法加载这些依赖。
+        但是如果您是使用标签引入的方式，也就是没有使用完整的Jet架构，那么您如果需要使用这些官方库的话，需要手动使用script方式引入，引入方式如下:
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;!--{name}指的就是库的名称-->
+&lt;script src='https://www.theajack.com/jet/assets/js/jet-lib/{name}.js'> &lt;script/>
+        </div>
+        建议下载到本地之后再引用。
+    </div>
+    <div class='text'>
+        若是要使用jui，虽然Jet会自动加载jui相关的css，但是处于渲染效果和性能考虑，推荐在head标签中引入 jui.css文件，如下.
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;!-- JUI css -->
+&lt;link rel="stylesheet" href='https://www.theajack.com/jet/assets/css/jui.min.css'/>
+    </div>
+    </div>
+    <div class='text'>
+        我们将在下面的章节中详细介绍这些库的功能和api.
+    </div>
+</div>
+
+<div class='title'>第三方库</div>
+<div class="sub">
+    <div class='text'>
+        开发者可以使用任何其他第三方库。
+    </div>
+    <div class='text'>
+        与官方库一样，
+        若是您使用的完整的Jet架构开发，则只需使用 下文中提到的 $use方法加载这些第三方库。
+        如果不是则，需要手动使用script方式引入，引入方式如下:
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;!--{src}指的就是第三方库的url，可以是本地文件或是http链接-->
+&lt;script src='{src}'> &lt;script/>
+        </div>
+        对于第三库也是建议下载到本地之后再引用。
+    </div>
+</div>
+<script>
+    new Jet({
+        func:{
+            jump:function(opt){
+                Jet.router.route(opt.ele.attr('data-route'))
+            }
+        }
+    })
+</script>

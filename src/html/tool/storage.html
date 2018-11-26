@@ -52,9 +52,12 @@
     </div>
 
     <div class='text'>
-        $storage 支持任何类型的值，读者可自行尝试。
+        $storage等价于 Jet.$.storage(), $storage 支持任何类型的值，读者可自行尝试。
     </div>
-    
+    <div class='title' jump-des='session'>$storage.session()</div>
+    <div class='text indent'>
+            $storage方法默认使用localStorage，若是您想使用 sessionStorage，请使用 $storage.session()方法，该方法与 Jet.$.storage.session 方法等价。其他使用与 $storage 方法一致。
+    </div>
 </div>    
 
 <script>

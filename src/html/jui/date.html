@@ -13,7 +13,7 @@
         请看一个例子：
             <div class="out">
                 <div>不同尺寸：
-                    <div class='j-date xs' jui-bind='date'></div>
+                    <div class='j-date xs' jui-bind='date' width='200'></div>
                     <div class='j-date s' jui-bind='date'></div>
                     <div class='j-date m' jui-bind='date'></div>
                     <div class='j-date l' jui-bind='date'></div>
@@ -28,15 +28,17 @@
                     支持查看日期详情(农历和节假日等)：
                     <div class='j-date' jui-date-detail='true' jui-bind='date'></div>
                 </div>
-            </div>
+            <!-- </div> -->
         <div class='j-code' disabled width='99%' height='auto'>
 
 &lt;div>不同尺寸：
-    &lt;div class='j-date xs' jui-bind='date'>&lt;/div>
+    <!-- 使用宽度 -->
+    &lt;div class='j-date xs' jui-bind='date' width='200'>&lt;/div>
     &lt;div class='j-date s' jui-bind='date'>&lt;/div>
     &lt;div class='j-date m' jui-bind='date'>&lt;/div>
     &lt;div class='j-date l' jui-bind='date'>&lt;/div>
     &lt;div class='j-date xl' jui-bind='date'>&lt;/div>
+    <!-- 使用disabled -->
     &lt;div class='j-date' disabled jui-bind='date'>&lt;/div>
 &lt;/div>
 &lt;div>

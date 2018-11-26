@@ -6,17 +6,17 @@
     <div class="list">
         <div class='link' jump-to='base'>1.基本使用 <span class="light-text">(参数列表与说明)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='part'>2.局部渲染 <span class="light-text">(局部渲染dom)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jump-to='name'>3.name参数 <span class="light-text">(为Jet元素设置一个唯一标识，设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='name'>3.name参数 <span class="light-text">(为Jet元素设置一个唯一标识，设置后可以通过 Jet.comp[name] 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='par'>4.par参数 <span class="light-text">(设置当前元素的父元素)</span><i class="icon icon-double-angle-right"></i></div>
         <div class='link' jump-to='static'>5.static参数 <span class="light-text">(设置Jet元素的静态数据)</span><i class="icon icon-double-angle-right"></i></div>
-        <div class='link' jon='Jet.$root.jumpTo("/intro/life")'>6.生命周期 <span class="light-text">(在组件的不同状态时触发设置的对应函数)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='Jet.root.jumpTo("/intro/life")'>6.生命周期 <span class="light-text">(在组件的不同状态时触发设置的对应函数)</span><i class="icon icon-double-angle-right"></i></div>
     </div>
 </div>
 <div class='title' jump-des='base'>1.基本使用</div>
 <div class="sub">
     <div class='title' jump-des='data&func'>1.data和func的使用</div>
     <div class='text'>Jet 使用
-        <span class='red'>new Jet()</span>
+        <span class='red'>new Jet()</span> 或 <span class='red'>JET()</span>
         来创建一个Jet组件，该组件的作用范围是当前html模板以及其中加载的Jload。
         <span class='light-text'>(见jload章节)</span>
     </div>
@@ -25,7 +25,7 @@
         <div class="list">
             <div>1.data <span class="light-text">(获取或者设置dom元素的innerHTML)</span></div>
             <div>2.func <span class="light-text">(获取dom元素的outerHTML)</span></div>
-            <div class='link' jon='Jet.$root.jumpTo("/intro/life")'>3.9个生命周期函数 <span class="light-text">(设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
+            <div class='link' jon='Jet.root.jumpTo("/intro/life")'>3.9个生命周期函数 <span class="light-text">(设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
             <div class='link' jump-to='name'>4.name参数 <span class="light-text">(为Jet元素设置一个唯一标识，设置后可以通过 Jet.name 获取到Jet元素)</span><i class="icon icon-double-angle-right"></i></div>
             <div class='link' jump-to='par'>5.par参数 <span class="light-text">(设置当前元素的父元素)</span><i class="icon icon-double-angle-right"></i></div>
             <div class='link' jump-to='part'>6.ele参数 <span class="light-text">(根据设置的ele参数局部渲染dom)</span><i class="icon icon-double-angle-right"></i></div>
@@ -38,7 +38,7 @@
 &lt;/div>
 &lt;!-- 会显示hello world --&gt;
 &lt;script>
-    new Jet({
+    new Jet({//或 JET({})
         data:{//数据
             message:'hello word'
         },
@@ -125,11 +125,11 @@
 
 <div class='title' jump-des='name'>3.name参数</div>
 <div class="sub">
-    <div class='text'>设置name参数后可以通过 Jet.[name] 获取到Jet元素。请看一个例子
+    <div class='text'>设置name参数后可以通过 Jet.comp[name] 获取到Jet元素。请看一个例子
     </div>
 
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;button jon='alert(Jet.myJet.myMessage)'>获取myJet&lt;/button>
+&lt;button jon='alert(Jet.comp.myJet.myMessage)'>获取myJet&lt;/button>
 &lt;script>
     new Jet({
         name:'myJet',
@@ -141,8 +141,12 @@
     </div>
     <div class='text'>以下是输出的html:
         <div class='out'>   
-            <button jon='alert(Jet.myJet.myMessage)'>获取myJet</button>
+            <button jon='alert(Jet.comp.myJet.myMessage)'>获取myJet</button>
         </div>
+    </div>
+    <div class='title' jump-des='root'>Jet.root:根组件</div>
+    <div class='text'>
+        root.js 或 root.html 中声明的组件是Jet应用的根组件，所有的组件都是它的直接或间接孩子。可以通过Jet.root获取到根组件。
     </div>
 </div>
 
@@ -178,7 +182,7 @@
 &lt;/script>
     </div>
     <div class='text'>
-        除了直接使用par属性，在jload元素中，还可以设置jload html元素的 <span class="link" jon='Jet.$root.jumpTo("/attr/load","jpar")'>jpar属性</span> 来动态的设置 父Jet元素。
+        除了直接使用par属性，在jload元素中，还可以设置jload html元素的 <span class="link" jon='Jet.root.jumpTo("/attr/load","jpar")'>jpar属性</span> 来动态的设置 父Jet元素。
     </div>
 </div>
 <div class='title' jump-des='static'>5.static参数</div>

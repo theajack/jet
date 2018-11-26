@@ -4,19 +4,22 @@
 <div class="sub">
     <div class='text'>1.不同种类的输入框：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-<input class="j-input" value='默认' type="text">
+<!--使用宽度-->
+<input class="j-input" value='默认' width='220' type="text">
 <input class="j-input normal" value='normal' type="text">
 <input class="j-input success" value='成功' type="text">
 <input class="j-input warn" value='warn' type="text">
 <input class="j-input info" value='info' type="text">
 <input class="j-input danger" value='危险' type="text">
+<!--使用disabled-->
 <input class="j-input" disabled value='禁用' type="text">
     </div>
     <div class="out">
+        <input class="j-input" value='默认' width='220' type="text">
         <input class="j-input normal" value='normal' type="text">
         <input class="j-input success" value='成功' type="text">
         <input class="j-input warn" value='warn' type="text">
-        <input class="j-input info" value='info（默认）' type="text">
+        <input class="j-input info" value='info' type="text">
         <input class="j-input danger" value='危险' type="text">
         <input class="j-input" disabled value='禁用' type="text">
     </div>
@@ -43,4 +46,25 @@
     <div class="out">
         <textarea class="j-input">teatarea</textarea> 
     </div>
+    <div class='text'>3.带有icon 和 title的输入框：</div>    
+    <div class='j-code' disabled width='99%' height='auto'>
+<input class="j-input xs" icon='pencil' value='使用icon' type="text">
+<input class="j-input normal s" title='用户' value='使用title' type="text">
+<input class="j-input info j-icon-right m" icon='user' value='放到右侧' type="text">
+<input class="j-input success l" icon='user' title='用户' value='结合使用' type="text">
+<input class="j-input warn xl" icon='pencil' jattr="title:用户" value='使用jattr绑定属性' type="text">
+<input class="j-input danger" jattr="title:删除;icon:trash" value='使用jattr绑定多个属性,结合width使用' width='400' type="text">
+    </div>
+    <div class="out">
+        <input class="j-input xs" icon='pencil' value='使用icon' type="text">
+        <input class="j-input normal s" title='用户' value='使用title' type="text">
+        <input class="j-input info j-icon-right m" icon='user' value='放到右侧' type="text">
+        <input class="j-input success l" icon='user' title='用户' value='结合使用' type="text">
+        <input class="j-input warn xl" icon='pencil' jattr="title:用户" value='使用jattr绑定属性' type="text">
+        <input class="j-input danger" jattr="title:删除;icon:trash" value='使用jattr绑定多个属性,结合width使用' width='400' type="text">
+    </div>
 </div>
+<script>
+    new Jet({
+    })
+</script>

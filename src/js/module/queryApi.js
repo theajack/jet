@@ -1,4 +1,4 @@
-Jet.$define('Query',function(){
+Jet.define('Query',function(){
     var map=[{
         name:'Jet简介',
         url:'/intro',
@@ -57,8 +57,13 @@ Jet.$define('Query',function(){
     },{
         name:'name参数',
         url:'/intro/grammer',
-        intro:'设置name参数后可以通过 Jet.name 获取到Jet元素',
+        intro:'设置name参数后可以通过 Jet.comp[name] 获取到Jet元素',
         des:'name'
+    },{
+        name:'Jet.root:根组件',
+        url:'/intro/grammer',
+        intro:'root.js 或 root.html 中声明的组件是Jet应用的根组件',
+        des:'root'
     },{
         name:'par参数',
         url:'/intro/grammer',
@@ -228,7 +233,7 @@ Jet.$define('Query',function(){
         intro:'使用 .$replace() 可以对当前数组赋一个新的值',
         des:'replace'
     },{
-        name:'属性样式事件',
+        name:'修饰属性',
         url:'/attr',
         intro:'本章中将介绍Jet中的属性，样式和事件的绑定',
     },{
@@ -302,6 +307,27 @@ Jet.$define('Query',function(){
         url:'/attr/html',
         intro:'将绑定的内容设置成为innerHTML',
     },{
+        name:'jpath:路径机制',
+        url:'/attr/path',
+        intro:'设置资源文件的加载方式',
+    },{
+        name:'js库',
+        url:'/lib',
+        intro:'加载项目所需js库',
+    },{
+        name:'官方库和第三方库',
+        url:'/lib/part',
+        intro:'官方库和第三方库',
+    },{
+        name:'use()',
+        url:'/lib/use',
+        intro:'加载官方库和其他第三方库',
+    },{
+        name:'use.all()',
+        url:'/lib/use',
+        intro:'加载所有官方库和其他第三方库',
+        des:'useAll'
+    },{
         name:'表单验证',
         url:'/valid',
         intro:'Jet中的自带一套表单验证的方案',
@@ -319,7 +345,7 @@ Jet.$define('Query',function(){
         url:'/valid/form',
         intro:'使用 Jform 属性来指定一个表单',
     },{
-        name:'Jet.valid',
+        name:'Jet.valid 方法',
         url:'/valid/method',
         intro:'valid对象中含有很多可以定制的属性',
     },{
@@ -467,15 +493,15 @@ Jet.$define('Query',function(){
         url:'/module',
         intro:'js异步模块加载规范',
     },{
-        name:'$define',
+        name:'define',
         url:'/module/define',
         intro:'定义模块',
     },{
-        name:'$export',
+        name:'export',
         url:'/module/export',
         intro:'输出模块',
     },{
-        name:'$import',
+        name:'import',
         url:'/module/import',
         intro:'引入模块',
     },{
@@ -494,11 +520,11 @@ Jet.$define('Query',function(){
         intro:'使用new关键字加载一个独立的模块',
         des:'new'
     },{
-        name:'$module',
+        name:'module',
         url:'/module/module',
         intro:'已引入的模块集合',
     },{
-        name:'$get',
+        name:'get',
         url:'/module/get',
         intro:'使用模块',
     },{
@@ -534,15 +560,25 @@ Jet.$define('Query',function(){
     },{
         name:'$storage',
         url:'/tool/storage',
-        intro:'操作storage',
+        intro:'操作localStorage',
+    },{
+        name:'$storage.session',
+        url:'/tool/storage',
+        intro:'操作sessionStorage',
+        des:'session'
     },{
         name:'Jet.$',
         url:'/tool/tool',
         intro:'常用的功能的函数以及对dom操作的方法',
     },{
-        name:'prototype扩展',
+        name:'prototype原型扩展',
         url:'/tool/prototype',
         intro:'dom元素，数组和字符串的prototype进行了扩展',
+    },{
+        name:'JUI的原型扩展',
+        url:'/tool/prototype',
+        intro:'更多的原型扩展方法',
+        des:'jui'
     },{
         name:'JUI',
         url:'/jui/',
@@ -581,6 +617,11 @@ Jet.$define('Query',function(){
         name:'基础样式类',
         url:'/jui/base',
         intro:'一套基础样式类',
+    },{
+        name:'组件样式与公共属性',
+        url:'/jui/base',
+        intro:'组件的一些公共类和属性',
+        des:'component',
     },{
         name:'图标icon',
         url:'/jui/icon',
@@ -667,7 +708,7 @@ Jet.$define('Query',function(){
         url:'/code',
         intro:'在线使用和调试Jet',
     }]
-    Jet.$export({
+    Jet.export({
         search:function(s){
             return map.filter(function(item){
                 return item.name.toLowerCase().has(s.toString().toLowerCase())||item.intro.toLowerCase().has(s.toString().toLowerCase());

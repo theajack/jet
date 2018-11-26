@@ -20,11 +20,13 @@
     .result{
         border: 1px solid #aaa;    
         word-wrap: break-word;
+        overflow-x: hidden;
     }
 </style>
 <div class='title'>在线使用Jet</div>
 <div class='text clearfix'>    
-    <button class='j-btn f-left' jshow='back' jon='this.$route.back()'><i class="j-icon icon-chevron-left"></i>返回</button>
+    <button class='j-btn f-left' jshow='back' jon='this.$route.back()' icon='chevron-left'>返回</button>
+    <button class='j-btn f-left' jon='resetCode' icon='refresh'>重置代码</button>
     <div class='switch-w'>
         <span class='code-text'>编辑</span>
         <div class="j-switch" jui-bind='codeBool' jui-change='changeMode'>
@@ -63,11 +65,7 @@ new Jet({
         this.initKeyDown(this.$dom.console);
         //<div jif='{{$.age}}<18:text[未成年|成年人]'></div>\n\
     },
-    data:{
-        codeBool:false,
-        back:false,
-        consoleCode:'',
-        res:'',
+    static:{
         code:"<div j='message'></div><br>\n\
 <div j='user'>\n\
     <div j=name>'姓名:'+$</div>\n\
@@ -88,12 +86,31 @@ new Jet({
         }\n\
     })\n"+
 "<"+"/script>"
-    },func:{
+    },
+    data:{
+        codeBool:false,
+        back:false,
+        consoleCode:'',
+        res:'',
+        code:function(){
+            return this.$data.code;
+        }
+    },
+    onmounted:function(){
+        if(this.$storage('testCode')){
+            this.code=this.$storage('testCode');
+        }
+        if(this.$storage('showBack')){
+            this.back=true;
+        }
+    },
+    func:{
         replace:function (js) {
             return js.replace('new Jet({', 'new Jet("test","test-container",{');//手动指定父元素和容器
         },
         changeMode:function() {
             if(this.codeBool){
+                this.$storage('testCode',this.code);
                 this.consoleCode=' ';
                 this.res='';
                 this.$dom.result.ele.attr('comp__id','test-container');
@@ -120,11 +137,19 @@ new Jet({
                 JUI.init();
                 this.$init();
             }
-        },loadCode:function(){
-            if(typeof Jet.$root._code!=='undefined'){
-                this.code=Jet.$root._code
-                //this.$jui('code').txt(Jet.$root._code)
-                Jet.$root._code=undefined;
+        },
+        resetCode:function(){
+            this.code=this.$data.code;
+            this.$storage('testCode',null);
+            this.$storage('showBack',null);
+        },
+        loadCode:function(){
+            if(typeof Jet.root._code!=='undefined'){
+                this.code=Jet.root._code;
+                this.$storage('testCode',this.code);
+                this.$storage('showBack',true);
+                //this.$jui('code').txt(Jet.root._code)
+                Jet.root._code=undefined;
                 this.back=true;
             }
         },initKeyDown:function(jdom){
@@ -134,7 +159,6 @@ new Jet({
                     _this.runConsole();
                 }
             },true)
-
         },runConsole:function(){
             var res=(new Function('return '+this.consoleCode))();
             try{

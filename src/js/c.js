@@ -1,6 +1,6 @@
-Jet.$define('c',function(){
+Jet.define('c',function(){
     var c=3;
-    this.$export({
+    this.export({
         $init:function(){
             console.log('c:'+c);
         },

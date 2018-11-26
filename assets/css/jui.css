@@ -1,8 +1,9 @@
 /*common********************************************************************/
-.j-btn,.j-input,.j-select,.j-radio,.j-checkbox,.j-switch,.j-date,.j-color,.j-slider{
+.j-btn,.j-input,.j-input-w,.j-select,.j-radio,.j-checkbox,.j-switch,.j-date,.j-color,.j-slider{
     margin: 3px;
     display: inline-block;
     vertical-align: middle;
+    font-family:'Microsoft Yahei',"Open Sans",Arial,sans-serif;
 }
 /* .j-option{visibility:hidden} */
 /*ROW AND COL********************************************************************/
@@ -82,14 +83,18 @@
     outline: none;
     border: none;
     font-family: "Microsoft Yahei";
-    transition: background-color .2s ease;
-    -webkit-transition: background-color .2s ease;
-    -o-transition: background-color .2s ease;
-    -moz-transition: background-color .2s ease;
-    -ms-transition: background-color .2s ease;
+    transition: background-color .3s ease;
+    -webkit-transition: background-color .3s ease;
+    -o-transition: background-color .3s ease;
+    -moz-transition: background-color .3s ease;
+    -ms-transition: background-color .3s ease;
 }
 .j-btn .j-icon{
 	margin-right:3px;
+}
+.j-btn.j-icon-right .j-icon{
+	margin-right:0;
+	margin-left:3px;
 }
 .j-btn.xs{
     height: 23px;
@@ -131,7 +136,7 @@
     font-size: 22px;
 	margin-right:5px;
 }
-.j-btn.icon-mn .j-icon,.j-icon.icon-mn{
+.j-btn.j-icon-mn .j-icon,.j-icon.j-icon-mn{
 	margin-right:0;
 }
 
@@ -153,7 +158,7 @@
 
 .j-input,.j-select,.j-date{
     font-size: 16px;
-    border: 1px solid #999;
+    border: 1px solid #aaa;
     background-color:#fff;
     width: 150px;
     padding-left: 5px;
@@ -161,47 +166,114 @@
     color: #222;
     outline: none;
     border-radius: 2px;
-    transition: border-color .2s ease;
-    -webkit-transition: border-color .2s ease;
-    -o-transition: border-color .2s ease;
-    -moz-transition: border-color .2s ease;
-    -ms-transition: border-color .2s ease;
+    transition: border-color .3s ease;
+    -webkit-transition: border-color .3s ease;
+    -o-transition: border-color .3s ease;
+    -moz-transition: border-color .3s ease;
+    -ms-transition: border-color .3s ease;
+}
+.j-input-w{
+    position: relative;
+    width: auto;
+    height: auto;
+    margin: 3px;
+    display: inline-block;
+    line-height: 26px;
+}
+.j-input-w .j-icon-w{
+    position: absolute;
+    display: inline-block;
+    padding:0 8px;
+    background-color: #ccc;
+    border-right: 1px solid #eee;
+    top:1px;
+    bottom:1px;
+    left: 1px;
+    font-size: 15px;
+    text-align: center;
+    color: #999;
+    border-radius: 2px 0 0 2px;
+    transition: color .3s ease;
+    -webkit-transition: color .3s ease;
+    -o-transition: color .3s ease;
+    -moz-transition: color .3s ease;
+    -ms-transition: color .3s ease;
+}
+.j-input-w.xs{line-height: 19px;}
+.j-input-w.s{line-height: 22px;}
+.j-input-w.l{line-height: 31px;}
+.j-input-w.xl{line-height: 36px;}
+.j-input-w.normal .j-icon-w{color: #2c88ca;}
+.j-input-w.success .j-icon-w{color: #2bcd2f;}
+.j-input-w.warn .j-icon-w{color: #d1972a;}
+.j-input-w.danger .j-icon-w{color: #dc5454;}
+.j-input-w .j-icon{
+}
+.j-input-w .j-input{margin: 0;}
+/* .j-input-w .j-input.j-icon-left{padding-left: 35px;} */
+.j-input-w .j-input:focus + .j-icon-w{color: #666;}
+.j-input-w.normal .j-input:focus + .j-icon-w{color: #0e4f7e;}
+.j-input-w.normal .j-icon-w{background-color:#b8e1ff}
+
+.j-input-w.success .j-input:focus + .j-icon-w{color: #09920e;}
+.j-input-w.success .j-icon-w{background-color:#cdffcf}
+
+.j-input-w.warn .j-input:focus + .j-icon-w{color: #885f13;}
+.j-input-w.warn .j-icon-w{background-color:#ffe7b9}
+
+.j-input-w.danger .j-input:focus + .j-icon-w{color: #973838;}
+.j-input-w.danger .j-icon-w{background-color:#ffcccc}
+/* .j-input.j-icon-right{
+    padding-right: 35px;
+    padding-left: 5px;
+} */
+.j-input-w .j-input.j-icon-right + .j-icon-w{
+    right:1px;
+    left: initial;
+    border-right: none;
+    border-left: 1px solid #eee;
+    border-radius: 0 2px 2px 0;
 }
 textarea.j-input{
 }
-.j-input:focus{border: 1px solid #bbb;}
-.j-input.normal{border-color: #1da1ff}
-.j-input.normal:focus{border-color: #70c4ff}
-.j-input.success{border-color: #2ac32f}
-.j-input.success:focus{border-color: #2fec34}
-.j-input.warn{border-color: #dfa02b}
-.j-input.warn:focus{border-color: #f2af32}
+.j-input:focus{border: 1px solid #777;}
+.j-input.normal{border-color: #2c88ca}
+.j-input.normal:focus{border-color: #0e4f7e}
+.j-input.success{border-color: #2bcd2f}
+.j-input.success:focus{border-color: #09920e}
+.j-input.warn{border-color: #d1972a}
+.j-input.warn:focus{border-color: #885f13}
 .j-input.danger{border-color: #dc5454}
-.j-input.danger:focus{border-color: #ff8383}
+.j-input.danger:focus{border-color: #c54d4d}
 .j-input.xs,.j-select.xs{
     font-size: 12px;
     height: 23px;
     width: 100px;
     padding-left: 2px;
 }
+.j-input-w .j-input{width:190px}
+.j-input-w .j-input.xs{width:140px}
 .j-input.s,.j-select.s{
     font-size: 14px;
     height: 26px;
     width: 120px;
     padding-left: 4px;
 }
+.j-input-w .j-input.s{width:160px}
 .j-input.l,.j-select.l{
     font-size: 18px;
     height: 35px;
     width: 170px;
     padding-left: 7px;
 }
+.j-input-w .j-input.l{width:210px}
 .j-input.xl,.j-select.xl{
     font-size: 22px;
     height: 40px;
     width: 200px;
     padding-left: 8px;
 }
+.j-input-w .j-input.xl{width:240px}
 .j-input[disabled],.j-select[disabled],.j-btn[disabled],.j-switch[disabled],.j-date[disabled],.j-color[disabled]{
     cursor:no-drop!important;
     background-color: #ddd!important;
@@ -242,11 +314,11 @@ textarea.j-input{
     top: 5px;
     font-size: 20px;
     transform: rotate(0deg);
-    transition: transform .2s ease;
-    -webkit-transition: -webkit-transform .2s ease;
-    -o-transition: -o-transform .2s ease;
-    -moz-transition: -moz-transform .2s ease;
-    -ms-transition: -ms-transform .2s ease;
+    transition: transform .3s ease;
+    -webkit-transition: -webkit-transform .3s ease;
+    -o-transition: -o-transform .3s ease;
+    -moz-transition: -moz-transform .3s ease;
+    -ms-transition: -ms-transform .3s ease;
 }
 .j-select-vw .j-icon.s-open{
     transform: rotate(-180deg);
@@ -264,11 +336,11 @@ textarea.j-input{
     border-radius: 3px;
     height:0;
     overflow: hidden;
-    transition: all .2s ease;
-    -webkit-transition: all .2s ease;
-    -o-transition: all .2s ease;
-    -moz-transition: all .2s ease;
-    -ms-transition: all .2s ease;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
     background-color:#fff;
     z-index:1;
 }
@@ -473,10 +545,10 @@ textarea.j-input{
     -moz-transition:all .3s ease;
     -ms-transition:all .3s ease;
     font-size: 13px;
-    line-height: 24px;
+    line-height: 22px;
 }
 .j-switch.xs{height: 16px;width:34px;border-radius: 8px;font-size: 10px;line-height: 14px;}
-.j-switch.s{height: 20px;width:42px;border-radius: 10px;font-size: 12px;line-height: 20px;}
+.j-switch.s{height: 20px;width:42px;border-radius: 10px;font-size: 12px;line-height: 19px;}
 .j-switch.l{height: 28px;width:58px;border-radius: 14px;font-size: 15px;line-height: 27px;}
 .j-switch.xl{height: 32px;width:66px;border-radius: 16px;font-size: 17px;line-height: 29px;}
 .j-switch.xs .j-switch-c{height:12px;width:12px;}
@@ -1237,7 +1309,8 @@ textarea.j-input{
     font-size: 18px;
     line-height: 22px;
     min-width: 245px!important;
-    text-align: left!important
+    text-align: left!important;
+    text-indent: 0;
 }
 
 .j-code.j_full {
@@ -1300,8 +1373,8 @@ textarea.j-input{
     left: 0px;
     color: #ddd;
     font-weight: normal;
-    transition: all .2s ease;
-    -webkit-transition: all .2s ease;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
 }
 .code_line_w div.j-active{
     left: -3px;
@@ -1317,8 +1390,8 @@ textarea.j-input{
     opacity:0;
     transform: translate(0,0);
     -webkit-transform: translate(0,0);
-    transition: all .2s ease;
-    -webkit-transition: all .2s ease;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
 }
 .j-code[buttons] .code_active_line{
     top: 41px;
@@ -1385,7 +1458,8 @@ cd_note,cd_note * {color: #019d00!important}
 	left: 50%;
 	top: 50%;
 	opacity: 0!important;
-	margin: -90px -150px;
+    margin-top: -90px;
+    margin-left:  -150px;
 	background-color: #fff;
 	border-radius: 5px;
 	box-shadow: #ddd 1px 1px 10px 2px;

@@ -44,7 +44,7 @@ jdom 获取和操作原生dom
 18-3-20:
     路由配置 默认与名称一样
     新增 css.conf 文件 可以设置css变量和函数 设置路由模板的公共样式
-    Jet.$route Jet.$route.back Jet.$route.forward
+    Jet.route Jet.route.back Jet.route.forward
     valid 可以设置 useJUI
     $remove 支持以元素为参数
     JUI message 增加30ms延迟 增加hover属性
@@ -60,7 +60,7 @@ jdom 获取和操作原生dom
     for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代替其所绑定的数据 ,对数组操作进行了完善
 3-28 修复了jload和路由组件模式下 JUI绑定的bug 现在如果jui-bind的属性不在当前Jet元素的数据中，则会在子Jet元素中寻找，如果都没有则会忽略掉
     子页面的Jet最好使用 ele:jdom 指定Jet绑定的html元素，这样可以很好地解决子页面与父页面和子页面与子页面之间的命名冲突的问题
-        增加了Jet name属性，用于生成一个在Jet.$ele 中的以 name属性命名的 Jet元素变量
+        增加了Jet name属性，用于生成一个在Jet.comp 中的以 name属性命名的 Jet元素变量
 3-30 jattr和jstyle添加 $r 的支持
 3-31 新增Jet.valid.useOnInput
 
@@ -73,7 +73,7 @@ jdom 获取和操作原生dom
     国际化现在可以包含一个json或者数组，而不只是一个值类型
 4-19 JUI 新增 j-drag
 4-23 修复：数组的方法不会触发数组的监听回掉，现在使用数组的长度的绑定会被正确刷新
-4-24 新增 $define，$export，$get,$import，$module，，as 关键字
+4-24 新增 define，export，$get,import，module，，as 关键字
 4-24 新增css scoped 属性，默认值为true;
     新增 JUI.dialog.isOpen clear ; 新增JUI.confirm.isOpen clear 
     数组removeByIndex
@@ -181,7 +181,7 @@ jdom 获取和操作原生dom
     11-4
     新增生命周期 beforeinitawait
     新增 Jet.router.activeRouter 重新激活active router link，用于一些后加载的组件中的router-link的激活
-    新增 新增 Jet.prototype.$module
+    新增 新增 Jet.prototype.module
 
     api jrouter&jout 新增jrouter-active说明
 

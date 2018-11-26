@@ -1,13 +1,13 @@
-<div class='title'>$define:定义模块</div>
+<div class='title'>define:定义模块</div>
 <div class="sub">
     <div class='text'>
         在 Jet 中，一个js文件就是一个模块，模块必须存放在 /src/js 目录下，可以包含子目录。
     </div>
     <div class='text'>
-        在模块文件中使用 Jet.$define() 定义一个模块。该方法包含三个参数：
+        在模块文件中使用 Jet.define() 定义一个模块。该方法包含三个参数：
         第一个参数是模块名，必选参数。
         第二个参数是一个数组，用于指定该模块的依赖模块，可选参数。
-        第三个参数是回调函数，里面包含所有的模块代码，包含模块内部代码和模块输出代码，在该回调函数中使用 Jet.$export 输出模块接口。
+        第三个参数是回调函数，里面包含所有的模块代码，包含模块内部代码和模块输出代码，在该回调函数中使用 Jet.export 输出模块接口。
         请看几个例子：
     </div>
     <div class='title'>1.简单定义</div>
@@ -15,10 +15,10 @@
         /src/js 目录下的模块文件 module1.js：
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
-Jet.$define('m1',function(){//模块名和模块回调函数
+Jet.define('m1',function(){//模块名和模块回调函数
     var count=0;//模块内部代码
     
-    Jet.$export({//输出模块
+    Jet.export({//输出模块
         getCount:function(){
             return count;
         },
@@ -30,7 +30,7 @@ Jet.$define('m1',function(){//模块名和模块回调函数
     </div>
     <div class='title'>2.添加依赖</div>
     <div class='text'>
-        $define 方法的第二个参数是一个可选参数，是一个数组类型，数组内元素为字符串类型，必须对应 /src/js 中的一个文件，首部的/和尾部的.js可以忽略，可以包含子目录。
+        define 方法的第二个参数是一个可选参数，是一个数组类型，数组内元素为字符串类型，必须对应 /src/js 中的一个文件，首部的/和尾部的.js可以忽略，可以包含子目录。
         通过这个数组参数可以为当前模块添加依赖模块。然后回调函数的回调参数就是依赖的模块json的集合，
         属性默认是模块名，可以通过as关键字设置别名。
     </div>
@@ -38,12 +38,12 @@ Jet.$define('m1',function(){//模块名和模块回调函数
         /src/js 目录下的模块文件 module2.js，它依赖 module1.js：
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
-Jet.$define('m2',['module1'],function(modules){
+Jet.define('m2',['module1'],function(modules){
     //依赖模块可以包含子目录，如 ['modules/module1']
     //modules为引入的模块集合，在该例中 modules为{m1:模块1}，回调参数modules可以为任意命名
     var count=0;
 
-    Jet.$export({
+    Jet.export({
         addCount1:function(){
             modules.m1.addCount();
         },
@@ -58,18 +58,18 @@ Jet.$define('m2',['module1'],function(modules){
     </div>
     <div class='title'>3.为依赖设置别名</div>
     <div class='text'>
-        依赖模块默认使用$define 定义模块名，但是使用 as 关键字可以为依赖模块设置别名。
+        依赖模块默认使用define 定义模块名，但是使用 as 关键字可以为依赖模块设置别名。
     </div>
     <div class='text'>
         /src/js 目录下的模块文件 module3.js，它依赖 module1.js：
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
-Jet.$define('m3',['module1 as m'],function(modules){
+Jet.define('m3',['module1 as m'],function(modules){
     //使用 as 关键字可以为依赖的模块起一个别名
     //modules为引入的模块集合，在该例中 modules为{m:模块1}，回调参数modules可以为任意命名
     var count=0;
     
-    Jet.$export({
+    Jet.export({
         addCount1:function(){
             modules.m.addCount();
         },
@@ -84,19 +84,19 @@ Jet.$define('m3',['module1 as m'],function(modules){
     </div>
     <div class='title'>4.使用new生成一个独立的依赖</div>
     <div class='text'>
-        前面的教程提到过，Jet中多次加载相同的模块都指向的是同一对象，如果希望它们互相独立，需要使用new关键字，new可以与as一起使用。独立模块不会被加入到$module集合中。用法如下：
+        前面的教程提到过，Jet中多次加载相同的模块都指向的是同一对象，如果希望它们互相独立，需要使用new关键字，new可以与as一起使用。独立模块不会被加入到module集合中。用法如下：
     </div>
     <div class='text'>
         /src/js 目录下的模块文件 module3.js，它依赖 module1.js：
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
-Jet.$define('m3',['new(module1) as m'],function(modules){
+Jet.define('m3',['new(module1) as m'],function(modules){
     //使用 as 关键字可以为依赖的模块起一个别名
     //modules为引入的模块集合，在该例中 modules为{m:模块1}，回调参数modules可以为任意命名
-    //模块不会被加入到$module集合中
+    //模块不会被加入到module集合中
     var count=0;
     
-    Jet.$export({
+    Jet.export({
         addCount1:function(){
             modules.m.addCount();
         },

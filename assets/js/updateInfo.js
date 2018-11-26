@@ -33,7 +33,7 @@ Jet新增 $jui()
 18-3-20:
 路由配置 默认与名称一样
 新增 css.conf 文件 可以设置css变量和函数 设置路由模板的公共样式
-Jet.$route Jet.$route.back Jet.$route.forward
+Jet.route Jet.route.back Jet.route.forward
 valid 可以设置 useJUI
 JUI message 增加30ms延迟 增加hover属性
 $remove 支持以元素为参数
@@ -51,7 +51,7 @@ for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代�
 
 3-28 修复了jload和路由组件模式下 JUI绑定的bug 现在如果jui-bind的属性不在当前Jet元素的数据中，则会在子Jet元素中寻找，如果都没有则会忽略掉
 子页面的Jet最好使用 ele:jdom 指定Jet绑定的html元素，这样可以很好地解决子页面与父页面和子页面与子页面之间的命名冲突的问题
- 增加了Jet name属性，用于生成一个在Jet.$ele 中的以 name属性命名的 Jet元素变量
+ 增加了Jet name属性，用于生成一个在Jet.comp 中的以 name属性命名的 Jet元素变量
 
 3-30 jattr和jstyle添加 $r 的支持
 3-31 新增Jet.valid.useOnInput
@@ -66,7 +66,7 @@ for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代�
 
 4-19 JUI 新增 j-drag
 4-23 修复：数组的方法不会触发数组的监听回掉，现在使用数组的长度的绑定会被正确刷新
-4-24 新增 $define，$export，$get,$import，$module，，as 关键字
+4-24 新增 define，export，$get,import，module，，as 关键字
 4-24 新增css scoped 属性，默认值为true;
     新增 JUI.dialog.isOpen clear ; 新增JUI.confirm.isOpen clear 
     数组removeByIndex
@@ -167,7 +167,7 @@ for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代�
   11-4
   新增生命周期 beforeinitawait
   新增 Jet.router.activeRouter 重新激活active router link，用于一些后加载的组件中的router-link的激活
-  新增 新增 Jet.prototype.$module
+  新增 新增 Jet.prototype.module
 
   api jrouter&jout 新增jrouter-active说明
 
@@ -185,11 +185,28 @@ for 的直接孩子 bind元素现在可以正确的在属性中使用 $ 来代�
     static 参数 支持立即执行函数
     Jet.router.indexMap 属性，保存路由首页对应的html地址 无需开发者设置
 
+jpath 是否使用jet的path机制，默认为true。如不使用，则默认使用以/src为根的绝对路径
+  11-18
+    (*重要)拆分 Jet，使用Jet.use() 按需加载 
+        系统模块--['render-time','router', 'css-config', 'res', 'valid', 'lang', 'module','tool','jui']
+      Jet.use.all() 加载全部预设依赖，回调函数参数为加载时间
+    (*重要) 可以使用Jet.use() 加载外部依赖
+    (*重要) 重构项目结构
+    新增控制台打印依赖加载时间和 组件渲染时间
+  11-20
+        jui-新增多种组件支持width属性、icon属性。
+
+  11-26
+    (*重要) 完成jet 脚手架工具 jet-js-cli
+    (*重要) Jet.use.define*() 声明第三方库的模块和模块之间的依赖 
+        module 和 rely 两个参数
+
   需修改 css scope 属性
-  需新增 组件销毁的生命周期
-  需拆分 Jet，使用Jet.$use() 按需加载 ['router','lang','module','css-config','jui','valid'] 
-  需重构项目结构
-  需制作脚手架工具 并发布npm包
+  需完善 组件销毁的生命周期
+  
   需将外围设施部署成 npm包
   颜色选择器BUG
+
+  jex 状态管理
+  jload 改变 src，以方便开发者自定义实现多级路由
 */

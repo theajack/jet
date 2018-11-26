@@ -20,6 +20,7 @@ var test=new Jet({
     }
 });
 </script> -->
+
 <div class='title'>动态元素</div>
 <div class="sub">
     <div class='text'>以下是输出的html:
@@ -70,6 +71,15 @@ var test=new Jet({
         </div>
     </div>
 </div>
+
+
+<input class="j-input xs" icon='pencil' value='默认' width='220' type="text">
+<input class="j-input normal s" title='用户' value='默认' width='220' type="text">
+<input class="j-input info j-icon-right m" icon='user'  value='默认' width='220' type="text">
+<input class="j-input success l" icon='pencil' icon='user' value='默认' width='220' type="text">
+<input class="j-input warn xl" icon='pencil' jattr="title:用户" title='用户' value='默认' width='220' type="text">
+<input class="j-input danger" jattr="title:删除;icon:trash" value='默认' width='220' type="text">
+
 <script>
     new Jet({
         name:'test',

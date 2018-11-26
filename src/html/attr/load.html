@@ -65,7 +65,7 @@
     
     <div class='title' jump-des='jpar'>jpar 属性</div>
     <div class='text indent'>
-            jpar 属性用于设置子组件Jet元素的父Jet元素，用于父组件与子组件间状态共享。详见 <span class="link" jon='Jet.$root.jumpTo("/intro/grammer","par")'>par参数</span>
+            jpar 属性用于设置子组件Jet元素的父Jet元素，用于父组件与子组件间状态共享。详见 <span class="link" jon='Jet.root.jumpTo("/intro/grammer","par")'>par参数</span>
     </div>
     <div class='j-code not-test' disabled width='99%' height='auto'>
 //父Jet元素
@@ -80,7 +80,7 @@ new Jet({
     </div>
 </div>
 <script>
-    Jet.$root.setLink({
+    Jet.root.setLink({
         last:'Jon',
         lastUrl:'/attr/on',
         next:'Jroot',
@@ -106,7 +106,7 @@ new Jet({
         <div class='text indent'>
             Jet 使用 Jload 加载组件。使用Jload可以在某个元素之内加载其他的html模板，加载的模板可以使用父模板的jet，也可以自己定义jet。
             使用的格式是 <span class='red'>Jload='file'</span> html模板文件可以忽略 .html 后缀。
-            file 可以使用<span class='link' jon='Jet.$root.jumpTo("/intro/res")'>资源管理</span>中定义的资源名。
+            file 可以使用<span class='link' jon='Jet.root.jumpTo("/intro/res")'>资源管理</span>中定义的资源名。
             Jload使用的html模板必须位于 /src/html目录下面，可以嵌套使用文件夹。
         </div>
         <div class='text indent' jump-des='jpar'>
@@ -414,8 +414,8 @@ new Jet({
             },
             func:{
                 resetTop:function(){
-                    if(Jet.$root.__des=='par-child'){
-                        Jet.$root.__des='';
+                    if(Jet.root.__des=='par-child'){
+                        Jet.root.__des='';
                         var top=$J.attr('jump-des="par-child"').offsetTop-55;
                         document.documentElement.scrollTop=top;
                         $J.body().scrollTop=top;

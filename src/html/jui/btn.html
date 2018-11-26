@@ -4,7 +4,8 @@
 <div class="sub">
     <div class='text'>1.不同种类的按钮：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-<button class="j-btn normal">normal（默认）</button>
+<!--使用公共属性width可以自定义宽度-->
+<button class="j-btn normal" width='300'>normal（默认）</button>
 <button class="j-btn success">成功</button>
 <button class="j-btn warn">warn</button>
 <button class="j-btn info">info</button>
@@ -12,7 +13,7 @@
 <button class="j-btn" disabled>禁用</button>
     </div>
     <div class="out">
-        <button class="j-btn normal">normal（默认）</button>
+        <button class="j-btn normal" width='300'>normal（默认）</button>
         <button class="j-btn success">成功</button>
         <button class="j-btn warn">warn</button>
         <button class="j-btn info">info</button>
@@ -36,27 +37,29 @@
         <button class="j-btn danger xl">最大</button>
     </div>
     <div class='text'>3.带图标的按钮：<span class='link' jon='jump' data-route='/jui/icon'>(icon列表<i class="icon icon-double-angle-right"></i>)</span></div>
+    <div class='text'>icon属性；j-icon-right；j-icon-mn</div>
     <div class='j-code' disabled width='99%' height='auto'>
 <button class="j-btn normal xs" icon="pencil">普通</button>
-<button class="j-btn success s" icon="time">成功</button>
+<!--使用 j-icon-right 类可以将icon放置在右侧-->
+<button class="j-btn success s j-icon-right" icon="time">成功</button>
 <button class="j-btn warn m" icon="unlock-alt">警告</button>
 <button class="j-btn info l" icon="heart">点赞</button>
 <button class="j-btn danger xl" icon="trash">删除</button><br>
 <button class="j-btn"><i class='j-icon icon-resize'></i>使用 i 标签</button>
-<!--j-btn 下的按钮有margin-left，如果想只使用图标作为按钮，可以使用 icon-mn 类来修饰-->
-<button class="j-btn"><i class='j-icon icon-pie-chart icon-mn'></i></button>
-<button class="j-btn icon-mn" icon='camera'></button>
+<!--j-btn 下的图标有margin-left，如果想只使用图标作为按钮，可以使用 j-icon-mn 类来修饰-->
+<button class="j-btn"><i class='j-icon icon-pie-chart j-icon-mn'></i></button>
+<button class="j-btn j-icon-mn" icon='camera'></button>
     </div>
     <div class="out">
         <button class="j-btn normal xs" icon="pencil">普通</button>
-        <button class="j-btn success s" icon="time">成功</button>
+        <button class="j-btn success s j-icon-right" icon="time">成功</button>
         <button class="j-btn warn m" icon="unlock-alt">警告</button>
         <button class="j-btn info l" icon="heart">点赞</button>
         <button class="j-btn danger xl" icon="trash">删除</button><br>
         <button class="j-btn"><i class='j-icon icon-resize'></i>使用 i 标签</button>
-        <!--j-btn 下的按钮有margin-left，如果想只使用图标作为按钮，可以使用 icon-mn 类来修饰-->
-        <button class="j-btn"><i class='j-icon icon-pie-chart icon-mn'></i></button>
-        <button class="j-btn icon-mn" icon='camera'></button>
+        <!--j-btn 下的图标有margin-left，如果想只使用图标作为按钮，可以使用 j-icon-mn 类来修饰-->
+        <button class="j-btn"><i class='j-icon icon-pie-chart j-icon-mn'></i></button>
+        <button class="j-btn j-icon-mn" icon='camera'></button>
     </div>
 </div>
 <script>

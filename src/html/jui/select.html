@@ -11,11 +11,11 @@
 <div class="sub">
     <div class='text'>请看一个例子</div>
     <div class="out">
-        <div class="j-select">
-            <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
-            <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
-            <div class="j-option" disabled value='3'><i class='j-icon icon-pencil'></i>选项三</div>
-        </div>
+        <div class="j-select" width='300'>
+            <div class="j-option" value='1' icon='bar-chart'>选项一</div>
+            <div class="j-option" default value='2' icon='pencil'>选项二</div>
+            <div class="j-option" disabled value='3' icon='pencil'>选项三</div>
+        </div><br>
         <div class="j-select" disabled>
             <div class="j-option" value='1'><i class='j-icon icon-pencil'></i>选项一</div>
             <div class="j-option" default value='2'><i class='j-icon icon-pencil'></i>选项二</div>
@@ -31,16 +31,20 @@
         </div>
     </div>
         <div class='j-code' disabled width='99%' height='auto'>
-&lt;div class="j-select">
-    &lt;div class="j-option" value='1'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项一&lt;/div>
-    &lt;div class="j-option" default value='2'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项二&lt;/div>
-    &lt;div class="j-option" disabled value='3'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项三&lt;/div>
-&lt;/div>
+&lt;!--使用width-->
+&lt;div class="j-select" width='300'>
+    &lt;!--使用icon-->
+    &lt;div class="j-option" value='1' icon='bar-chart'>选项一&lt;/div>
+    &lt;div class="j-option" default value='2' icon='pencil'>选项二&lt;/div>
+    &lt;div class="j-option" disabled value='3' icon='pencil'>选项三&lt;/div>
+&lt;/div>&lt;br>
+&lt;!--使用disabled-->
 &lt;div class="j-select" disabled>
     &lt;div class="j-option" value='1'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项一&lt;/div>
     &lt;div class="j-option" default value='2'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项二&lt;/div>
     &lt;div class="j-option" disabled value='3'>&lt;i class='j-icon icon-pencil'>&lt;/i>选项三&lt;/div>
 &lt;/div>
+&lt;!--使用数据绑定-->
 &lt;div j='vs'>
     &lt;span J='value'>&lt;/span>
     &lt;div class="j-select" jui-bind='value' jattr='aaa:{{$.list}}' j='list'>

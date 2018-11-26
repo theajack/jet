@@ -15,7 +15,7 @@
     #searchIcon {
         z-index: 10;
         position: absolute;
-        right: 70px;
+        right: 102px;
     }
 
     #searchIcon.icon-times {
@@ -114,11 +114,18 @@
         #header {
             padding: 0px;
         }
+        .h-icon.icon-home{
+            display: none;
+        }
+        .h-icon.icon-github{
+            position: relative;
+            left: 4px;
+        }
     }
 </style>
-
-<i class="j-icon icon-github h-icon f-right" jon='toGithub'></i>
 <i class="j-icon icon-arrow-up h-icon f-right" jon='toTop'></i>
+<i class="j-icon icon-home h-icon f-right" jon='toHome'></i>
+<i class="j-icon icon-github h-icon f-right" jon='toGithub'></i>
 <i id='searchIcon' class="j-icon h-icon f-right" jif='showSearch:class[icon-times|icon-search]' jon='toggleSearch'></i>
 <div id="searchWrapper" jif='showSearch:class[w-show]' jstyle='width:{{$.swWidth}}' class='f-right'>
     <input type="text" class='j-input' jon='focus:searchFocus' j='queryString' placeholder="搜索api">
@@ -174,8 +181,10 @@
                 return s.substring(0, si) + '<span class="__red">' + s.substring(si, ei) + '</span>' + s.substring(ei);
             }, toGithub: function () {
                 $J.open("https://github.com/theajack/jet")
+            }, toHome:function(){
+                $J.open("https://www.theajack.com")
             }, toTop: function () {
-                $J.scrollTo(0)
+                $J.id('rootApp').scrollTo(0)
             }
         }
     })

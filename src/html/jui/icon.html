@@ -81,9 +81,12 @@
             <div class="j-btn code-copy" jon='copy'><i class="j-icon icon-copy"></i></div>
         </div>
         <div>
-            <input type="text" class="j-input" jon='input:queryIcon'>
-            <div class="j-btn info code-copy"><i class="j-icon icon-search"></i></div>
-            <div class="j-btn code-copy list-change" title='切换模式' jon='changeList'><i jattr='class:"icon"+({{$.list}}?"-th":"-bars")+" j-icon"'class=" "></i></div>
+            <input type="text" readonly class="j-input" j='name'>
+            <div class="j-btn code-copy" jon='copyName'><i class="j-icon icon-copy"></i></div>
+        </div>
+        <div>
+            <input type="text" class="j-input normal j-icon-right" icon='search' jon='input:queryIcon'>
+            <button class="j-btn code-copy" title='切换模式' jon='changeList'><i jattr='class:"icon"+({{$.list}}?"-th":"-bars")+" j-icon"'class=" "></i></button>
         </div>
     </div>
     <ul jdom='iconList' class="clearfix">
@@ -455,19 +458,25 @@
     new Jet({
         data:{
             class:'j-icon icon-resize',
-            value:'<i class="j-icon icon-resize></i>',
+            value:'<i class="j-icon icon-resize"></i>',
             list:false,
+            name:'icon="resize"'
         },
         onmounted:function(){
             var _this=this;
             $J.id('iconsExample').findTag('li').clk(function(){
                 _this.value=this.child(0).allHtml();
                 _this.class=this.child(0).className;
+                _this.name='icon="'+_this.class.substring("j-icon icon-".length)+'"';
             });
         },
         func:{
             copy:function(){
                 if($J.copy(this.value)){
+                    JUI.msg.success('复制成功')
+                }
+            },copyName:function(){
+                if($J.copy(this.name)){
                     JUI.msg.success('复制成功')
                 }
             },queryIcon:function(opt){

@@ -20,6 +20,7 @@
 }
 body{
   background-color: #eee;
+  overflow-y: hidden;
 }
 .loading{
   padding-top: 200px;
@@ -253,6 +254,7 @@ pre{
   background-color: #444;
   color: #fff;
   word-wrap: break-word;
+  overflow-x: hidden;
 }
 .break-word{
   word-wrap: break-word;

@@ -19,33 +19,44 @@
 <div class="sub">
     <div class='text'>1.静态的单选框：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;div class='j-radio'>&lt;/div>
+&lt;!--使用icon-->
+&lt;div class='j-radio' icon='pencil'>&lt;/div>
 &lt;div class='j-radio'>是否&lt;/div>
 &lt;div class='j-radio' value='yes'>&lt;/div>
 &lt;div class='j-radio' disabled>好的&lt;/div>
+&lt;div class='j-radio' checked>默认选中&lt;/div>
     </div>
     <div class="out">
-        <div class='j-radio'></div>
+        <div class='j-radio' icon='pencil'></div>
         <div class='j-radio'>是否</div>
         <div class='j-radio' value='yes'></div>
         <div class='j-radio' disabled>好的</div>
+        <div class='j-radio' checked>默认选中</div>
     </div>
     <div class='text'>2.使用$jui方法改变checked：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;div class='j-radio' jdom='radio1'>单选&lt;/div>
-&lt;button jon='this.$jui("radio1").checked=true'>选中&lt;/button>
+&lt;div class="j-radio-group">
+    &lt;div class='j-radio' jdom='radio1'>单选&lt;/div>
+    &lt;button jon='this.$jui("radio1").checked=true'>选中&lt;/button>
+    &lt;button jon='this.$jui("radio1").checked=false'>取消选中&lt;/button>
+&lt;/div>
     </div>
     <div class="out">
-        <div class='j-radio' jdom='radio1'>单选</div>
+        <div class="j-radio-group">
+            <div class='j-radio' jdom='radio1'>单选</div>
+        </div>
         <button jon='this.$jui("radio1").checked=true'>选中</button>
+        <button jon='this.$jui("radio1").checked=false'>取消选中</button>
     </div>
 
     <div class='text'>3.数据绑定的单选框：</div>
     <div class='j-code' disabled width='99%' height='auto'>
-&lt;div class='j-radio' jui-bind='radio'>A&lt;/div>
-&lt;div class='j-radio'>B&lt;/div>
-&lt;div class='j-radio'>C&lt;/div>
-&lt;div class='j-radio'>D&lt;/div>
+&lt;div class="j-radio-group" jui-bind='radio'>
+    &lt;div class='j-radio'>A&lt;/div>
+    &lt;div class='j-radio'>B&lt;/div>
+    &lt;div class='j-radio'>C&lt;/div>
+    &lt;div class='j-radio'>D&lt;/div>
+&lt;/div>
 &lt;div>
     &lt;button jon='this.radio="A"'>选A&lt;/button>
     &lt;button jon='this.radio="B"'>选B&lt;/button>
@@ -62,10 +73,12 @@
 &lt;/script>
     </div>
     <div class="out">
-        <div class='j-radio' jui-bind='radio'>A</div>
-        <div class='j-radio'>B</div>
-        <div class='j-radio'>C</div>
-        <div class='j-radio'>D</div>
+        <div class="j-radio-group" jui-bind='radio'>
+            <div class='j-radio'>A</div>
+            <div class='j-radio'>B</div>
+            <div class='j-radio'>C</div>
+            <div class='j-radio'>D</div>
+        </div>
         <div>
             <button jon='this.radio="A"'>选A</button>
             <button jon='this.radio="B"'>选B</button>
@@ -77,8 +90,8 @@
 </div>
 <div class='title' jump-des='radioGroup'>2.单选框组</div>
 <div class='text indent'>
-    使用j-radio-group类来定义一个单选框组。单选框可选的属性有 value 、checked 和 disabled。单选框不支持颜色与大小的改变。
-    未使用单选框组包裹的单选框会被分配到一个默认的全局单选框组中。
+    使用j-radio-group类来定义一个单选框组。
+    <div>未使用单选框组包裹的单选框会被分配到一个默认的全局单选框组中。</div>
     <div>value属性是设置单选框的值，等价与直接在HTML中写值，只不过写在value属性里的值不会被显示出来。值得注意的是，在同一个单选框组中的单选框不同能有相同的value值，所以最好是对每个单选框设置一个值，如果都默认为空值，则会报错。</div>
     <div>checked属性是设置单选框是否被选中。</div>
     <div>disabled属性是设置单选框是否被禁用。</div>

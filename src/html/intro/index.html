@@ -38,12 +38,20 @@
     <img class='logo' src="jet.png">
 </div>
 <div class='text indent'>
-    Jet是一个前端的轻量级的js MVVM框架，不依赖任何第三方库。Jet采用数据双向绑定，以数据驱动视图。
+    Jet是一个前端的轻量级的渐进式 MVVM框架，不依赖任何第三方库。Jet采用数据双向绑定，以数据驱动视图。
     在本文档里，我们提供了一个在线调试的工具，您可以通过它<span class='link' jon='jump' data-route='/code'>在线使用Jet<i class="icon icon-double-angle-right"></i></span>
 </div>
 <div class='text indent'>
     Jet使用css和es5，可以在非服务器环境中开发，但是在非服务其环境中无法使用路由功能和jload属性以及无法使用完整的js模块规范。
-    在服务器环境中开发，推荐使用lite-server。lite-server 是轻量级的仅适用于开发的 node 服务器。</div>
+    Jet可以通过引入script标签的方式局部使用，从而可以与您已有的项目完美结合，实现渐进式的Web开发。
+</div>
+<div class='text indent'>
+    您也可以通过npm安装 或是 手动下载Jet web项目来在服务器环境中开发，服务器环境使用lite-server。lite-server 是轻量级的仅适用于开发的 node 服务器。
+    使用完整Jet web项目结构开发可以使用Jet的所有功能。开发完成以后只需要将几个文件夹复制到生产环境中即可运行，由于使用Jet使用es5构建，所以无需经过打包转化等操作。
+</div>
+<!-- <div class='text indent'>
+    该API文档完全使用Jet开发，您可以<a href="https://www.theajack.com/jet/jet-api.zip" download='jet-api.zip' class='link'>点击下载</a>该项目作为使用Jet的参考。后面的安装使用章节会有一个更简单的、更易于起步的项目供您下载。
+</div> -->
 <div class='text'>
     Jet主要由以下几个部分构成：
     <div class='list'>

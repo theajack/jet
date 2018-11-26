@@ -1,5 +1,5 @@
-Jet.$define('Scroll', function () {
-    var _g = Jet.$root;
+Jet.define('Scroll', function () {
+    var _g = Jet.root;
     var max;
     var isMobile=($J.width()<600);
     var _checkScroll = function () {
@@ -27,7 +27,7 @@ Jet.$define('Scroll', function () {
     } else {
         var menuScroll = 0;
         $J.id('menu').onmousewheel = function (e) {
-            //Jet.$root.stopPro(e);
+            //Jet.root.stopPro(e);
             if (!_g.bodyFix) _g.bodyFix = true;
             if (max > 0) {
                 var _top = menuScroll + $J.sign(e.wheelDelta) * 80;
@@ -45,17 +45,17 @@ Jet.$define('Scroll', function () {
         }
         window.onresize = _checkScroll;
     }
-    Jet.$export({
+    Jet.export({
         scrollTopMargin:function(){
             return -(($J.width()<600)?50:5);
         },
         routed: function () {
-            document.documentElement.scrollTop = 0;
-            $J.body().scrollTop = 0;
+            var root=$J.id('rootApp')
+            root.scrollTop = 0;
             $J.attr('jump-to').each(function (item) {
                 $J.attr('jump-des="' + item.attr('jump-to') + '"').exist(function (ele) {
                     item.clk(function () {
-                        $J.scrollTo(ele.offsetTop + Jet.$module.Scroll.scrollTopMargin());
+                        root.scrollTo(ele.offsetTop + Jet.module.Scroll.scrollTopMargin());
                     });
                 });
             });
@@ -63,16 +63,16 @@ Jet.$define('Scroll', function () {
             if (Jet.router.lastTrueHash !== "#/code") {
                 $J.cls('j-code').each(function (item) {
                     if (!item.hasClass('not-test')) {
-                        item.before('<button class="j-btn test-online" onclick="Jet.$root.testOnLine(this)"><i class="j-icon icon-edit"></i>在线使用</button>')
+                        item.before('<button class="j-btn test-online" onclick="Jet.root.testOnLine(this)"><i class="j-icon icon-edit"></i>在线使用</button>')
                     }
                 });
 
                 if (typeof _g._top !== 'undefined') {
-                    $J.body().scrollTop = _g._top;
+                    root.scrollTop = _g._top;
                     _g._top = undefined;
                 }
             }
-            Jet.footer.setLink(Jet.$module.Content.getJumpInfo())
+            Jet.comp.footer.setLink(Jet.module.Content.getJumpInfo())
             this.routeFunc();
         },
         checkScroll: _checkScroll,
