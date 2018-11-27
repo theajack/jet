@@ -66,10 +66,10 @@
         if (Jet.lang.used) {
             _JT.attr(_lang)._JT_each(function (item) {//静态文字
                 item._JT_html(item._jet_langs[Jet.lang.type]);
-                if(C._canUse())Jet.valid.init(item);
+                if(C._canUse('valid'))Jet.valid.init(item);
             });
             Jet.lang.jets._JT_each(function (item) {//绑定文字
-                item.refresh('valid');
+                item.refresh();
             });
         }
     }
