@@ -1,7 +1,7 @@
 # jet-js-cli
 ### [theajack](https://www.theajack.com/)
-#### [Jet.js](https://www.theajack.com/jet) 的脚手架工具，帮助您更便捷地使用Jet
-#### [Jet.js](https://www.theajack.com/jet) Scaffolding tools to help you use Jet.js framework more easily
+#### [Jet.js](https://www.jet-js.com) 的脚手架工具，帮助您更便捷地使用Jet
+#### [Jet.js](https://www.jet-js.com) Scaffolding tools to help you use Jet.js framework more easily
 #### Jet 是一个轻量级、渐进式的 JS MVVM框架
 #### Jet is a lightweight, progressive JS MVVM framework
 
