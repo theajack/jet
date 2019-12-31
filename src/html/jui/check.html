@@ -1,0 +1,70 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>复选框与复选框组</div>
+
+<div class="sub">
+    <div class="text">
+        请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class="j-checkbox-group" jui-bind='fruitList'>
+    &lt;!--使用icon-->
+    &lt;div class="j-checkbox" icon='pencil'>芒果&lt;/div>
+    &lt;div class="j-checkbox">西瓜&lt;/div> 
+    &lt;div class="j-checkbox" disabled>橘子禁用&lt;/div> 
+&lt;/div>
+&lt;div j='fruitList' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;div class="j-checkbox-group">
+    &lt;div class="j-checkbox" icon='pencil'>芒果&lt;/div>
+    &lt;!--使用checked-->
+    &lt;div class="j-checkbox" checked>西瓜&lt;/div> 
+    &lt;div class="j-checkbox" disabled>橘子禁用&lt;/div> 
+&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        fruitList:['芒果']
+    }
+});
+&lt;/script>
+    </div>
+    <div class="out">
+        <div class="j-checkbox-group" jui-bind='fruitList'>
+            <div class="j-checkbox" icon='pencil'>芒果</div>
+            <div class="j-checkbox">西瓜</div> 
+            <div class="j-checkbox" disabled>橘子禁用</div> 
+        </div>
+        <div j='fruitList' jfor-inline>
+            <span j='$value'></span>
+        </div>
+        <br>
+        <div class="j-checkbox-group">
+            <div class="j-checkbox" icon='pencil'>芒果</div>
+            <div class="j-checkbox" checked>西瓜</div> 
+            <div class="j-checkbox" disabled>橘子禁用</div> 
+        </div>
+    </div>
+    <div class='text'>checkbox group 对应的 JUI对象有以下以下几个方法：</div>
+    <div class="list">
+        <div>1.selectAll():选中当前checkbox group下的所有checkbox</div>
+        <div>2.clear():清空当前checkbox group下的所有checkbox的选中状态</div>
+        <div>3.remove(arg):删除当前group中的某一个checkbox，参数可以是checkbox对象或checkbox位于checkbox group的索引</div>
+        <div>4.removeAll():删除当前group中的所有checkbox</div>
+    </div>
+</div>
+
+<script>
+    new Jet({
+        data:{
+            fruitList:['芒果']
+        }
+    });
+</script>

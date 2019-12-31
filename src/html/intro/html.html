@@ -1,0 +1,38 @@
+
+<div class='title'>Jet组件</div>
+<div class='text indent'>Jet组件的是html后缀的文件，语法与普通的html一样。
+    区别在去无需使用html、head和body标签。</div>
+<div class='title'>script 和 style 标签</div>
+<div class='text indent'>
+    可以在Jet组件的任何位置插入style标签和script标签，使用<span class='red'>src</span>
+    <span class='light-text'>(外联样式也使用style标签而不是link标签)</span>
+    属性可以引用外联样式和脚本，但是外联的样式文件必须放在/src/css文件夹中，外联的脚本必须放在/src/js文件夹中。
+    可以使用嵌套文件夹。css和js代码都只在当前页面生效。如果想要使用全局样式，
+    请在/src/css/common.css中编写。对于js，当然您也可以使用全局js，直接在index.html中以script标签引入，但是不推荐这么做。
+</div>
+<div class='text'>以下是一个标准的Jet组件实例
+</div>
+<div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;style src='hello.css'>&lt;/style><!--外联样式-->
+&lt;style>
+    /*内联样式*/
+&lt;/style>
+<div>
+    这是一个Jet组件示例
+</div>
+&lt;script src='hello.js'>&lt;/script><!--外联脚本-->
+&lt;script>
+    //内联脚本
+&lt;/script>
+</div>
+<div class='title' jump-des='scoped'>scoped 属性</div>
+<div class='text indent'>
+    路由页面或者jload页面的Jet组件中的style标签的 <span class="red">scoped</span> 属性表示css样式是否只在当前组件中生效。
+    若是不加该属性或是设置该属性为false，则表示改样式表会作用在html的所有dom元素上。
+    若设置了 scoped 属性且值不为false，则改样式表只会最用在当前组件中的所有dom元素上。
+</div>
+<div class='text indent'>
+    当组件被销毁或移除时，组件的所有样式表也将被移除。
+</div>
+<div class='title' jump-des='img'>图片</div>
+<div class='text indent'>在Jet组件或者Jload文件中使用img标签，src只需要指定图片的名称即可，可以包含文件夹。Jet会自动到/src/image/ 目录下查找对应的图片。若是src属性 使用的是绝对路径（/ 开头），则Jet不会对其处理。</div>

@@ -1,0 +1,38 @@
+
+<!-- <div j='user'>
+    <span j='name'></span>:
+    <span jif='{{$.age}}>20:class[_red]' j='age'></span>
+</div>
+<div j='message' jif='{{$.message}}=="hello jload":class[_red]'></div> 
+<div j='$props'>
+    <div j='each'>
+        <span j='name'></span>:
+    </div>
+</div>
+<div></div>
+<script>
+    new Jet({
+        onmounted:function(){
+            //debugger
+            this.$props.each.name='new name'
+        },
+        data:{
+            message:'hello jload',
+        }
+    })
+</script> -->
+
+<div>aaa</div>
+<script>
+    new Jet({
+        onmounted:function(){
+            //debugger;
+        },
+        func:{
+            log:function() {
+                //debugger;
+                console.log(this._tools.name)
+            }
+        }
+    })
+</script>

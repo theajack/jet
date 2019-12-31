@@ -1,0 +1,123 @@
+<style>
+    .a{
+        color:#eee;
+    }
+</style>
+<div class='title'>Jroot</div>
+<div class="sub">
+    <div class='text indent'>
+        在Jet中，存在一个数据的作用域，若是作用域内没有绑定的属性，则会自动返回到上一级作用域查找，若是查到根jet元素都没有该属性，则会放弃渲染这个元素。
+        若是想直接跳过这样一个查找的过程，将元素的作用域直接设置为根元素，那么您需要使用<span class="red">Jroot</span>属性。
+        使用Jroot，可以将html元素绑定到Jet根元素上，从而避免jet元素只能一级一级地继承父元素的jet数据。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;div j='name'>
+        &lt;div j='value'>&lt;/div>
+        &lt;div j='message'>&lt;/div>
+        &lt;div j='message' jroot>&lt;/div>
+    &lt;/div>
+    &lt;br>
+    &lt;div j='message'>&lt;/div>
+    &lt;div j='message' jroot>&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            user:{
+                name:{
+                    value:'jack',
+                    message:'message name'
+                },
+                message:'message user'
+            },
+            message:'message root'
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div j='user'>
+                <div j='name'>
+                    <div j='value'></div>
+                    <div j='message'></div>
+                    <div j='message' jroot></div>
+                </div>
+                <br>
+                <div j='message'></div>
+                <div j='message' jroot></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='r'>$r</div>
+<div class="sub">
+    <div class='text indent'>
+        对于使用了<span class="red">Jattr，Jstyle，Jif，Jshow</span>且没有使用Jroot属性或是已经使用了当前作用域数据的元素，可以在属性值中使用 <span class="red">$r</span> 关键字来使用Jet数据。（在其他元素中不许需要，因为其他元素可以直接使用this来使用Jet数据）请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;div j='name' jdom='$r'>
+        &lt;div j='value' jif='{{$r.message}}=="message root":class[c1|c2]'>$+1&lt;/div>
+        &lt;div j='value' jshow='{{$r.message}}=="message name"'>$+2&lt;/div>
+        &lt;div j='value' jattr='attr:{{$r.message}}'>$+3&lt;/div>
+        &lt;div j='value' jstyle='color:{{$r.color}}'>$+4&lt;/div>
+    &lt;/div>
+    &lt;div j='html'>&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        onmounted:function(){
+            this.html=this.$dom.$r.html;
+        },
+        data:{
+            html:'',
+            user:{
+                name:{
+                    value:'jack',
+                    message:'message name'
+                },
+                message:'message user'
+            },
+            message:'message root',
+            color:'#f44'
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div j='user'>
+                <div j='name' jdom='$r'>
+                    <div j='value' jif='{{$r.message}}=="message root":class[c1|c2]'>$+1</div>
+                    <div j='value' jshow='{{$r.message}}=="message name"'>$+2</div>
+                    <div j='value' jattr='attr:{{$r.message}}'>$+3</div>
+                    <div j='value' jstyle='color:{{$r.color}}'>$+4</div>
+                </div>
+                <div j='html'></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        onmounted:function(){
+            this.html=this.$dom.$r.html;
+        },
+        data:{
+            html:'',
+            user:{
+                name:{
+                    value:'jack',
+                    message:'message name'
+                },
+                message:'message user'
+            },
+            message:'message root',
+            color:'#f44'
+        }
+    });
+</script>

@@ -1,0 +1,155 @@
+<div class='title'>动态元素</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">JL()</span> 或者 <span class="red">new Jet.lang()</span> 方法可以定义一个支持国际化语言的动态的Jet数据。请看一个例子：
+    </div>
+    
+    <div class='text'>
+        index.js 或者 index.html 中插入以下代码：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en']);
+    </div>
+    <div class='text'>
+        Jet组件中：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;span j='message'>&lt;/span> 
+&lt;span j='message2'>&lt;/span>&lt;br>
+&lt;button jon='click:Jet.lang.type="cn"'>设置中文&lt;/button>
+&lt;button jon='click:Jet.lang.type="en"'>设置英文&lt;/button>
+&lt;script>
+    new Jet({
+        data:{
+            message:JL({
+                en:'hello',
+                cn:'你好'
+            }),
+            message2:new Jet.lang({
+                en:' world',
+                cn:',世界'
+            })
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <span j='message'></span> 
+            <span j='message2'></span><br>
+            <button jon='click:Jet.lang.type="cn"'>设置中文</button>
+            <button jon='click:Jet.lang.type="en"'>设置英文</button>
+        </div>
+    </div>
+    <div class='title'>使用json或数组作为数据源</div>
+    <div class='text'>
+        除了只使用值类型外，JL还可以使用json数据或者数组来作为数据源。请看一个例子：
+    </div>
+    
+    <div class='text'>
+        index.js 或者 index.html 中插入以下代码：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en']);
+    </div>
+    <div class='text'>
+        Jet组件中：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;div j='name'>&lt;/div>
+    &lt;div j='height'>&lt;/div>
+&lt;/div> 
+&lt;button jon='click:Jet.lang.type="cn"'>设置中文&lt;/button>
+&lt;button jon='click:Jet.lang.type="en"'>设置英文&lt;/button>
+&lt;script>
+    new Jet({
+        data:{
+            user:JL({
+                en:{
+                    name:'jack',
+                    height:'180cm'
+                },cn:{
+                    name:'杰克',
+                    height:'180厘米'
+                }
+            })
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div j='user'>
+                <div j='name'></div>
+                <div j='height'></div>
+            </div> 
+            <button jon='click:Jet.lang.type="cn"'>设置中文</button>
+            <button jon='click:Jet.lang.type="en"'>设置英文</button>
+        </div>
+    </div>
+    <div class='title'>将Jet数据整个作为数据源</div>
+    <div class='text'>
+        也可以将整个Jet数据作为数据源。请看一个例子：
+    </div>
+    
+    <div class='text'>
+        index.js 或者 index.html 中插入以下代码：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en']);
+    </div>
+    <div class='text'>
+        Jet组件中：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;div j='name'>&lt;/div>
+    &lt;div j='height'>&lt;/div>
+&lt;/div> 
+&lt;button jon='click:Jet.lang.type="cn"'>设置中文&lt;/button>
+&lt;button jon='click:Jet.lang.type="en"'>设置英文&lt;/button>
+&lt;script>
+    new Jet({
+        data:JL({
+            en:{
+                user:{
+                    name:'jack',
+                    height:'180cm'
+                }
+            },cn:{
+                user:{
+                    name:'杰克',
+                    height:'180厘米'
+                }
+            }
+        })
+    })
+&lt;/script>
+    </div>
+    <div class='text'>请使用在线使用来查看运行效果。值得注意的是 JL 或 Jet.lang 中不能再包含 JL 或 Jet.lang。
+    </div>
+</div>
+<script>
+    new Jet({
+        data:{
+            message:JL({
+                en:'hello',
+                cn:'你好'
+            }),
+            message2:new Jet.lang({
+                en:' world',
+                cn:',世界'
+            }),
+            user:JL({
+                en:{
+                    name:'jack',
+                    height:'180cm'
+                },cn:{
+                    name:'杰克',
+                    height:'180厘米'
+                }
+            })
+        }
+    })
+</script>

@@ -1,0 +1,73 @@
+<div class='title'>资源管理</div>
+<div class='sub text'>
+    <div>
+        Jet 通过  <span class='red'>Jet.res.define()</span> 方法统一定义。之后便可以在组件中用使用变量的方式引用资源。<br>
+        Jet 中将资源分为以下五个大类:
+    </div>   
+    <div class='list'>
+        <div>1.html: <span class="light-text">(后缀为html的文件，为Jet中的路由页面和组件；默认路径为 /src/html)</span></div>
+        <div>2.js：<span class="light-text">(后缀为js的文件，为Jet中的模块和js文件；默认路径为 /src/js)</span></div>
+        <div>3.css：<span class="light-text">(后缀为css的文件，为Jet中的样式文件；默认路径为 /src/css)</span></div>
+        <div>4.image：<span class="light-text">(图片资源文件，缺省后缀名为 .jpg；默认路径为 /src/image)</span></div>
+        <div>5.media：<span class="light-text">(媒体资源文件，包含音频、视频和其他，缺省后缀名为 .mp3；默认路径为 /src/media)</span></div>
+    </div>
+    <div>
+        声明资源之后，可以通过<span class='red'>Jet.res[type][name]</span>获取到对应的资源文件地址。其中type是资源的类别，name是自定义的资源名称。<br>
+        更常用的方法是在引用资源文件时，使用 <span class='red'>@[name]</span> 作为引用目录，Jet会自动判断资源的类型。在引入模块和定义路由时，也可以使用这种语法。<br>
+        这种资源统一声明管理的好处是，如果资源重命名或是资源需要替换或是目录层级发生改变时，只需要对 Jet.res.define() 方法进行修改就可以。<br>
+        在一些复用性不是很高的资源文件上，您也可以不使用这种管理方式，比如路由页面。
+    </div>  
+    <div>
+        请看几个例子
+    </div>   
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;script>
+//定义
+Jet.res.define({
+    html:{
+        forLoad:'comp/for_load', //缺省后缀名为.html，可以包含子目录
+        page1:'page/p1.html'
+    },
+    js:{
+        module1:'module/1.js',
+        ajs:'a.js'
+    },
+    css:{
+        test:'test.js'
+    }
+    image:{
+        wechat:'wechat.png',
+        alipay:'alipay'//缺省后缀名为.jpg
+    },
+    media:{
+        music:'audio/music.mp3',
+        video:'video/video.mp4'
+    }
+})
+&lt;/script>
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+//使用
+&lt;style src='@test'>&lt;/style>&lt;!--样式引用-->
+&lt;div jload='@forLoad'>&lt;/div>&lt;!--jload引用-->
+&lt;img src="@wechat" alt="">&lt;!--图片引用-->
+&lt;audio src="@music">&lt;/audio>&lt;!--音频引用-->
+&lt;video src="@video">&lt;/video>&lt;!--视频引用-->
+&lt;script src='@ajs'>&lt;/script>&lt;!--script引用-->
+&lt;script>
+    Jet.router.use({//路由引用
+        router:{
+            '/':'@page1',
+        }
+    });
+    Jet.import('@module1',function(){//模块引用
+    })
+    Jet.res.image.wechat //通过Jet.res 对象获取到文件目录
+&lt;/script>
+    </div>
+</div>
+
+<script>
+    new Jet({
+    })
+</script>

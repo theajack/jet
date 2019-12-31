@@ -1,0 +1,55 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>选项卡</div>
+
+<div class="sub">
+<div class='text'>
+    请看一个例子：
+    <div class="out">
+        <div class='j-tab' jui-bind='page'>
+            <div value='p1' title='第一页'>
+                1
+            </div>
+            <div value='p2' title='第二页'>
+                2
+            </div>
+            <div value='p3' title='第三页'>
+                3
+            </div>
+        </div>
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class='j-tab' jui-bind='page'>
+    &lt;div value='p1' title='第一页'>
+        1
+    &lt;/div>
+    &lt;div value='p2' title='第二页'>
+        2
+    &lt;/div>
+    &lt;div value='p3' title='第三页'>
+        3
+    &lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            page:'p2',
+        }
+    });
+&lt;/script>
+    </div>
+</div>
+
+<script>
+    new Jet({
+        data:{
+            page:'p2',
+        }
+    });
+</script>

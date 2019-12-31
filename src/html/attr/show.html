@@ -1,0 +1,67 @@
+<div class='title'>Jshow</div>
+<div class="sub">
+    <div class='title' jump-des='boolexp'>1.使用布尔值</div>
+    <div class='text'>
+        使用Jshow属性，可以根据一个布尔值或者布尔表达式来显示或者隐藏绑定的html元素。请看下面一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input jon='click:this.bool=!this.bool' type="button" value='改变布尔值'>
+&lt;div jshow='bool'>
+    示例html元素
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            bool:true
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input jon='click:this.bool=!this.bool' type="button" value='改变布尔值'>
+            <div jshow='bool'>
+                示例html元素
+            </div>
+        </div>
+    </div>
+    
+    <div class='title' jump-des='boolexp'>2.使用布尔表达式</div>
+    <div class='text'>
+        jshow的条件使用一个布尔值表达式，与使用布尔值不同的是布尔表达式中的变量要使用 {{}} 包裹起来。请看一个例子
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+改变绑定数据的值：
+&lt;input j='number' type="text">
+&lt;div jshow='{{$.number}}>10'>
+    示例html元素
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            number:10
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            改变绑定数据的值：
+            <input input j='number' type="text">
+            <div jshow='{{$.number}}>10'>
+                示例html元素
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        name:'jshow',
+        data:{//数据
+            bool:true,
+            number:10
+        }
+    });
+</script>

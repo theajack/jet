@@ -1,0 +1,443 @@
+<!-- <style scoped=false>
+    ._red{
+        color:#f00;
+    }
+</style>
+<div class='title'>Jload</div>
+<div class="sub">
+    <div class='text indent'>
+        使用Jload可以在某个元素之内加载其他的Jet组件，加载的模板可以使用父模板的jet，也可以自己定义jet。
+        使用的格式是 <span class='red'>Jload='file'</span> Jet组件文件可以忽略 .html 后缀。
+        Jload使用的Jet组件必须位于 /src/html目录下面，可以嵌套使用文件夹。
+        接下来请看一个加载for_load.html文件的例子:
+    </div>
+    <div class='text'>
+        for_load.html：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;span j='name'>&lt;/span>:
+    &lt;span jif='{{$.age}}>20:class[_red]' j='age'>&lt;/span>
+&lt;/div>
+&lt;div j='message' jif='{{$.message}}=="hello jload":class[_red]'>&lt;/div>
+&lt;br>
+&lt;div j='user'>
+    修改父模版年龄：&lt;input type="text" j='age'>
+&lt;/div>
+&lt;div>
+    修改当前模板的message：&lt;input type="text" j='message'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            message:'hello jload'
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>
+        父模板代码:
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;style>
+    ._red{
+        color:#f00;
+    }
+&lt;/style>
+&lt;div jload='/attr/for_load.html'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            user:{
+                name:'jack',
+                age:20
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jload='/attr/for_load.html'></div>
+        </div>
+    </div>
+    
+    <div class='title' jump-des='jpar'>jpar 属性</div>
+    <div class='text indent'>
+            jpar 属性用于设置子组件Jet元素的父Jet元素，用于父组件与子组件间状态共享。详见 <span class="link" jon='Jet.root.jumpTo("/intro/grammer","par")'>par参数</span>
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+//父Jet元素
+new Jet({
+    name:'parent',
+    data:{
+    }
+});
+
+// 设置之后jload子组件中的Jet元素的父元素就是 Jet.parent
+&lt;div jload='/attr/for_load.html' jpar='parent'>&lt;/div>
+    </div>
+</div>
+<script>
+    Jet.root.setLink({
+        last:'Jon',
+        lastUrl:'/attr/on',
+        next:'Jroot',
+        nextUrl:'/attr/root',
+    });
+    new Jet({
+        data:{
+            user:{
+                name:'jack',
+                age:20
+            }
+        }
+    });
+</script> -->
+
+<style>
+        ._red{
+            color:#f00;
+        }
+    </style>
+    <div class='title'>Jload</div>
+    <div class="sub">
+        <div class='text indent'>
+            Jet 使用 Jload 加载组件。使用Jload可以在某个元素之内加载其他的Jet组件，加载的模板可以使用父模板的jet，也可以自己定义jet。
+            使用的格式是 <span class='red'>Jload='file'</span> Jet组件文件可以忽略 .html 后缀。
+            file 可以使用<span class='link' jon='Jet.root.jumpTo("/intro/res")'>资源管理</span>中定义的资源名。
+            Jload使用的Jet组件必须位于 /src/html目录下面，可以嵌套使用文件夹。
+        </div>
+        <div class='text indent'>
+            jload 元素中若是设置了html内容，则会在该jload元素渲染之前显示设置的html内容，这一点很适合做一个加载动画，如下：
+        </div>
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;div jload='/attr/for_load.html'>
+    &lt;div class='loading'>
+        &lt;i class="j-icon icon-spinner-indicator icon-spin">&lt;/i>
+        &lt;span>加载中...&lt;/span>
+    &lt;/div>
+&lt;/div>
+        </div>
+        <div class='text indent' jump-des='jpar'>
+            使用<span class='red'>jpar</span>属性设置子组件Jet元素的父Jet元素，用于父组件与子组件间状态共享。jpar值为父组件的name属性。
+            若是不设置jpar属性，Jet会将jload所在页面的Jet元素作为load元素的父元素。
+        </div>
+        <div class='text indent' jump-des='jonload'>
+            使用<span class='red'>jonload</span>属性可一个Jload元素添加一个加载完成的回调函数，值可以是其父Jet元素的一个Jet函数名、元素自己的一个而函数名或者一串js代码。
+        </div>
+        <div class='text indent'>
+            jonload 支持一个 json类型的参数，它有三个属性，分别是：ele(jload对应的dom元素)、par(父jet元素)、jet(自身jet元素)
+        </div>
+        <div class='text indent'>
+            接下来请看一个加载for_load.html文件的例子:
+        </div>
+        <div class='text'>
+            for_load.html：
+        </div>
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;span j='name'>&lt;/span>:
+    &lt;span jif='{{$.age}}>20:class[_red]' j='age'>&lt;/span>
+&lt;/div>
+&lt;div j='message' jif='{{$.message}}=="hello jload":class[_red]'>&lt;/div>
+&lt;br>
+&lt;div j='user'>
+    修改父模版年龄：&lt;input type="text" j='age'>
+&lt;/div>
+&lt;div>
+    修改当前模板的message：&lt;input type="text" j='message'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            message:'hello jload'
+        }
+    })
+&lt;/script>
+        </div>
+        <div class='text'>
+            父模板代码:
+        </div>
+        <div class='j-code' disabled width='99%' height='auto'>
+&lt;style>
+    ._red{
+        color:#f00;
+    }
+&lt;/style>
+&lt;div jload='/attr/for_load.html'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            user:{
+                name:'jack',
+                age:20
+            }
+        }
+    });
+&lt;/script>
+        </div>
+        <div class='text'>
+            以下是输出的结果：
+            <div class='out'>
+                <div jload='/attr/for_load.html' jonload='resetTop'></div>
+                <!-- <div j='arr'>
+                    <div jattr='name:{{$index}}'>a'a</div>
+                </div> -->
+                <!-- <div j='arr'>
+                    <div j=name ></div>
+                </div>
+                <div j='arr'>
+                    <div j='$each' >
+                        <div j=$index></div>
+                        <div jload='/attr/for_load2.html' jattr='name:"load"+{{$index}} '
+                            :user='user'
+                            :each='$'
+                            @log='console.log(this,$,opt)'
+                        >
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class='title' jump-des='par-child'>父子组件通信</div>
+    <div class="sub">
+        <div class="text">Jet中的父子组件通信有两种方式，一种是直接引用，一种是属性传参。</div>
+        <div class='title'>1.引用方式通信</div>
+        <div class="text">
+            在子组件中可以使用 <span class='red'>this.$par</span> 获取到父组件 Jet对象的引用。
+        </div>
+        <div class="text">
+            在父组件中可以使用 <span class='red'>this.$child</span> 获取到它的所有子组件的集合,该集合是一个json对象，键是子组件的name参数，值是子组件Jet对象的引用。
+            若是子组件没有指定name参数，Jet会为其指定一个name参数。若是想利用这种方式通信，推荐给子组件指定name参数。
+        </div>
+        <div class='title'>2.属性传参方式通信</div>
+        <div class="text">
+          推荐使用这种方式进行父子组件通信。该方式是通过在子组件上设置属性来传递父组件的属性或方法或计算属性和方法。
+          有三种类型的属性声明，如下：
+            <div class="list">
+                <div>1. :name='' <span class="light-text">(声明子元素的数据：可以是父元素中的data或是一个js表达式【支持Jet中的数据作用域】)</span></div>
+                <div>2. ::name='' <span class="light-text">(声明子元素的数据：同上 不同的是会将数据做一个深拷贝而不是直接引用，完全切断子元素与父元素的绑定关系)</span></div>
+                <div>3. @func='' <span class="light-text">(声明子元素的方法：可以是父元素中的func或是一个js表达式)</span></div>
+            </div>
+        </div>
+        <div class="text"><span class='bold'>属性命名：</span>由于属性不支持大写，所以以 <span class="red">-</span> 来代替大写，比如 user-data 会被Jet翻译成 userData</div>
+        
+        <div class="text">对于属性值，可以是<span class="red">数据作用域内的数据</span>、<span class="red">js表达式</span>或是<span class="red">普通的字符串</span>。</div>
+        <div class="text"><span class='bold'>js表达式：</span>当属性值使用时，需要使用 <span class="red">{ }</span> 包裹起来，否则会当成一个字符串处理。</div>
+        <div class="text">注：当 js表达式与 : 组合使用时，仅支持单向数据流，即父元素数据改变会影响子元素，但是子元素数据改变不会影响父元素，这是因为这里的子元素数据是由父元素数据计算得到的，
+            而不是严格对应的。若想要让子元素数据改变后 反向计算得到对应父元素数据并且改变父元素数据，请使用 ondatachange 。</div>
+        
+        <div class="text">
+            <span class='bold'>保持父子组件双向绑定：</span>在使用 js表达式 时，如果想要在{}中引用的父元素数据也与子元素保持双向绑定，请使用 <span class="red">{{ }}</span> 包裹起引用的数据，使用方式就如同在 jif等元素中使用一样，
+            如 {{{$.age}}+1} 最外层括号表示是使用js表达式，里面的双层括号表示保持双向绑定。
+        </div>
+        <div class="text">如果不是js表达式 Jet会首先检测是不是数据作用域内的数据，如果不是，则会被当作字符串处理。</div>
+        <div class="text">
+            在js表达式中 this指代父元素，有两个参数<span class="red">$</span>和<span class="red">opt</span>，$指代作用域内的数据，opt指代如下
+            <pre>opt={
+    data:指代作用域内的数据,
+    ele:指代当前dom元素,
+    jet:指代父Jet元素,
+    root:指代根Jet元素
+}</pre>
+        在子元素中使用 this.$props对象就可以获取到父元素给子元素传递的数据。
+        也可以使用 属性J 绑定 $props 中的数据。
+        </div>
+        <div class="text">
+            使用属性J时，除了使用$props绑定数据，还可以直接使用父元素的数据来绑定。请看一个例子：
+        </div>
+        <div class="text">父组件：</div>
+        <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='message'>&lt;/div>
+&lt;input type="text" j='message'>
+&lt;div j='data'>
+    &lt;div j='user'>
+        &lt;span j='name'>&lt;/span>
+        &lt;input  type='text' j='name'/>
+    &lt;/div>
+&lt;/div>
+&lt;div j='user2'>
+    &lt;span j='name'>&lt;/span>
+    &lt;input  type='text' j='name'/>
+&lt;/div>
+&lt;br>
+&lt;div>使用根数据,并且全部使用父Jet数据或方法&lt;/div>
+&lt;!--直接使用父元素数据-->
+&lt;div jload='/comp/child.html'
+    :child-user='user2'
+    :message='{{{$.message}}+"x"}'
+    ::user-clone='user2'
+    :index='1'
+    @child-log='log'
+>&lt;/div> 
+&lt;br>
+&lt;div>使用作用域数据,并且使用js表达式&lt;/div>
+&lt;div j='data'>
+    &lt;!--这里的 child-user 不在支持双向绑定-->
+    &lt;!--data 中 不存在message属性，所以这里的message没判定为字符串-->
+    &lt;div jload='/comp/child.html'
+        :child-user='{{{$.user}}}'
+        ::user-clone='{{name:"自定义"}}'
+        :message='message'
+        :index='2'
+        @child-log='{alert(JSON.stringify($))}'
+    >&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            user2:{
+                name:'jack2',
+                age:20
+            },
+            data:{
+                user:{
+                    name:'jack3',
+                    age:20
+                }
+            },
+            message:'Hello Jet'
+        },
+        func:{
+            log:function(opt){
+                //this 默认指代父元素
+                console.log('this指代：',this)
+                console.log('参数:',opt)
+                alert('from child')
+            }
+        }
+    });
+&lt;/script>
+        </div>
+        <div class="text">子组件：</div>
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;!--直接使用父元素数据-->
+&lt;div style='margin:20px;padding:10px;background-color:#666'>
+    子元素 &lt;span j='index'>&lt;/span>:
+    &lt;div j='data'>
+        &lt;div j='user'>
+            &lt;span j='name'>&lt;/span>
+            &lt;input  type='text' j='name'/>
+        &lt;/div>
+    &lt;/div>
+    &lt;!--直接使用父元素数据-->
+    &lt;div j='user2'>
+        &lt;span j='name'>&lt;/span>
+        &lt;input  type='text' j='name'/>
+    &lt;/div>
+    &lt;div j='$props'>
+        &lt;!--使用直接引用数据-->
+        &lt;div j='childUser'>
+            直接引用父元素数据：&lt;span j='name'>&lt;/span>：&lt;input  type='text' j='name'/>
+        &lt;/div>
+        &lt;!--使用克隆数据-->
+        &lt;div j='userClone'>
+            克隆数据：&lt;span j='name'>&lt;/span>：&lt;input type='text' j='name'/>
+        &lt;/div>
+        &lt;div>
+            值类型的双向绑定:&lt;span j='message'>&lt;/span>：&lt;input type='text' j='message'/>
+        &lt;/div>
+    &lt;/div>
+    &lt;!--使用父元素方法,若是有重名方法，会优先使用子元素方法-->
+    &lt;button jon='childLog'>父元素方法&lt;/button>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            mes:'from child',
+            index:-1,
+        },
+        onmounted:function(){
+            //赋值
+            this.index=this.$props.index;
+        }
+    })
+&lt;/script>
+        </div>
+        <div>以下是输出结果：</div>
+        <div class="out">
+            <div j='message'></div>
+            <input type="text" j='message'>
+            <div j='data'>
+                <div j='user'>
+                    <span j='name'></span>
+                    <input  type='text' j='name'/>
+                </div>
+            </div>
+            <div j='user2'>
+                <span j='name'></span>
+                <input  type='text' j='name'/>
+            </div>
+            <br>
+            <div>使用根数据,并且全部使用父Jet数据或方法</div>
+            <!--直接使用父元素数据-->
+            <div jload='/comp/child.html'
+                :child-user='user2'
+                :message='{{{$.message}}+"x"}'
+                ::user-clone='user2'
+                :index='1'
+                @child-log='log'
+            ></div> 
+            <br>
+            <div>使用作用域数据,并且使用js表达式</div>
+            <div j='data'>
+                <!--这里的 child-user 不在支持双向绑定-->
+                <!--data 中 不存在message属性，所以这里的message没判定为字符串-->
+                <div jload='/comp/child.html'
+                    :child-user='{{{$.user}}}'
+                    ::user-clone='{{name:"自定义"}}'
+                    :message='message'
+                    :index='2'
+                    @child-log='{alert(JSON.stringify($))}'
+                ></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Jet({
+            name:'jload',
+            data:{
+                user:{
+                    name:'jack',
+                    age:20
+                },
+                user2:{
+                    name:'jack2',
+                    age:20
+                },
+                data:{
+                    user:{
+                        name:'jack3',
+                        age:20
+                    }
+                },
+                arr:[{
+                    name:'jack1',
+                    age:20
+                },{
+                    name:'jack2',
+                    age:20
+                }],
+                message:'Hello Jet'
+            },
+            func:{
+                resetTop:function(){
+                    if(Jet.root.__des=='par-child'){
+                        Jet.root.__des='';
+                        var top=$J.attr('jump-des="par-child"').offsetTop-55;
+                        document.documentElement.scrollTop=top;
+                        $J.body().scrollTop=top;
+                    }
+                },
+                log:function(opt){
+                    //this 默认指代父元素
+                    console.log('this指代：',this)
+                    console.log('参数:',opt)
+                    alert('from child')
+                }
+            }
+        });
+    </script>

@@ -1,0 +1,58 @@
+<div class='title'>less</div>
+<div class="sub">
+    <div class='text indent'>
+            Less 是一门 CSS 预处理语言，它扩充了 CSS 语言，增加了诸如变量、混合（mixin）、函数等功能，让 CSS 更易维护、方便制作主题、扩充。
+    </div>
+    <div class='text indent'>
+        Jet对less源码进行了部分修改，使其适用于在Jet程序中使用，并将其纳入Jet的官方库。Jet中使用的less版本为3.8.1。
+    </div>
+    <div class='text indent'>
+        Jet less 可以对 common.css，组件中的style标签以及组件中引入的外部 less 文件进行转译。
+        当您引入了less之后，Jet会默认对这css代码进行转译操作。当然若是您不希望某些css被转译，可以 
+        <span class='link' jump-to='no-less'>手动禁止</span> 这种默认行为。
+    </div>
+    <div class='text'>
+        很遗憾，由于less对Jet定义的 公共变量和函数的语法不支持，会在编译的时候异常甚至报错，所以less与 Jet的css变量和函数体系的语法不能同时用于同一个css标签或文件内。
+        若是你在引入了less的情况下想使用 Jet的css变量体系，那么在使用的 style上使用 jless='false' 来禁用less。
+    </div>
+    <div class='title'>使用</div>
+    <div class='text'>
+        使用 Jet.use 或 Jet.use.all 方法加载了less库之后，所有的css代码都会默认在加载时被转译，无需任何操作。
+    </div>
+    <div class='title' jump-des='no-less'>禁用less</div>
+    <div class='text'>
+        若您希望组件中的css或组件中引入的css代码不使用less转译，请在对应的 style 标签上设置属性 <span class="red">jless='false'</span>
+    </div>
+    <div class='text'>
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;style jless='false'>
+    
+&lt;/style>
+        </div>
+    </div>
+    <div class='text'>
+        若您希望common.css 不使用less转译，在 index.html 文件中对 common.css 添加 jless='false'
+    </div>
+    <div class='title' jump-des='Jet.less'>Jet.less</div>
+    <div class='text'>
+        使用了less之后，会在Jet会生成一个Jet.less对象，该对象上有一个很有用的方法，<span class="red">Jet.less.toCss()</span>.
+        刚方法接受一个 字符串类型的参数，返回一个字符串类型的参数，作用是将less转换为css。
+    </div>
+    <div class='text'>
+        另外，<span class="red">Jet.less</span>也暴露原始的Less对象。
+    </div>
+    <div class='title'>生产环境</div>
+    <div class='text'>
+        在运行时编译less代码会产生一定的开销。
+        若是您安装了 <span class='link' jon='click:Jet.router.route("https://www.npmjs.com/package/jet-js-cli",true)'>jet-js-cli</span> 并且使用 jet init 使用Jet，
+        可以通过 jet build 命令 配合 build.config.json 配置文件中设置 buildCssWithLess 为true，来将所有 less 打包转化为 css。
+        从而在生产环境中无需在运行时转译less.
+    </div>
+    <div class='text'>
+        通过 jet build 命令 配合 build.config.json 配置文件中设置 commenLess 为true，可以使用less编译common.css文件，你也可以将common.css文件名修改为 common.less。
+    </div>
+</div>
+<script>
+    new Jet({
+    });
+</script>

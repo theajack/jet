@@ -1,0 +1,102 @@
+<style>
+    .item{
+        border: 1px solid #fff;
+        background-color: #ddd;
+        margin: 20px;
+        padding: 10px;
+    }
+    .item.discount{
+        background-color: rgb(255, 213, 134);
+    }
+</style>
+<div class='item'>
+    总库存：<span j="sum"></span>
+</div>
+<div j='goods'>
+    <div class='item' jif='{{$.discount}}!=undefined:class[discount]'>
+        <div j='$index'>$+1</div>
+        <div>商品名称：
+            <span j='name'></span>
+        </div>
+        <div>原价：
+            <input class='j-input xs' type='number' j='price'/>
+        </div>
+        <div jshow='{{$.discount}}!=undefined'>
+            折扣：<span j='discount'></span>
+        </div>
+        <span>
+            售价：
+            <span j='price'>
+                $*(opt.parData.discount||1)
+            </span>
+        </span>    
+        <div>库存：
+            <input class='j-input xs' type='number' j='num'/>
+            <button class='j-btn xs' icon='plus' jon='add'></button>
+            <button class='j-btn xs' icon="minus" jon='reduce'></button>
+        </div>
+    </div>
+</div>
+<script>
+    JET({
+        data: {
+            goods: [
+                {
+                    name: 'T恤',
+                    num: 100,
+                    price: 100.00,
+                    discount:0.9
+                },
+                {
+                    name: '牛仔裤',
+                    num: 200,
+                    price: 200.00
+                },
+                {
+                    name: '羽绒服',
+                    num: 80,
+                    price: 1000.00
+                }
+            ],
+            sum: 0,
+        },
+        onmounted: function () {
+            this.countSum();
+        },
+        func: {
+            add: function (d) {
+                d.data.num++;
+            },
+            reduce: function (d) {
+                d.data.num--;
+            },
+            countSum: function () {
+                var s = 0;
+                this.goods.forEach(function (ele) {
+                    s += ele.num;
+                });
+                this.sum = s;
+            },
+        },
+        ondatachange: {
+            goods: {
+                $each: {
+                    num: function (d) {
+                        if(d.value===''||d.value<0){
+                            d.set(0)
+                            JUI.msg('库存必须大于等于0')
+                        }else{
+                            this.countSum();
+                        }
+                    },
+                    price: function (d) {
+                        if(d.value===''||d.value<0){
+                            d.set(0)
+                            JUI.msg('商品价格必须大于等于0')
+                        }
+                    }
+                }
+            }
+        }
+    })
+</script>

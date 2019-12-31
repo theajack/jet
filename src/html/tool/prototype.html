@@ -1,0 +1,76 @@
+<div class='title'>prototype扩展</div>
+<div class='sub'>
+    <div class='text indent'>
+        Jet对dom元素，数组和字符串的prototype进行了扩展，添加了一些常用的方法供开发者使用。不过为了尽量不引起命名冲突，所有的扩展方法都带有 _JT_ 的前缀。
+        这里只做介绍，详细的使用文档请参考<a class='link' target="view_window" href="https://www.theajack.com/jetterjs">Jetterjs开发文档</a>。
+    </div>
+    <div class='text'>
+        dom元素的扩展：
+        <div class="list">
+            <div>_JT_css <span class="light-text">(获取或修改样式)</span></div>
+            <div>_JT_attr <span class="light-text">(获取或修改属性值)</span></div>
+            <div>_JT_hasAttr <span class="light-text">(判断是否含有某属性)</span></div>
+            <div>_JT_removeAttr <span class="light-text">(移除某属性)</span></div>
+            <div>_JT_findTag <span class="light-text">(根据标签查找所有孩子元素)</span></div>
+            <div>_JT_findAttr <span class="light-text">(根据属性查找所有孩子元素)</span></div>
+            <div>_JT_select <span class="light-text">(根据选择器查找所有孩子元素)</span></div>
+            <div>_JT_findClass <span class="light-text">(根据类名查找所有孩子元素)</span></div>
+            <div>_JT_addClass <span class="light-text">(添加类)</span></div>
+            <div>_JT_removeClass <span class="light-text">(删除类)</span></div>
+            <div>_JT_hasClass <span class="light-text">(判断是否含有某类)</span></div>
+            <div>_JT_val <span class="light-text">(获取或修改value值)</span></div>
+            <div>_JT_txt <span class="light-text">(获取或修改innerText值)</span></div>
+            <div>_JT_content <span class="light-text">(获取或修改value或者innerText值)</span></div>
+            <div>_JT_html <span class="light-text">(获取或修改innerHTML值)</span></div>
+            <div>_JT_allHtml <span class="light-text">(获取或修改outerHTML值)</span></div>
+            <div>_JT_next <span class="light-text">(返回下一个元素)</span></div>
+            <div>_JT_prev <span class="light-text">(返回上一个元素)</span></div>
+            <div>_JT_child <span class="light-text">(返回某个或所有孩子元素)</span></div>
+            <div>_JT_clone <span class="light-text">(克隆元素)</span></div>
+            <div>_JT_parent <span class="light-text">(返回父元素)</span></div>
+            <div>_JT_prepend <span class="light-text">(在第一个位置插入一个或多个元素)</span></div>
+            <div>_JT_append <span class="light-text">(在最后一个位置插入一个或多个元素)</span></div>
+            <div>_JT_toArray <span class="light-text">(将元素或者元素集合转化为一个数组)</span></div>
+            <div>_JT_index <span class="light-text">(获取元素在父元素中的位置)</span></div>
+            <div>_JT_event <span class="light-text">(为元素绑定事件)</span></div>
+            <div>_JT_on <span class="light-text">(为元素绑定事件)</span></div>
+            <div>_JT_clk <span class="light-text">(为元素绑定点击事件)</span></div>
+            <div>_JT_empty <span class="light-text">(清空元素下的所有内容)</span></div>
+            <div>_JT_remove <span class="light-text">(删除自身)</span></div>
+            <div>_JT_each <span class="light-text">(对元素集合进行遍历)</span></div>
+            <div>_JT_last <span class="light-text">(获取元素集合的最后一个元素)</span></div>
+            <div>_JT_first <span class="light-text">(获取元素集合的第一个元素)</span></div>
+            <div>_JT_exist <span class="light-text">(判断获取的元素是否存在)</span></div>
+        </div>
+    </div>
+    <div class='text'>
+        数组的扩展：
+        <div class="list">
+            <div>_JT_each <span class="light-text">(遍历数组，相当于forEach)</span></div>
+            <div>_JT_empty <span class="light-text">(清空数组)</span></div>
+            <div>_JT_last <span class="light-text">(获取最后一个元素)</span></div>
+            <div>_JT_first <span class="light-text">(获取第一个元素)</span></div>
+            <div>_JT_remove <span class="light-text">(删除某个元素)</span></div>
+            <div>_JT_removeByIndex <span class="light-text">(删除某位置上的元素)</span></div>
+            <div>_JT_insert <span class="light-text">(插入元素)</span></div>
+            <div>_JT_insertArray <span class="light-text">(插入多个元素)</span></div>
+            <div>_JT_prepend <span class="light-text">(头部插入元素)</span></div>
+        </div>
+    </div>
+    <div class='text'>
+        字符串的扩展：
+        <div class="list">
+            <div>_JT_has <span class="light-text">(是否包含子串)</span></div>
+            <div>_JT_replaceAll <span class="light-text">(替换所有元素)</span></div>
+        </div>
+    </div>
+    <div class='text indent'>
+        <a class='link' target="view_window" href="https://www.theajack.com/jetterjs">Jetterjs</a>
+         中还有很多方法这里没有提取使用，提取以上方法是因为在 Jet 中用到了这些功能，如果对 Jetterjs 完整的开发接口感兴趣，请访问<a class='link' target="view_window" href="https://www.theajack.com/jetterjs">Jetterjs开发文档</a>
+    </div>
+    <div class="title" jump-des='jui'>引入JUI时的原型扩展</div>
+    <div class='text indent'>
+        为了方便JUI的开发，在JUI库中，我们提取了<a class='link' target="view_window" href="https://www.theajack.com/jetterjs">Jetterjs</a>中几乎所有的dom操作方法，并且都去除了 _JT_ 前缀，
+        若是您引入了JUI那么您可以使用这些方法。详情请参考<a class='link' target="view_window" href="https://www.theajack.com/jetterjs">Jetterjs开发文档</a>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div class='title'>Jet.lang.init</div>
+<div class="sub">
+    <div class='text indent'>
+        使用 <span class="red">Jet.lang.init()</span> 方法可以动态初始化新增的需要国际化的静态html元素，动态元素不需要使用。
+        不带参数使用该方法时是对全局的没有初始化的jlang元素初始化，带参数时根据jdom来查找元素，参数可以使jdom值，jdom元素或者dom元素。请看一个例子：
+    </div>
+    
+    <div class='text'>
+        index.js 或者 index.html 中插入以下代码：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en']);
+    </div>
+    <div class='text'>
+        Jet组件中：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='init_dom'>&lt;/div>
+&lt;button jon='add'>添加元素&lt;/button>
+&lt;button jon='init'>初始化&lt;/button>
+&lt;button jon='type'>切换语言&lt;/button>
+&lt;script>
+    new Jet({
+        func:{
+            add:function(){
+                this.$dom.init_dom.html="&lt;div jlang>\
+                    &lt;span jname='cn'>你好，世界&lt;/span>\
+                    &lt;span jname='en'>hello world&lt;/span>\
+                &lt;/div>"
+            },init:function(){
+                Jet.lang.init('init_dom');
+            },type:function(){
+                Jet.lang.type=(Jet.lang.type=='cn')?'en':'cn';
+            }
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div jdom='init_dom'></div>
+            <button jon='add'>添加元素</button>
+            <button jon='init'>初始化</button>
+            <button jon='type'>切换语言</button>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        func:{
+            add:function(){
+                this.$dom.init_dom.html="<div jlang>\
+                    <span jname='cn'>你好，世界</span>\
+                    <span jname='en'>hello world</span>\
+                </div>"
+            },init:function(){
+                Jet.lang.init('init_dom');
+            },type:function(){
+                Jet.lang.type=(Jet.lang.type=='cn')?'en':'cn';
+            }
+        }
+    })
+</script>

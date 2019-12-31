@@ -1,0 +1,75 @@
+<style>
+    .unpass{
+        color:#f44;
+        font-size:12px;
+    }
+    .pass{
+        color:#4f4;
+        font-size:12px;
+    }
+</style>
+<div class='title'>自定义验证样式</div>
+<div class='text'>
+    使用 onOnePass，onOneFail 和 useDefaultStyle 结合可以定制验证成功或者失败的提示信息，请看一个简单的例子：
+</div>
+<div class='text'>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;style>
+    .unpass{
+        color:#f44;
+        font-size:12px;
+    }
+    .pass{
+        color:#4f4;
+        font-size:12px;
+    }
+&lt;/style>
+数字：&lt;input type="text" jvalid='number'>
+&lt;span jshow='!$.pass' class='unpass'>*请输入数字&lt;/span>
+&lt;span jshow='pass' jrun='opt.ele.style.display="none"' class='pass'>*验证通过&lt;/span>
+&lt;script>
+    new Jet({
+        onmounted:function(){
+            var _this=this;
+            Jet.valid.useDefaultStyle=false;
+            Jet.valid.onOnePass(function(ele,err){
+                _this.pass=true;
+            });
+            Jet.valid.onOneFail(function(ele,err){
+                _this.pass=false;
+            });
+        },
+        data:{
+            pass:true
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div>
+                数字：<input type="text" jvalid='number'>
+                <span jshow='!$.pass' class='unpass'>*请输入数字</span>
+                <span jshow='pass' jrun='opt.ele.style.display="none"' class='pass'>*验证通过</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Jet({
+        onmounted:function(){
+            var _this=this;
+            Jet.valid.useDefaultStyle=false;
+            Jet.valid.onOnePass(function(ele,err){
+                _this.pass=true;
+            });
+            Jet.valid.onOneFail(function(ele,err){
+                _this.pass=false;
+            });
+        },
+        data:{
+            pass:true
+        }
+    })
+</script>

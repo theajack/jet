@@ -1,0 +1,99 @@
+<div class='title'>Jattr</div>
+<div class="sub">
+    <div class='text'>
+        使用Jattr属性，可以给html元素绑定属性,使用格式是 <span class='red'>Jattr="attr1:value1;attr2:value2;..."</span> 。请看下面一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+
+&lt;div jdom='showArea'>
+    &lt;div jattr='attr:value'>单个静态属性&lt;/div>
+    &lt;div jattr='attr1:value1;attr2:value2'>多个静态属性&lt;/div>
+    &lt;div jattr='attr:{{$.string}}'>动态属性，使用字符串数据&lt;/div>
+    &lt;div jattr='attr:{{$.json.key}}'>动态属性，使用json数据&lt;/div>
+    &lt;div jattr='attr:{{$.json.key}}+"-plus"'>计算值的动态属性，使用json数据&lt;/div>
+&lt;/div>
+&lt;div>
+    改变字符串值：&lt;input type="text" j='string'>
+&lt;/div>
+&lt;div j='json'>
+    改变json值：&lt;input type="text" j='key'>
+&lt;/div>
+&lt;div j='html'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        onmounted:function(){
+            this.setHtml();
+        },
+        ondatachange:{
+            'string':function(){
+                this.setHtml();
+            },
+            'json.key':function(){
+                this.setHtml();
+            }
+        },
+        data:{
+            string:'dynamic string',
+            json:{
+                key:'dynamic json'
+            },
+            html:''
+        },
+        func:{
+            setHtml:function(){
+                this.html=this.$dom.showArea.html;
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jdom='showArea'>
+                <div jattr='attr:value'>单个静态属性</div>
+                <div jattr='attr1:value1;attr2:value2'>多个静态属性</div>
+                <div jattr='attr:{{$.string}}'>动态属性，使用字符串数据</div>
+                <div jattr='attr:{{$.json.key}}'>动态属性，使用json数据</div>
+                <div jattr='attr:{{$.json.key}}+"-plus"'>计算值的动态属性，使用json数据</div>
+            </div>
+            <div>
+                改变字符串值：<input type="text" j='string'>
+            </div>
+            <div j='json'>
+                改变json值：<input type="text" j='key'>
+            </div>
+            <div j='html'>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script>
+    new Jet({
+        onmounted:function(){
+            this.setHtml();
+        },
+        ondatachange:{
+            'string':function(){
+                this.setHtml();
+            },
+            'json.key':function(){
+                this.setHtml();
+            }
+        },
+        data:{
+            string:'dynamic string',
+            json:{
+                key:'dynamic json'
+            },
+            html:''
+        },
+        func:{
+            setHtml:function(){
+                this.html=this.$dom.showArea.html;
+            }
+        }
+    });
+</script>

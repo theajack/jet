@@ -1,0 +1,65 @@
+<style>
+    .wechat{
+        width:150px;
+    }
+    .pay{
+        width:250px;
+        height:260px;
+        margin: 30px 20px;
+    }
+</style>
+
+<div class='title'>1.关于</div>
+<div class='sub text' j=info>
+    <div>
+        <img class='wechat ml' jattr='src:{{$.wechat}}' alt="">
+    </div>
+    <div class=''>
+        个人微信
+    </div>
+    <div class=''>
+        版本：<span j=version></span>
+    </div>
+    <div class=''>
+        时间：<span j=date></span>
+    </div>
+    <div class=''>
+        作者： <span j=author></span>
+    </div>
+    <div class=''>
+        邮箱：<span j=email></span>
+    </div>
+    <div class=''>
+        主页：<span class='link' jon='click:$J.jump("https://www.theajack.com")' j=site></span>
+    </div>
+</div>
+<div class='title' jump-des='donate'>2.赞助</div>
+<div class='sub'>
+    <div class='text'>
+        <div>
+            <img class='pay' src="@alipay" alt="">
+            <img class='pay' src="@wechatpay" alt="">
+        </div>
+        <div class=''>
+            Jet 是由个人开发维护的一款框架,
+            如果你正在使用并且觉得不错,
+            希望您能给个人开发者一点赞助和支持,
+            谢谢！
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        data:{
+            info:{
+                img:'',
+                wechat:'@wechat',
+                author:'theajack',
+                version:'1.0',
+                date:'2018/3/15',
+                email:'theajack@qq.com',
+                site:'www.theajack.com'
+            }
+        }
+    })
+</script>

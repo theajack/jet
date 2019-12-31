@@ -1,0 +1,106 @@
+<style>
+    .out{
+        background-color: #fff;
+        border: 1px solid #888;
+        width:99%;
+        color:#444;
+    }
+</style>
+<div class='title'>切换按钮</div>
+
+<div class="sub">
+        <div class='text'>切换按钮支持使用两个子元素，第一个子元素表示打开的情况，第二个表示关闭的情况。
+            每一个情况都有text和value，text用于显示，value用于设置开关。text值等于子元素的innerText，当设置了value属性是，value值等于设置的值，否则value值等于元素的text值，当元素text
+            当text为空且没有设置value时，第一个元素的value值为true，第二个为false。请看一个例子：</div>
+        <div class='j-code' disabled width='99%' height='auto'>
+&lt;div class="j-switch xs" jui-bind='sv'>
+    &lt;div>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch s" jui-bind='sv'>
+    &lt;div>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch" jui-bind='sv'>
+    &lt;div>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch l" jui-bind='sv'>
+    &lt;div>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch xl" jui-bind='sv'>
+    &lt;div>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+&lt;div class="j-switch" disabled jui-bind='sv'>
+    &lt;div>是&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+<!-- 使用checked属性可以选择打开或关闭 与jui-bind一起使用时 jui-bind优先级更高 -->
+&lt;div class="j-switch">
+<!-- 使用icon -->
+    &lt;div icon='pencil' checked>&lt;/div>
+    &lt;div>否&lt;/div>
+&lt;/div>
+<!-- 一个空的切换按钮 默认关闭 可以使用 on属性打开 on属性只在空的切换按钮上有效 -->
+&lt;div class="j-switch" on>
+&lt;/div>
+<!-- 使用width -->
+&lt;div class="j-switch" width='200'>
+    &lt;div icon='pencil' checked>很长很长的文字非常长&lt;/div>
+    &lt;div icon='pencil'>很长很长的文字非常长啊&lt;/div>
+&lt;/div>
+&lt;script>
+new Jet({
+    data:{
+        sv:'否',
+    }
+});
+&lt;/script>
+        </div>
+        <div class="out">
+            <div class="j-switch xs" jui-bind='sv'>
+                <div>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch s" jui-bind='sv'>
+                <div>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch" jui-bind='sv'>
+                <div>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch l" jui-bind='sv'>
+                <div>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch xl" jui-bind='sv'>
+                <div>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch" disabled jui-bind='sv'>
+                <div>是</div>
+                <div>否</div>
+            </div>
+            <div class="j-switch">
+                <div icon='pencil' checked></div>
+                <div>否</div>
+            </div>
+            <div class="j-switch" on>
+            </div>
+            <div class="j-switch" width='200'>
+                <div icon='pencil' checked>很长很长的文字非常长</div>
+                <div icon='pencil'>很长很长的文字非常长啊</div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    new Jet({
+        data:{
+            sv:'否',
+        }
+    });
+</script>

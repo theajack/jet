@@ -1,0 +1,403 @@
+<div class='title'>Jdom</div>
+<div class='text indent'>
+    在Jet中，一般不需要直接操作dom元素，但是如果有这种需求，可以使用Jdom属性在Jet中生成一个可以使用Jet特殊语法操作的类dom元素，
+    使用格式是 <span class='red'>Jdom='name'</span>。
+    在Jet方法中就可以使用 <span class='red'>this.$dom.name</span> 获取到与dom元素对应的类dom元素，
+    可以使用类dom元素中定义的属性来获取或者设置dom元素的一些东西，主要有以下几类：
+    <span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
+    <div class="list">
+            <!-- html text class attr css  -->
+        <div class='link' jump-to='html'>1.html <span class="light-text">(获取或者设置dom元素的innerHTML)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='outerHtml'>2.outerHtml <span class="light-text">(获取dom元素的outerHTML)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='text'>3.text <span class="light-text">(获取或者设置dom元素的innerText)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='attr'>4.attr <span class="light-text">(获取或者设置[增加或删除]dom元素的属性)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='class'>5.class <span class="light-text">(获取或者设置[增加、删除或赋值]dom元素的类)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='css'>6.css <span class="light-text">(获取或者设置dom元素的样式)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='dom'>7.this.$DOM() <span class="light-text">(将一个dom元素转换成类dom元素以进行方便的dom操作)</span><i class="icon icon-double-angle-right"></i></div>
+    </div>
+    <div class='text'>
+        注意：在Jet渲染完成之后，Jdom属性会被删除掉。
+    </div>
+</div>
+<div class='title' jump-des='html'>1.html</div>
+<div class="sub">
+    <div class='text'>
+        使用类dom元素的html属性可以获取或者设置dom元素的innerHTML，请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+
+&lt;div jdom='htmlDiv'>&lt;div>一个测试元素&lt;/div>&lt;/div>
+&lt;input type="button" jon='click:getHtml' value='获取innerHTML'>
+&lt;input type="button" jon='click:setHtml' value='设置innerHTML'>
+&lt;div j='html'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            html:'显示区域'
+        },
+        func:{
+            getHtml:function(){
+                this.html=this.$dom.htmlDiv.html;
+            },setHtml:function(){
+                this.$dom.htmlDiv.html='&lt;input type="button" value="一个新的测试元素"/>';
+                this.getHtml();
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jdom='htmlDiv'><div>一个测试元素</div></div>
+            <input type="button" jon='click:getHtml' value='获取innerHTML'>
+            <input type="button" jon='click:setHtml' value='设置innerHTML'>
+            <div j='html'></div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='outerHtml'>2.outerHtml</div>
+<div class="sub">
+    <div class='text'>
+        使用类dom元素的outerHtml属性可以获取dom元素的outerHTML，请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+
+&lt;div jdom='outerHtmlDiv'>&lt;div>一个测试元素&lt;/div>&lt;/div>
+&lt;input type="button" jon='click:getOuterHtml' value='获取innerHTML'>
+&lt;input type="button" jon='click:setOuterHtml' value='设置innerHTML'>
+&lt;div j='outerHtml'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            outerHtml:'显示区域'
+        },
+        func:{
+            getOuterHtml:function(){
+                this.outerHtml=this.$dom.outerHtmlDiv.outerHtml;
+            },
+            setOuterHtml:function(){
+                this.$dom.outerHtmlDiv.html='<input type="button" value="一个新的测试元素"/>';
+                this.getOuterHtml();
+            },
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jdom='outerHtmlDiv'><div>一个测试元素</div></div>
+            <input type="button" jon='click:getOuterHtml' value='获取outerHTML'>
+            <input type="button" jon='click:setOuterHtml' value='设置outerHTML'>
+            <div j='outerHtml'></div>
+        </div>
+    </div>
+</div>
+
+<div class='title' jump-des='text'>3.text</div>
+<div class="sub">
+    <div class='text'>
+        使用类dom元素的html属性可以获取或者设置dom元素的innerText，请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='textDiv'>&lt;div>一个测试元素&lt;/div>&lt;/div>
+&lt;input type="button" jon='click:getText' value='获取innerText'>
+&lt;input type="button" jon='click:setText' value='设置innerText'>
+&lt;div j='text'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            text:'显示区域'
+        },
+        func:{
+            getText:function(){
+                this.text=this.$dom.textDiv.text;
+            },setText:function(){
+                this.$dom.textDiv.text='<input type="button" value="一个新的测试元素"/>';
+                this.getText();
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jdom='textDiv'><div>一个测试元素</div></div>
+            <input type="button" jon='click:getText' value='获取innerText'>
+            <input type="button" jon='click:setText' value='设置innerText'>
+            <div j='text'></div>
+        </div>
+    </div>
+</div>
+
+<div class='title' jump-des='attr'>4.attr</div>
+<div class="sub">
+    <div class='text'>
+        使用类dom元素的attr属性可以获取或者设置dom元素的属性。给元素添加属性时使用加号（加号可以省略）；删除属性时使用减号，
+        赋值使用等于号，若是没有赋值，则默认值为空字符。若是有多个属性，使用分号分隔。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='attrDiv' attr1='a'>测试元素&lt;/div>
+&lt;input type="button" jon='click:getAttr' value='获取属性'>
+&lt;input type="button" jon='click:setAttr' value='设置属性'>
+&lt;input type="button" jon='click:removeAttr' value='删除属性'>
+&lt;input type="button" jon='click:setManyAttr' value='操作多个属性'>
+&lt;div j='attr'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            attr:'',
+        },
+        onmounted:function(){
+            this.refreshAttrHtml();
+        },
+        func:{
+            getAttr:function(){
+                this.attr=this.$dom.attrDiv.attr.attr1;
+                //若是属性名含有-等不符合js语法的字符，请使用 ['attr']
+            },setAttr:function(){
+                this.$dom.attrDiv.attr='attr2=b';
+                this.refreshAttrHtml();
+            },removeAttr:function(){
+                this.$dom.attrDiv.attr='-attr2';
+                this.refreshAttrHtml();
+            },setManyAttr:function(){
+                this.$dom.attrDiv.attr='attr3=c;-attr1';
+                this.refreshAttrHtml();
+            },refreshAttrHtml:function(){
+                this.attr=this.$dom.attrDiv.outerHtml;
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jdom='attrDiv' attr1='a'>测试元素</div>
+            <input type="button" jon='click:getAttr' value='获取属性'>
+            <input type="button" jon='click:setAttr' value='设置属性'>
+            <input type="button" jon='click:removeAttr' value='删除属性'>
+            <input type="button" jon='click:setManyAttr' value='操作多个属性'>
+            <div j='attr'></div>
+        </div>
+    </div>
+</div>
+
+<div class='title' jump-des='class'>5.class</div>
+<div class="sub">
+    <div class='text'>
+        使用类dom元素的class属性可以获取或者设置（添加、删除或赋值）dom元素的类。添加或删除类时必须使用加号或者减号操作符。
+        给元素添加类时使用加号；删除属性时使用减号。若是需要操作多个类，使用分号分隔。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='classDiv' class='c1 c2'>测试元素&lt;/div>
+&lt;input type="button" jon='click:getClass' value='获取类'>
+&lt;input type="button" jon='click:setClass' value='设置类'>
+&lt;input type="button" jon='click:addClass' value='添加类'>
+&lt;input type="button" jon='click:removeClass' value='删除类'>
+&lt;input type="button" jon='click:setManyClass' value='操作多个类'>
+&lt;div j='class'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            class:'',
+        },
+        onmounted:function(){
+            this.refreshClassHtml();
+        },
+        func:{
+            getClass:function(){
+                this.class=this.$dom.classDiv.class;
+            },setClass:function(){
+                this.$dom.classDiv.class='c3 c4';
+                this.refreshClassHtml();
+            },addClass:function(){
+                this.$dom.classDiv.class='+c5';
+                this.refreshClassHtml();
+            },removeClass:function(){
+                this.$dom.classDiv.class='-c3';
+                this.refreshClassHtml();
+            },setManyClass:function(){
+                this.$dom.classDiv.class='+c6;-c4';
+                this.refreshClassHtml();
+            },refreshClassHtml:function(){
+                this.class=this.$dom.classDiv.outerHtml;
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jdom='classDiv' class='c1 c2'>测试元素</div>
+            <input type="button" jon='click:getClass' value='获取类'>
+            <input type="button" jon='click:setClass' value='设置类'>
+            <input type="button" jon='click:addClass' value='添加类'>
+            <input type="button" jon='click:removeClass' value='删除类'>
+            <input type="button" jon='click:setManyClass' value='操作多个类'>
+            <div j='class'></div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='css'>6.css</div>
+<div class="sub">
+    <div class='text'>
+        使用类dom元素的css属性可以获取或者设置dom元素的样式。获取样式时，请使用驼峰式的命名规则，如 backgroundColor，设置命名时则不能使用驼峰式命名。
+        若是需要设置多个样式，使用空格分隔。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jdom='cssDiv' style='color:#f44'>测试元素&lt;/div>
+&lt;input type="button" jon='click:getCss' value='获取样式'>
+&lt;input type="button" jon='click:setCss' value='设置样式'>
+&lt;input type="button" jon='click:setManyCss' value='设置多个样式'>
+&lt;div j='css'>&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            css:'',
+        },
+        onmounted:function(){
+            this.refreshCssHtml();
+        },
+        func:{
+            getCss:function(){
+                this.css=this.$dom.cssDiv.css.color;
+            },setCss:function(){
+                this.$dom.cssDiv.css='color=#4f4';
+                this.refreshCssHtml();
+            },setManyCss:function(){
+                this.$dom.cssDiv.css='color=#44f;background-color=#aaa';
+                this.refreshCssHtml();
+            },refreshCssHtml:function(){
+                this.css=this.$dom.cssDiv.outerHtml;
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jdom='cssDiv' style='color:#f44'>测试元素</div>
+            <input type="button" jon='click:getCss' value='获取样式'>
+            <input type="button" jon='click:setCss' value='设置样式'>
+            <input type="button" jon='click:setManyCss' value='设置多个样式'>
+            <div j='css'></div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='dom'>7.this.$DOM()</div>
+<div class="sub">
+    <div class='text'>
+        使用Jet元素的$DOM方法可以将一个dom元素转换成类dom元素以进行方便的dom操作。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jon='click:test$'>点击这个元素&lt;/div>
+&lt;script>
+    new Jet({
+        func:{
+            test$:function(opt){
+                var dom=this.$DOM(opt.ele);
+                dom.text='修改之后的text';
+                dom.css='color=#4f4';
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jon='click:test$'>点击这个元素</div>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        data:{
+            html:'显示区域',
+            outerHtml:'显示区域',
+            text:'显示区域',
+            attr:'',
+            class:'',
+            css:'',
+        },
+        onmounted:function(){
+            this.refreshAttrHtml();
+            this.refreshClassHtml();
+            this.refreshCssHtml();
+        },
+        func:{
+            getHtml:function(){
+                this.html=this.$dom.htmlDiv.html;
+            },setHtml:function(){
+                this.$dom.htmlDiv.html='<input type="button" value="一个新的测试元素"/>';
+                this.getHtml();
+            }, 
+            getOuterHtml:function(){
+                this.outerHtml=this.$dom.outerHtmlDiv.outerHtml;
+            },
+            setOuterHtml:function(){
+                this.$dom.outerHtmlDiv.html='<input type="button" value="一个新的测试元素"/>';
+                this.getOuterHtml();
+            },
+            getText:function(){
+                this.text=this.$dom.textDiv.text;
+            },setText:function(){
+                this.$dom.textDiv.text='<input type="button" value="一个新的测试元素"/>';
+                this.getText();
+            },
+            getAttr:function(){
+                this.attr=this.$dom.attrDiv.attr.attr1;
+                //若是属性名含有-等不符合js语法的字符，请使用 ['attr']
+            },setAttr:function(){
+                this.$dom.attrDiv.attr='attr2=b';
+                this.refreshAttrHtml();
+            },removeAttr:function(){
+                this.$dom.attrDiv.attr='-attr2';
+                this.refreshAttrHtml();
+            },setManyAttr:function(){
+                this.$dom.attrDiv.attr='attr3=c;-attr1';
+                this.refreshAttrHtml();
+            },refreshAttrHtml:function(){
+                this.attr=this.$dom.attrDiv.outerHtml;
+            },
+            getClass:function(){
+                this.class=this.$dom.classDiv.class;
+            },setClass:function(){
+                this.$dom.classDiv.class='c3 c4';
+                this.refreshClassHtml();
+            },addClass:function(){
+                this.$dom.classDiv.class='+c5';
+                this.refreshClassHtml();
+            },removeClass:function(){
+                this.$dom.classDiv.class='-c3';
+                this.refreshClassHtml();
+            },setManyClass:function(){
+                this.$dom.classDiv.class='+c6;-c4';
+                this.refreshClassHtml();
+            },refreshClassHtml:function(){
+                this.class=this.$dom.classDiv.outerHtml;
+            },
+            getCss:function(){
+                this.css=this.$dom.cssDiv.css.color;
+            },setCss:function(){
+                this.$dom.cssDiv.css='color=#4f4';
+                this.refreshCssHtml();
+            },setManyCss:function(){
+                this.$dom.cssDiv.css='color=#44f;background-color=#aaa';
+                this.refreshCssHtml();
+            },refreshCssHtml:function(){
+                this.css=this.$dom.cssDiv.outerHtml;
+            },test$:function(opt){
+                var dom=this.$DOM(opt.ele);
+                dom.text='修改之后的text';
+                dom.css='color=#4f4';
+            }
+        }
+    });
+</script>

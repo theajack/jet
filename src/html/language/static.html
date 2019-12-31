@@ -1,0 +1,51 @@
+<div class='title'>静态元素</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">jlang</span> 和 <span class="red">jname</span> 属性可以渲染静态的dom元素。请看一个例子：
+    </div>
+    
+    <div class='text'>
+        index.js 或者 index.html 中插入以下代码：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en']);
+    </div>
+    <div class='text'>
+        Jet组件中：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jlang>
+    &lt;span jname='cn'>你好，世界&lt;/span>
+    &lt;span jname='en'>hello world&lt;/span>
+&lt;/div>
+&lt;button jon='click:Jet.lang.type="cn"'>设置中文&lt;/button>
+&lt;button jon='click:Jet.lang.type="en"'>设置英文&lt;/button>
+&lt;script>
+new Jet({
+})
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div jlang>
+                <span jname='cn'>你好，世界</span>
+                <span jname='en'>hello world</span>
+            </div>
+            <button jon='click:Jet.lang.type="cn"'>设置中文</button>
+            <button jon='click:Jet.lang.type="en"'>设置英文</button>
+        </div>
+    </div>
+    <div class='text'>
+        每个jlang元素中只能包含n个jname元素，其中n是设置的语言的数量，Jet会根据当前选中的语言来自动替换掉jlang元素的内容。
+    </div>
+</div>
+<script>
+    new Jet({
+    })
+//     1.onroute
+// 2.beforeinit
+// 3.beforemount
+// 4.onready
+// 5.onmounted
+// 6.onrouted
+</script>

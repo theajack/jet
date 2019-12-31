@@ -1,0 +1,60 @@
+<div class='title'>Jstyle</div>
+<div class="sub">
+    <div class='text'>
+        使用Jstyle样式，可以给html元素绑定样式,使用格式是 <span class='red'>Jstyle="style1:value1;style2:value2;..."</span> 。请看下面一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div jstyle='color:#f44'>单个静态样式&lt;/div>
+&lt;div jstyle='color:#f44;background-color:#4f4'>多个静态样式&lt;/div>
+&lt;div jstyle='color:{{$.color}}'>动态样式，使用字符串数据&lt;/div>
+&lt;div jstyle='color:{{$.json.color}}'>动态样式，使用json数据&lt;/div>
+&lt;div jstyle='color:"#"+{{$.json.number}}'>计算值的动态样式，使用json数据&lt;/div>
+&lt;div>
+    改变字符串值：&lt;input type="text" j='color'>
+&lt;/div>
+&lt;div j='json'>
+    &lt;div>改变json的color值：&lt;input type="text" j='color'>&lt;/div>
+    &lt;div>改变json的number值：&lt;input type="text" j='color'>&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            color:'#44f',
+            json:{
+                color:'#44f',
+                number:900,
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div jstyle='color:#f44'>单个静态样式</div>
+            <div jstyle='color:#f44;background-color:#4f4'>多个静态样式</div>
+            <div jstyle='color:{{$.color}}'>动态样式，使用字符串数据</div>
+            <div jstyle='color:{{$.json.color}}'>动态样式，使用json数据</div>
+            <div jstyle='color:"#"+{{$.json.number}}'>计算值的动态样式，使用json数据</div>
+            <div>
+                改变字符串值：<input type="text" j='color'>
+            </div>
+            <div j='json'>
+                <div>改变json的color值：<input type="text" j='color'></div>
+                <div>改变json的number值：<input type="text" j='number'></div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script>
+    new Jet({
+        data:{
+            color:'#44f',
+            json:{
+                color:'#44f',
+                number:900,
+            }
+        }
+    });
+</script>

@@ -1,0 +1,85 @@
+<style>
+    .logo{
+        width:200px;
+        margin:10px; 
+        width:200px;
+        animation: rotateY 20s infinite linear;
+        -moz-animation: rotateY 20s infinite linear;	/* Firefox */
+        -webkit-animation: rotateY 20s infinite linear;	/* Safari 和 Chrome */
+        -o-animation: rotateY 20s infinite linear;
+    }
+    @keyframes rotateY{
+        from {transform: perspective(600px) rotateY(0deg);}
+        to {transform: perspective(600px) rotateY(360deg);}
+    }
+
+    @-moz-keyframes rotateY{
+        from {-moz-transform: perspective(600px) rotateY(0deg);}
+        to {-moz-transform: perspective(600px) rotateY(360deg);}
+    }
+
+    @-webkit-keyframes rotateY{
+        from {-webkit-transform: perspective(600px) rotateY(0deg);}
+        to {-webkit-transform: perspective(600px) rotateY(360deg);}
+    }
+
+    @-o-keyframes rotateY{
+        from {-o-transform: perspective(600px) rotateY(0deg);}
+        to {-o-transform: perspective(600px) rotateY(360deg);}
+    }
+    @media screen and (max-width: 620px) {
+        .logo{
+            width:120px;
+        }
+    }
+</style>
+<div class='title'>Jet简介</div>
+<div class='text t-center'>
+    <img class='logo' src="jet.png">
+</div>
+<div class='text indent'>
+    Jet是一个前端的轻量级的渐进式 MVVM框架，不依赖任何第三方库。Jet采用数据双向绑定，以数据驱动视图，倡导组件化开发。
+    在本文档里，我们提供了一个在线调试的工具，您可以通过它<span class='link' jon='jump' data-route='/code'>在线使用Jet<i class="icon icon-double-angle-right"></i></span>
+</div>
+<div class='text indent'>
+    Jet可以在非服务器环境中开发，但是在非服务其环境中无法使用路由功能和jload属性以及无法使用完整的js模块规范。
+    Jet可以通过引入script标签的方式局部使用，从而可以与您已有的项目完美结合，实现渐进式的Web开发。
+</div>
+<div class='text indent'>
+    您也可以通过<span class='link' jon='click:Jet.router.route("https://www.npmjs.com/package/jet-js-cli",true)'>jet-js-cli</span>建立项目 或是 手动下载 Jet模板 来在服务器环境中开发，
+    服务器环境基于lite-server。lite-server 是轻量级的仅适用于开发的 node 服务器。
+    使用完整Jet web项目结构开发可以使用Jet的所有功能。开发完成以后只需要将几个文件夹复制到生产环境中即可运行，由于使用Jet使用es5构建，所以可以无需经过打包转化等操作。
+</div>
+<div class='text indent'>
+    当然若您需要使用es6进行您的项目开发，您可以在安装jet-js-cli后通过jet build命令将es6转换为es5在生产环境中使用。
+</div>
+<div class='text indent'>
+    另外，Jet具有良好的兼容性，在未使用路由库的情况下，可以兼容ie9+。在使用路由库由于ie9及以下不支持 pushState 方法，因此不兼容ie9，兼容ie10+。其他浏览器和移动端浏览器也都能兼容较低版本。
+</div>
+<!-- <div class='text indent'>
+    该API文档完全使用Jet开发，您可以<a href="https://www.theajack.com/jet/jet-api.zip" download='jet-api.zip' class='link'>点击下载</a>该项目作为使用Jet的参考。后面的安装使用章节会有一个更简单的、更易于起步的项目供您下载。
+</div> -->
+<div class='text'>
+    Jet主要由以下几个部分构成：
+    <div class='list'>
+        <div class='link' jon='jump' data-route='/bind'>1.数据绑定 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/attr'>2.属性 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/valid'>3.表单验证 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/lang'>4.国际化语言 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/router'>5.路由 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/module'>6.js模块规范 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/css'>7.css配置文件 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/tool'>8.工具方法 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/jui'>9.JUI <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jon='jump' data-route='/lib'>10.js库的加载 <i class="icon icon-double-angle-right"></i></div>
+    </div>
+</div>
+<script>
+    JET({
+        func:{
+            jump:function(opt){
+                Jet.router.route(opt.ele.attr('data-route'))
+            }
+        }
+    })
+</script>

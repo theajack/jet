@@ -1,0 +1,86 @@
+<style>
+    .wrapper{
+        text-align: center;
+        margin-top:100px;
+    }
+    .p404{
+        font-size:100px;
+        line-height:100px;
+        font-weight: bold;
+        margin-bottom: 100px;
+    }
+    .linkw{
+        margin-top:70px;
+    }
+    .home{
+        text-decoration: underline;
+        color:#777;
+        font-size:30px;
+        cursor: pointer;
+    }
+    .home:hover{
+        color:#444;
+    }
+    .info{
+        font-size:50px;
+    }
+</style>
+<div class='wrapper'>
+    <div class="p404">404</div>
+    <div class='info'>
+        您所访问的页面不存在
+    </div>
+    <div class='linkw'>
+        <span class='mm home' jon='back'>返回上一页</span> <span class='mm home' jon='home'>返回主页</span>   
+    </div>
+</div>
+<script>
+    new Jet({
+        func:{
+            home:function(){
+                Jet.router.route('/');
+            },
+            back:function(){
+                $J.back();
+            }
+        }
+    })
+</script>
+
+<!-- <div j='user' id='user'>
+        <div j='name'>
+            <span j='first'></span>-<span j='last'></span>
+        </div>
+        <span j='age'></span><input type='text' j='age' />
+    <button jon='addBtn'>添加按钮</button>
+    <button jon='addEle2'>添加元素</button>
+    <span j='age'></span>
+</div>
+    <script>
+        var a=new Jet({
+            data:{//数据
+                user:{
+                    name:{
+                        first:'first',
+                        last:'last'
+                    },
+                    age:20
+                },
+                age:200,
+                list:['l1','l2','l3']
+            },func:{
+            addBtn:function(){
+                user.append("<button jon='addEle'>添加元素</button><button jon='addEle'>添加元素</button>")
+                this.$init()
+            },
+            addEle:function(opt){
+                opt.ele.after("<input type='text' jshow='{{$.age}}>10' j='age' />");
+                this.$init()
+            },
+            addEle2:function(opt){
+                opt.ele.after("<input type='text' jon='alert(opt.data)' j='age' />");
+                this.$init('user')
+            },
+        }
+        });
+    </script> -->

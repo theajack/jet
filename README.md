@@ -1,98 +1,58 @@
-# jet-js-cli
-### [theajack](https://www.theajack.com/)
-#### [Jet.js](https://www.jet-js.com) 的脚手架工具，帮助您更便捷地使用Jet
-#### [Jet.js](https://www.jet-js.com) Scaffolding tools to help you use Jet.js framework more easily
-#### Jet 是一个轻量级、渐进式的 JS MVVM框架
-#### Jet is a lightweight, progressive JS MVVM framework
+# Jet.js:一款轻量级、渐进式的MVVM框架
+## 介绍
 
-#### 1.Installation
-1.Use npm to install
+Jet.js 是一款轻量级、渐进式的MVVM框架 [Jet.js](https://www.theajack.com/jet)，详细使用和安装教程请[点击这里](https://www.theajack.com/jet)
+Jet不依赖任何第三方库，采用数据双向绑定，以数据驱动视图。
 
-<pre>
-npm install jet-js-cli -g
-</pre>
+Jet可以在非服务器环境中开发，但是在非服务其环境中无法使用路由功能和jload属性以及无法使用完整的js模块规范。 Jet可以通过引入script标签的方式局部使用，从而可以与您已有的项目完美结合，实现渐进式的Web开发。
 
-下载需要一点时间，请耐心等候
-Download takes a little time, please be patient
+您也可以通过 [jet-js-cli](https://www.npmjs.com/package/jet-js-cli) 建立项目 或是 手动下载 Jet模板 来在服务器环境中开发， 服务器环境基于lite-server。
 
-（请使用 `-g` 全局安装，否则后续命令无法执行）
-(Please use `-g` to install globally, otherwise subsequent commands cannot be executed)
+当然若您需要使用es6进行您的项目开发，您可以在安装jet-js-cli后通过jet build命令将es6转换为es5在生产环境中使用。
 
-#### 2.Use
+## 图解
 
-选择一个您希望建立项目的目录，命令行运行以下命令：
-Select a directory where you want to build the project, and run the following command from the command line:
+在使用和学习Jet之前，先通过一张图了解一下Jet是如何工作，以及Jet能做些什么。
 
-<pre>
-jet init projectName
-</pre>
+以下是一个标准的Jet应用的所有主要部分和工作流程。
 
-#### 3.Development
+Jet将 DOM树映射成Jet组件树，Jet组件由new Jet()声明， 每一个Jet组件由源数据、响应数据、函数、Jet元素树、生命周期和非响应数据构成。 其中Jet元素树对应的是由Jet容器中的DOM树映射而成。
 
-执行上述命令后会下载一个Jet的开发模板和相应开发环境，执行以下命令可以运行这个Jet示例程序：
-After executing the above command, you will download a Jet development template and the corresponding development environment. You can run the Jet sample program by executing the following command:
+Jet元素分为两大类：绑定元素和工具元素。这些元素都继承自Jet.Base，Jet元素是Jet MVVM模式的核心。 每个Jet元素由源数据、响应域数据、DOM元素、响应域函数队列、$regist、$refresh还有其他一些方法组成， 其中View对应的就是DOM元素，Modal对应的是源数据，其他部分构成ViewModel，负责源数据与DOM之间的双向绑定。
 
-<pre>
-cd projectName
-jet run
-</pre>
+除此之外，Jet还包含一些外围设施供开发者开箱即用，帮助更高效的构建Web应用。
 
-详细Jet使用教程请参考 [Jet API](https://www.theajack.com/jet/)
-For detailed Jet tutorials, please refer to [Jet API] (https://www.theajack.com/jet/)
+Jet组件包含的特性和Jet元素包含的修饰属性，为Jet应用赋予更强大的功能。
 
-#### 4.Package and use in production environment
+![Jet 图解](https://www.theajack.com/jet/src/image/Jet%E5%9B%BE%E8%A7%A3.jpg)
 
-##### 4.1 Packing Command
-使用以下命令打包项目
+每一个Jet组件都有它的生命周期，包含以下9个， 大致流程请参考下图:
 
-<pre>jet build</pre>
+![Jet 生命周期](https://www.theajack.com/jet/src/image/Jet%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
 
-打包完成后，会在根目录下生成一个`build`文件夹（如已有`build`文件夹，会将旧的打包文件覆盖），将build文件夹中的所有文件复制到您的生产环境中即可运行。
-After the package is completed, a build folder will be generated in the root directory (such as the existing build folder, the old package file will be overwritten), and all the files in the build folder will be copied to your production environment to run.
+## 一个基本的Jet实例
 
-生成`build`文件夹后，可以使用一下命令测试打包之后的项目能否正常工作。
-After generating the `build` folder, you can use the following command to test whether the packaged project works properly.
-
-<pre>
-cd build
-jet run
-</pre>
-
-实际上，您可以使用`jet run`命令在任一目录下启动一个http服务器，入口文件是`index.html`
-In fact, you can use the `jet run` command to start an http server in any directory. The entry file is `index.html`
-
-##### 4.2 Packing configuration
-
-在根目录中的`build.config.json`文件中，有以下配置项
-In the `build.config.json` file in the root directory, there are the following configuration items.
-
-<pre>
-...
-"jetConfig": {
-	"compressHtml": true,
-	"compressCss": true,
-	"compressJs": true,
-	"buildJsWithBabel": false
-},
-...
-</pre>
-
-各项参数含义如下
-The meaning of each parameter is as follows
-
-|参数|默认值|描述|
-|:--:|:--:|:--:|
-|compressHtml|true|是否压缩html文件|
-|compressCss|true|是否压缩css文件|
-|compressJs|true|是否压缩js文件|
-|buildJsWithBabel|false|是否将es6转为es5|
-
-|Parameters|Defaults|Description|
-|:--:|:--:|:--:|
-|compressHtml|true|whether to compress html files|
-|compressCss|true|Currently compress css files|
-|compressJs|true|whether to compress js files|
-|buildJsWithBabel|false| Whether to convert es6 to es5|
-
--备注：若您使用es6开发，虽然支持配置 buildJsWithBabel 后在生产环境中转es5。但在开发环境中，请使用es6兼容性较好的浏览器，例如高版本的Chrome。因为在开发环境中，Jet并没有对es6转es5.
-- Note: If you use es6 development, although support for configuring buildJsWithBabel, transfer es5 in the production environment. But in a development environment, use a browser with better es6 compatibility, such as a higher version of Chrome. Because in the development environment, Jet did not turn es5 to es5.
+以下是一个简单的Jet组件
+[点击这里](https://www.theajack.com/jet/#/code) 可以在线使用这个例子
+```
+<div j='message'></div><br>
+<div j='user'>
+    <div j=name>'姓名:'+$</div>
+    <div>年龄:<input j='age' type='text' class='j-input' jon='input:console.log(this.user.age)'/></div>
+    <div j='age'>($<18)?'未成年':'成年人'</div>
+</div>
+<script>
+    new Jet({
+        data:{
+            message:'Hello Jet',
+            user:{
+                name:'theajack',
+                age:24
+            }
+        },
+        func:{
+        }
+    })
+</script>
+```
+[点击这里](https://www.theajack.com/jet/#/code) 可以在线使用这个例子

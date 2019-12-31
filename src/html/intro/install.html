@@ -1,0 +1,91 @@
+<div class='title'>安装使用</div>
+<div class='text'>
+    <div>Jet 是一款非常灵活的渐进式MVVM框架，它有以下三种安装使用方式</div>
+    <div class="list">
+        <div class='link' jump-to='script'>1.script标签引入 <span class="light-text">(适用于已有网站项目，在新增页面中使用Jet)</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='cli'>2.通过jet-js-cli使用 <span class="light-text">(适用于从头构建新项目[推荐])</span><i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='zip'>3.下载jet-template压缩包 <span class="light-text">(适用于从头构建新项目)</span><i class="icon icon-double-angle-right"></i></div>
+    </div>
+</div>
+<div class='title' jump-des='script'>1.以script标签引入</div>
+<div class='sub'>
+    <div class="text">
+        Jet是一款渐进式MVVM框架，它不要求您必须全部使用Jet开发环境才能使用它。若是您已有一个web项目，您想在项目中部分使用Jet，您可以通过引入script标签来使用Jet.
+    </div>
+    <div class='title'>Jet主文件引入</div>
+    <div class='text'>
+        jet.min.js是Jet的主模块，在您的项目中插入以下标签就可以使用Jet的基本功能:
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;script src='https://www.theajack.com/jet/assets/js/jet.min.js'>&lt;/script>
+    </div>
+    <div class='title'>官方库</div>
+    <div class="text"> 
+        Jet配备了一些官方js库，方便您更高效的开发web项目，官方库的列表和使用请参考 <span class="link" jon='Jet.root.jumpTo("/lib/part")'>Jet官方库</span>
+    </div>
+
+</div>
+<div class='title' jump-des='cli'>2.通过jet-js-cli使用</div>
+<div class='sub'>
+    <div class='text indent'> 
+        jet-js-cli 是针对Jet开发的脚手架工具。具体使用请参阅  <span class='link' jon='click:Jet.router.route("https://www.npmjs.com/package/jet-js-cli",true)'>jet-js-cli文档</span>
+    </div>
+    <div class='text indent'> 
+        jet-js-cli 内置 lite-server，支持热加载，您的任何代码的修改都会及时触发页面刷新。但是请保证您的项目的目录中不包含中文字符。
+    </div>
+    <div class='text indent'> 
+        主要命令如下（需要先安装nodejs，若是未安装请<a target='view_window' href="http://www.runoob.com/nodejs/nodejs-install-setup.html" class='link'>点击这里</a>）</div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+//安装cli工具，请使用-g安装，否则后续命令jet无法识别。
+npm install jet-js-cli -g 
+
+//使用jet-template初始化项目
+jet init myJetProject
+
+//进入项目，运行
+cd myJetProject
+jet run
+
+//完成项目编码以后，打包项目，发布到生产环境
+jet build
+
+
+//您可以使用以下命令测试打包后的项目能否正常运行
+cd build
+jet run
+    </div>
+    </div> 
+    <div class='text indent'> 
+        实际上，安装了jet-js-cli之后，您可以通过 <span class="red">jet run</span> 命令在任何目录中启动一个 lite-server 服务器，但是建议目录中不包含中文字符，这样可以使用热加载。
+    </div>
+    <div class='text indent'> 
+        <span class="red">jet build</span> 完成之后，在目录中会有一个 build文件夹，只需要将build文件夹下的所有文件拷贝到生产环境服务器目录下即可正常运行，值得注意的是配置路由时的路径与根目录等参数必须配置正确。
+    </div>
+</div>
+
+<div class='title' jump-des='zip'>3.下载jet-template压缩包</div>
+<div class='sub'>
+    <div class='text indent'>
+        下载安装使用也十分简单，只需要 <a href="https://www.theajack.com/jet/jet-template.zip" download='jet-template.zip' class='link'>下载jet-template.zip 文件</a>，
+        解压到您希望建立项目的目录，是然后用 <span class="red">npm run dev</span> 命令运行项目即可。
+        但是前提是您已经安装了nodejs。
+    </div>
+    <div class='text indent'>
+        项目编码完成以后，只需要将 项目中的三个文件（如下）拷贝到生产环境中http服务器中即可，值得注意的是配置路由时的路径与根目录等参数必须配置正确。
+        <div class='list'>
+            <div><i class="icon icon-folder-close-alt"></i> 
+                assets 
+                <span class='light-text'>(框架相关的代码和资源，无需用户操作)</span>
+            </div>
+            <div><i class="icon icon-folder-close-alt"></i> 
+                src<span class='light-text'>(使用者主要编写代码的地方)</span>
+            </div>
+            <div><i class="icon icon-file-code"></i> index.html
+                <span class='light-text'>(入口html文件)</span></div>
+        </div>
+    </div>
+</div>
+    
+<script>
+    new Jet()
+</script>

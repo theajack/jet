@@ -1,0 +1,112 @@
+<div class='title'>import:引入模块</div>
+<div class="sub">
+    <div class='text'>
+        使用Jet.import() 或 在 Jet元素中使用 this.import() (Jet.prototype.$import) 来引入一个已经定义过的模块：
+    </div>
+    <div class='title'>1.Jet.import</div>
+    <div class='text indent'>
+        使用Jet.import()会在 Jet.module 中添加一个模块，模块名为define方法设置的名称。
+        该方法支持任意个参数，最后一个参数可以是一个回调函数，除此之外其他参数，全部为字符串，表示需要加载的模块，其必须与对应的js文件同名，.js后缀可以省略。
+    </div>
+    <div class='text indent'>
+        如果最后一个函数是一个回调函数，那么在所有模块加载完成之后会执行该回调函数，回调参数一个json对象，表示的是所有加载的模块集合。请看一个例子：
+    </div>
+    <div class='text'>
+        /src/js 目录下的模块文件 module1.js：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.define('m1',function(){//模块名和模块回调函数
+    var count=0;//模块内部代码
+    
+    Jet.export({//输出模块
+        getCount:function(){
+            return count;
+        },
+        addCount:function(){
+            count++;
+        },
+    })
+})
+    </div>
+    <div class='text'>
+        /src/js 目录下的模块文件 module2.js：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.define('m2',['module1'],function(modules){
+    //依赖模块可以包含子目录，如 ['modules/module1']
+    //modules为引入的模块集合，在该例中 modules为{m1:模块1}，回调参数modules可以为任意命名
+    var count=0;
+
+    Jet.export({
+        addCount1:function(){
+            modules.m1.addCount();
+        },
+        addCount2:function(){
+            count++;
+        },
+        allCount:function(){
+            return modules.m1.getCount()+count;
+        },
+    })
+})
+    </div>
+
+    <div class='text'>
+        加载module1：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.import('module1');//加载一个模块，加载之后Jet.module={m1:模块一}
+
+Jet.import('module1','module2');//加载多个模块，加载之后Jet.module={m1:模块一,m2:模块二}
+Jet.import('module1','module2',function(modules){//使用回调函数，加载之后Jet.module={m1:模块一,m2:模块二}
+    //modules={m1:模块一,m2:模块二},表示当前import 加载的模块集合
+});
+    </div>
+    <div class='title' jump-des='Jet.prototype.$import'>2.Jet.prototype.$import</div>
+    <div class='text'>
+        在 Jet元素中可以使用 this.$import()来引入模块，使用以后除了在Jet.module中会添加对应的模块，还会在当前Jet元素的module中会添加对应的模块。
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+new Jet({
+    onmounted:function(){
+        this.$import('module1','module2',function(modules){
+            //modules={m1:模块一,m2:模块二},表示当前import 加载的模块集合
+            //参数和使用方法与Jet.import一致
+            //this.$module={m1:模块一,m2:模块二}
+            //Jet.module={m1:模块一,m2:模块二}
+        });
+    }
+})
+    </div>
+    <div class='title' jump-des='s-name'>3.为模块设置别名</div>
+    <div class='text'>
+        使用import() 加载模块时可以使用 as 为模块设置别名，但是别名只在回调函数中可用，不会记录到 Jet.module 或this.module 集合中，集合中的模块名仍然对应的是 define 方法设置的模块名，请看一个例子：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.import('module1 as mym2','module2 as mym2',function(modules){
+    //modules={mym2:模块一,mym2:模块二}
+    //Jet.module={m1:模块一,m2:模块二}
+});
+    </div>
+    <div class='title' jump-des='new'>4.使用new加载一个独立的模块</div>
+    <div class='text'>
+        前面的教程提到过，Jet中多次加载相同的模块都指向的是同一对象，如果希望它们互相独立，需要使用new关键字，new可以与as一起使用。
+        独立模块不会被加入到module集合中。用法如下：
+    </div>
+    <div class='text'>
+        /src/js 目录下的模块文件 module3.js，它依赖 module1.js：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.import('new(module1) as mym2','new(module2) as mym2',function(modules){
+    //modules={mym2:模块一,mym2:模块二}
+    //Jet.module={m1:模块一,m2:模块二}
+});
+    </div>
+    <div class='title' jump-des='noBabel'>5.no-babel: 前缀</div>
+    <div class='text'>
+        当使用 babel库 之后，默认是会把所有的 模块都通过babel转译，但是若您不希望这样做，可以使用 no-babel: 前缀来禁止转译。使用如下。
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.import('no-babel:module1');
+    </div>
+</div>

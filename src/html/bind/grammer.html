@@ -1,0 +1,479 @@
+<div class='title'>特殊语法</div>
+<div class='text'>
+    上一节大致介绍了bind，for，text和input四种Jet元素类型：
+    这一节我们要介绍它们的一些特殊语法。<span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
+    <div class="list">
+        <div class='link' jump-to='bind'>1.bind <i class="icon icon-double-angle-right"></i></div>
+        <div>
+            <div class="link" jump-to='for'>2.for <i class="icon icon-double-angle-right"></i></div>
+            <div class="list">
+                <div class='link' jump-to='for-intro'>a.概述 <i class="icon icon-double-angle-right"></i></div>
+                <div class='link' jump-to='for-$each'>b.$each <i class="icon icon-double-angle-right"></i></div>
+                <div class='link' jump-to='for-$index'>c.$index <i class="icon icon-double-angle-right"></i></div>
+                <div class='link' jump-to='for-$value'>d.$value <i class="icon icon-double-angle-right"></i></div>
+                <div class='link' jump-to='for-inline'>e.属性 jfor-inline <i class="icon icon-double-angle-right"></i></div>
+            </div>
+        </div>
+        <div>
+            <div class="link" jump-to='text'>3.text <i class="icon icon-double-angle-right"></i></div>
+        </div>
+        <div>
+            <div class="link" jump-to='input'>4.input <i class="icon icon-double-angle-right"></i></div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='bind'>1.bind</div>
+<div class="sub">
+    <div class='text'>
+        bind元素没有特殊的语法，它只是一个容器，里面可以嵌套bind元素，也可以含有for、text、和input
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='user'>
+    &lt;div j='name'>
+        &lt;span j='first'>&lt;/span>
+        &lt;span j='last'>&lt;/span>
+    &lt;/div>
+    &lt;div j='age'>&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            user:{
+                name:{
+                    first:'first',
+                    last:'last'
+                },
+                age:1
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div j='user'>
+                <div j='name'>
+                    <span j='first'></span>
+                    <span j='last'></span>
+                </div>
+                <div j='age'></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--for************************************************************************-->
+<div class='title' jump-des='for'>2.for</div>
+<div class="sub">
+    <div class='title' jump-des='for-intro'>a.概述</div>
+    <div class='text'>
+        for元素也是一个容器，但是在逻辑上它不能直接包含text和input元素，尽管你可以直接这么写，
+        那是因为Jet会将你直接写在for元素中的text和input包在一个bind元素中。这是为了更好的管理数组中的元素。
+    </div>
+    <div class='text'>
+        对一个html元素使用J='array' 绑定一个数组，就会生成一个对应的for元素，for元素会将其中的html内容与数组中每个元素都绑定，每个元素都会对应一个bind元素。
+        接下来举三个例子，分别是元素类型是值类型、json和数组层层嵌套
+    </div>
+    <div class='text'>
+        值类型的例子
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='list'>
+    &lt;span j='$index'>&lt;/span>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            list:[11,22,33]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        上面的写法例子等价于下面的写法
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='list'>
+    &lt;div j='$each'>
+        &lt;span j='$index'>&lt;/span>
+        &lt;span j='$value'>&lt;/span>
+    &lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            list:[11,22,33]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <div j='list'>
+                <span j='$index'></span>-<span j='$value'></span>
+            </div>
+        </div>
+    </div>
+    <div class='text'>
+        这里出现了三个关键词：<span class='red'>$each</span>,<span class='red'>$index</span>和<span class='red'>$value</span>。这里分别介绍一下这三个词：
+    </div>
+    <div class='title' jump-des='for-$each'>b.$each</div>
+    <div class='text'>
+        $each 是与数组中的每一个数组元素对应，每一个数组元素生成一个bind类型的元素。若是你没有使用$each，Jet会自动把for的html内容用$each包裹起来。
+        当时用了多层数组嵌套时，请显式使用$each。
+    </div>
+    <div class='text'>
+        使用$each 还有一个重要的功能，就是 <span class='red'>switch</span> 功能，根据不同的数据来使用不同的html内容，请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='users'>
+    &lt;div j='$each.sex=boy'>
+        我是&lt;span class='red'>男生&lt;/span>。我叫&lt;span j='name'>&lt;/span>
+    &lt;/div>
+    &lt;div j='$each.sex=girl'>
+        &lt;span class='red'>女生&lt;/span>的模板。我叫&lt;span j='name'>&lt;/span>
+    &lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            users:[{
+                name:'bob',
+                sex:'boy',
+            },{
+                name:'lina',
+                sex:'girl',
+            },{
+                name:'jack',
+                sex:'boy',
+            }]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出：
+        <div class="out">
+            <div j='users'>
+                <div j='$each.sex=boy'>
+                    我是<span class='red'>男生</span>。我叫
+                    <span j='name'></span>
+                </div>
+                <div j='$each.sex=girl'>
+                    <span class='red'>女生</span>的模板。我叫
+                    <span j='name'></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='title' jump-des='for-$index'>c.$index</div>
+    <div class='text'>
+        $index 指的是数组元素的索引，从0到n。a.概述中的例子中已经可以体现出，这里就不再另举例
+    </div>
+    <div class='text'>
+        这里说一下多层嵌套的时候如何获取父元素或者父元素的父元素的索引，Jet使用 <span class='red'>$index(n)</span> 来获取父元素的索引。
+        这里的(n)是第几层父元素，可以不要，不要参数默认 n=1，表示直系的第一个父元素。请看一个例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='arrays'>
+    &lt;div j='$each' class='a1'>
+        &lt;div j='$each' class='a2'>
+            &lt;div j='$each' class='a3'>
+                &lt;span j='$index(2)'>&lt;/span>-&lt;span j='$index()'>&lt;/span>-&lt;span j='$index'>&lt;/span>:
+                &lt;span j='$value'>&lt;/span>
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            arrays:[
+                [
+                    [111,112],
+                    [121,122]
+                ],
+                [
+                    [211,212],
+                    [221,222]
+                ]
+            ]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出：
+        <div class="out">
+            <div j='arrays'>
+                <div j='$each' class='a1'>
+                    <div j='$each' class='a2'>
+                        <div j='$each' class='a3'>
+                            <span j='$index(2)'></span>-<span j='$index()'></span>-<span j='$index'></span>:
+                            <span j='$value'></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="out">
+            <div j='arrays2'>
+                <div j='$each' class='a1'>
+                    <div j='list' class='a2'>
+                        <div j='$each' class='a3'>
+                            <div j='list' class='a2'>
+                                <div j='$each' class='a3'>
+                                        <span j='$.$p(2).$index'></span>-<span j='$.$p.$index'></span>-
+                                    <span j='$index'></span>-<span j='$value'></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="out">
+            <div j='arrays2'>
+                <div j='list' class='a2'>
+                    <div j='list' class='a2'>
+                            <span j='$.$p(2).$index'></span>-<span j='$.$p.$index'></span>-
+                        <span j='$index'></span>-<span j='$value'></span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    
+    <div class='text'>
+        在jtool元素中（jif，jshow，jattr，jstyle）中也可以使用$index，使用方法如下：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;div j='array'>
+    &lt;div jattr='name:{{$index}}'>&lt;/div>
+&lt;/div>
+    </div>
+
+    <div class='title' jump-des='for-$value'>d.$value</div>
+    <div class='text'>
+        $value 的使用场景当 for 数组中的元素是值类型。因为值类型没有键可供属性j来使用。举一个例子
+    </div>
+
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='list'>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            list:[11,22,33]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出
+        <div class='out'>
+            <div j='list'>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+    <div class='title' jump-des='for-inline'>e.属性 jfor-inline</div>
+    <div class='text'>
+        因为会对 for 元素的所有孩子默认加上一个 each 包裹，所以可能会产生一个开发者不希望看到的块状元素，但是使用 jfor-inline 可以使 each 为一个行内元素。
+        这种效果也可以通过主动使用 一个 行内元素的 each来实现。请看一个例子：
+    </div>
+    <!--  buttons='fontsizeup;fontsizedown;fullscreen;fix' -->
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='list' jfor-inline>
+    &lt;span j='$value'>&lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            list:[11,22,33]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        等价于以下写法：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='list'>
+    &lt;span j='$each'>
+        &lt;span j='$value'>&lt;/span>
+    &lt;/span>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            list:[11,22,33]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出
+        <div class='out'>
+            <div j='list' jfor-inline>
+                <span j='$value'></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='text'>3.text</div>
+<div class="sub">
+    <div class='text indent'>
+        text是渲染文本的类型，不接受用户输入。当绑定的数据是boolean，number，string类型（值类型）时，
+        并且对应的html元素不是输入元素（不是input，textarea，select或contenteditable的元素），
+        Jet会生成一个text类型的jet元素。
+    </div>
+
+    <div class='text'>
+        text元素可以使用 $ 来进行值的运算,并且可以使用任何符合js语法的表达式。请看下面的例子：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='string'>&lt;/div>
+&lt;div j='string'>$&lt;/div>
+&lt;div j='string'>$+' world'&lt;/div>
+&lt;div j='string'>$.substring(1,4)&lt;/div>
+&lt;div j='number'>$+2&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            string:'hello',
+            number:10
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的html：
+        <div class="out">
+            <div j="string"></div>
+            <div j="string">$</div>
+            <div j="string">$+' world'</div>
+            <div j="string">$.substring(1,4)</div>
+            <div j="number">$+2</div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='input'>4.input</div>
+<div class="sub">
+    <div class='text indent'>
+        input也是渲染文本的类型，但它还可以接受用户输入，并且会改变数据源，从而刷新其他绑定了相同数据的UI。
+        当绑定的数据是boolean，number，string类型（值类型）时，
+        并且对应的html元素是输入元素（是input，textarea，select或contenteditable的元素），
+        Jet会生成一个input类型的jet元素
+    </div>
+    <div class='text'>
+        input也可以使用 $ 来进行值的运算,不过要放在 value 属性中。请看一个例子 
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j="string">&lt;/div>
+&lt;div j="number">&lt;/div>
+&lt;div>&lt;input type='text' j='string'/>&lt;/div>
+&lt;div>&lt;input type='text' j='string' value='$'/>&lt;/div>
+&lt;div>&lt;textarea j='string'>$+' world'&lt;/textarea>&lt;/div>
+&lt;div>&lt;div contenteditable="true" j='string'>&lt;/div>&lt;/div>
+&lt;div>&lt;input type='text' j='number'/>&lt;/div>
+&lt;div>&lt;input type='text' j='number' value='$+2'/>&lt;/div>
+&lt;div>
+    &lt;select j='number'>
+        &lt;option value='10'>value=10&lt;/option>
+        &lt;option value='11'>value=11&lt;/option>
+        &lt;option value='12'>value=12&lt;/option>
+    &lt;/select>
+&lt;/div>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{//数据
+            string:'hello',
+            number:10
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的html：
+        <div class="out">
+            <div j="string"></div>
+            <div j="number"></div>
+            <div><input type='text' j='string'/></div>
+            <div><input type='text' j='string' value='$'/></div>
+            <div><textarea j='string'>$+' world'</textarea></div>
+            <div><div contenteditable="true" j='string'></div></div>
+            <div><input type='text' j='number'/></div>
+            <div><input type='text' j='number' value='$+2'/></div>
+            <div>
+                <select j='number'>
+                    <option value='10'>value=10</option>
+                    <option value='11'>value=11</option>
+                    <option value='12'>value=12</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        data:{//数据
+            user:{
+                name:{
+                    first:'first',
+                    last:'last'
+                },
+                age:1
+            },
+            list:[11,22,33],
+            users:[{
+                name:'bob',
+                sex:'boy',
+            },{
+                name:'lina',
+                sex:'girl',
+            },{
+                name:'jack',
+                sex:'boy',
+            }],
+            arrays:[
+                [
+                    [111,112],
+                    [121,122]
+                ],
+                [
+                    [211,212],
+                    [221,222]
+                ]
+            ],
+            arrays2:[
+                {
+                    list:[
+                        {
+                            list:[111,112]
+                        },
+                        {
+                            list:[121,122]
+                        },
+                    ]
+                },
+                {
+                    list:[
+                        {
+                            list:[211,212]
+                        },
+                        {
+                            list:[221,222]
+                        },
+                    ]
+                },
+            ],
+            string:'hello',
+            number:10,
+        }
+    });
+</script>

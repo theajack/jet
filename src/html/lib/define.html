@@ -1,0 +1,60 @@
+<div class='title'>use.define方法</div>
+<div class="sub">
+    <div class='text indent'>
+        使用 Jet.use 方法加载库时，如果库很多，而且不同库之间有依赖关系，那么需要使用define方法来管理库和他们之间的依赖关系。
+    </div>
+    <div class='text indent'>
+        使用 <span class="red">Jet.use.define</span> 方法参数有两个属性 <span class="red">lib</span>和<span class="red">depend</span>
+    </div>
+    <div class='text indent'>
+        lib 参数用于声明库，depend参数用于声明库之间的依赖关系。使用方式如下
+    </div>
+    <div class='title' jump-des='weekdep'>弱依赖</div>
+    <div class='text indent'>
+        弱依赖的定义是：对于a和b两个库，当a加载与否对b库的运行结果有两种不同的效果，但是即便a没有加载，也不会使b库报错，即b也能正常运行，只是会产生一个备用的结果，此时成b弱依赖于a。
+    </div>
+    <div class='text indent'>
+        通俗来说就是a对于b不是必须的，但是有a会更好。
+    </div>
+    <div class='text indent'>
+        而depend参数配置的依赖关系默认为强依赖，在b库之前没有加载a库就会导致b库报错，无法正常运行。
+    </div>
+    <div class='text indent'>
+        我们可以在depend参数中的被依赖库加一个 <span class="red">@</span>前缀来定义一个弱依赖关系：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.use.define({
+    lib:{
+        a:'src/js/a.js',
+        b:'src/js/b',//.js后缀可以省略
+        c:'src/js/c',
+    },
+    depend:{
+        a:['b','c'],
+        b:['c','tool'],//也可以依赖官方库
+        c:['@tool'] //c 弱依赖于tool
+    }
+})
+    </div>
+    <div class='text indent'>
+        声明库之后，就可以通过库名来加载库
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.use('a')
+    </div>
+    <div class='text indent'>
+        在上面的示例中，由于 a依赖b和c，b以来c和tool，所以Jet会自动添加b,c,tool三个依赖项，并且放在a之前加载，又因为b以来c和tool,所以c和tool会在b之前加载
+    </div>
+    <div class='text indent'>
+        Jet会严格按照定义的依赖关系按顺序分别加载js库。
+    </div>
+</div>
+<script>
+    new Jet({
+        func:{
+            jump:function(opt){
+                Jet.router.route(opt.ele.attr('data-route'))
+            }
+        }
+    })
+</script>

@@ -1,0 +1,14 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "description": "{{description}}",
+  "author": "{{author}}",
+  "jetConfig": {
+    "compressHtml": true,
+    "compressCss": true,
+    "compressJs": true,
+    "buildJsWithBabel": false,
+    "buildCssWithLess": false,
+    "commonLess":false
+  }
+}

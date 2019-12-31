@@ -1,0 +1,68 @@
+<div class='title'>export:输出模块</div>
+<div class="sub">
+    <div class='text'>
+        在Jet.define() 方法的最后一个参数，也就是回调函数中，使用Jet.export()暴露模块的接口，刚方法的参数是一个json对象，请看几个例子：
+    </div>
+    <div class='title'>1.一般使用</div>
+    <div class='text'>
+        /src/js 目录下的模块文件 module1.js：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.define('m1',function(){//模块名和模块回调函数
+    var count=0;//模块内部代码
+    //当前this指代Jet，所以可以使用 this.export
+    Jet.export({//输出模块
+        getCount:function(){
+            return count;
+        },
+        addCount:function(){
+            count++;
+        },
+    })
+})
+    </div>
+    <div class='text'>
+        除了输出一个json作为模块，还可以输出一个函数或者数组等作为模块：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.define('add',function(){
+    Jet.export(
+        function(a,b){
+            return a+b;
+        }
+    )
+})
+    </div>
+    <div class='title'>2.$init方法</div>
+    <div class='text'>
+        Jet.export 中可以含有一个$init属性，该属性是一个函数，会在模块加载完成输出接口是执行这个方法，随后这个属性会被删除，不会包含在输出的模块中。
+    </div>
+    <div class='text'>
+        /src/js 目录下的模块文件 module1.js：
+    </div>
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.define('m1',function(){//模块名和模块回调函数
+    var count=0;//模块内部代码
+    //当前this指代Jet，所以可以使用 this.export
+    Jet.export({//输出模块
+        $init:function(){
+            console.log(count);
+        },
+        getCount:function(){
+            return count;
+        },
+        addCount:function(){
+            count++;
+        }
+    })
+})
+    </div>
+</div>
+<script>
+    // Jet.import('module2 as mmm2',function(mods){
+    //     //debugger
+    //     console.log('export:',mods)
+    //     console.log('export:',Jet.module)
+    //     console.log('export:',_modules)
+    // })
+</script>

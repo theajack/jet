@@ -1,0 +1,92 @@
+<div class='title'>路由属性</div>
+<div class='sub'>
+    <div class='text indent'>
+        Jet.router 对象中有许多与路由相关的属性，开发者可以使用它们来辅助开发。
+        这些属性都是只读的，不可以修改或者修改没有任何意义。一共有以下7个：
+        <div class="list">
+            <div>1.base <span class="light-text">(根目录路径)</span></div>
+            <div>2.trueBase <span class="light-text">(根目录路径是否是真实的文件目录，布尔类型)</span></div>
+            <div>3.history <span class="light-text">(是否使用history模式，布尔类型)</span></div>
+            <div>4.path <span class="light-text">(当前的路由路径)</span></div>
+            <div>5.url <span class="light-text">(当前的不包含根路径的路由路径)</span></div>
+            <div>6.params <span class="light-text">(链接后面的参数，json类型)</span></div>
+            <div>7.conf <span class="light-text">(存放资源文件的目录，json类型)</span></div>
+            <div>8.map <span class="light-text">(路由的映射表，json类型)</span></div>
+            <div>9.active <span class="light-text">(当前路由页面对应的jrouter dom元素)</span></div>
+            <div>10.out <span class="light-text">(路由出口对应的dom元素)</span></div>
+            <div>11.index <span class="light-text">(设置路由首页)</span></div>
+            <div>12.indexMap <span class="light-text">(路由首页对应的html地址，无需开发者设置)</span></div>
+        </div>
+    </div>
+    <div class='text '>
+        请看它们其中的某些值：
+    </div><div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='base'>'base: '+$&lt;/div>
+&lt;div j='trueBase'>'trueBase: '+$&lt;/div>
+&lt;div j='history'>'history: '+$&lt;/div>
+&lt;div j='path'>'path: '+$&lt;/div>
+&lt;div j='url'>'url: '+$&lt;/div>
+&lt;div j='params'>'params: '+$&lt;/div>
+&lt;div j='conf'>'conf: '+$&lt;/div>
+&lt;div j='map'>'map: '+$&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            base:null,
+            trueBase:null,
+            history:null,
+            path:null,
+            url:null,
+            params:null,
+            map:null,
+            conf:null
+        },onmounted:function(){
+            this.base=Jet.router.base;
+            this.trueBase=Jet.router.trueBase;
+            this.history=Jet.router.history;
+            this.path=Jet.router.path;
+            this.url=Jet.router.url;
+            this.params=JSON.stringify(Jet.router.params);
+            this.map=JSON.stringify(Jet.router.map);
+            this.conf=JSON.stringify(Jet.router.conf);
+        }
+    })
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div j='base'>'base: '+$</div>
+            <div j='trueBase'>'trueBase: '+$</div>
+            <div j='history'>'history: '+$</div>
+            <div j='path'>'path: '+$</div>
+            <div j='url'>'url: '+$</div>
+            <div j='params'>'params: '+$</div>
+            <div j='conf'>'conf: '+$</div>
+            <div j='map'>'map: '+$</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Jet({
+        data:{
+            base:null,
+            trueBase:null,
+            history:null,
+            path:null,
+            url:null,
+            params:null,
+            map:null,
+            conf:null
+        },onmounted:function(){
+            this.base=Jet.router.base;
+            this.trueBase=Jet.router.trueBase;
+            this.history=Jet.router.history;
+            this.path=Jet.router.path;
+            this.url=Jet.router.url;
+            this.params=JSON.stringify(Jet.router.params);
+            this.map=JSON.stringify(Jet.router.map);
+            this.conf=JSON.stringify(Jet.router.conf);
+        }
+    });
+</script>

@@ -1,0 +1,363 @@
+<style>
+    ._red{
+        color:#f00;
+    }
+    ._green{
+        color:#0f0;
+    }
+    ._bg-gray{background-color: #ccc}
+</style>
+<div class='title'>Jif</div>
+<div class='text'>
+    <div class='indent'>
+        使用Jif属性可以根据给定的布尔值或布尔表达式的结果对元素进行两种不同的操作。其大致的使用格式如下
+    </div>
+    <div class='t-center'><span class='red'>Jif="exp:class[a,b|b];attr[a=b,a=b|a];text[a|b];html[a|b];css[a=a,a=a|b=b];func|func"</span></div>
+    <div class='indent'>
+        其中冒号前的是布尔值或者布尔表达式，冒号后面的是指令，指令使用分号间隔，同时使用多个指令。
+        指令中方括号外部的是指令名，方括号内部的是两个待选项，使用 竖线 间隔，如果只有一个待选项，
+        则false不执行任何操作。待选项可以由多个小项组成，小项之间使用逗号间隔。
+        如果没有可识别的指令，则认为是自定义函数，自定义函数可以使Jet中的方法，全局函数，或者是一段合法的js代码，
+        自定义函数中可以使用一个参数 opt ，它是一个json数据，里面含有三个属性：ele(对应的html元素),data(对应的Jet数据),jet(根Jet元素)。
+        自定义函数的中的this指代的是根Jet元素。
+        本节将从以下几个方面介绍Jif的用法
+    </div>
+    <span class="light-text">(点及下面的列表可以跳转到对应位置)</span>
+    <div class="list">
+        <div class='link' jump-to='bool'>1.使用布尔值 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='boolexp'>2.使用布尔表达式 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='class'>3.class用法 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='attr'>4.attr用法 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='text'>5.text用法 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='html'>6.html用法 <i class="icon icon-double-angle-right"></i></div>
+        <div class='link' jump-to='func'>7.自定义函数 <i class="icon icon-double-angle-right"></i></div>
+    </div>
+</div>
+<div class='title' jump-des='bool'>1.使用布尔值</div>
+<div class="sub">
+    <div class='text'>
+        jif的条件使用一个布尔值,如果要使用绑定json数据或者数组中的布尔值，请使用$.attr，请看一个例子
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;style>
+._red{color:#f00;}
+._green{color:#0f0;}
+&lt;/style>
+&lt;input jon='click:this.bool=!this.bool' type="button" value='改变布尔值'>
+&lt;div jif='bool:class[_red|_green]'>
+    示例html元素
+&lt;/div>
+&lt;input jon='click:this.json.bool=!this.json.bool' type="button" value='改变json中的布尔值'>
+&lt;div jif='$.json.bool:class[_red|_green]'>
+    示例html元素
+&lt;/div>
+&lt;input jon='click:this.array[0]=!this.array[0]' type="button" value='改变数组中的布尔值'>
+&lt;div jif='$.array[0]:class[_red|_green]'>
+    示例html元素
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            bool:true,
+            json:{
+                bool:true
+            },
+            array:[true]
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input jon='click:this.bool=!this.bool' type="button" value='改变布尔值'>
+            <div jif='bool:class[_red|_green]'>
+                示例html元素
+            </div>
+            <input jon='click:this.json.bool=!this.json.bool' type="button" value='改变json中的布尔值'>
+            <div jif='$.json.bool:class[_red|_green]'>
+                示例html元素
+            </div>
+            <input jon='click:this.array[0]=!this.array[0]' type="button" value='改变数组中的布尔值'>
+            <div jif='$.array[0]:class[_red|_green]'>
+                示例html元素
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='boolexp'>2.使用布尔表达式</div>
+<div class="sub">
+    <div class='text'>
+        jif的条件使用一个布尔值表达式，与使用布尔值不同的是布尔表达式中的变量要使用 {{}} 包裹起来。请看一个例子
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;style>
+._red{color:#f00;}
+._green{color:#0f0;}
+&lt;/style>
+改变绑定数据的值：
+&lt;input j='exp_int' type="text">
+&lt;div jif='{{$.exp_int}}>10:class[_red|_green]'>
+    示例html元素
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            exp_int:10
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            改变绑定数据的值：
+            <input input j='exp_int' type="text">
+            <div jif='{{$.exp_int}}>10:class[_red|_green]'>
+                示例html元素
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='class'>3.class用法</div>
+<div class="sub">
+    <div class='text'>
+        jif的class指令用来给元素添加类，可以根据布尔值或布尔表达式的结果来给元素添加不同的类，使用 逗号，可以添加多个类。
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;style>
+._red{color:#f00;}
+._green{color:#0f0;}
+._bg-gray{background-color: #ccc}
+&lt;/style>
+&lt;input jon='click:this.bool_class=!this.bool_class' type="button" value='改变布尔值'>
+&lt;div jif='bool_class:class[_red|_green]'>
+    单个类
+&lt;/div>
+&lt;div jif='bool_class:class[_red,_bg-gray|_green]'>
+    多个类
+&lt;/div>
+&lt;div jif='bool_class:class[_red]'>
+    只有单个候选项
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            bool_class:true
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input jon='click:this.bool_class=!this.bool_class' type="button" value='改变布尔值'>
+            <div jif='bool_class:class[_red|_green]'>
+                单个类
+            </div>
+            <div jif='bool_class:class[_red,_bg-gray|_green]'>
+                多个类
+            </div>
+            <div jif='bool_class:class[_red]'>
+                只有单个候选项
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='attr'>4.attr用法</div>
+<div class="sub">
+    <div class='text'>
+        jif的attr指令用来给元素添加属性，可以根据布尔值或布尔表达式的结果来给元素添加不同的属性，使用 逗号，可以添加多个属性，
+        使用等于号表示属性的键值对，值不需要是用引号包裹，如果没有使用等号给属性赋值，则属性为空值。接下来看几个例子
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input jon='click:this.bool_attr=!this.bool_attr' type="button" value='改变布尔值'>
+&lt;div jdom='attr'>
+    &lt;div jif='bool_attr:attr[a=v_1|a=v_2]'>
+        单个属性
+    &lt;/div>
+    &lt;div jif='bool_attr:attr[a=v_1,b=v_1|a=v_2]'>
+        多个属性
+    &lt;/div>
+    &lt;div jif='bool_attr:attr[a=v_1]'>
+        只有单个候选项
+    &lt;/div>
+&lt;/div>
+&lt;div j='attr_html'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        onmounted:function(){
+            this.attr_html=this.$dom.attr.html;
+        },
+        data:{
+            bool_attr:true,
+            attr_html:'',
+        },
+        ondatachange:{
+            'bool_attr':function(){
+                this.attr_html=this.$dom.attr.html;
+            }
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input jon='click:this.bool_attr=!this.bool_attr' type="button" value='改变布尔值'>
+            <div jdom='attr'>
+                <div jif='bool_attr:attr[a=v_1|a=v_2]'>
+                    单个属性
+                </div>
+                <div jif='bool_attr:attr[a=v_1,b=v_1|a=v_2]'>
+                    多个属性
+                </div>
+                <div jif='bool_attr:attr[a=v_1]'>
+                    只有单个候选项
+                </div>
+            </div>
+            <div j='attr_html'>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='text'>5.text用法</div>
+<div class="sub">
+    <div class='text'>
+        jif的text指令用来改变元素的innerText，可以根据布尔值或布尔表达式的结果来给元素添加不同的innerText。
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input jon='click:this.bool_text=!this.bool_text' type="button" value='改变布尔值'>
+&lt;div jif='bool_text:text[&lt;div id="text1_true">text_true&lt;/div>|&lt;div id="text1_false">text_false&lt;/div>]'>
+&lt;/div>
+&lt;div jif='bool_text:text[&lt;div id="text2">text_true&lt;/div>]'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            bool_text:true
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input jon='click:this.bool_text=!this.bool_text' type="button" value='改变布尔值'>
+            <div jif='bool_text:text[<div id="text1_true">text_true</div>|<div id="text1_false">text_false</div>]'>
+            </div>
+            <div jif='bool_text:text[<div id="text2">text_true</div>]'>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='html'>6.html用法</div>
+<div class="sub">
+    <div class='text'>
+        jif的html指令用来改变元素的innerHTML，可以根据布尔值或布尔表达式的结果来给元素添加不同的innerHTML。
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;input jon='click:this.bool_html=!this.bool_html' type="button" value='改变布尔值'>
+&lt;div jif='bool_html:html[&lt;div id="text1_true">text1_true&lt;/div>|&lt;div id="text1_false">text1_false&lt;/div>]'>
+&lt;/div>
+&lt;div jif='bool_html:html[&lt;div id="text2">text2_true&lt;/div>]'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            bool_html:true
+        }
+    });
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input jon='click:this.bool_html=!this.bool_html' type="button" value='改变布尔值'>
+            <div jif='bool_html:html[<div id="text1_true">text1_true</div>|<div id="text1_false">text1_false</div>]'>
+            </div>
+            <div jif='bool_html:html[<div id="text2">text2_true</div>]'>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='title' jump-des='func'>7.自定义函数</div>
+<div class="sub">
+    <div class='text'>
+        若是没有以上的指令，jif会默认识别为自定义函数，自定义函数可以使Jet中的方法，全局函数，或者是一段合法的js代码，
+        自定义函数中可以使用一个参数 opt ，它是一个json数据，里面含有三个属性：ele(对应的html元素),data(对应的Jet数据),jet(根Jet元素)。
+        自定义函数的中的this指代的是根Jet元素。
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+
+&lt;input jon='click:this.bool_func=!this.bool_func' type="button" value='改变布尔值'>
+&lt;div jif='bool_func:func_true|func_false'>
+&lt;/div>
+&lt;div jif='bool_func:func(opt)|opt.ele.html(opt.data.bool_func)'>
+&lt;/div>
+&lt;script>
+    new Jet({
+        data:{
+            bool_func:true
+        },
+        func:{
+            func_true:function(opt){
+                opt.ele.innerHTML=opt.data.bool_func;
+            },func_false:function(opt){
+                opt.ele.innerHTML=opt.data.bool_func;
+            }
+        }
+    });
+    function func(opt){
+        opt.ele.innerHTML=opt.data.bool_func
+    }
+&lt;/script>
+    </div>
+    <div class='text'>
+        以下是输出的结果：
+        <div class='out'>
+            <input jon='click:this.bool_func=!this.bool_func' type="button" value='改变布尔值'>
+            <div jif='bool_func:func_true|func_false'>
+            </div>
+            <div jif='bool_func:func(opt)|opt.ele.html(opt.data.bool_func)'>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        onmounted:function(){
+            this.attr_html=this.$dom.attr.html;
+        },
+        data:{//数据
+            bool:true,
+            json:{
+                bool:true
+            },
+            array:[true],
+            exp_int:10,
+            bool_class:true,
+            bool_attr:true,
+            bool_text:true,
+            bool_html:true,
+            bool_func:true,
+            attr_html:'',
+        },
+        ondatachange:{
+            'bool_attr':function(){
+                this.attr_html=this.$dom.attr.html;
+            }
+        },
+        func:{
+            func_true:function(opt){
+                opt.ele.innerHTML=opt.data.bool_func;
+            },func_false:function(opt){
+                opt.ele.innerHTML=opt.data.bool_func;
+            }
+        }
+    });
+    function func(opt){
+        opt.ele.innerHTML=opt.data.bool_func
+    }
+</script>

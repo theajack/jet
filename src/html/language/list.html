@@ -1,0 +1,39 @@
+<div class='title'>Jet.lang.list</div>
+<div class="sub">
+    <div class='text'>
+        使用 <span class="red">Jet.lang.list</span> 属性可以查看可用的语言列表，该属性不可修改，其值是在index.js文件中使用Jet.lang.use()方法设置的。请看一个例子：
+    </div>
+    
+    <div class='j-code not-test' disabled width='99%' height='auto'>
+Jet.lang.use(['cn','en']);
+    </div>
+    <div class='text'>
+        Jet组件中：
+    </div>
+    <div class='j-code' disabled width='99%' height='auto'>
+&lt;div j='list'>&lt;/div> 
+&lt;script>
+new Jet({
+    data:{
+        list:''
+    },onmounted:function(){
+        this.list=Jet.lang.list.toString();
+    }
+})
+&lt;/script>
+    </div>
+    <div class='text'>以下是输出的html:
+        <div class='out'>
+            <div j='list'></div> 
+        </div>
+    </div>
+</div>
+<script>
+    new Jet({
+        data:{
+            list:''
+        },onmounted:function(){
+            this.list=Jet.lang.list.toString();
+        }
+    })
+</script>

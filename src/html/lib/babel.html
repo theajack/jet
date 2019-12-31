@@ -1,0 +1,60 @@
+<div class='title'>babel</div>
+<div class="sub">
+    <div class='text indent'>
+        babel是一个javascript转译器，可以将新一代的js语法转换成浏览器可以运行的js代码。
+    </div>
+    <div class='text indent'>
+        Jet对babel源码进行了部分修改，使其适用于在Jet程序中使用，并将其纳入Jet的官方库。Jet使用的babel版本为6.26.0。
+    </div>
+    <div class='text indent'>
+        Jet babel可以对 组件中的js，组件中引入的外部js 以及 使用Jet.define定义的Jet模块 进行转译。
+        当您引入了babel之后，Jet会默认对这js代码进行转译操作。当然若是您不希望某些js代码被转译，可以 
+        <span class='link' jump-to='no-babel'>手动禁止</span> 这种默认行为。
+    </div>
+    <div class='title'>使用</div>
+    <div class='text'>
+        使用 Jet.use 或 Jet.use.all 方法加载了babel库之后，所有的js代码都会默认在加载时被转译，无需任何操作。
+    </div>
+    <div class='title' jump-des='no-babel'>禁用babel</div>
+    <div class='text'>
+        若您希望组件中的js或组件中引入的js代码不使用babel转译，请在对应的 script 标签上设置属性 <span class="red">jbabel='false'</span>
+    </div>
+    <div class='text'>
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;script jbabel='false'>
+    new Jet({
+        //...
+    })
+&lt;/script>
+        </div>
+    </div>
+    <div class='text'>
+        若您希望Jet模块中的js不使用babel转译，请在import模块时使用 <span class="red">no-babel:</span> 前缀标记模块
+    </div>
+    <div class='text'>
+        <div class='j-code not-test' disabled width='99%' height='auto'>
+&lt;script jbabel='false'>
+    Jet.import('no-babel:name')
+&lt;script/>
+        </div>
+    </div>
+    <div class='title' jump-des='Jet.babel'>Jet.babel</div>
+    <div class='text'>
+        使用了babel之后，会在Jet会生成一个Jet.babel对象，该对象上有一个很有用的方法，<span class="red">Jet.babel.toEs5()</span>.
+        刚方法接受一个 字符串类型的参数，返回一个字符串类型的参数，作用是将es6转换为es5。
+    </div>
+    <div class='text'>
+        另外，<span class="red">Jet.babel._babel</span>暴露原始的Babel对象。
+    </div>
+    <div class='title'>生产环境</div>
+    <div class='text'>
+        在运行时编译js代码会产生一定的开销。
+        若是您安装了 <span class='link' jon='click:Jet.router.route("https://www.npmjs.com/package/jet-js-cli",true)'>jet-js-cli</span> 并且使用 jet init 使用Jet，
+        可以通过 jet build 命令 配合 build.config.json 配置文件中设置 buildJsWithBabel 为true，来将所有es6 打包转化为 es5。
+        从而在生产环境中无需在运行时转译es6.
+    </div>
+</div>
+<script>
+    new Jet({
+    });
+</script>
