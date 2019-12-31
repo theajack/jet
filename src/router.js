@@ -1,7 +1,11 @@
-
+var index = '/', trueBase = true;
+if(window.location.host === "www.theajack.com" && window.location.pathname === '/jet/'){
+    index = '/jet', trueBase = false;
+}
 Jet.router.use({
     history: false,
-    index: '/',
+    trueBase: trueBase,
+    index: index,
     oninit: function () {
         //Jet.import('queryApi');
     },
