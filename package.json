@@ -1,0 +1,30 @@
+{
+  "name": "jet",
+  "version": "0.0.1",
+  "description": "Jet--前端轻量级渐进式MVVM框架",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theajack/jet.git"
+  },
+  "keywords": [
+    "js框架",
+    "MVVM"
+  ],
+  "author": "theajack",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/theajack/jet/issues"
+  },
+  "homepage": "https://github.com/theajack/jet#readme",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-uglify": "^3.0.2"
+  }
+}

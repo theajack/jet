@@ -1,4 +1,7 @@
 # Jet.js:一款轻量级、渐进式的MVVM框架
+
+### [文档](https://www.theajack.com/jet/) | [jet-js-cli](https://github.com/theajack/jet-js-cli)
+
 ## 介绍
 
 Jet.js 是一款轻量级、渐进式的MVVM框架 [Jet.js](https://www.theajack.com/jet)，详细使用和安装教程请[点击这里](https://www.theajack.com/jet)
@@ -34,7 +37,7 @@ Jet组件包含的特性和Jet元素包含的修饰属性，为Jet应用赋予�
 
 以下是一个简单的Jet组件
 [点击这里](https://www.theajack.com/jet/#/code) 可以在线使用这个例子
-```
+```html
 <div j='message'></div><br>
 <div j='user'>
     <div j=name>'姓名:'+$</div>
