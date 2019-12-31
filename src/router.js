@@ -1,6 +1,6 @@
-var base = '', trueBase = true;
+var base = '', trueBase = false;
 if(window.location.host === "www.theajack.com" && window.location.pathname === '/jet/'){
-    index = '/jet', trueBase = false;
+    base = '/jet', trueBase = true;
 }
 Jet.router.use({
     history: false,
@@ -152,3 +152,7 @@ Jet.router.use({
         '/e':'/example/cart'
     }
 });
+
+
+
+

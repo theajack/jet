@@ -6,7 +6,7 @@ Jet不依赖任何第三方库，采用数据双向绑定，以数据驱动视�
 
 Jet可以在非服务器环境中开发，但是在非服务其环境中无法使用路由功能和jload属性以及无法使用完整的js模块规范。 Jet可以通过引入script标签的方式局部使用，从而可以与您已有的项目完美结合，实现渐进式的Web开发。
 
-您也可以通过 [jet-js-cli](https://www.npmjs.com/package/jet-js-cli) 建立项目 或是 手动下载 Jet模板 来在服务器环境中开发， 服务器环境基于lite-server。
+您也可以通过 [jet-js-cli](https://www.npmjs.com/package/jet-js-cli) 建立项目 或是 手动下载 <a href="https://www.theajack.com/jet/jet-template.zip" download='jet-template.zip' class='link'>Jet模板</a> 来在服务器环境中开发， 服务器环境基于lite-server。
 
 当然若您需要使用es6进行您的项目开发，您可以在安装jet-js-cli后通过jet build命令将es6转换为es5在生产环境中使用。
 

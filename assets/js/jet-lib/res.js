@@ -1,5 +1,6 @@
 (function () {
-    Jet.__base__._useList.push('res');
+    var C=Jet.__base__;
+    C._useList.push('res');
     Jet.res = {
         defFileName: {
             image: '.jpg',
@@ -33,7 +34,7 @@
     function _dealResFile(str, type) {
         var def = Jet.res.defFileName[type], file = str;
         if (def == undefined) {
-            Jet.__base__._throw('不支持的资源类型：' + type);
+            C._throw('不支持的资源类型：' + type);
         }
         if (type == 'image' || type == 'media') {
             if (str.indexOf('.') == -1) {
@@ -57,7 +58,7 @@
             }
         }
         if (Jet.router)
-            return Jet.router.conf[type] + Jet.__base__._dealSrc(file);
+            return Jet.router.conf[type] + C._dealSrc(file);
         return C._dealSrc(file);
     }
 })()

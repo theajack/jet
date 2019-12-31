@@ -48,26 +48,27 @@ Jet.use.all(
     function (times) {
         //Jet.router.setBase('/jet');
         Jet.lang.use(['cn', 'en']);
-        Jet.res.define({
-            image: {
-                wechat: 'wechat.png',
-                alipay: 'alipay',
-                wechatpay: 'wechatpay',
-                logo: 'logo'
-            },
-            html: {
-                forLoad: '/attr/for_load',
-                pageInstall: 'intro/install',
-                routerMenu: 'comp/router-menu',
-                header: 'comp/header',
-                footer: 'comp/footer',
-            },
-            js: {
-                content: 'module/contents',
-                scroll: 'module/scroll',
-                api: 'module/queryApi'
-            }
+        Jet.use('router-config',function(){
+            Jet.res.define({
+                image: {
+                    wechat: 'wechat.png',
+                    alipay: 'alipay',
+                    wechatpay: 'wechatpay',
+                    logo: 'logo'
+                },
+                html: {
+                    forLoad: 'attr/for_load',
+                    pageInstall: 'intro/install',
+                    routerMenu: 'comp/router-menu',
+                    header: 'comp/header',
+                    footer: 'comp/footer',
+                },
+                js: {
+                    content: 'module/contents',
+                    scroll: 'module/scroll',
+                    api: 'module/queryApi'
+                }
+            })
+            // Jet.use('root')
         })
-        Jet.use('router-config')
-        // Jet.use('root')
     });
