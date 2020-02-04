@@ -1,5 +1,5 @@
 /**
- * babel 
+ * babel
  * less
  * config.js
  * build.config.json
@@ -22,19 +22,19 @@
 // })
 
 Jet.use.define({
-    lib:{
-        stat:'https://www.theajack.com/assets/js/stat.js',
-        "router-config":'src/router.js'
+    lib: {
+        stat: 'https://www.theajack.com/assets/js/stat.js',
+        'router-config': 'src/router.js'
         // a:'src/js/a.js',
         // b:'src/js/b',//.js后缀可以省略
         // c:'src/js/c',
         // root:'src/root.js'
     }
-})
+});
 
 // //声明库之后，就可以通过 库名来使用库
 // Jet.use('a',function(){
-    
+
 // })
 // Jet.config.babel=false;
 //Jet.config.env='pro'
@@ -42,13 +42,15 @@ Jet.use.define({
 //     debugger;
 // });
 Jet.use.all(
-    '-babel','-less',
+    '-babel',
+    '-less',
     //'cnchar',
     //'/src/js/cnchar.js',
-    function (times) {
+    function(times) {
         //Jet.router.setBase('/jet');
+        JUI.CODE.theme = 'dark';
         Jet.lang.use(['cn', 'en']);
-        Jet.use('router-config',function(){
+        Jet.use('router-config', function() {
             Jet.res.define({
                 image: {
                     wechat: 'wechat.png',
@@ -61,14 +63,15 @@ Jet.use.all(
                     pageInstall: 'intro/install',
                     routerMenu: 'comp/router-menu',
                     header: 'comp/header',
-                    footer: 'comp/footer',
+                    footer: 'comp/footer'
                 },
                 js: {
                     content: 'module/contents',
                     scroll: 'module/scroll',
                     api: 'module/queryApi'
                 }
-            })
+            });
             // Jet.use('root')
-        })
-    });
+        });
+    }
+);
