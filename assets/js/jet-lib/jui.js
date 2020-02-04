@@ -3828,6 +3828,7 @@
     // moveCursor();.replaceAll("<","&lt;").replaceAll(">","&gt;")
         var val = this.codearea.val();
         var html = val.replaceAll('<', '&lt;').replaceAll('>', '&gt;') + ' ';// 为了不让最后一个字符是换行
+        html = _geneHtmlNote(html);
         html = _geneHtmlElement(html);
         // html = _geneKey(html);
         // html = _geneFun(html);
@@ -3835,7 +3836,6 @@
         // html = _geneNumber(html);
         html = _geneString(html);
         // html = _geneNote(html);
-        html = _geneHtmlNote(html);
         _getView(this.ele, 1).html(html);
 
         // var htmlSign = _geneSign(val.replaceAll('<', '&lt;').replaceAll('>', '&gt;') + ' ');
