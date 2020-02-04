@@ -1425,12 +1425,13 @@ textarea.j-input{
     position: absolute;
     top: 0;
     border-radius: 5px 5px 0 0;
-    background-color: rgba(220,220,220,.8);
+    background-color: #dedede;
     border-bottom: 1px solid #ddd;
     text-align: right;
     padding-right: 5px;
     white-space: normal;
     padding-top: 1px;
+    z-index: 1;
 }
 
 .code_set_w .j-icon {
@@ -1444,7 +1445,7 @@ textarea.j-input{
 
 .j-c-dark .code_set_w{
     border-bottom: 1px solid #aaa;
-    background-color: rgba(100,100,100,.6);
+    background-color: #666;
 }
 .j-c-dark .code_set_w .j-icon{
     color: #fff;
@@ -1486,18 +1487,19 @@ cd_dfun,cd_dfun * {    color: #b2ff00}
 cd_num {    color: #fff}
 cd_tag,cd_tag * {color: rgb(128,0,82)}
 cd_str,cd_str * {color: rgb(209,74,71)!important}
-cd_note,cd_note * {color: #019d00!important}
+cd_note,cd_note * {color: rgb(106,153,85)!important}
 cd_attr{color: rgb(0,16,144);}
 cd_attr_equal{color: #666;}
 cd_attr_punc{color: rgb(128,0,0);}
 cd_html_c{color: rgb(128,0,0);}
 
-.j-c-dark cd_tag,cd_tag * {color: rgb(62,156,214)}
-.j-c-dark cd_str,cd_str * {color: rgb(199,141,117)!important}
+.j-c-dark cd_tag,.j-c-dark cd_tag * {color: rgb(62,156,214)}
+.j-c-dark cd_str,.j-c-dark cd_str * {color: rgb(199,141,117)!important}
 .j-c-dark cd_attr{color: rgb(156, 220,254);}
 .j-c-dark cd_attr_equal{color: #ddd;}
 .j-c-dark cd_attr_punc{color: rgb(128,128,128);}
 .j-c-dark cd_html_c{color: rgb(128,0,0);}
+.j-c-dark cd_note,.j-c-dark cd_note{color: #6a8a35;}
 
 /* .code_editor_view span{
     font-family: Consolas, 'Courier New', monospace;
@@ -1523,7 +1525,7 @@ cd_html_c{color: rgb(128,0,0);}
 }
 .j-c-js-cm,.j-c-js-cm *{
     /*color: #008084;*/
-    color:#089900
+    color:rgb(106,153,85)
 }
 .j-c-js-str,.j-c-js-str *{
     color: #d14a47;
