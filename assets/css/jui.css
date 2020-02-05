@@ -1312,6 +1312,41 @@ textarea.j-input{
     text-indent: 0;
     background-color: rgba(240,240,240,.95);
 }
+.j-code,.j-code *{
+    box-sizing:border-box;
+}
+.j-code *::-webkit-scrollbar {
+    width:5px;
+    cursor: pointer;
+    height: 5px;
+}
+.j-code *::-webkit-scrollbar-button    {
+    display: none;
+}
+.j-code *::-webkit-scrollbar-track     {
+    display: none;
+}
+.j-code *::-webkit-scrollbar-track-piece {
+    background-color:#ddd;
+}
+.j-code.j-c-dark *::-webkit-scrollbar-track-piece {
+    background-color:#ddd;
+}
+.j-code *::-webkit-scrollbar-thumb{
+    background-color:#ccc;
+    border-radius:5px;
+    cursor: pointer;
+}
+.j-code *::-webkit-scrollbar-thumb:hover{
+    background-color:#bbb;
+    cursor: pointer;
+}
+.j-code.j-c-dark *::-webkit-scrollbar-track-piece {
+    background-color:#666;
+}
+.j-code.j-c-dark *::-webkit-scrollbar-thumb{
+    background-color:#999;
+}
 
 .j-code.j-c-dark {
     background-color: rgba(20,20,20,.95);
@@ -1327,7 +1362,6 @@ textarea.j-input{
     border: 0;
     border-radius: 0;
     z-index: 10000;
-    overflow: auto!important;
 }
 .j-code.j_full .code_editor, .j-code.j_full .code_editor_view{
     min-height: 100%!important;
@@ -1353,7 +1387,7 @@ textarea.j-input{
     word-break: break-all;
     word-wrap: normal;
     margin: 0;
-
+    min-width: 245px;
     padding-left:35px;
 }
 
@@ -1361,6 +1395,7 @@ textarea.j-input{
     padding-left: 10px!important;
 }
 .code_line_w{
+    min-height: 100%;
     position: absolute;
     left: 0;
     top: 0px;
@@ -1387,15 +1422,15 @@ textarea.j-input{
     padding-top: 40px;
 }
 .code_line_w div{
-    position: relative;
-    left: 0px;
     font-weight: normal;
     transition: all .3s ease;
+    position:relative;
+    left:0;
     -webkit-transition: all .3s ease;
 }
 .code_line_w div.j-active{
-    left: -3px;
     color: #444;
+    left: -3px;
     font-weight: bold;
 }
 .j-c-dark .code_line_w div.j-active{
@@ -1410,11 +1445,11 @@ textarea.j-input{
     opacity:0;
     transform: translate(0,0);
     -webkit-transform: translate(0,0);
-    transition: all .3s ease;
-    -webkit-transition: all .3s ease;
+    transition: opacity .3s ease;
+    -webkit-transition: opacity .3s ease;
 }
 .j-c-dark .code_active_line{
-    background-color: #000;
+    background-color: #333;
 }
 .j-code[buttons] .code_active_line{
     top: 41px;
@@ -1425,7 +1460,7 @@ textarea.j-input{
     position: absolute;
     top: 0;
     border-radius: 5px 5px 0 0;
-    background-color: #dedede;
+    background-color: #bbb;
     border-bottom: 1px solid #ddd;
     text-align: right;
     padding-right: 5px;
@@ -1480,11 +1515,6 @@ textarea.j-input{
 }
 
 .code_editor.bg {    background-color: rgba(20,20,20,.9)}
-cd_key {    color: #22b5ff}
-cd_sign {    color: #f0d}
-cd_fun,cd_fun * {    color: #001dff}
-cd_dfun,cd_dfun * {    color: #b2ff00}
-cd_num {    color: #fff}
 cd_tag,cd_tag * {color: rgb(128,0,82)}
 cd_str,cd_str * {color: rgb(209,74,71)!important}
 cd_note,cd_note * {color: rgb(106,153,85)!important}
@@ -1501,15 +1531,6 @@ cd_html_c{color: rgb(128,0,0);}
 .j-c-dark cd_html_c{color: rgb(128,0,0);}
 .j-c-dark cd_note,.j-c-dark cd_note{color: #6a8a35;}
 
-/* .code_editor_view span{
-    font-family: Consolas, 'Courier New', monospace;
-    display:inline;
-    font-size:14px;
-    line-height:17px;
-    font-weight:normal;
-    padding:0;
-    margin:0;
-} */
 .j-c-js-punc{
     color: #666;
 }
