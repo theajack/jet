@@ -3328,6 +3328,7 @@
             }
         };
         item.$jui = _jui;
+        this.fontSize(this.fontSize()); // 初始化lineheight
     };
     JUI.CODE._name = 'j-code';
     JUI.CODE.init = function (item) {

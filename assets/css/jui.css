@@ -1365,6 +1365,7 @@ textarea.j-input{
 }
 .j-code.j_full .code_editor, .j-code.j_full .code_editor_view{
     min-height: 100%!important;
+    width: 100%!important;
 }
 
 .j_hidden {
@@ -1441,7 +1442,7 @@ textarea.j-input{
     height: 20px;
     position: absolute;
     background-color: #ddd;
-    top: 11px;
+    top: 10px;
     opacity:0;
     transform: translate(0,0);
     -webkit-transform: translate(0,0);
@@ -1452,7 +1453,7 @@ textarea.j-input{
     background-color: #333;
 }
 .j-code[buttons] .code_active_line{
-    top: 41px;
+    top: 40px;
 }
 .code_set_w {
     width: 100%;
