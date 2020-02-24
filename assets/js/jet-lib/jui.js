@@ -3438,7 +3438,7 @@
             }
             if (w == 'auto') {
                 jui.view1.css('width', h);
-                jui.view2.css('width', h);
+                jui.view2.data('width', w).css('width', h);
                 jui.codearea.data('width', 'auto').css('overflow-x', 'hidden').css('width', w); ;
             } else {
                 jui.view1.css('width', '100%');
@@ -3612,6 +3612,9 @@
         this.ele.toggleClass(_ce_full);
         obj.toggleClass('icon-collapse-full');
         $J.body().toggleClass(_ce_hidden);
+        if(!this.ele.hasClass(_ce_full)){
+            _checkSizeAuto(this.ele.findClass('code_editor'));
+        }
     };
     JUI.CODE.prototype.fontSizeUp = function () {
         var n = this.fontSize();
@@ -3962,7 +3965,7 @@
         _checkSizeAutoPart(obj, 'width');
     }
     function _checkSizeAutoPart (obj, s) {
-        if (obj.data(s) == 'auto') {
+        if (obj.data(s) == 'auto' && !obj.parent().hasClass(_ce_full)) {
             var n = obj.prev().css(s);
             if (n == 'auto') {
                 setTimeout(function () { obj.css(s, obj.prev().css(s)); }, 0);
@@ -3971,6 +3974,16 @@
             }
         }
     }
+    // function _checkSizeAutoPart (obj, s) {
+    //     if (obj.data(s) === 'auto' && !obj.parent().hasClass(_ce_full)) {
+    //         var n = obj.prev().data(s);
+    //         if (n == 'auto') {
+    //             obj.css(s, obj.prev().css(s));
+    //         } else {
+    //             obj.css(s, n);
+    //         }
+    //     }
+    // }
 
     // function _geneSign (html) {
     //     _code._sign.each(function (a) {
