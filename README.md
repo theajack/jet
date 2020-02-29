@@ -1,15 +1,15 @@
 # Jet.js:一款轻量级、渐进式的MVVM框架
 
-### [文档](https://www.theajack.com/jet/) | [jet-js-cli](https://github.com/theajack/jet-js-cli)
+### [文档](https://theajack.gitee.io/jet/) | [jet-js-cli](https://github.com/theajack/jet-js-cli)
 
 ## 介绍
 
-Jet.js 是一款轻量级、渐进式的MVVM框架 [Jet.js](https://www.theajack.com/jet)，详细使用和安装教程请[点击这里](https://www.theajack.com/jet)
+Jet.js 是一款轻量级、渐进式的MVVM框架 [Jet.js](https://theajack.gitee.io/jet)，详细使用和安装教程请[点击这里](https://theajack.gitee.io/jet)
 Jet不依赖任何第三方库，采用数据双向绑定，以数据驱动视图。
 
 Jet可以在非服务器环境中开发，但是在非服务其环境中无法使用路由功能和jload属性以及无法使用完整的js模块规范。 Jet可以通过引入script标签的方式局部使用，从而可以与您已有的项目完美结合，实现渐进式的Web开发。
 
-您也可以通过 [jet-js-cli](https://www.npmjs.com/package/jet-js-cli) 建立项目 或是 手动下载 <a href="https://www.theajack.com/jet/jet-template.zip" download='jet-template.zip' class='link'>Jet模板</a> 来在服务器环境中开发， 服务器环境基于lite-server。
+您也可以通过 [jet-js-cli](https://www.npmjs.com/package/jet-js-cli) 建立项目 或是 手动下载 <a href="https://theajack.gitee.io/jet/jet-template.zip" download='jet-template.zip' class='link'>Jet模板</a> 来在服务器环境中开发， 服务器环境基于lite-server。
 
 当然若您需要使用es6进行您的项目开发，您可以在安装jet-js-cli后通过jet build命令将es6转换为es5在生产环境中使用。
 
@@ -27,16 +27,16 @@ Jet元素分为两大类：绑定元素和工具元素。这些元素都继承�
 
 Jet组件包含的特性和Jet元素包含的修饰属性，为Jet应用赋予更强大的功能。
 
-![Jet 图解](https://www.theajack.com/jet/src/image/Jet%E5%9B%BE%E8%A7%A3.jpg)
+![Jet 图解](https://theajack.gitee.io/jet/src/image/Jet%E5%9B%BE%E8%A7%A3.jpg)
 
 每一个Jet组件都有它的生命周期，包含以下9个， 大致流程请参考下图:
 
-![Jet 生命周期](https://www.theajack.com/jet/src/image/Jet%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
+![Jet 生命周期](https://theajack.gitee.io/jet/src/image/Jet%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
 
 ## 一个基本的Jet实例
 
 以下是一个简单的Jet组件
-[点击这里](https://www.theajack.com/jet/#/code) 可以在线使用这个例子
+[点击这里](https://theajack.gitee.io/jet/#/code) 可以在线使用这个例子
 ```html
 <div j='message'></div><br>
 <div j='user'>
@@ -58,4 +58,4 @@ Jet组件包含的特性和Jet元素包含的修饰属性，为Jet应用赋予�
     })
 </script>
 ```
-[点击这里](https://www.theajack.com/jet/#/code) 可以在线使用这个例子
+[点击这里](https://theajack.gitee.io/jet/#/code) 可以在线使用这个例子
