@@ -2,10 +2,8 @@
   font-family: ZenIcon;
   font-style: normal;
   font-weight: normal;
-
-  src: url('../fonts/zenicon.eot?v=2.2.0');
-  src: url('../fonts/zenicon.eot?#iefix&v=2.2.0') format('embedded-opentype'), url('../fonts/zenicon.woff?v=2.2.0') format('woff'), url('../fonts/zenicon.ttf?v=2.2.0') format('truetype'), url('../fonts/zenicon.svg#regular?v=2.2.0') format('svg');
-  }
+  src:url('https://cdn.jsdelivr.net/gh/theajack/easy-icon/dist/font/fontawesome.woff');
+}
 .j-icon,
 [class^="icon-"],
 [class*=" icon-"] {
